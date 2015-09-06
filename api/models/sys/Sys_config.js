@@ -1,0 +1,34 @@
+/**
+ * 系统参数
+ * Created by wizzer on 2015/9/6.
+ */
+module.exports = {
+  schema: true,
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
+  attributes: {
+    config_key: {
+      type: 'string',
+      primaryKey: true,
+      size: 100,
+      required: true
+    },
+    config_val: {
+      type: 'string',
+      size: 100,
+      required: true
+    },
+    createdAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return new Date().getTime();
+      }
+    },
+    updatedAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return new Date().getTime();
+      }
+    }
+  }
+};

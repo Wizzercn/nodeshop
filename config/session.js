@@ -57,7 +57,7 @@ module.exports.session = {
    ttl: 30,//<redis session TTL in seconds>
   // db: 0,
   // pass: <redis auth password>,
-   prefix: 'nodeshop:',
+   prefix: 'ns_session:',
 
 
   /***************************************************************************

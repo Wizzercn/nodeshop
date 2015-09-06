@@ -35,7 +35,7 @@ module.exports.routes = {
   '/': {
     view: 'homepage'
   },
-  '/sysadmin': 'admin/IndexController.list'
+  '/sysadmin': 'admin/LoginController.login'
 
   /***************************************************************************
   *                                                                          *

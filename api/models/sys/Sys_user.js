@@ -1,47 +1,62 @@
 /**
- * Sys_user.js
- *
- * @description :: TODO: You might write a short summary of how this model works and what it represents here.
- * @docs        :: http://sailsjs.org/#!documentation/models
+ * 系统用户
+ * Created by wizzer on 2015/9/6.
  */
 var uuid=require('node-uuid');
 module.exports = {
   schema: true,
-  tableName: 'aaaasys_user',
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
   attributes: {
     id: {
       type: 'string',
       primaryKey: true,
-      unique: true,
+      size: 50,
       defaultsTo: function (){ return uuid.v4().replace('-',''); }
     },
     loginname: {
       type: 'string',
       unique: true,
-      size: 100
+      size: 100,
+      required: true,
+      maxLength: 100
     },
     nickname: {
       type: 'string',
-      size: 50
+      size: 50,
+      required: true,
+      maxLength: 50
     },
     email: {
-      type: 'string',
-      size: 100
+      type: 'email',
+      unique: true,
+      required: true
     },
     password:{
-      type: 'string'
+      type: 'string',
+      size: 100,
+      required: true
     },
     slat:{
-      type: 'string'
+      type: 'string',
+      size: 6,
+      required: true
     },
     disabled:{
-      type:'string',
-      enum: ['true', 'false']
+      type:'boolean',
+      defaultsTo: function (){ return true; }
     },
-    createAt:{
-      type: 'integer',
-      size: 10,
-      defaultsTo: function (){ return new Date().getTime(); }
+    createdAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return new Date().getTime();
+      }
+    },
+    updatedAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return new Date().getTime();
+      }
     }
   }
 };

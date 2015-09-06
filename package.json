@@ -1,8 +1,8 @@
 {
   "name": "nodeshop",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "version": "0.1.0",
+  "description": "a Sails shop",
   "keywords": [],
   "dependencies": {
     "ejs": "~0.8.4",
@@ -19,9 +19,14 @@
     "grunt-sails-linker": "~0.9.5",
     "grunt-sync": "~0.0.4",
     "include-all": "~0.1.3",
+    "node-uuid": "^1.4.3",
+    "nodemailer": "^1.4.0",
+    "nodemailer-smtp-transport": "^1.0.3",
     "rc": "~0.5.0",
     "sails": "~0.11.0",
-    "sails-disk": "~0.10.0"
+    "sails-disk": "~0.10.0",
+    "sails-mysql": "^0.11.0",
+    "sails-redis": "^0.10.5"
   },
   "scripts": {
     "debug": "node debug app.js",
@@ -30,8 +35,8 @@
   "main": "app.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/anonymous node/sails user/nodeshop.git"
+    "url": "git@github.com:Wizzercn/nodeshop.git"
   },
-  "author": "anonymous node/sails user",
+  "author": "wizzercn",
   "license": ""
 }
