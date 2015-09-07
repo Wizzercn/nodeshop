@@ -13,8 +13,15 @@ export PATH=$NODE_HOME/bin:$PATH
 -----------------------------------
 >>npm install node-gyp -g
 
-3.安装WebStorm
+3.安装WebStorm 并安装JDK7
 -----------------------------------
+>>rpm -ivh jdk-7u79-linux-x64.rpm
+>>gedit /etc/profile
+JAVA_HOME=/usr/java/jdk1.7.0_79
+CLASSPATH=.:$JAVA_HOME/lib.tools.jar
+PATH=$JAVA_HOME/bin:$PATH
+export JAVA_HOME CLASSPATH PATH
+>>source /etc/profile
 
 4.安装Git 并生成ssh密钥,github帐号设置中添加密钥
 -----------------------------------
