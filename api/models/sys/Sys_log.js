@@ -15,6 +15,14 @@ module.exports = {
       type: 'string',
       size: 100
     },
+    url:{
+      type:'string',
+      size:255
+    },
+    note:{
+      type:'string',
+      size:500
+    },
     op_id: {//操作人ID
       type: 'string',
       size: 50
@@ -22,6 +30,10 @@ module.exports = {
     op_name: {
       type: 'string',
       size: 50
+    },
+    op_ip:{
+      type:'string',
+      size:20
     },
     createdAt:{
       type:'integer',

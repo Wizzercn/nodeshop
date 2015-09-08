@@ -11,7 +11,7 @@ export PATH=$NODE_HOME/bin:$PATH
 
 2.npm
 -----------------------------------
-npm install -g --registry=https://registry.npm.taobao.org
+>>npm install -g --registry=https://registry.npm.taobao.org
 
 3.安装必备模块 node-gyp (CentOS6.5 自带Python2.6.6)
 -----------------------------------
@@ -34,5 +34,12 @@ export JAVA_HOME CLASSPATH PATH
 >>ssh-keygen -t rsa -C "wizzer@qq.com"
 >>cat ~/.ssh/id_rsa.pub
 >>git clone git@github.com:Wizzercn/nodeshop.git
+
 >>git pull
->>
+>>git commit -am 'note'
+>>git push
+
+6.验证码组件ccap,需安装,python2.7
+------------------------------------
+http://blog.csdn.net/tiantiandjava/article/details/17242345
+>>npm install ccap
