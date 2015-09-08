@@ -10,6 +10,7 @@ export PATH=$NODE_HOME/bin:$PATH
 >>node -v
 
 2.npm
+-----------------------------------
 npm install -g --registry=https://registry.npm.taobao.org
 
 3.安装必备模块 node-gyp (CentOS6.5 自带Python2.6.6)
