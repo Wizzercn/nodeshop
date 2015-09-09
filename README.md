@@ -9,9 +9,9 @@ export PATH=$NODE_HOME/bin:$PATH
 >>source /etc/profile
 >>node -v
 
-2.npm
+2.npm 设置为国内源
 -----------------------------------
->>npm install -g --registry=https://registry.npm.taobao.org
+>>npm config set registry https://registry.npm.taobao.org
 
 3.安装必备模块 node-gyp (CentOS6.5 自带Python2.6.6)
 -----------------------------------
@@ -39,7 +39,7 @@ export JAVA_HOME CLASSPATH PATH
 >>git commit -am 'note'
 >>git push
 
-6.验证码组件ccap,需安装,python2.7
+6.验证码组件ccap,需安装python2.7
 ------------------------------------
 http://blog.csdn.net/tiantiandjava/article/details/17242345
 >>npm install ccap
