@@ -3,5 +3,5 @@
  */
 module.exports.system = {
   AppName:'Node.js 电子商城系统',
-  AppCopyright:'2015'
+  AppCopyright:'Wizzer.cn'
 };

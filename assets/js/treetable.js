@@ -1,4 +1,4 @@
 $(document).ready(function () {
-    $("head").append("<link rel=\"stylesheet\" href=\""+base+"/include/plugins/treetable/jquery.treetable.css\">");
-    $("body").append("<script type=\"text/javascript\" src=\""+base+"/include/plugins/treetable/jquery.treetable.js\"></script>");
+    $("head").append("<link rel=\"stylesheet\" href=\"/plugins/treetable/jquery.treetable.css\">");
+    $("body").append("<script type=\"text/javascript\" src=\"/plugins/treetable/jquery.treetable.js\"></script>");
 });
