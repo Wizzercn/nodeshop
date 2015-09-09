@@ -44,7 +44,7 @@ module.exports = {
     },
     disabled:{
       type:'boolean',
-      defaultsTo: function (){ return true; }
+      defaultsTo: function (){ return false; }
     },
     createdAt:{
       type:'integer',
