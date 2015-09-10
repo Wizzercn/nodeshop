@@ -62,6 +62,12 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
+    },
+    role:{
+      collection:'Sys_role',via:'id'
+    },
+    unit:{
+      collection:'Sys_unit',via:'id'
     }
   }
 };
