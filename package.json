@@ -5,6 +5,7 @@
   "description": "a Sails shop",
   "keywords": [],
   "dependencies": {
+    "bcrypt": "^0.8.5",
     "ccap": "^0.6.0",
     "connect-redis": "^2.5.0",
     "ejs": "~0.8.4",

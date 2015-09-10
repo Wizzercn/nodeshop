@@ -39,7 +39,7 @@ module.exports = {
     },
     slat:{
       type: 'string',
-      size: 6,
+      size: 10,
       required: true
     },
     disabled:{
