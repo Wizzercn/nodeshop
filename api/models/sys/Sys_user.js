@@ -3,6 +3,7 @@
  * Created by wizzer on 2015/9/6.
  */
 var uuid=require('node-uuid');
+var moment = require('moment');
 module.exports = {
   schema: true,
   autoCreatedAt: false,
@@ -37,11 +38,6 @@ module.exports = {
       size: 100,
       required: true
     },
-    slat:{
-      type: 'string',
-      size: 10,
-      required: true
-    },
     disabled:{
       type:'boolean',
       defaultsTo: function (){ return false; }
@@ -49,13 +45,13 @@ module.exports = {
     createdAt:{
       type:'integer',
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     },
     updatedAt:{
       type:'integer',
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     }
   }

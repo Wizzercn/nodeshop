@@ -2,6 +2,7 @@
  * 系统日志
  * Created by wizzer on 2015/9/6.
  */
+var moment = require('moment');
 module.exports = {
   schema: true,
   autoCreatedAt: false,
@@ -9,19 +10,20 @@ module.exports = {
   attributes: {
     id: {
       type: 'integer',
-      autoIncrement: true
+      autoIncrement: true,
+      primaryKey: true
     },
     type: {
       type: 'string',
-      size: 100
+      size: 10
     },
     url:{
       type:'string',
-      size:255
+      size:100
     },
     note:{
       type:'string',
-      size:500
+      size:255
     },
     op_id: {//操作人ID
       type: 'string',
@@ -38,13 +40,13 @@ module.exports = {
     createdAt:{
       type:'integer',
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     },
     updatedAt:{
       type:'integer',
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     }
   }
