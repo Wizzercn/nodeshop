@@ -25,25 +25,19 @@ module.exports = {
       type:'string',
       size:255
     },
-    op_id: {//操作人ID
+    createdBy: {//操作人ID
       type: 'string',
       size: 50
     },
-    op_name: {
+    createdByName: {
       type: 'string',
       size: 50
     },
-    op_ip:{
+    createdIp:{
       type:'string',
       size:20
     },
     createdAt:{
-      type:'integer',
-      defaultsTo:function(){
-        return moment().format('X');
-      }
-    },
-    updatedAt:{
       type:'integer',
       defaultsTo:function(){
         return moment().format('X');

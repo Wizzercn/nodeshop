@@ -38,17 +38,26 @@ module.exports = {
       size: 100,
       required: true
     },
+    lastIp:{
+      type: 'string',
+      size: 20
+    },
+    loginCount:{
+      type: 'integer',
+      size: 11,
+      defaultsTo:function(){
+        return 0;
+      }
+    },
     disabled:{
       type:'boolean',
       defaultsTo: function (){ return false; }
     },
-    createdAt:{
-      type:'integer',
-      defaultsTo:function(){
-        return moment().format('X');
-      }
+    createdBy:{
+      type: 'string',
+      size: 50
     },
-    updatedAt:{
+    createdAt:{
       type:'integer',
       defaultsTo:function(){
         return moment().format('X');
