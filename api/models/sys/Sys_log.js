@@ -39,6 +39,7 @@ module.exports = {
     },
     createdAt:{
       type:'integer',
+      index: true,
       defaultsTo:function(){
         return moment().format('X');
       }

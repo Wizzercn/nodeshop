@@ -10,10 +10,9 @@ module.exports = {
   autoUpdatedAt: false,
   attributes: {
     id: {
-      type: 'string',
-      primaryKey: true,
-      size: 50,
-      defaultsTo: function (){ return uuid.v4().replace('-',''); }
+      type: 'integer',
+      autoIncrement: true,
+      primaryKey: true
     },
     loginname: {
       type: 'string',
@@ -63,11 +62,9 @@ module.exports = {
         return moment().format('X');
       }
     },
-    role:{
-      collection:'Sys_role',via:'id'
-    },
-    unit:{
-      collection:'Sys_unit',via:'id'
+    roles: {
+      collection: 'Sys_role',
+      via: 'users'
     }
   }
 };

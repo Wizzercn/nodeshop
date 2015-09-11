@@ -7,9 +7,13 @@ module.exports = {
   autoCreatedAt: false,
   autoUpdatedAt: false,
   attributes: {
+    id: {
+      type: 'integer',
+      autoIncrement: true,
+      primaryKey: true
+    },
     config_key: {
       type: 'string',
-      primaryKey: true,
       size: 100,
       required: true
     },
