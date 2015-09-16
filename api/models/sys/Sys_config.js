@@ -2,6 +2,7 @@
  * 系统参数
  * Created by wizzer on 2015/9/6.
  */
+var moment = require('moment');
 module.exports = {
   schema: true,
   autoCreatedAt: false,
@@ -24,14 +25,15 @@ module.exports = {
     },
     createdAt:{
       type:'integer',
+      index: true,
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     },
     updatedAt:{
       type:'integer',
       defaultsTo:function(){
-        return new Date().getTime();
+        return moment().format('X');
       }
     }
   }

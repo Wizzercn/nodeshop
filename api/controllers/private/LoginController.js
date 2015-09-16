@@ -6,48 +6,24 @@ var bcrypt = require('bcrypt');
 var StringUtil = require('../../common/util/StringUtil');
 module.exports = {
   /**
+   * 切换语言
+   * @param req
+   * @param res
+   */
+  lang: function (req, res) {
+    console.log('lang::'+req.param('lang'));
+    console.log('Referer::'+req.header('Referer'));
+    req.setLocale(req.param('lang'));
+    console.log('lang::'+req.getLocale());
+    res.redirect('/private/login/login');
+  },
+  /**
    * 登陆页
    * @param req
    * @param res
    */
   login: function (req, res) {
-
-    //Sys_role.findOne(1).populate('users').populate('menus').exec(function(err, role) {
-    //  console.log(':::'+JSON.stringify(role.users));
-    //  console.log(':::'+JSON.stringify(role.menus));
-    //});
-    Sys_menu.query('SELECT * FROM SYS_MENU', function(err, data) {
-      console.log('::1:'+JSON.stringify(data));
-      for(var i in data){
-        console.log('::'+data[i].name);
-      }
-
-    });
-    Sys_user.findOne(4).populate('roles',{disabled:false}).exec(function(err, user) {
-      console.log('::2:'+JSON.stringify(user.roles));
-      console.log('::3:'+JSON.stringify(user.roles[0].menus));
-      var roleIds=[],userRoles=user.roles;
-      console.log(':'+JSON.stringify(userRoles.prototype));
-      for(var i in userRoles){
-        console.log(i+':'+userRoles[i].id);
-        roleIds.push(userRoles[i].id);
-      }
-      console.log('::roleIds:'+JSON.stringify(roleIds));
-      Sys_role.find().where({id:roleIds}).populate('menus',{disabled:false}).exec(function(err, role) {
-        console.log('::4:'+JSON.stringify(role[0].menus));
-      });
-    });
-
-    //Sys_user.findOne(4).populate('roles').exec(function(err, user) {
-    //  console.log('::2:'+JSON.stringify(user.roles));
-    //  console.log('::3:'+JSON.stringify(user.roles.id));
-    //    Sys_role.find(1).populate('menus').exec(function(err, role) {
-    //      console.log('::4:'+JSON.stringify(role.menus));
-    //    });
-    //
-    //});
-
-    return res.view('private/login.ejs', {layout: 'layouts/login'});
+    return res.view('private/login.ejs', {layout: 'layouts/login',lang:req.getLocale()});
   },
   /**
    * 登出
@@ -58,7 +34,7 @@ module.exports = {
     Sys_user.findOne(req.session.user.id).exec(function (err, user) {
       if (user) {
         Sys_log.create({
-          type: 'system', url: req.url, note: '退出系统',
+          type: 'system', url: req.url, note:  sails.__('private.login.logout'),
           op_id: user.id, op_name: user.nickname, op_ip: StringUtil.getClientAddress(req)
         }).exec(function (err, log) {
         });
@@ -83,49 +59,81 @@ module.exports = {
       captchaMust = req.session.captchaMust || false,
       errCount = req.session.errorCount || 0;
     if (!username || !password) {
-      return res.json({code: 1, msg: '用户名密码不能为空'});
+      return res.json({code: 1, msg: sails.__('private.login.required')});
     }
-    if (captchaMust) {
+    if (captchaMust) {//验证验证码
       if (captcha == '') {
-        return res.json({code: 2, msg: '请输入验证码'});
+        return res.json({code: 2, msg: sails.__('private.login.inputverifycode')});
       } else if (captchaText == captcha.toLowerCase()) {
         errCount = 0;
       } else {
-        return res.json({code: 5, msg: '验证码不正确'});
+        return res.json({code: 5, msg: sails.__('private.login.errorverifycode')});
       }
     }
-    if (errCount > 1) {
+    if (errCount > 1) {//若输错密码三次则必须验证验证码
       req.session.captchaMust = true;
-      return res.json({code: 2, msg: '请输入验证码'});
+      return res.json({code: 2, msg: sails.__('private.login.inputverifycode')});
     }
     req.session.errorCount = errCount + 1;
 
-    Sys_user.findOne({
-        loginname: username
-      },
-      function (err, user) {
-        if (!user || err) return res.json({code: 3, msg: '用户名不存在'});
-        if(user.disabled){
-          return res.json({code: 6, msg: '用户被禁止登陆'});
-        }else if (bcrypt.compareSync(password, user.password)) {
-          req.session.auth = true;
-          req.session.user = user;
-          req.session.captchaMust = false;
-          req.session.errorCount = 0;
+    Sys_user.findOne({loginname: username}).populate('roles', {disabled: false}).exec(function (err, user) {
+      if (!user || err) return res.json({code: 3, msg: sails.__('private.login.nousername')});
+      if (user.disabled) {//判断用户状态
+        return res.json({code: 6, msg: sails.__('private.login.forbidden')});
+      } else if (bcrypt.compareSync(password, user.password)) {//判断密码
+        req.session.auth = true;
+        req.session.user = user;
+        req.session.captchaMust = false;
+        req.session.errorCount = 0;
+        var roleIds = [],roleCodes=[], userRoles = user.roles;
+        userRoles.forEach(function (obj) {
+          roleIds.push(obj.id);
+          roleCodes.push(obj.code);
+        });
+        req.session.roleCodes = roleCodes;
 
-          Sys_user.update(user.id,{lastIp:StringUtil.getClientAddress(req),loginCount:user.loginCount+1},function(err){});
-          //登陆日志
-          Sys_log.create({
-            type: 'system', url: req.url, note: '登陆成功',
-            createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getClientAddress(req)
-          }).exec(function (err) {});
+        if (roleIds.length > 0) {//用户拥有角色则加载菜单
+          Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
+            var fisrtMenus = [], secondMenus = new Map();
+            role.forEach(function (m) {
+              m.menus.forEach(function (obj)
+              {
+                if (obj.path.length == 4) {
+                  fisrtMenus.push(obj);
+                } else {
+                  var s = secondMenus.get(obj.path.substring(0, obj.path.length - 4))||[];
+                  if (s) {
+                    s.push(obj);
+                  }
+                  secondMenus.set(obj.path.substring(0, obj.path.length - 4), s);
+                }
+              });
 
-          return res.json({code: 0, msg: '登陆成功'});
-        } else {
-          return res.json({code: 4, msg: '密码不正确'});
+            });
+            req.session.fisrtMenus=fisrtMenus;
+            req.session.secondMenus=secondMenus;
+
+          });
         }
+        Sys_user.update(user.id, {
+          lastIp: StringUtil.getClientAddress(req),
+          loginCount: user.loginCount + 1
+        }, function (err) {
+        });
+        //登陆日志
+        Sys_log.create({
+          type: 'system', url: req.url, note:  sails.__('private.login.success'),
+          createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getClientAddress(req)
+        }).exec(function (err) {
+        });
 
-      });
+        return res.json({code: 0, msg: sails.__('private.login.success')});
+      } else {
+        return res.json({code: 4, msg: sails.__('private.login.errorpassword')});
+      }
+
+
+    });
   },
   /**
    * 验证码

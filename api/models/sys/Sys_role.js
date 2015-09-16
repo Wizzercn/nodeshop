@@ -1,7 +1,7 @@
 /**
  * Created by root on 9/10/15.
  */
-var uuid=require('node-uuid');
+//var uuid=require('node-uuid');
 module.exports = {
   schema: true,
   autoCreatedAt: false,

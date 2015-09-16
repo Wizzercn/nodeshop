@@ -15,17 +15,17 @@
               <div class="form-group">
                 <input type="text" id="username" name="username" value="superadmin" required
                        class="form-control input-lg mb25"
-                       placeholder="用户名">
+                       placeholder="<%=sails.__('private.login.username')%>">
               </div>
               <div class="form-group">
                 <input type="password" id="password" name="password" value="1" required
                        class="form-control input-lg mb25"
-                       placeholder="密码">
+                       placeholder="<%=sails.__('private.login.password')%>">
               </div>
               <p id="tip" class="bg-danger p15" style="display:none"></p>
               <div class="show">
-                <button class="btn btn-primary btn-lg btn-block" type="submit" data-loading-text="登陆中...">
-                  登陆系统
+                <button class="btn btn-primary btn-lg btn-block" type="submit" data-loading-text="<%=sails.__('private.login.loading')%>...">
+                  <%=sails.__('private.login.load')%>
                 </button>
               </div>
             </form>
@@ -46,7 +46,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title" style="color:black;">请输入验证码
+        <h4 class="modal-title" style="color:black;"><%=sails.__('private.login.inputverifycode')%>
         </h4>
       </div>
       <div class="modal-body">
@@ -55,7 +55,7 @@
             <div class="col-xs-2"></div>
             <div class="col-xs-6">
               <input type="text" id="verifycode" required class="form-control input-lg"
-                     placeholder="验证码">
+                     placeholder="<%=sails.__('private.login.verifycode')%>">
             </div>
             <div class="col-xs-4">
               <img id="captcha_img" src="/private/login/captcha" style="height:46px;cursor: pointer;"
@@ -65,7 +65,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button id="ok" type="button" class="btn btn-primary" data-dismiss="modal">登陆
+        <button id="ok" type="button" class="btn btn-primary" data-dismiss="modal"><%=sails.__('private.login.load')%>
         </button>
       </div>
     </div>
@@ -78,13 +78,13 @@
     $("#loginForm").ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {
-        form.find("button:submit").text("登陆中...");
+        form.find("button:submit").text("<%=sails.__('private.login.loading')%>...");
         form.find("button:submit").attr("disabled", "disabled");
       },
       success: function (data, statusText, xhr, form) {
         if (data.code == 0) {
           $("#tip").hide();
-          form.find("button:submit").text("登陆系统");
+          form.find("button:submit").text("<%=sails.__('private.login.load')%>");
           window.location.href = "/sysadmin/index";
         } else if (data.code == 2) {
           $("#verifycode").val("");
@@ -95,7 +95,7 @@
           $('#captcha_img').attr('src', '/private/login/captcha?_=' + new Date().getTime());
           $("#tip").html(data.msg);
           $("#tip").fadeIn();
-          form.find("button:submit").text("登陆系统");
+          form.find("button:submit").text("<%=sails.__('private.login.load')%>");
           form.find("button:submit").removeAttr("disabled")
         }
       }

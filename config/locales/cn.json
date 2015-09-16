@@ -1,9 +1,0 @@
-{
-  "Welcome": "欢迎",
-  "A brand new app.": "新应用",
-  "authentication.email.required": "请输入Email",
-  "authentication.email.email": "Email地址不正确",
-  "authentication.email.unique": "Email地址已存在",
-  "authentication.loginname.required": "请输入用户名",
-  "authentication.loginname.required": "请输入密码"
-}

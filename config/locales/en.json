@@ -5,5 +5,19 @@
   "authentication.email.email": "Provide valid email address",
   "authentication.email.unique": "Email address is already taken",
   "authentication.loginname.required": "Username is required",
-  "authentication.password.required": "Password is required"
+  "authentication.password.required": "Password is required",
+  "private.login.username":"Username",
+  "private.login.password":"Password",
+  "private.login.loading":"Loading",
+  "private.login.load":"Load",
+  "private.login.verifycode":"Captcha",
+  "private.login.required":"Username & Password required",
+  "private.login.inputverifycode":"Captcha required",
+  "private.login.errorverifycode":"Captcha is error",
+  "private.login.nousername":"Username is not exist",
+  "private.login.forbidden":"Username is forbidden",
+  "private.login.success":"Success",
+  "private.login.errorpassword":"Password is not right",
+  "private.login.logout":"Exit",
+  "private.forbidden":"Forbidden"
 }

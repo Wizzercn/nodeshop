@@ -3,7 +3,9 @@
  */
 module.exports = function(req, res, next) {
   if (req.session.auth && !req.session.user.disabled) {
-    return next();
+    res.layout='layouts/private';
+    res.lang=req.getLocale();
+    return next(res);
   } else {
     return res.redirect('/private/login/login');
   }

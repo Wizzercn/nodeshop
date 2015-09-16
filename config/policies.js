@@ -27,6 +27,9 @@ module.exports.policies = {
   ***************************************************************************/
   '*':true,
   'private/IndexController':{
-    '*':'private'
+    '*':['private']
+  },
+  'private/sys/UnitController':{
+    '*':['sysadmin']
   }
 };
