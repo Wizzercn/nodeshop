@@ -36,7 +36,7 @@ module.exports.routes = {
     view: 'homepage'
   },
   '/sysadmin': 'private/LoginController.login',
-  '/sysadmin/index': 'private/IndexController.index'
+  '/sysadmin/home': 'private/HomeController.index'
 
   /***************************************************************************
   *                                                                          *

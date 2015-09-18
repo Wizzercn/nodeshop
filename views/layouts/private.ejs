@@ -14,12 +14,18 @@
   <link rel="stylesheet" href="/css/skins/palette.css">
   <link rel="stylesheet" href="/css/fonts/font.css">
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/panel.css">
   <link rel="stylesheet" href="/plugins/jstree/themes/default/style.min.css">
   <!--[if lt IE 9]>
   <script src="/js/html5shiv.js"></script>
   <script src="/js/respond.min.js"></script>
   <script src="/js/json2.js"></script>
   <![endif]-->
+  <%if(user.loginTheme){%>
+  <link rel="stylesheet" href="/css/skins/<%=user.loginTheme%>" id="skin">
+  <%}else{%>
+  <link rel="stylesheet" href="/css/skins/palette.css" id="skin">
+  <%}%>
   <script src="/plugins/modernizr.js"></script>
   <script src="/plugins/jquery-1.11.1.min.js"></script>
   <script src="/js/jquery.pjax.js"></script>

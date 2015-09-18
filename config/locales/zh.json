@@ -19,5 +19,11 @@
   "private.login.success":"登陆成功",
   "private.login.errorpassword":"密码不正确",
   "private.login.logout":"退出系统",
-  "private.forbidden":"没有权限"
+  "private.forbidden":"没有权限",
+  "private.index.theme":"主题",
+  "private.index.layout":"布局",
+  "private.index.panel":"自定义皮肤和布局",
+  "private.index.usersetting":"修改资料",
+  "private.index.userpassword":"修改密码",
+  "private.index.panel":"自定义皮肤和布局"
 }

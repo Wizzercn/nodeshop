@@ -3,7 +3,6 @@
  */
 var ccap = require('ccap')();
 var bcrypt = require('bcrypt');
-var StringUtil = require('../../common/util/StringUtil');
 module.exports = {
   /**
    * 切换语言
@@ -11,11 +10,52 @@ module.exports = {
    * @param res
    */
   lang: function (req, res) {
-    console.log('lang::'+req.param('lang'));
-    console.log('Referer::'+req.header('Referer'));
+    console.log(req.ip); // '/admin/new'
+    console.log(req.originalUrl); // '/admin/new'
+    console.log(req.baseUrl); // '/admin'
+    console.log(req.path); // '/new'
+    console.log('lang::' + req.param('lang'));
+    console.log('Referer::' + res.get('Referer'));
+    console.log('Referer::' + req.headers['referer']);
     req.setLocale(req.param('lang'));
-    console.log('lang::'+req.getLocale());
-    res.redirect('/private/login/login');
+    console.log('lang::' + req.getLocale());
+    var url = req.headers['referer'] || '/';
+    res.redirect(url);
+  },
+  /**
+   * 更改主题
+   * @param req
+   * @param res
+   */
+  theme: function (req, res) {
+    Sys_user.update({id: req.session.user.id}, {loginTheme:req.body.loginTheme}, function (err, obj) {
+      req.session.user.loginTheme = req.body.loginTheme;
+      req.session.save();
+    });
+  },
+  /**
+   * 更改布局
+   * @param req
+   * @param res
+   */
+  layout: function (req, res) {
+    var p = req.body.p, v = req.body.v;
+    if ('sidebar' == p) {
+      Sys_user.update({id: req.session.user.id}, {loginSidebar: v}, function (err, obj) {
+        req.session.user.loginSidebar = v;
+        req.session.save();
+      });
+    } else if ('boxed' == p) {
+      Sys_user.update({id: req.session.user.id}, {loginBoxed: v}, function (err, obj) {
+        req.session.user.loginBoxed = v;
+        req.session.save();
+      });
+    } else if ('scroll' == p) {
+      Sys_user.update({id: req.session.user.id}, {loginScroll: v}, function (err, obj) {
+        req.session.user.loginScroll = v;
+        req.session.save();
+      });
+    }
   },
   /**
    * 登陆页
@@ -23,7 +63,8 @@ module.exports = {
    * @param res
    */
   login: function (req, res) {
-    return res.view('private/login.ejs', {layout: 'layouts/login',lang:req.getLocale()});
+    var salt = bcrypt.genSaltSync(10); var hash = bcrypt.hashSync('1', salt); console.log(hash);
+    return res.view('private/login.ejs', {layout: 'layouts/login', lang: req.getLocale()});
   },
   /**
    * 登出
@@ -34,8 +75,8 @@ module.exports = {
     Sys_user.findOne(req.session.user.id).exec(function (err, user) {
       if (user) {
         Sys_log.create({
-          type: 'system', url: req.url, note:  sails.__('private.login.logout'),
-          op_id: user.id, op_name: user.nickname, op_ip: StringUtil.getClientAddress(req)
+          type: 'system', url: req.url, note: sails.__('private.login.logout'),
+          op_id: user.id, op_name: user.nickname, op_ip: req.ip
         }).exec(function (err, log) {
         });
         req.session.destroy();
@@ -85,48 +126,47 @@ module.exports = {
         req.session.user = user;
         req.session.captchaMust = false;
         req.session.errorCount = 0;
-        var roleIds = [],roleCodes=[], userRoles = user.roles;
+        var roleIds = [], roleCodes = [], userRoles = user.roles;
         userRoles.forEach(function (obj) {
           roleIds.push(obj.id);
           roleCodes.push(obj.code);
         });
         req.session.roleCodes = roleCodes;
-
+        req.session.save();
         if (roleIds.length > 0) {//用户拥有角色则加载菜单
           Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
-            var fisrtMenus = [], secondMenus = new Map();
+            var firstMenus = [], secondMenus = {};
             role.forEach(function (m) {
-              m.menus.forEach(function (obj)
-              {
+              m.menus.forEach(function (obj) {
                 if (obj.path.length == 4) {
-                  fisrtMenus.push(obj);
+                  firstMenus.push(obj);
                 } else {
-                  var s = secondMenus.get(obj.path.substring(0, obj.path.length - 4))||[];
+                  var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
                   if (s) {
                     s.push(obj);
                   }
-                  secondMenus.set(obj.path.substring(0, obj.path.length - 4), s);
+                  secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
                 }
               });
 
             });
-            req.session.fisrtMenus=fisrtMenus;
-            req.session.secondMenus=secondMenus;
+            req.session.firstMenus = firstMenus;
+            req.session.secondMenus = secondMenus;
+            req.session.save();
 
           });
         }
         Sys_user.update(user.id, {
-          lastIp: StringUtil.getClientAddress(req),
+          lastIp: req.ip,
           loginCount: user.loginCount + 1
         }, function (err) {
         });
         //登陆日志
         Sys_log.create({
-          type: 'system', url: req.url, note:  sails.__('private.login.success'),
-          createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getClientAddress(req)
+          type: 'system', url: req.url, note: sails.__('private.login.success'),
+          createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
         }).exec(function (err) {
         });
-
         return res.json({code: 0, msg: sails.__('private.login.success')});
       } else {
         return res.json({code: 4, msg: sails.__('private.login.errorpassword')});

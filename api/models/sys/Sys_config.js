@@ -29,12 +29,6 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
-    },
-    updatedAt:{
-      type:'integer',
-      defaultsTo:function(){
-        return moment().format('X');
-      }
     }
   }
 };

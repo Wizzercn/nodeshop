@@ -52,9 +52,24 @@ module.exports = {
       type:'boolean',
       defaultsTo: function (){ return false; }
     },
-    createdBy:{
+    loginTheme:{
       type: 'string',
-      size: 50
+      size:20
+    },
+    loginSidebar:{
+      type: 'boolean',
+      defaultsTo: function (){ return false; }
+    },
+    loginScroll:{
+      type: 'boolean',
+      defaultsTo: function (){ return false; }
+    },
+    loginBoxed:{
+      type: 'boolean',
+      defaultsTo: function (){ return false; }
+    },
+    createdBy:{
+      type: 'integer'
     },
     createdAt:{
       type:'integer',

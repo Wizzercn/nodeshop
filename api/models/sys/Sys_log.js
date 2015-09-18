@@ -26,8 +26,7 @@ module.exports = {
       size:255
     },
     createdBy: {//操作人ID
-      type: 'string',
-      size: 50
+      type: 'integer'
     },
     createdByName: {
       type: 'string',

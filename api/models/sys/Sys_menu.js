@@ -66,8 +66,7 @@ module.exports = {
       size: 11
     },
     createdBy:{
-      type: 'string',
-      size: 50
+      type: 'integer'
     },
     createdAt:{
       type:'integer',
