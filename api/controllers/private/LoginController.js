@@ -10,13 +10,6 @@ module.exports = {
    * @param res
    */
   lang: function (req, res) {
-    console.log(req.ip); // '/admin/new'
-    console.log(req.originalUrl); // '/admin/new'
-    console.log(req.baseUrl); // '/admin'
-    console.log(req.path); // '/new'
-    console.log('lang::' + req.param('lang'));
-    console.log('Referer::' + res.get('Referer'));
-    console.log('Referer::' + req.headers['referer']);
     req.setLocale(req.param('lang'));
     console.log('lang::' + req.getLocale());
     var url = req.headers['referer'] || '/';
@@ -28,10 +21,12 @@ module.exports = {
    * @param res
    */
   theme: function (req, res) {
-    Sys_user.update({id: req.session.user.id}, {loginTheme:req.body.loginTheme}, function (err, obj) {
-      req.session.user.loginTheme = req.body.loginTheme;
-      req.session.save();
+    req.session.user.loginTheme = req.body.loginTheme;
+    req.session.save();
+    Sys_user.update({id: req.session.user.id}, {loginTheme: req.body.loginTheme}).exec(function (err, obj) {
+
     });
+    res.end();
   },
   /**
    * 更改布局
@@ -39,23 +34,24 @@ module.exports = {
    * @param res
    */
   layout: function (req, res) {
-    var p = req.body.p, v = req.body.v;
+    var p = req.body.p, v =req.body.v=='true';
+    console.log('a...'+typeof(v));
+    console.log('c...'+(v));
     if ('sidebar' == p) {
-      Sys_user.update({id: req.session.user.id}, {loginSidebar: v}, function (err, obj) {
-        req.session.user.loginSidebar = v;
-        req.session.save();
+      req.session.user.loginSidebar = v;
+      Sys_user.update({id: req.session.user.id}, {loginSidebar: v}).exec(function (err, obj) {
       });
     } else if ('boxed' == p) {
-      Sys_user.update({id: req.session.user.id}, {loginBoxed: v}, function (err, obj) {
-        req.session.user.loginBoxed = v;
-        req.session.save();
+      req.session.user.loginBoxed = v;
+      Sys_user.update({id: req.session.user.id}, {loginBoxed: v}).exec(function (err, obj) {
       });
     } else if ('scroll' == p) {
-      Sys_user.update({id: req.session.user.id}, {loginScroll: v}, function (err, obj) {
-        req.session.user.loginScroll = v;
-        req.session.save();
+      req.session.user.loginScroll = v;
+      Sys_user.update({id: req.session.user.id}, {loginScroll: v}).exec(function (err, obj) {
       });
     }
+    req.session.save();
+    res.end();
   },
   /**
    * 登陆页
@@ -63,7 +59,7 @@ module.exports = {
    * @param res
    */
   login: function (req, res) {
-    var salt = bcrypt.genSaltSync(10); var hash = bcrypt.hashSync('1', salt); console.log(hash);
+    //var salt = bcrypt.genSaltSync(10); var hash = bcrypt.hashSync('1', salt); console.log(hash);
     return res.view('private/login.ejs', {layout: 'layouts/login', lang: req.getLocale()});
   },
   /**

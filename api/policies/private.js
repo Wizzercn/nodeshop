@@ -2,6 +2,7 @@
  * Created by root on 9/9/15.
  */
 module.exports = function (req, res, next) {
+  if (req.url == '/favicon.ico')return res.end('');
   if (req.session.auth && !req.session.user.disabled) {
     req.data = {
       layout: 'layouts/private',

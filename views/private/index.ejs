@@ -15,33 +15,33 @@
         <div></div>
       </a>
       <a onclick="sublime.changeTheme('palette.2.css')" href="/css/skins/palette.2.css"
-         class="css_orange cs_color cs_2 <% if('palette2.css' == user.loginTheme){ %>active<% } %>">
+         class="css_orange cs_color cs_2 <% if('palette.2.css' == user.loginTheme){ %>active<% } %>">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </a>
       <a onclick="sublime.changeTheme('palette.3.css')" href="/css/skins/palette.3.css"
-         class="css_orange cs_color cs_3 <% if('palette3.css' == user.loginTheme){ %>active<% } %>">
+         class="css_orange cs_color cs_3 <% if('palette.3.css' == user.loginTheme){ %>active<% } %>">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </a>
       <a onclick="sublime.changeTheme('palette.4.css')" href="/css/skins/palette.4.css"
-         class="css_orange cs_color cs_4 <% if('palette4.css' == user.loginTheme){ %>active<% } %>">
+         class="css_orange cs_color cs_4 <% if('palette.4.css' == user.loginTheme){ %>active<% } %>">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </a>
-    </div>
+    </div><%=user.loginScroll==true%>
     <div class="options-container">
       <h6><%= sails.__('private.index.layout') %></h6>
       <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
         <img src="/img/panel/small.png" alt="">
       </a>
-      <a class="pg-val toggle-scroll toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
+      <a class="pg-val toggle-scroll toggle-active <% if(user.loginScroll){ %>active<% } %>" href="javascript:;">
         <img src="/img/panel/scroll.png" alt="">
       </a>
       <a class="pg-val toggle-boxed toggle-active <% if(user.loginBoxed){ %>active<% } %>" href="javascript:;">
