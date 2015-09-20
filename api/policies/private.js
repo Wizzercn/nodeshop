@@ -9,7 +9,8 @@ module.exports = function (req, res, next) {
       lang: req.getLocale(),
       user: req.session.user,
       firstMenus: req.session.firstMenus,
-      secondMenus: req.session.secondMenus
+      secondMenus: req.session.secondMenus,
+      path:req.url
     };
     return next();
   } else {

@@ -35,7 +35,7 @@
         <div></div>
         <div></div>
       </a>
-    </div><%=user.loginScroll==true%>
+    </div><%= user.loginScroll == true %>
     <div class="options-container">
       <h6><%= sails.__('private.index.layout') %></h6>
       <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
@@ -51,7 +51,8 @@
     <small class="pg-footer"><i class="ti-info-alt mr5"></i><%= sails.__('private.index.panel') %></small>
   </div>
 </div>
-<div class="app <% if(user.loginSidebar){ %>small-menu<% } %> <% if(user.loginScroll){ %>fixed-scroll<% } %> <% if(user.loginBoxed){ %>boxed<% } %>">
+<div
+  class="app <% if(user.loginSidebar){ %>small-menu<% } %> <% if(user.loginScroll){ %>fixed-scroll<% } %> <% if(user.loginBoxed){ %>boxed<% } %>">
   <header class="header header-fixed navbar">
     <div class="brand">
 
@@ -61,7 +62,7 @@
       <a href="/sysadmin/home" class="navbar-brand">
         <img src="/img/logo.png" alt="">
                 <span class="heading-font">
-                <%=sails.config.system.AppName%>
+                <%= sails.config.system.AppName %>
                 </span>
       </a>
 
@@ -209,13 +210,13 @@
       <!-- START Language list-->
       <li class="language-dropdown dropdown hidden-xs">
         <a href="javascript:;" data-toggle="dropdown" id="language">
-          <%if('zh'==lang){%>
+          <% if('zh' == lang){ %>
           <img src="/img/flags/cn.png" class="flag">
           <span class="language"></span>
-          <%}else{%>
+          <% }else{ %>
           <img src="/img/flags/us.png" class="flag">
           <span class="language"></span>
-          <%}%>
+          <% } %>
         </a>
         <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
           <li>
@@ -236,15 +237,15 @@
 
       <li class="off-right">
         <a href="javascript:;" data-toggle="dropdown">
-          <span class="hidden-xs ml10"><%-user.nickname%></span>
+          <span class="hidden-xs ml10"><%- user.nickname %></span>
           <i class="ti-angle-down ti-caret hidden-xs"></i>
         </a>
         <ul class="dropdown-menu animated fadeInLeft">
           <li>
-            <a href="javascript:;"><%=sails.__('private.index.usersetting')%></a>
+            <a href="javascript:;"><%= sails.__('private.index.usersetting') %></a>
           </li>
           <li>
-            <a href="javascript:;"><%=sails.__('private.index.userpassword')%></a>
+            <a href="javascript:;"><%= sails.__('private.index.userpassword') %></a>
           </li>
         </ul>
       </li>
@@ -267,11 +268,36 @@
           <li>
             <a href="index.html">
               <i class="ti-home"></i>
-              <span>Dashboard</span>
+              <span><%= path %></span>
             </a>
           </li>
+          <%if(firstMenus){%>
+          <% firstMenus.forEach(function(firstMenu){ %>
+          <li>
+            <a href="<% if(firstMenu.url){ %><%=firstMenu.url%><% }else{ %>javascript:;<% } %>">
+              <i class="toggle-accordion"></i>
+              <i class="ti-map"></i>
+              <span><%= firstMenu.name %></span>
 
-
+            </a>
+            <%if(secondMenus[firstMenu.path]){%>
+            <ul class="sub-menu">
+              <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+              <li <%if(path==secondMenu.url){%>class="active"<%}%>>
+                <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>">
+                  <span><%= secondMenu.name %></span>
+                </a>
+              </li>
+              <%});%>
+            </ul>
+            <%}%>
+          </li>
+          <% });} %>
+          <script>
+            $(function(){
+              $("[href='<%=path%>']").parent().parent().parent().addClass("open");
+            });
+          </script>
           <li>
             <a href="javascript:;">
               <i class="toggle-accordion"></i>
@@ -740,7 +766,7 @@
       </nav>
     </aside>
     <section class="main-content">
-      </section>
+    </section>
   </section>
 
 

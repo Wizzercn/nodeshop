@@ -7,7 +7,7 @@
 module.exports = {
   index: function (req, res) {
     var data=req.data;
-
+    console.log('data::'+JSON.stringify(data));
     return res.view('private/index.ejs',data);
 
   }

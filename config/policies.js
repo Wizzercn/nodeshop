@@ -20,16 +20,18 @@
 module.exports.policies = {
 
   /***************************************************************************
-  *                                                                          *
-  * Default policy for all controllers and actions (`true` allows public     *
-  * access)                                                                  *
-  *                                                                          *
-  ***************************************************************************/
-  '*':true,
-  'private/HomeController':{
-    '*':['private']
+   *                                                                          *
+   * Default policy for all controllers and actions (`true` allows public     *
+   * access)                                                                  *
+   *                                                                          *
+   ***************************************************************************/
+  '*': true,
+  'private/HomeController': {
+    '*': 'sysadmin',
+    'index': 'private'
   },
-  'private/sys/UnitController':{
-    '*':['private','sysadmin']
+  'private/sys/UnitController': {
+    '*': 'sysadmin',
+    'index': 'private'
   }
 };
