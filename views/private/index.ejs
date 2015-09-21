@@ -273,9 +273,11 @@
           </li>
           <%if(firstMenus){%>
           <% firstMenus.forEach(function(firstMenu){ %>
-          <li>
+          <li <%if(path==firstMenu.path){%>class="active"<%}else if(path.indexOf(firstMenu.path)==0){%>class="open"<%}%>>
             <a href="<% if(firstMenu.url){ %><%=firstMenu.url%><% }else{ %>javascript:;<% } %>">
+              <%if(secondMenus[firstMenu.path]){%>
               <i class="toggle-accordion"></i>
+              <%}%>
               <i class="ti-map"></i>
               <span><%= firstMenu.name %></span>
 
@@ -283,244 +285,43 @@
             <%if(secondMenus[firstMenu.path]){%>
             <ul class="sub-menu">
               <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
-              <li <%if(path==secondMenu.url){%>class="active"<%}%>>
+
+              <li <%if(path==secondMenu.path){%>class="active"<%}else if(path.indexOf(secondMenu.path)==0){%>class="open"<%}%>>
                 <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>">
+                  <%if(secondMenus[secondMenu.path]){%>
+                  <i class="toggle-accordion"></i>
+                  <%}%>
                   <span><%= secondMenu.name %></span>
                 </a>
+                <%if(secondMenus[secondMenu.path]){%>
+                <ul class="sub-menu">
+                  <%secondMenus[secondMenu.path].forEach(function(thirdMenu){%>
+                  <li <%if(path==thirdMenu.path){%>class="active"<%}%>>
+                    <a href="<% if(thirdMenu.url){ %><%=thirdMenu.url%><% }else{ %>javascript:;<% } %>">
+                      <span><%= thirdMenu.name %></span>
+                    </a>
+                  </li>
+                  <%});%>
+                </ul>
+                <%}%>
               </li>
+
               <%});%>
             </ul>
             <%}%>
           </li>
           <% });} %>
-          <script>
-            $(function(){
-              $("[href='<%=path%>']").parent().parent().parent().addClass("open");
-            });
-          </script>
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-layout-media-overlay-alt-2"></i>
-              <span>UI Elements</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="buttons.html">
-                  <span>Buttons</span>
-                </a>
-              </li>
-              <li>
-                <a href="general.html">
-                  <span>General Elements</span>
-                </a>
-              </li>
-              <li>
-                <a href="typography.html">
-                  <span>Typography</span>
-                </a>
-              </li>
-              <li>
-                <a href="tabs_accordion.html">
-                  <span>Tabs &amp; Accordions</span>
-                </a>
-              </li>
-              <li>
-                <a href="icons.html">
-                  <span>Fontawesome</span>
-                </a>
-              </li>
-              <li>
-                <a href="themify_icons.html">
-                  <span>Themify Icons</span>
-                </a>
-              </li>
-              <li>
-                <a href="grid.html">
-                  <span>Grid Layout</span>
-                </a>
-              </li>
-              <li>
-                <a href="widgets.html">
-                  <span>Widgets</span>
-                </a>
-              </li>
-            </ul>
-          </li>
+          <!--<script>-->
+            <!--$(function(){-->
+              <!--$("[href='<%=path%>']").parent().parent().parent().addClass("open");-->
+              <!--$("[href='<%=path%>']").parent().parent().parent().parent().parent().addClass("open");-->
+            <!--});-->
+          <!--</script>-->
 
 
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-support"></i>
-              <span>Components</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="calendar.html">
-                  <span>Calendar</span>
-                </a>
-              </li>
-              <li>
-                <a href="gallery.html">
-                  <span>Gallery</span>
-                </a>
-              </li>
-              <li>
-                <a href="sortable.html">
-                  <span>Sortable &amp; Nestable Lists</span>
-                </a>
-              </li>
-              <li>
-                <a href="chart.html">
-                  <span>Charts</span>
-                </a>
-              </li>
-              <li>
-                <a href="progress_slider.html">
-                  <span>Progress bars &amp; Sliders</span>
-                </a>
-              </li>
-              <li>
-                <a href="tree.html">
-                  <span>Tree View</span>
-                </a>
-              </li>
-              <li>
-                <a href="notifications.html">
-                  <span>Notifications</span>
-                </a>
-              </li>
-              <li>
-                <a href="animated.html">
-                  <span>Animated Elements</span>
-                </a>
-              </li>
-              <li>
-                <a href="tour.html">
-                  <span>Tour</span>
-                </a>
-              </li>
-            </ul>
-          </li>
 
 
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-folder"></i>
-              <span>Forms</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="forms.html">
-                  <span>Forms Elements</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_custom.html">
-                  <span>Customized Elements</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_validation.html">
-                  <span>Form Validation</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_wizard.html">
-                  <span>Form Wizards</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_wysiwyg.html">
-                  <span>WYSIWYG/Markdown Editors</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_inline.html">
-                  <span>Content Editable</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_dropzone.html">
-                  <span>Dropzone</span>
-                </a>
-              </li>
-              <li>
-                <a href="xeditable.html">
-                  <span>X-Editable</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_masks.html">
-                  <span>Input Masks</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_pickers.html">
-                  <span>Form Pickers</span>
-                </a>
-              </li>
-              <li>
-                <a href="form_crop.html">
-                  <span>Image Crop</span>
-                </a>
-              </li>
-            </ul>
-          </li>
 
-
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-window"></i>
-              <span>Tables</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="table_basic.html">
-                  <span>Basic Tables</span>
-                </a>
-              </li>
-              <li>
-                <a href="table_responsive.html">
-                  <span>Resonsive Table</span>
-                </a>
-              </li>
-              <li>
-                <a href="datatable.html">
-                  <span>Data Tables</span>
-                </a>
-              </li>
-              <li>
-                <a href="table_editable.html">
-                  <span>Editable Table</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-map"></i>
-              <span>Maps</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="google_maps.html">
-                  <span>Google Maps</span>
-                </a>
-              </li>
-              <li>
-                <a href="vector.html">
-                  <span>Vector Maps</span>
-                </a>
-              </li>
-            </ul>
-          </li>
 
         </ul>
         <p class="nav-title">MORE</p>
@@ -674,66 +475,6 @@
           </li>
 
 
-          <li class="open">
-            <a href="javascript:;" class="active">
-              <i class="toggle-accordion"></i>
-              <i class="ti-menu-alt"></i>
-              <span>Multi Level Menu</span>
-            </a>
-            <ul class="sub-menu">
-              <li class="open">
-                <a href="javascript:;">
-                  <i class="toggle-accordion"></i>
-                  <span>Menu Link 1</span>
-                </a>
-                <ul class="sub-menu">
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 1.1</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 1.2</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 1.3</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="javascript:;">
-                  <i class="toggle-accordion"></i>
-                  <span>Menu Link 2</span>
-                </a>
-                <ul class="sub-menu">
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 2.1</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 2.2</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="javascript:;">
-                      <span>Menu Link 2.3</span>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a href="javascript:;">
-                  <span>Menu Link 3</span>
-                </a>
-              </li>
-            </ul>
-          </li>
 
           <li>
             <a href="http://sublime.nyasha.me/frontend">

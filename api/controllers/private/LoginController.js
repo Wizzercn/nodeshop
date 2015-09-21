@@ -126,30 +126,6 @@ module.exports = {
           roleCodes.push(obj.code);
         });
         req.session.roleCodes = roleCodes;
-        req.session.save();
-        if (roleIds.length > 0) {//用户拥有角色则加载菜单
-          Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
-            var firstMenus = [], secondMenus = {};
-            role.forEach(function (m) {
-              m.menus.forEach(function (obj) {
-                if (obj.path.length == 4) {
-                  firstMenus.push(obj);
-                } else {
-                  var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
-                  if (s) {
-                    s.push(obj);
-                  }
-                  secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
-                }
-              });
-
-            });
-            req.session.firstMenus = firstMenus;
-            req.session.secondMenus = secondMenus;
-            req.session.save();
-
-          });
-        }
         Sys_user.update(user.id, {
           lastIp: req.ip,
           loginCount: user.loginCount + 1
@@ -161,7 +137,37 @@ module.exports = {
           createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
         }).exec(function (err) {
         });
-        return res.json({code: 0, msg: sails.__('private.login.success')});
+        if (roleIds.length > 0) {
+          Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
+
+            if (role) {
+              var firstMenus = [], secondMenus = {};
+              role.forEach(function (m) {
+                m.menus.forEach(function (obj) {
+                  if (obj.path.length == 4) {
+                    firstMenus.push(obj);
+                  } else {
+                    var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
+                    if (s) {
+                      s.push(obj);
+                    }
+                    secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
+                  }
+                });
+
+              });
+              req.session.firstMenus = firstMenus;
+              req.session.secondMenus = secondMenus;
+            }
+
+            req.session.save();
+            return res.json({code: 0, msg: sails.__('private.login.success')});
+          });
+        } else {
+          return res.json({code: 0, msg: sails.__('private.login.success')});
+
+        }
+
       } else {
         return res.json({code: 4, msg: sails.__('private.login.errorpassword')});
       }
