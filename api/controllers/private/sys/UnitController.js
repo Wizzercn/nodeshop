@@ -3,8 +3,12 @@
  */
 module.exports = {
   index: function (req, res) {
-    var userId=req.session.user.id;
-    return res.view('private/index.ejs', {layout: 'layouts/private',user:req.session.user});
+    var data=req.data;
+    return res.view('private/index.ejs',data);
 
+  },
+  add: function (req, res) {
+    var data=req.data;
+    return res.view('private/index.ejs',data);
   }
 };

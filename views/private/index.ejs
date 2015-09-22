@@ -75,19 +75,40 @@
         </a>
 
       </li>
-      <li class="header-search">
 
-        <a href="javascript:;" class="toggle-search">
-          <i class="ti-search"></i>
-        </a>
-
-        <div class="search-container">
-          <form role="search">
-            <input type="text" class="form-control search" placeholder="type and press enter">
-          </form>
-        </div>
-      </li>
     </ul>
+    <div class="collapse navbar-collapse pull-left" id="hor-menu">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/sysadmin/home">
+            <i class="ti-home"></i>
+            <span>首页</span>
+          </a>
+        </li>
+        <%if(firstMenus){%>
+        <% firstMenus.forEach(function(firstMenu){ %>
+
+        <li class="dropdown">
+          <a href="javascript:;" data-toggle="dropdown">
+            <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}%>
+            <span><%=firstMenu.name%></span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <%if(secondMenus[firstMenu.path]){%>
+              <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+            <li>
+              <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>">
+                <span><%=secondMenu.name%></span>
+              </a>
+            </li>
+            <%});}%>
+          </ul>
+        </li>
+        <%});}%>
+
+      </ul>
+    </div>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown hidden-xs">
         <a href="javascript:;" data-toggle="dropdown">
@@ -265,14 +286,9 @@
         <p class="nav-title">MENU</p>
         <ul class="nav">
 
-          <li>
-            <a href="index.html">
-              <i class="ti-home"></i>
-              <span><%= path %></span>
-            </a>
-          </li>
-          <%if(firstMenus){%>
-          <% firstMenus.forEach(function(firstMenu){ %>
+
+          <%if(path.length>8&&secondMenus[path.substring(0,path.length-8)]){%>
+          <% secondMenus[path.substring(0,path.length-8)].forEach(function(firstMenu){ %>
           <li <%if(path==firstMenu.path){%>class="active"<%}else if(path.indexOf(firstMenu.path)==0){%>class="open"<%}%>>
             <a href="<% if(firstMenu.url){ %><%=firstMenu.url%><% }else{ %>javascript:;<% } %>">
               <%if(secondMenus[firstMenu.path]){%>
@@ -293,216 +309,30 @@
                   <%}%>
                   <span><%= secondMenu.name %></span>
                 </a>
-                <%if(secondMenus[secondMenu.path]){%>
-                <ul class="sub-menu">
-                  <%secondMenus[secondMenu.path].forEach(function(thirdMenu){%>
-                  <li <%if(path==thirdMenu.path){%>class="active"<%}%>>
-                    <a href="<% if(thirdMenu.url){ %><%=thirdMenu.url%><% }else{ %>javascript:;<% } %>">
-                      <span><%= thirdMenu.name %></span>
-                    </a>
-                  </li>
-                  <%});%>
-                </ul>
-                <%}%>
               </li>
 
               <%});%>
             </ul>
             <%}%>
           </li>
-          <% });} %>
-          <!--<script>-->
-            <!--$(function(){-->
-              <!--$("[href='<%=path%>']").parent().parent().parent().addClass("open");-->
-              <!--$("[href='<%=path%>']").parent().parent().parent().parent().parent().addClass("open");-->
-            <!--});-->
-          <!--</script>-->
-
-
-
-
-
-
-        </ul>
-        <p class="nav-title">MORE</p>
-        <ul class="nav">
-
-          <li>
+          <% });}else{%>
+          <li class="open">
             <a href="javascript:;">
               <i class="toggle-accordion"></i>
               <i class="ti-layers"></i>
-              <span>Ready Pages</span>
+              <span>常用菜单</span>
             </a>
             <ul class="sub-menu">
-              <li>
-                <a href="mail.html">
-                  <span>Mailbox</span>
-                </a>
-              </li>
-              <li>
-                <a href="mail_view.html">
-                  <span>Mail View</span>
-                </a>
-              </li>
-              <li>
-                <a href="compose.html">
-                  <span>Compose</span>
-                </a>
-              </li>
-              <li>
-                <a href="profile.html">
-                  <span>Profile</span>
-                </a>
-              </li>
-              <li>
-                <a href="invoice.html">
-                  <span>Invoice</span>
-                </a>
-              </li>
-              <li>
-                <a href="signin.html">
-                  <span>Signin</span>
-                </a>
-              </li>
-              <li>
-                <a href="signup.html">
-                  <span>Signup</span>
-                </a>
-              </li>
-              <li>
-                <a href="forgot.html">
-                  <span>Forgot Password</span>
-                </a>
-              </li>
-              <li>
-                <a href="lock.html">
-                  <span>Lock Screen</span>
-                </a>
-              </li>
-              <li>
-                <a href="404.html">
-                  <span>404 Page</span>
-                </a>
-              </li>
-              <li>
-                <a href="500.html">
-                  <span>500 Page</span>
-                </a>
-              </li>
-              <li>
-                <a href="changelog.html">
-                  <span class="pull-right small label label-danger">Updated</span>
-                  <span>Change Log</span>
-                </a>
-              </li>
-              <li>
-                <a href="timeline.html">
-                  <span>Timeline</span>
-                </a>
-              </li>
-              <li>
-                <a href="catalog.html">
-                  <span>Catalog</span>
-                </a>
-              </li>
-              <li>
-                <a href="chat.html">
-                  <span>Chat</span>
+              <li class="active">
+                <a href="forms.html">
+                  <span>订单管理</span>
                 </a>
               </li>
             </ul>
           </li>
+          <%}%>
 
 
-          <li>
-            <a href="javascript:;">
-              <i class="toggle-accordion"></i>
-              <i class="ti-layout"></i>
-              <span>Layouts</span>
-            </a>
-            <ul class="sub-menu">
-              <li>
-                <a href="small_menu.html">
-                  <span>Small Menu</span>
-                </a>
-              </li>
-              <li>
-                <a href="right_menu.html">
-                  <span>Right Side Menu</span>
-                </a>
-              </li>
-              <li>
-                <a href="push_sidebar.html">
-                  <span>Chat Sidebar</span>
-                </a>
-              </li>
-              <li>
-                <a href="language_bar.html">
-                  <span>Language Switcher</span>
-                </a>
-              </li>
-              <li>
-                <a href="footer_layout.html">
-                  <span>Layout With Footer</span>
-                </a>
-              </li>
-              <li>
-                <a href="horizontal_menu.html">
-                  <span>Horizontal Menu</span>
-                </a>
-              </li>
-              <li>
-                <a href="boxed.html">
-                  <span>Boxed Layout</span>
-                </a>
-              </li>
-              <li>
-                <a href="horizontal_menu_boxed.html">
-                  <span>Horizontal Boxed</span>
-                </a>
-              </li>
-              <li>
-                <a href="fixed_scroll.html">
-                  <span>Fixed Header &amp; Scrollable Layout</span>
-                </a>
-              </li>
-              <li>
-                <a href="blank.html">
-                  <span>Blank Page</span>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-
-
-          <li>
-            <a href="http://sublime.nyasha.me/frontend">
-              <i class="ti-layout-media-center"></i>
-              <span>Frontend Template</span>
-            </a>
-          </li>
-        </ul>
-        <p class="nav-title">LABELS</p>
-        <ul class="nav">
-          <li>
-            <a href="javascript:;">
-              <i class="ti-control-record text-warning"></i>
-              <span>Projects</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <i class="ti-control-record text-success"></i>
-              <span>Apps</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:;">
-              <i class="ti-control-record text-danger"></i>
-              <span>Support</span>
-            </a>
-          </li>
         </ul>
       </nav>
     </aside>

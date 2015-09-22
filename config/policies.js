@@ -31,7 +31,6 @@ module.exports.policies = {
     'index': 'private'
   },
   'private/sys/UnitController': {
-    '*': 'sysadmin',
-    'index': 'private'
+    '*': 'private'
   }
 };
