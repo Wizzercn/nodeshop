@@ -1,4 +1,5 @@
 /**
+ * 后台权限拦截器
  * Created by root on 9/9/15.
  */
 module.exports = function (req, res, next) {
@@ -22,7 +23,9 @@ module.exports = function (req, res, next) {
         permission = obj.permission;
       }
       var hasPermission = req.session.permission;
-      if (hasPermission.indexOf(permission)>-1||'/sysadmin/home'==req.url) {
+      var roleCodes = req.session.roleCodes;
+      //如果角色是sysadmin,或者是后台首页,或是有Permission权限则通过
+      if (roleCodes.indexOf('sysadmin') > -1 || hasPermission.indexOf(permission) > -1 || '/sysadmin/home' == req.url) {
         req.data = {
           layout: 'layouts/private',
           lang: req.getLocale(),
