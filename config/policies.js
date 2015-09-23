@@ -27,8 +27,7 @@ module.exports.policies = {
    ***************************************************************************/
   '*': true,
   'private/HomeController': {
-    '*': 'sysadmin',
-    'index': 'private'
+    '*': 'private'
   },
   'private/sys/UnitController': {
     '*': 'private'

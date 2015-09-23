@@ -43,6 +43,10 @@ module.exports = {
       type: 'string',
       size: 100
     },
+    permission:{
+      type: 'string',
+      size: 100
+    },
     hidden: {
       type: 'boolean',
       defaultsTo: function () {

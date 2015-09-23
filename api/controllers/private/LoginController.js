@@ -141,7 +141,7 @@ module.exports = {
           Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
 
             if (role) {
-              var firstMenus = [], secondMenus = {};
+              var firstMenus = [], secondMenus = {},permission=[];
               role.forEach(function (m) {
                 m.menus.forEach(function (obj) {
                   if (obj.path.length == 4) {
@@ -153,11 +153,15 @@ module.exports = {
                     }
                     secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
                   }
+                  if(obj.permission){
+                    permission.push(obj.permission);
+                  }
                 });
 
               });
               req.session.firstMenus = firstMenus;
               req.session.secondMenus = secondMenus;
+              req.session.permission = permission;
             }
 
             req.session.save();

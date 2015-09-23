@@ -294,7 +294,7 @@
               <%if(secondMenus[firstMenu.path]){%>
               <i class="toggle-accordion"></i>
               <%}%>
-              <i class="ti-map"></i>
+              <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}else{%><i class="ti-map"></i><%}%>
               <span><%= firstMenu.name %></span>
 
             </a>
