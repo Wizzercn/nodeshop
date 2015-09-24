@@ -4,9 +4,9 @@
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="<%=sails.config.system.AppName%>">
+  <meta name="description" content="<%= sails.config.system.AppName %>">
   <meta name="keywords" content="wizzer,node,nodejs,shop">
-  <title><%=sails.config.system.AppName%></title>
+  <title><%= sails.config.system.AppName %></title>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/font-awesome.css">
   <link rel="stylesheet" href="/css/themify-icons.css">
@@ -22,11 +22,11 @@
   <script src="/js/respond.min.js"></script>
   <script src="/js/json2.js"></script>
   <![endif]-->
-  <%if(user.loginTheme){%>
-  <link rel="stylesheet" href="/css/skins/<%=user.loginTheme%>" id="skin">
-  <%}else{%>
+  <% if(user.loginTheme){ %>
+  <link rel="stylesheet" href="/css/skins/<%= user.loginTheme %>" id="skin">
+  <% }else{ %>
   <link rel="stylesheet" href="/css/skins/palette.css" id="skin">
-  <%}%>
+  <% } %>
   <script src="/plugins/modernizr.js"></script>
   <script src="/plugins/jquery-1.11.1.min.js"></script>
   <script src="/js/jquery.pjax.js"></script>
@@ -119,27 +119,29 @@
             <span>首页</span>
           </a>
         </li>
-        <%if(firstMenus){%>
+        <% if(firstMenus){ %>
         <% firstMenus.forEach(function(firstMenu){ %>
 
         <li class="dropdown">
           <a href="javascript:;" data-toggle="dropdown">
-            <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}%>
-            <span><%=firstMenu.name%></span>
+            <% if(firstMenu.icon){ %>
+            <i class="<%= firstMenu.icon %>"></i>
+            <% } %>
+            <span><%= firstMenu.name %></span>
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <%if(secondMenus[firstMenu.path]){%>
-            <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+            <% if(secondMenus[firstMenu.path]){ %>
+            <% secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
             <li>
-              <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>">
-                <span><%=secondMenu.name%></span>
+              <a href="<% if(secondMenu.url){ %> <%= secondMenu.url %> <% }else{ %>javascript:;<% } %>">
+                <span><%= secondMenu.name %></span>
               </a>
             </li>
-            <%});}%>
+            <% });} %>
           </ul>
         </li>
-        <%});}%>
+        <% });} %>
 
       </ul>
     </div>
@@ -297,10 +299,11 @@
         </a>
         <ul class="dropdown-menu animated fadeInLeft">
           <li>
-            <a href="javascript:;"><%= sails.__('private.index.usersetting') %></a>
+            <a href="#"><%= sails.__('private.index.usersetting') %></a>
           </li>
           <li>
-            <a href="javascript:;"><%= sails.__('private.index.userpassword') %></a>
+            <a href="#" data-toggle="modal"
+               data-target="#homeChangePassword"><%= sails.__('private.index.userpassword') %></a>
           </li>
         </ul>
       </li>
@@ -320,36 +323,49 @@
         <p class="nav-title">MENU</p>
         <ul class="nav">
 
-
-          <%if(path.length>8&&secondMenus[path.substring(0,path.length-8)]){%>
-          <% secondMenus[path.substring(0,path.length-8)].forEach(function(firstMenu){ %>
-          <li <%if(path==firstMenu.path){%>class="active"<%}else if(path.indexOf(firstMenu.path)==0){%>class="open"<%}%>>
-            <a <% if(firstMenu.url){ %>href="<%=firstMenu.url%>" data-pjax<% }else{ %>href="javascript:;"<% } %>>
-              <%if(secondMenus[firstMenu.path]){%>
+          <% if(path.length > 8 && secondMenus[path.substring(0, path.length - 8)]){ %>
+          <% secondMenus[path.substring(0, path.length - 8)].forEach(function(firstMenu){ %>
+          <li <% if(path == firstMenu.path){ %>class="active"
+              <% }else if(path.indexOf(firstMenu.path) == 0){ %>class="open"
+            <% } %>
+            >
+            <a <% if(firstMenu.url){ %>href="<%= firstMenu.url %>" data-pjax<% }else{ %>href="javascript:;"
+              <% } %>
+              >
+              <% if(secondMenus[firstMenu.path]){ %>
               <i class="toggle-accordion"></i>
-              <%}%>
-              <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}else{%><i class="ti-map"></i><%}%>
+              <% } %>
+              <% if(firstMenu.icon){ %>
+              <i class="<%= firstMenu.icon %>"></i>
+              <% }else{ %>
+              <i class="ti-map"></i>
+              <% } %>
               <span><%= firstMenu.name %></span>
 
             </a>
-            <%if(secondMenus[firstMenu.path]){%>
+            <% if(secondMenus[firstMenu.path]){ %>
             <ul class="sub-menu">
-              <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+              <% secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
 
-              <li <%if(path==secondMenu.path){%>class="active"<%}else if(path.indexOf(secondMenu.path)==0){%>class="open"<%}%>>
-                <a <% if(secondMenu.url){ %>href="<%=secondMenu.url%>" data-pjax<% }else{ %>href="javascript:;"<% } %>>
-                  <%if(secondMenus[secondMenu.path]){%>
+              <li <% if(path == secondMenu.path){ %>class="active"
+                  <% }else if(path.indexOf(secondMenu.path) == 0){ %>class="open"
+                <% } %>
+                >
+                <a <% if(secondMenu.url){ %>href="<%= secondMenu.url %>" data-pjax<% }else{ %>href="javascript:;"
+                  <% } %>
+                  >
+                  <% if(secondMenus[secondMenu.path]){ %>
                   <i class="toggle-accordion"></i>
-                  <%}%>
+                  <% } %>
                   <span><%= secondMenu.name %></span>
                 </a>
               </li>
 
-              <%});%>
+              <% }); %>
             </ul>
-            <%}%>
+            <% } %>
           </li>
-          <% });}else{%>
+          <% });}else{ %>
           <li class="open">
             <a href="javascript:;">
               <i class="toggle-accordion"></i>
@@ -364,27 +380,82 @@
               </li>
             </ul>
           </li>
-          <%}%>
-
+          <% } %>
 
         </ul>
       </nav>
     </aside>
     <section class="main-content" id="container">
-      <%-body%>
+      <%- body %>
     </section>
   </section>
 
 
 </div>
+<form id="passForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
+      action="/private/sys/user/changePassword" method="post">
+  <div id="homeChangePassword" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h4 class="modal-title"><%= sails.__('private.index.userpassword') %></h4>
+        </div>
+        <div class="modal-body">
 
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form">
+                <label for="password" class="col-sm-2 control-label">原密码</label>
+
+                <div class="col-sm-8">
+                  <input id="oldPassword" tabindex="1" type="password" class="form-control" name="oldPassword"
+                         data-parsley-required="true" placeholder="原密码">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form">
+                <label for="password" class="col-sm-2 control-label">新密码</label>
+                <div class="col-sm-8">
+                  <input id="newPassword" tabindex="2" type="password" class="form-control" name="newPassword"
+                         data-parsley-required="true" data-parsley-min="6" data-parsley-max="20" placeholder="新密码">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form">
+                <label for="passwordAgain" class="col-sm-2 control-label">密码确认</label>
+
+                <div class="col-sm-8">
+                  <input id="passwordAgain" type="password" tabindex="6" class="form-control"
+                         data-parsley-equalto="#newPassword"
+                         data-parsley-required="true" name="eqPassword" placeholder="请再输入一次密码">
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+          <button type="submit" class="btn btn-primary">确 认</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
 <!--script-->
 <script src="/bootstrap/js/bootstrap.js"></script>
 <script src="/plugins/jquery.form.js"></script>
 <script src="/plugins/parsley.min.js"></script>
-<%if('zh'==lang){%>
+<% if('zh' == lang){ %>
 <script src="/plugins/parsley.zh_cn.js"></script>
-<%}%>
+<% } %>
 <script src="/plugins/jquery.nestable.js"></script>
 <script src="/plugins/icheck/icheck.js"></script>
 <script src="/plugins/jquery.slimscroll.min.js"></script>
@@ -420,7 +491,22 @@
       $(".gallery-loader").fadeOut();
     } catch (e) {
     }
+    $("#passForm").ajaxForm({
+      dataType: 'json',
+      beforeSubmit: function (arr, form, options) {
+        form.find("button:submit").text("提交...");
+        form.find("button:submit").attr("disabled", "disabled");
+      },
+      success: function (data, statusText, xhr, form) {
+        if (data.code == 0) {
+          form.find("button:submit").text("确 认");
 
+        } else {
+          form.find("button:submit").text("确 认");
+          form.find("button:submit").removeAttr("disabled")
+        }
+      }
+    });
   });
 
 </script>
