@@ -34,13 +34,14 @@ module.exports = function (req, res, next) {
           secondMenus: req.session.secondMenus,
           path: path
         };
-        //console.log("pjax::"+req.get('X-PJAX'));虽然是PJAX请求,但因为左侧菜单不一样,SO不能因此来取消布局模板的加载
-
         return next();
       } else {
         return res.forbidden(sails.__('private.forbidden'));
       }
     });
+  }else if('true'==req.get('X-PJAX')||'XMLHttpRequest'==req.get('x-requested-with')){//ajax or pjax
+    res.set('sessionstatus','timeout');
+    return res.send('Timeout');
   } else {
     return res.redirect('/private/login/login');
   }
