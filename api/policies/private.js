@@ -34,6 +34,8 @@ module.exports = function (req, res, next) {
           secondMenus: req.session.secondMenus,
           path: path
         };
+        //console.log("pjax::"+req.get('X-PJAX'));虽然是PJAX请求,但因为左侧菜单不一样,SO不能因此来取消布局模板的加载
+
         return next();
       } else {
         return res.forbidden(sails.__('private.forbidden'));

@@ -4,7 +4,7 @@
 module.exports = {
   index: function (req, res) {
     var data=req.data;
-    return res.view('private/index.ejs',data);
+    return res.view('private/sys/unit/index.ejs',data);
 
   },
   add: function (req, res) {

@@ -30,9 +30,354 @@
   <script src="/plugins/modernizr.js"></script>
   <script src="/plugins/jquery-1.11.1.min.js"></script>
   <script src="/js/jquery.pjax.js"></script>
-
+</head>
 <body>
-<%- body %>
+<div class="gallery-loader" style="background-color:transparent;">
+  <div class="loader"></div>
+</div>
+
+<div class="playground hidden-xs">
+  <div class="options">
+    <div class="pg-close ti-close"></div>
+    <div class="options-container color-options">
+      <h6><%= sails.__('private.index.theme') %></h6>
+      <a onclick="sublime.changeTheme('palette.css')" href="/css/skins/palette.css"
+         class="css_orange cs_color cs_1 <% if(!user.loginTheme || 'palette.css' == user.loginTheme){ %>active<% } %>">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </a>
+      <a onclick="sublime.changeTheme('palette.2.css')" href="/css/skins/palette.2.css"
+         class="css_orange cs_color cs_2 <% if('palette.2.css' == user.loginTheme){ %>active<% } %>">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </a>
+      <a onclick="sublime.changeTheme('palette.3.css')" href="/css/skins/palette.3.css"
+         class="css_orange cs_color cs_3 <% if('palette.3.css' == user.loginTheme){ %>active<% } %>">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </a>
+      <a onclick="sublime.changeTheme('palette.4.css')" href="/css/skins/palette.4.css"
+         class="css_orange cs_color cs_4 <% if('palette.4.css' == user.loginTheme){ %>active<% } %>">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </a>
+    </div><%= user.loginScroll == true %>
+    <div class="options-container">
+      <h6><%= sails.__('private.index.layout') %></h6>
+      <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
+        <img src="/img/panel/small.png" alt="">
+      </a>
+      <a class="pg-val toggle-scroll toggle-active <% if(user.loginScroll){ %>active<% } %>" href="javascript:;">
+        <img src="/img/panel/scroll.png" alt="">
+      </a>
+      <a class="pg-val toggle-boxed toggle-active <% if(user.loginBoxed){ %>active<% } %>" href="javascript:;">
+        <img src="/img/panel/boxed.png" alt="">
+      </a>
+    </div>
+    <small class="pg-footer"><i class="ti-info-alt mr5"></i><%= sails.__('private.index.panel') %></small>
+  </div>
+</div>
+<div
+  class="app <% if(user.loginSidebar){ %>small-menu<% } %> <% if(user.loginScroll){ %>fixed-scroll<% } %> <% if(user.loginBoxed){ %>boxed<% } %>">
+  <header class="header header-fixed navbar">
+    <div class="brand">
+
+      <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
+
+
+      <a href="/sysadmin/home" class="navbar-brand">
+        <img src="/img/logo.png" alt="">
+                <span class="heading-font">
+                <%= sails.config.system.AppName %>
+                </span>
+      </a>
+
+    </div>
+    <ul class="nav navbar-nav">
+      <li class="hidden-xs">
+
+        <a href="javascript:;" class="toggle-sidebar">
+          <i class="ti-menu"></i>
+        </a>
+
+      </li>
+
+    </ul>
+    <div class="collapse navbar-collapse pull-left" id="hor-menu">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="/sysadmin/home">
+            <i class="ti-home"></i>
+            <span>首页</span>
+          </a>
+        </li>
+        <%if(firstMenus){%>
+        <% firstMenus.forEach(function(firstMenu){ %>
+
+        <li class="dropdown">
+          <a href="javascript:;" data-toggle="dropdown">
+            <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}%>
+            <span><%=firstMenu.name%></span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <%if(secondMenus[firstMenu.path]){%>
+            <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+            <li>
+              <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>">
+                <span><%=secondMenu.name%></span>
+              </a>
+            </li>
+            <%});}%>
+          </ul>
+        </li>
+        <%});}%>
+
+      </ul>
+    </div>
+    <ul class="nav navbar-nav navbar-right">
+      <li class="dropdown hidden-xs">
+        <a href="javascript:;" data-toggle="dropdown">
+          <i class="ti-more-alt"></i>
+        </a>
+        <ul class="dropdown-menu animated zoomIn">
+          <li class="dropdown-header">Quick Links</li>
+          <li>
+            <a href="javascript:;">Start New Campaign</a>
+          </li>
+          <li>
+            <a href="javascript:;">Review Campaigns</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="javascript:;">Settings</a>
+          </li>
+          <li>
+            <a href="javascript:;">Wish List</a>
+          </li>
+          <li>
+            <a href="javascript:;">Purchases History</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="javascript:;">Activity Log</a>
+          </li>
+          <li>
+            <a href="javascript:;">Settings</a>
+          </li>
+          <li>
+            <a href="javascript:;">System Reports</a>
+          </li>
+          <li class="divider"></li>
+          <li>
+            <a href="javascript:;">Help</a>
+          </li>
+          <li>
+            <a href="javascript:;">Report a Problem</a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="notifications dropdown">
+        <a href="javascript:;" data-toggle="dropdown">
+          <i class="ti-bell"></i>
+
+          <div class="badge badge-top bg-danger animated flash">
+            <span>3</span>
+          </div>
+        </a>
+
+        <div class="dropdown-menu animated fadeInLeft">
+          <div class="panel panel-default no-m">
+            <div class="panel-heading small"><b>Notifications</b>
+            </div>
+
+            <ul class="list-group">
+              <li class="list-group-item">
+                <a href="javascript:;">
+                                    <span class="pull-left mt5 mr15">
+                                    <img src="/img/face4.jpg" class="avatar avatar-sm img-circle" alt="">
+                                    </span>
+
+                  <div class="m-body">
+                    <div class="">
+                      <small><b>CRYSTAL BROWN</b></small>
+                      <span class="label label-danger pull-right">ASSIGN AGENT</span>
+                    </div>
+                    <span>Opened a support query</span>
+                    <span class="time small">2 mins ago</span>
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="javascript:;">
+                  <div class="pull-left mt5 mr15">
+                    <div class="circle-icon bg-danger">
+                      <i class="ti-download"></i>
+                    </div>
+                  </div>
+                  <div class="m-body">
+                    <span>Upload Progress</span>
+
+                    <div class="progress progress-xs mt5 mb5">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="40"
+                           aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                      </div>
+                    </div>
+                    <span class="time small">Submited 23 mins ago</span>
+                  </div>
+                </a>
+              </li>
+              <li class="list-group-item">
+                <a href="javascript:;">
+                                    <span class="pull-left mt5 mr15">
+                                    <img src="/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
+                                    </span>
+
+                  <div class="m-body">
+                    <em>Status Update:</em>
+                    <span>All servers now online</span>
+                    <span class="time small">5 days ago</span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+            <div class="panel-footer">
+              <a href="javascript:;">See all notifications</a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="dropdown hidden-xs">
+        <a href="javascript:;" class="pg-toggle">
+          <i class="ti-palette"></i>
+        </a>
+      </li>
+
+      <!-- START Language list-->
+      <li class="language-dropdown dropdown hidden-xs">
+        <a href="javascript:;" data-toggle="dropdown" id="language">
+          <% if('zh' == lang){ %>
+          <img src="/img/flags/cn.png" class="flag">
+          <span class="language"></span>
+          <% }else{ %>
+          <img src="/img/flags/us.png" class="flag">
+          <span class="language"></span>
+          <% } %>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
+          <li>
+            <a href="/private/login/lang/en">
+              <img src="/img/flags/us.png" class="flag">
+              <span class="language">English</span>
+            </a>
+          </li>
+          <li>
+            <a href="/private/login/lang/zh">
+              <img src="/img/flags/cn.png" class="flag">
+              <span class="language">中文</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+      <!-- END Language list    -->
+
+      <li class="off-right">
+        <a href="javascript:;" data-toggle="dropdown">
+          <span class="hidden-xs ml10"><%- user.nickname %></span>
+          <i class="ti-angle-down ti-caret hidden-xs"></i>
+        </a>
+        <ul class="dropdown-menu animated fadeInLeft">
+          <li>
+            <a href="javascript:;"><%= sails.__('private.index.usersetting') %></a>
+          </li>
+          <li>
+            <a href="javascript:;"><%= sails.__('private.index.userpassword') %></a>
+          </li>
+        </ul>
+      </li>
+      <li class="off-right hidden-xs">
+        <a href="/private/login/logout">
+          <i class="ti-power-off"></i>
+        </a>
+      </li>
+    </ul>
+  </header>
+  <section class="layout">
+
+    <aside class="sidebar offscreen-left">
+
+      <nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"
+           data-wheel-step="10">
+        <p class="nav-title">MENU</p>
+        <ul class="nav">
+
+
+          <%if(path.length>8&&secondMenus[path.substring(0,path.length-8)]){%>
+          <% secondMenus[path.substring(0,path.length-8)].forEach(function(firstMenu){ %>
+          <li <%if(path==firstMenu.path){%>class="active"<%}else if(path.indexOf(firstMenu.path)==0){%>class="open"<%}%>>
+            <a href="<% if(firstMenu.url){ %><%=firstMenu.url%><% }else{ %>javascript:;<% } %>" data-pjax>
+              <%if(secondMenus[firstMenu.path]){%>
+              <i class="toggle-accordion"></i>
+              <%}%>
+              <%if(firstMenu.icon){%><i class="<%=firstMenu.icon%>"></i><%}else{%><i class="ti-map"></i><%}%>
+              <span><%= firstMenu.name %></span>
+
+            </a>
+            <%if(secondMenus[firstMenu.path]){%>
+            <ul class="sub-menu">
+              <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
+
+              <li <%if(path==secondMenu.path){%>class="active"<%}else if(path.indexOf(secondMenu.path)==0){%>class="open"<%}%>>
+                <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>" data-pjax>
+                  <%if(secondMenus[secondMenu.path]){%>
+                  <i class="toggle-accordion"></i>
+                  <%}%>
+                  <span><%= secondMenu.name %></span>
+                </a>
+              </li>
+
+              <%});%>
+            </ul>
+            <%}%>
+          </li>
+          <% });}else{%>
+          <li class="open">
+            <a href="javascript:;">
+              <i class="toggle-accordion"></i>
+              <i class="ti-heart"></i>
+              <span>常用菜单</span>
+            </a>
+            <ul class="sub-menu">
+              <li class="active">
+                <a href="forms.html">
+                  <span>订单管理</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <%}%>
+
+
+        </ul>
+      </nav>
+    </aside>
+    <section class="main-content" id="container">
+      <%-body%>
+    </section>
+  </section>
+
+
+</div>
+
 <!--script-->
 <script src="/bootstrap/js/bootstrap.js"></script>
 <script src="/plugins/jquery.form.js"></script>
@@ -56,13 +401,33 @@
 <script src="/js/main.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    try{
-      $(".gallery-loader").fadeOut(function(){
-        $(".gallery-loader").remove();
+    if($.support.pjax) {
+      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
+      $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
+        $(".gallery-loader").fadeIn();
       });
-    }catch(e){};
+      $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
+        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
+        pajx_loadDuodsuo();
+      });
+      function pajx_loadDuodsuo() {
+        var dus = $(".ds-thread");
+        if ($(dus).length == 1) {
+          var el = document.createElement('div');
+          el.setAttribute('data-thread-key', $(dus).attr("data-thread-key"));//必选参数
+          el.setAttribute('data-url', $(dus).attr("data-url"));
+          DUOSHUO.EmbedThread(el);
+          $(dus).html(el);
+        }
+      }
+    }
+    try {
+      $(".gallery-loader").fadeOut();
+    } catch (e) {
+    }
 
   });
+
 </script>
 <!--script-->
 </body>
