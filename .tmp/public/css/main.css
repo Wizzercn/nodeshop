@@ -630,6 +630,21 @@ aside > .fffix > footer p {
     vertical-align: top;
     float: none;
   }
+  .app > .layout > .main-content{
+    height: 100%;
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+    overflow: hidden;
+  }
+  .app > .layout > .main-content > section,
+  .app > .layout > .main-content > aside {
+    height: 100%;
+    position: relative;
+    display: table-cell;
+    vertical-align: top;
+    float: none;
+  }
   .app .header-fixed + .layout {
     padding-top: 50px;
   }
@@ -4911,7 +4926,7 @@ html[dir="rtl"] .select2-container .select2-choice .select2-arrow {
 }
 /*
 *   Data tables
-*   
+*
 */
 .sorting:after,
 .sorting_asc:after,
@@ -4957,7 +4972,7 @@ table.dataTable {
 }
 /*
 *   Stepy Wizard
-*   
+*
 */
 
 .stepy {
@@ -5045,7 +5060,7 @@ table.dataTable {
 }
 /*
 *   Jstree
-*   
+*
 */
 .jstree-default .jstree-clicked,
 .jstree-default .jstree-hovered {
@@ -5072,7 +5087,7 @@ table.dataTable {
 }
 /*
 *   IonSLider
-*   
+*
 */
 .irs-line-mid,
 .irs-line-left,
@@ -5103,7 +5118,7 @@ table.dataTable {
   border-radius: 2px;
 }
 /*
-*   Owl Carousel Owl Demo Theme 
+*   Owl Carousel Owl Demo Theme
 *   v1.3.3
 */
 .owl-theme .owl-controls .owl-page span {

@@ -324,7 +324,7 @@
           <%if(path.length>8&&secondMenus[path.substring(0,path.length-8)]){%>
           <% secondMenus[path.substring(0,path.length-8)].forEach(function(firstMenu){ %>
           <li <%if(path==firstMenu.path){%>class="active"<%}else if(path.indexOf(firstMenu.path)==0){%>class="open"<%}%>>
-            <a href="<% if(firstMenu.url){ %><%=firstMenu.url%><% }else{ %>javascript:;<% } %>" data-pjax>
+            <a <% if(firstMenu.url){ %>href="<%=firstMenu.url%>" data-pjax<% }else{ %>href="javascript:;"<% } %>>
               <%if(secondMenus[firstMenu.path]){%>
               <i class="toggle-accordion"></i>
               <%}%>
@@ -337,7 +337,7 @@
               <%secondMenus[firstMenu.path].forEach(function(secondMenu){%>
 
               <li <%if(path==secondMenu.path){%>class="active"<%}else if(path.indexOf(secondMenu.path)==0){%>class="open"<%}%>>
-                <a href="<% if(secondMenu.url){ %><%=secondMenu.url%><% }else{ %>javascript:;<% } %>" data-pjax>
+                <a <% if(secondMenu.url){ %>href="<%=secondMenu.url%>" data-pjax<% }else{ %>href="javascript:;"<% } %>>
                   <%if(secondMenus[secondMenu.path]){%>
                   <i class="toggle-accordion"></i>
                   <%}%>
@@ -401,32 +401,21 @@
 <script src="/js/main.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-    if($.support.pjax) {
-      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
-      $('.main-navigation a[data-pjax]').on('click',function(){
-        $('.main-navigation a[data-pjax]').each(function(){
-          $(this).parent().removeClass('active');
-        });
-        $(this).parent().addClass('active');
-      });
-      $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
-        $(".gallery-loader").fadeIn();
-      });
-      $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
-        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
-        pajx_loadDuodsuo();
-      });
-      function pajx_loadDuodsuo() {
-        var dus = $(".ds-thread");
-        if ($(dus).length == 1) {
-          var el = document.createElement('div');
-          el.setAttribute('data-thread-key', $(dus).attr("data-thread-key"));//必选参数
-          el.setAttribute('data-url', $(dus).attr("data-url"));
-          DUOSHUO.EmbedThread(el);
-          $(dus).html(el);
-        }
-      }
-    }
+//    if($.support.pjax) {
+//      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
+//      $('.main-navigation a[data-pjax]').on('click',function(){
+//        $('.main-navigation a[data-pjax]').each(function(){
+//          $(this).parent().removeClass('active');
+//        });
+//        $(this).parent().addClass('active');
+//      });
+//      $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
+//        $(".gallery-loader").fadeIn();
+//      });
+//      $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
+//        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
+//      });
+//    }
     try {
       $(".gallery-loader").fadeOut();
     } catch (e) {
