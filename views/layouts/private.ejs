@@ -101,7 +101,7 @@
       </a>
 
     </div>
-    <ul class="nav navbar-nav">
+    <ul class="nav navbar-nav navbar-left">
       <li class="hidden-xs">
 
         <a href="javascript:;" class="toggle-sidebar">
@@ -111,7 +111,6 @@
       </li>
 
     </ul>
-    <div class="collapse navbar-collapse pull-left" id="hor-menu">
       <ul class="nav navbar-nav">
         <li>
           <a href="/sysadmin/home">
@@ -133,18 +132,30 @@
           <ul class="dropdown-menu">
             <% if(secondMenus[firstMenu.path]){ %>
             <% secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
-            <li>
+            <li class="dropdown">
               <a href="<% if(secondMenu.url){ %> <%= secondMenu.url %> <% }else{ %>javascript:;<% } %>">
+                <% if(secondMenus[secondMenu.path]){ %><i class="toggle-accordion"></i><%}%>
                 <span><%= secondMenu.name %></span>
               </a>
+              <% if(secondMenus[secondMenu.path]){ %>
+              <ul class="sub-menu">
+                <% secondMenus[secondMenu.path].forEach(function(thMenu){ %>
+                <li class="clearfix" >
+                  <a href="<% if(thMenu.url){ %> <%= thMenu.url %> <% }else{ %>javascript:;<% } %>">
+                    <span><%= thMenu.name %></span>
+                  </a>
+                </li>
+                <% });%>
+              </ul>
+              <%}%>
             </li>
+
             <% });} %>
           </ul>
         </li>
         <% });} %>
 
       </ul>
-    </div>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown hidden-xs">
         <a href="javascript:;" data-toggle="dropdown">
@@ -421,7 +432,7 @@
                 <label for="password" class="col-sm-2 control-label">新密码</label>
                 <div class="col-sm-8">
                   <input id="newPassword" tabindex="2" type="password" class="form-control" name="newPassword"
-                         data-parsley-required="true" data-parsley-min="6" data-parsley-max="20" placeholder="新密码">
+                         data-parsley-required="true" data-parsley-minlength="6" data-parsley-maxlength="20"  placeholder="新密码">
                 </div>
               </div>
             </div>
@@ -429,7 +440,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="form">
-                <label for="passwordAgain" class="col-sm-2 control-label">密码确认</label>
+                <label for="passwordAgain" class="col-sm-2 control-label">确认密码</label>
 
                 <div class="col-sm-8">
                   <input id="passwordAgain" type="password" tabindex="6" class="form-control"
@@ -491,6 +502,9 @@
       $(".gallery-loader").fadeOut();
     } catch (e) {
     }
+    $('#homeChangePassword').on('hidden.bs.modal',function(){
+      $("#passForm")[0].reset();
+    });
     $("#passForm").ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {

@@ -291,6 +291,33 @@ var sublime = function () {
             var data = $(this).data();
             $(this).slimScroll(data);
         });
+      $(document).on("click", ".header .dropdown-menu a", function (e) {
+        var links = $(this).parents('li'), parentLink = $(this).closest("li"), otherLinks = $('.header .dropdown  li').not(links),
+          subMenu = $(this).next();
+        otherLinks.removeClass('open');
+        otherLinks.find('.sub-menu').slideUp();
+        if (subMenu.is("ul") && (!subMenu.is(":visible")) ) {
+          subMenu.slideDown();
+          parentLink.addClass("open");
+        }
+        else if (subMenu.is("ul") && (subMenu.is(":visible"))) {
+          parentLink.removeClass("open");
+          subMenu.slideUp();
+        }
+        if ($(this).hasClass('active') === false) {
+          $(this).parents("ul.dropdown-menu").find('a').removeClass('active');
+          $(this).addClass('active');
+        }
+        if ($(this).attr('href') === '#'||$(this).attr('href') === 'javascript:;') {
+          e.preventDefault();
+        }
+        e.stopPropagation();
+        return true;
+      });
+      $(".header > .nav > .dropdown-menu > li.open").each(function () {
+        $(".sub-menu").hide();
+        $(this).children(".sub-menu").show();
+      });
     }
 
     function initToggleActiveState() {
