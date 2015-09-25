@@ -35,17 +35,17 @@ module.exports = function (req, res, next) {
           path: path
         };
         //非PJAX请求的ajax网页请求,加载空的布局文件(treetable等非json的js控件)
-        if('XMLHttpRequest'==req.get('X-Requested-With')&&'true'!=req.get('X-PJAX')){
-          data.layout='layouts/layout.ejs';
+        if ('XMLHttpRequest' == req.get('X-Requested-With') && 'true' != req.get('X-PJAX')) {
+          data.layout = 'layouts/layout.ejs';
         }
-        req.data=data;
+        req.data = data;
         return next();
       } else {
         return res.forbidden(sails.__('private.forbidden'));
       }
     });
-  }else if('true'==req.get('X-PJAX')||'XMLHttpRequest'==req.get('x-requested-with')){//ajax or pjax
-    res.set('sessionstatus','timeout');
+  } else if ('true' == req.get('X-PJAX') || 'XMLHttpRequest' == req.get('x-requested-with')) {//ajax or pjax
+    res.set('sessionstatus', 'timeout');
     return res.send('Timeout');
   } else {
     return res.redirect('/private/login/login');
