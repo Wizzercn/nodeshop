@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/panel.css">
   <link rel="stylesheet" href="/plugins/jstree/themes/default/style.min.css">
+  <link rel="stylesheet" href="/plugins/treetable/jquery.treetable.css">
 
   <!--[if lt IE 9]>
   <script src="/js/html5shiv.js"></script>
@@ -118,9 +119,7 @@
             <span>首页</span>
           </a>
         </li>
-        <% if(firstMenus){ %>
-        <% firstMenus.forEach(function(firstMenu){ %>
-
+        <% if(firstMenus){ firstMenus.forEach(function(firstMenu){ %>
         <li class="dropdown">
           <a href="javascript:;" data-toggle="dropdown">
             <% if(firstMenu.icon){ %>
@@ -130,8 +129,7 @@
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <% if(secondMenus[firstMenu.path]){ %>
-            <% secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
+            <% if(secondMenus[firstMenu.path]){ secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
             <li class="dropdown">
               <a href="<% if(secondMenu.url){ %> <%= secondMenu.url %> <% }else{ %>javascript:;<% } %>">
                 <% if(secondMenus[secondMenu.path]){ %><i class="toggle-accordion"></i><%}%>
@@ -145,17 +143,11 @@
                     <% } %>>
                   <span><%= thMenu.name %></span>
                   </a>
-                </li>
-                <% });%>
-              </ul>
-              <%}%>
-            </li>
-
-            <% });} %>
+                </li><% });%>
+              </ul><%}%>
+            </li><% });} %>
           </ul>
-        </li>
-        <% });} %>
-
+        </li><% });} %>
       </ul>
     <ul class="nav navbar-nav navbar-right">
       <li class="dropdown hidden-xs">
@@ -476,7 +468,7 @@
 <script src="/plugins/fastclick.js"></script>
 <script src="/plugins/count-to/jquery.countTo.js"></script>
 <script src="/js/toast.js"></script>
-<script src="/js/treetable.js"></script>
+<script src="/plugins/treetable/jquery.treetable.js"></script>
 <script src="/js/datatables.js"></script>
 <script src="/plugins/jstree/jstree.min.js"></script>
 <script src="/js/offscreen.js"></script>
@@ -495,7 +487,7 @@
         $(".gallery-loader").fadeIn();
       });
       $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
-        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
+        setTimeout(function(){$(".gallery-loader").fadeOut()},250);
       });
     }
     try {

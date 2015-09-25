@@ -50,6 +50,12 @@ module.exports = {
       type: 'string',
       size: 20
     },
+    hasChildren: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     location: {
       type: 'integer',
       size: 11

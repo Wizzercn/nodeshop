@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/sys/unit/add"><i class="ti-plus"></i>新增机构</a>
+    <a class="btn btn-primary navbar-btn" href="/private/sys/unit/add" data-pjax><i class="ti-plus"></i>新增机构</a>
   </div>
 </header>
 <div class="content-wrap">
@@ -10,42 +10,25 @@
         <table id="unitTreeTable" class="table no-m">
           <thead>
           <tr>
-            <th class="col-md-3 pd-l-lg">
+            <th class="col-md-2 pd-l-lg">
               <span class="pd-l-sm ml20"></span>机构名称
             </th>
-            <th class="col-md-5">地址</th>
+            <th class="col-md-2">地址</th>
+            <th class="col-md-2">手机</th>
+            <th class="col-md-2">电话</th>
             <th class="col-md-2">操作</th>
           </tr>
           </thead>
           <tbody>
-          <tr data-tt-id="c53eaa28c38f41b48cf1b0b1b3e40747" data-tt-parent-id="" data-tt-branch="true">
+          <% unit.forEach(function(obj){
+          %>
+          <tr data-tt-id="<%=obj.id%>" data-tt-parent-id="<%=obj.parentId%>" data-tt-branch="<%=obj.hasChildren==1?'true':'false'%>">
             <td>
-              <span class="pd-l-sm"></span>测试
+              <span class="pd-l-sm"></span><%-obj.name%>
             </td>
-            <td>hhh</td>
-            <td>
-              <div class="btn-group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  <i class="ti-settings"></i>
-                  <span class="ti-angle-down"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/private/sys/unit/detail/c53eaa28c38f41b48cf1b0b1b3e40747" data-toggle="modal"
-                         data-target="#dialogUnitDetail">查看</a></li>
-                  <li><a href="/private/sys/unit/edit/c53eaa28c38f41b48cf1b0b1b3e40747">修改</a></li>
-                  <li><a href="javascript:;" onclick="del('c53eaa28c38f41b48cf1b0b1b3e40747')">删除</a></li>
-                  <li class="divider"></li>
-                  <li><a href="/private/sys/unit/add?pid=c53eaa28c38f41b48cf1b0b1b3e40747">添加子机构</a></li>
-
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr data-tt-id="494b5df19aa443f29a624f5bf278b71b" data-tt-parent-id="" data-tt-branch="true">
-            <td>
-              <span class="pd-l-sm"></span>23
-            </td>
-            <td></td>
+            <td><%-obj.address%></td>
+            <td><%-obj.mobile%></td>
+            <td><%-obj.tel%></td>
             <td>
               <div class="btn-group">
                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
@@ -53,86 +36,19 @@
                   <span class="ti-angle-down"></span>
                 </button>
                 <ul class="dropdown-menu" role="menu">
-                  <li><a href="/private/sys/unit/detail/494b5df19aa443f29a624f5bf278b71b" data-toggle="modal"
+                  <li><a href="/private/sys/unit/detail/<%=obj.id%>" data-toggle="modal"
                          data-target="#dialogUnitDetail">查看</a></li>
-                  <li><a href="/private/sys/unit/edit/494b5df19aa443f29a624f5bf278b71b">修改</a></li>
-                  <li><a href="javascript:;" onclick="del('494b5df19aa443f29a624f5bf278b71b')">删除</a></li>
+                  <li><a href="/private/sys/unit/edit/<%=obj.id%>">修改</a></li>
+                  <li><a href="javascript:;" onclick="del('<%=obj.id%>')">删除</a></li>
                   <li class="divider"></li>
-                  <li><a href="/private/sys/unit/add?pid=494b5df19aa443f29a624f5bf278b71b">添加子机构</a></li>
+                  <li><a href="/private/sys/unit/add?pid=<%=obj.id%>" data-pjax>添加子机构</a></li>
 
                 </ul>
               </div>
             </td>
           </tr>
-          <tr data-tt-id="d816ad26f2914da0b9a49544b2d0e482" data-tt-parent-id="" data-tt-branch="false">
-            <td>
-              <span class="pd-l-sm"></span>aaa
-            </td>
-            <td>aaaaaaaaaa</td>
-            <td>
-              <div class="btn-group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  <i class="ti-settings"></i>
-                  <span class="ti-angle-down"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/private/sys/unit/detail/d816ad26f2914da0b9a49544b2d0e482" data-toggle="modal"
-                         data-target="#dialogUnitDetail">查看</a></li>
-                  <li><a href="/private/sys/unit/edit/d816ad26f2914da0b9a49544b2d0e482">修改</a></li>
-                  <li><a href="javascript:;" onclick="del('d816ad26f2914da0b9a49544b2d0e482')">删除</a></li>
-                  <li class="divider"></li>
-                  <li><a href="/private/sys/unit/add?pid=d816ad26f2914da0b9a49544b2d0e482">添加子机构</a></li>
-
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr data-tt-id="062a8468785047d4a281c63ccb3d2a48" data-tt-parent-id="" data-tt-branch="false">
-            <td>
-              <span class="pd-l-sm"></span>test
-            </td>
-            <td>安徽省合肥市蜀山区合作化南路922号</td>
-            <td>
-              <div class="btn-group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  <i class="ti-settings"></i>
-                  <span class="ti-angle-down"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/private/sys/unit/detail/062a8468785047d4a281c63ccb3d2a48" data-toggle="modal"
-                         data-target="#dialogUnitDetail">查看</a></li>
-                  <li><a href="/private/sys/unit/edit/062a8468785047d4a281c63ccb3d2a48">修改</a></li>
-                  <li><a href="javascript:;" onclick="del('062a8468785047d4a281c63ccb3d2a48')">删除</a></li>
-                  <li class="divider"></li>
-                  <li><a href="/private/sys/unit/add?pid=062a8468785047d4a281c63ccb3d2a48">添加子机构</a></li>
-
-                </ul>
-              </div>
-            </td>
-          </tr>
-          <tr data-tt-id="d3218d755bcb46298230d51c29ab2560" data-tt-parent-id="" data-tt-branch="true">
-            <td>
-              <span class="pd-l-sm"></span>系统管理
-            </td>
-            <td>银河-太阳系-地球</td>
-            <td>
-              <div class="btn-group">
-                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  <i class="ti-settings"></i>
-                  <span class="ti-angle-down"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu">
-                  <li><a href="/private/sys/unit/detail/d3218d755bcb46298230d51c29ab2560" data-toggle="modal"
-                         data-target="#dialogUnitDetail">查看</a></li>
-                  <li><a href="/private/sys/unit/edit/d3218d755bcb46298230d51c29ab2560">修改</a></li>
-                  <li><a href="javascript:;" onclick="del('d3218d755bcb46298230d51c29ab2560')">删除</a></li>
-                  <li class="divider"></li>
-                  <li><a href="/private/sys/unit/add?pid=d3218d755bcb46298230d51c29ab2560">添加子机构</a></li>
-
-                </ul>
-              </div>
-            </td>
-          </tr>
+          <%
+          }); %>
           </tbody>
         </table>
       </div>
@@ -181,7 +97,18 @@
   </div>
 </div>
 <script>
-  $(function(){
-    //$("#dialogUnitDetail").modal('show');
+  $(function () {
+    var unitTreeTable = $("#unitTreeTable").treetable({
+      expandable: true,
+      onNodeExpand : function(){
+        var node = this;
+        var rows = "<tr data-tt-id=\"loading\" data-tt-parent-id=\""+node.id+"\" data-tt-branch=\"false\"><td colspan='5'><img src=\"/img/loading.gif\"/>loading</td></tr>";
+        unitTreeTable.treetable("loadBranch", node, rows);
+        $.post("/private/sys/unit/child/"+node.id,{}, function(data){
+          unitTreeTable.treetable("unloadBranch", node);
+          unitTreeTable.treetable("loadBranch", node, data);
+        });
+      }
+    });
   });
 </script>

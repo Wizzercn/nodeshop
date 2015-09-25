@@ -26,7 +26,7 @@ module.exports = function (req, res, next) {
       var roleCodes = req.session.roleCodes;
       //如果角色是sysadmin,或者是后台首页,或是有Permission权限则通过
       if (roleCodes.indexOf('sysadmin') > -1 || hasPermission.indexOf(permission) > -1 || '/sysadmin/home' == req.url) {
-        req.data = {
+        var data = {
           layout: 'layouts/private',
           lang: req.getLocale(),
           user: req.session.user,
@@ -34,6 +34,11 @@ module.exports = function (req, res, next) {
           secondMenus: req.session.secondMenus,
           path: path
         };
+        //非PJAX请求的ajax网页请求,加载空的布局文件(treetable等非json的js控件)
+        if('XMLHttpRequest'==req.get('X-Requested-With')&&'true'!=req.get('X-PJAX')){
+          data.layout='layouts/layout.ejs';
+        }
+        req.data=data;
         return next();
       } else {
         return res.forbidden(sails.__('private.forbidden'));
