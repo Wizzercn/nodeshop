@@ -141,8 +141,9 @@
               <ul class="sub-menu">
                 <% secondMenus[secondMenu.path].forEach(function(thMenu){ %>
                 <li class="clearfix" >
-                  <a href="<% if(thMenu.url){ %> <%= thMenu.url %> <% }else{ %>javascript:;<% } %>">
-                    <span><%= thMenu.name %></span>
+                  <a <% if(thMenu.url){ %>href="<%= thMenu.url %>" <% }else{ %>href="javascript:;"
+                    <% } %>>
+                  <span><%= thMenu.name %></span>
                   </a>
                 </li>
                 <% });%>
@@ -340,7 +341,7 @@
               <% }else if(path.indexOf(firstMenu.path) == 0){ %>class="open"
             <% } %>
             >
-            <a <% if(firstMenu.url){ %>href="<%= firstMenu.url %>" data-pjax<% }else{ %>href="javascript:;"
+            <a <% if(firstMenu.url){ %>href="<%= firstMenu.url %>" <%if('data-pjax'==firstMenu.target){%>data-pjax<%}%><% }else{ %>href="javascript:;"
               <% } %>
               >
               <% if(secondMenus[firstMenu.path]){ %>
@@ -362,8 +363,7 @@
                   <% }else if(path.indexOf(secondMenu.path) == 0){ %>class="open"
                 <% } %>
                 >
-                <a <% if(secondMenu.url){ %>href="<%= secondMenu.url %>" data-pjax<% }else{ %>href="javascript:;"
-                  <% } %>
+                <a <% if(secondMenu.url){ %>href="<%= secondMenu.url %>" <%if('data-pjax'==secondMenu.target){%>data-pjax<%}%><% }else{ %>href="javascript:;"<% } %>
                   >
                   <% if(secondMenus[secondMenu.path]){ %>
                   <i class="toggle-accordion"></i>
@@ -404,7 +404,7 @@
 
 </div>
 <form id="passForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
-      action="/private/sys/user/changePassword" method="post">
+      action="/private/sys/user/doChangePassword" method="post">
   <div id="homeChangePassword" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -483,21 +483,21 @@
 <script src="/js/main.js"></script>
 <script type="text/javascript">
   $(document).ready(function () {
-//    if($.support.pjax) {
-//      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
-//      $('.main-navigation a[data-pjax]').on('click',function(){
-//        $('.main-navigation a[data-pjax]').each(function(){
-//          $(this).parent().removeClass('active');
-//        });
-//        $(this).parent().addClass('active');
-//      });
-//      $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
-//        $(".gallery-loader").fadeIn();
-//      });
-//      $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
-//        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
-//      });
-//    }
+    if($.support.pjax) {
+      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
+      $('.main-navigation a[data-pjax]').on('click',function(){
+        $('.main-navigation a[data-pjax]').each(function(){
+          $(this).parent().removeClass('active');
+        });
+        $(this).parent().addClass('active');
+      });
+      $(document).on('pjax:send', function () { //pjax链接点击后显示加载动画；
+        $(".gallery-loader").fadeIn();
+      });
+      $(document).on('pjax:complete', function () { //pjax链接加载完成后隐藏加载动画；
+        setTimeout(function(){$(".gallery-loader").fadeOut()},500);
+      });
+    }
     try {
       $(".gallery-loader").fadeOut();
     } catch (e) {
@@ -513,12 +513,16 @@
       },
       success: function (data, statusText, xhr, form) {
         if (data.code == 0) {
+          $('#homeChangePassword').modal('hide');
+          Toast.success(data.msg);
           form.find("button:submit").text("确 认");
-
+          $("#passForm")[0].reset();
         } else {
           form.find("button:submit").text("确 认");
-          form.find("button:submit").removeAttr("disabled")
+          form.find("button:submit").removeAttr("disabled");
+          Toast.error(data.msg);
         }
+
       }
     });
   });
