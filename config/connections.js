@@ -45,7 +45,10 @@ module.exports.connections = {
     host: '192.168.1.11',
     user: 'root',
     password: 'root',
-    database: 'nodeshop'
+    database: 'nodeshop',
+    pool: true,
+    connectionLimit: 10,
+    waitForConnections: true
   },
 
   /***************************************************************************

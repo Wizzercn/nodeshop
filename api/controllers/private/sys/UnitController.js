@@ -16,11 +16,13 @@ module.exports = {
   },
   child: function (req, res) {
     var data = req.data;
-    Sys_unit.query('select * from sys_unit where parentId=$1 order by location asc,path asc',[req.params.id],function (err, objs) {
+    Sys_unit.query('select * from sys_unit where parentId = ? order by location asc,path asc',[parseInt(req.params.id)],function (err, objs) {
       var unit=[];
       if(objs){
         unit=objs;
       }
+      console.log('err:::'+JSON.stringify(err));
+      console.log('unit:::'+JSON.stringify(unit));
       data.unit=unit;
       return res.view('private/sys/unit/child.ejs', data);
     });
