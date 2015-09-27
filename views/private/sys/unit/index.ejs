@@ -92,12 +92,15 @@
 <div id="dialogUnitDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      aaaaaaaaaaaaaa
+
     </div>
   </div>
 </div>
 <script>
   $(function () {
+    $("#dialogUnitDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
     var unitTreeTable = $("#unitTreeTable").treetable({
       expandable: true,
       onNodeExpand : function(){
