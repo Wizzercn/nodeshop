@@ -1,7 +1,7 @@
 /**
  * Created by wizzer on 2015/9/6.
  */
-var ccap = require('ccap')();
+var ccap = require('ccap');
 var bcrypt = require('bcrypt');
 module.exports = {
   /**
@@ -75,9 +75,9 @@ module.exports = {
       }).exec(function (err, log) {
       });
       req.session.destroy();
-      res.redirect('/private/login/login');
+      res.redirect('/sysadmin');
     } else {
-      res.redirect('/private/login/login');
+      res.redirect('/sysadmin');
     }
   },
   /**
@@ -141,7 +141,7 @@ module.exports = {
           Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
 
             if (role) {
-              var firstMenus = [], secondMenus = {},permission=[];
+              var firstMenus = [], secondMenus = {}, permission = [];
               role.forEach(function (m) {
                 m.menus.forEach(function (obj) {
                   if (obj.path.length == 4) {
@@ -153,7 +153,7 @@ module.exports = {
                     }
                     secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
                   }
-                  if(obj.permission){
+                  if (obj.permission) {
                     permission.push(obj.permission);
                   }
                 });
@@ -186,7 +186,17 @@ module.exports = {
    */
   captcha: function (req, res) {
     if (req.url == '/favicon.ico')return res.end('');//Intercept request favicon.ico
-    var ary = ccap.get();
+    var str_ary = ['2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+      'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var str_num = 6,
+      r_num = str_ary.length,
+      text = '';
+    for (var i = 0; i < str_num; i++) {
+      var pos = Math.floor(Math.random() * r_num);
+      text += str_ary[pos];//生成随机数
+    }
+    var cc=ccap({generate:function(){return text}});
+    var ary = cc.get();
     var txt = ary[0];
     var buf = ary[1];
     req.session.captchaText = txt.toLowerCase();
