@@ -3,33 +3,23 @@
  */
 module.exports = {
   index: function (req, res) {
-    var data = req.data;
     Sys_unit.query('select * from sys_unit where length(path)=4 order by location asc,path asc', function (err, objs) {
-      var unit = [];
-      if (objs) {
-        unit = objs;
-      }
-      data.unit = unit;
-      return res.view('private/sys/unit/index.ejs', data);
+      req.data.unit = objs;
+      return res.view('private/sys/unit/index.ejs', req.data);
     });
 
   },
   child: function (req, res) {
-    var data = req.data;
     Sys_unit.query('select * from sys_unit where parentId = ? order by location asc,path asc', [parseInt(req.params.id)], function (err, objs) {
-      var unit = [];
-      if (objs) {
-        unit = objs;
-      }
-      data.unit = unit;
-      return res.view('private/sys/unit/child.ejs', data);
+      req.data.unit = objs;
+      return res.view('private/sys/unit/child.ejs', req.data);
     });
   },
   detail: function (req, res) {
-    var data = req.data;
     Sys_unit.findOne({id:req.params.id}).exec(function (err, obj) {
-      data.obj = obj;
-      return res.view('private/sys/unit/detail.ejs', data);
+      req.data.moment=require("moment");
+      req.data.obj = obj;
+      return res.view('private/sys/unit/detail.ejs', req.data);
     });
   }
 };
