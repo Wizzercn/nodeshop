@@ -7,7 +7,6 @@ module.exports = {
       req.data.unit = objs;
       return res.view('private/sys/unit/index.ejs', req.data);
     });
-
   },
   child: function (req, res) {
     Sys_unit.query('select * from sys_unit where parentId = ? order by location asc,path asc', [parseInt(req.params.id)], function (err, objs) {
@@ -21,5 +20,20 @@ module.exports = {
       req.data.obj = obj;
       return res.view('private/sys/unit/detail.ejs', req.data);
     });
+  },
+  add:function(req,res){
+    var pid=req.query.pid;
+    if(pid){
+      Sys_unit.findOne({id:pid}).exec(function (err, obj) {
+        req.data.parentUnit = obj;
+        return res.view('private/sys/unit/add', req.data);
+      });
+    }else{
+      return res.view('private/sys/unit/add', req.data);
+    }
+  },
+  addDo:function(req,res){
+    var pid=req.body.pid;
+    
   }
 };
