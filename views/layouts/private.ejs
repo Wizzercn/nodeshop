@@ -476,7 +476,7 @@
 <script type="text/javascript">
   $(document).ready(function () {
     if($.support.pjax) {
-      $(document).pjax('a[data-pjax]', '#container', {fragment: '#container', timeout: 8000});
+      $(document).pjax('a[data-pjax]', '#container', {maxCacheLength:0, fragment: '#container', timeout: 8000});
       $('.main-navigation a[data-pjax]').on('click',function(){
         $('.main-navigation a[data-pjax]').each(function(){
           $(this).parent().removeClass('active');
