@@ -2,7 +2,6 @@
  * 系统用户
  * Created by wizzer on 2015/9/6.
  */
-var uuid=require('node-uuid');
 var moment = require('moment');
 module.exports = {
   schema: true,
