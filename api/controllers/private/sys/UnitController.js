@@ -2,6 +2,7 @@
  * Created by root on 9/16/15.
  */
 var moment = require('moment');
+var StringUtil = require('../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
     Sys_unit.find().where({parentId: 0}).sort('location asc').sort('path asc').exec(function (err, objs) {
@@ -65,9 +66,27 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    console.log(JSON.stringify(body));
-    Sys_unit.create()
-    return res.json({});
+    var parentId = parseInt(body.parentId);
+    Sys_unit.find().where({parentId: parentId}).sort({path: 'desc'}).limit(1).exec(function (err, objs) {
+      var path = '0001';
+      if (objs.length > 0) {
+        var num = parseInt(objs[0].path) + 1;
+        path = StringUtil.getPath(num, 4);
+      }
+      body.path = path;
+      body.location = 0;
+      body.createdBy = req.session.user.id;
+      Sys_unit.create(body).exec(function (err, obj) {
+        if (err || !obj)return res.json({code: 1, msg: sails.__('add.fail')});
+        if (parentId > 0) {
+          Sys_unit.update({id: parentId}, {hasChildren: true}).exec(function (err, obj) {
+
+          });
+        }
+        return res.json({code: 0, msg: sails.__('add.ok')});
+      });
+    });
+
 
   }
 };

@@ -26,6 +26,10 @@
   "private.index.usersetting":"编辑常用菜单",
   "private.index.userpassword":"修改密码",
   "private.index.panel":"自定义皮肤和布局",
-  "update.failure":"修改失败",
-  "update.success":"修改成功"
+  "update.fail":"修改失败",
+  "update.ok":"修改成功",
+  "add.fail":"添加失败",
+  "add.ok":"添加成功",
+  "delete.fail":"删除失败",
+  "delete.ok":"删除成功"
 }

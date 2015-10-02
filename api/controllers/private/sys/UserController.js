@@ -21,9 +21,9 @@ module.exports = {
       var hash = bcrypt.hashSync(newPassword, salt);
       Sys_user.update({id: user.id}, {password: hash}).exec(function (err, obj) {
         if (err) {
-          return res.json({code: 2, msg: sails.__('update.failure')});
+          return res.json({code: 2, msg: sails.__('update.fail')});
         } else {
-          return res.json({code: 0, msg: sails.__('update.success')});
+          return res.json({code: 0, msg: sails.__('update.ok')});
         }
       });
     } else {
