@@ -74,8 +74,8 @@ module.exports = {
         if (objs.length > 0) {
           var num = parseInt(objs[0].path) + 1;
           path = StringUtil.getPath(num, objs[0].path.length);
-        }else{
-          path=path+'0001';
+        } else {
+          path = path + '0001';
         }
         body.path = path;
         body.location = 0;
@@ -83,7 +83,8 @@ module.exports = {
         Sys_unit.create(body).exec(function (cerr, obj) {
           if (cerr || !obj)return res.json({code: 1, msg: sails.__('add.fail')});
           if (parentId > 0) {
-            Sys_unit.update({id: parentId}, {hasChildren: true}).exec(function(e,o){});
+            Sys_unit.update({id: parentId}, {hasChildren: true}).exec(function (e, o) {
+            });
           }
           return res.json({code: 0, msg: sails.__('add.ok')});
         });
@@ -121,7 +122,14 @@ module.exports = {
       if (err || !obj)return res.json({code: 1, msg: sails.__('delete.fail')});
       Sys_unit.destroy({path: {'like': obj.path + '%'}})
         .exec(function (err) {
-          console.log(err);
+          Sys_unit.query('SELECT COUNT(id) as num FROM sys_unit WHERE parentId=?', [obj.parentId], function (e, o) {
+            if (o.length > 0) {
+              if (o[0].num == 0) {
+                Sys_unit.update({id: obj.parentId}, {hasChildren: false}).exec(function (e2, o2) {
+                });
+              }
+            }
+          });
         });
       return res.json({code: 0, msg: sails.__('delete.ok')});
     });

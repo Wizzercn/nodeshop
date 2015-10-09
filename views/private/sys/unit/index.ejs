@@ -128,13 +128,12 @@
         dialog.modal("hide");
         if(data.code==0){
           Toast.success(data.msg);
-          btn.button("reset");
           unitTreeTable.treetable("removeNode", id);
           //从表格中移除此行
         }else{
           Toast.error(data.msg);
         }
-
+        btn.button("reset");
       },"json");
     });
   }
