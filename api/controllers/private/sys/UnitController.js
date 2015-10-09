@@ -7,7 +7,7 @@ module.exports = {
   index: function (req, res) {
     Sys_unit.find().where({parentId: 0}).sort('location asc').sort('path asc').exec(function (err, objs) {
       req.data.unit = objs;
-      return res.view('private/sys/unit/index.ejs', req.data);
+      return res.view('private/sys/unit/index', req.data);
     });
   },
   child: function (req, res) {
@@ -15,14 +15,14 @@ module.exports = {
     if (!id)id = '0';
     Sys_unit.find().where({parentId: id}).sort('location asc').sort('path asc').exec(function (err, objs) {
       req.data.unit = objs;
-      return res.view('private/sys/unit/child.ejs', req.data);
+      return res.view('private/sys/unit/child', req.data);
     });
   },
   detail: function (req, res) {
     Sys_unit.findOne({id: req.params.id}).exec(function (err, obj) {
       req.data.moment = require("moment");
       req.data.obj = obj;
-      return res.view('private/sys/unit/detail.ejs', req.data);
+      return res.view('private/sys/unit/detail', req.data);
     });
   },
   tree: function (req, res) {
@@ -67,26 +67,63 @@ module.exports = {
   addDo: function (req, res) {
     var body = req.body;
     var parentId = parseInt(body.parentId);
-    Sys_unit.find().where({parentId: parentId}).sort({path: 'desc'}).limit(1).exec(function (err, objs) {
-      var path = '0001';
-      if (objs.length > 0) {
-        var num = parseInt(objs[0].path) + 1;
-        path = StringUtil.getPath(num, 4);
-      }
-      body.path = path;
-      body.location = 0;
-      body.createdBy = req.session.user.id;
-      Sys_unit.create(body).exec(function (err, obj) {
-        if (err || !obj)return res.json({code: 1, msg: sails.__('add.fail')});
-        if (parentId > 0) {
-          Sys_unit.update({id: parentId}, {hasChildren: true}).exec(function (err, obj) {
-
-          });
+    Sys_unit.findOne({id: parentId}).exec(function (err, unit) {
+      var path = '';
+      if (unit)path = unit.path || '';
+      Sys_unit.find().where({parentId: parentId}).sort({path: 'desc'}).limit(1).exec(function (ferr, objs) {
+        if (objs.length > 0) {
+          var num = parseInt(objs[0].path) + 1;
+          path = StringUtil.getPath(num, objs[0].path.length);
+        }else{
+          path=path+'0001';
         }
-        return res.json({code: 0, msg: sails.__('add.ok')});
+        body.path = path;
+        body.location = 0;
+        body.createdBy = req.session.user.id;
+        Sys_unit.create(body).exec(function (cerr, obj) {
+          if (cerr || !obj)return res.json({code: 1, msg: sails.__('add.fail')});
+          if (parentId > 0) {
+            Sys_unit.update({id: parentId}, {hasChildren: true}).exec(function(e,o){});
+          }
+          return res.json({code: 0, msg: sails.__('add.ok')});
+        });
       });
     });
 
-
+  },
+  edit: function (req, res) {
+    var id = req.params.id;
+    Sys_unit.findOne({id: id}).exec(function (err, obj) {
+      if (obj) {
+        Sys_unit.findOne({id: obj.parentId}).exec(function (err, punit) {
+          req.data.parentUnit = punit;
+          req.data.obj = obj;
+          return res.view('private/sys/unit/edit', req.data);
+        });
+      } else {
+        return res.view('private/sys/unit/edit', req.data);
+      }
+    });
+  },
+  editDo: function (req, res) {
+    var body = req.body;
+    Sys_unit.update({id: body.id}, body).exec(function (err, obj) {
+      if (err || !obj)return res.json({code: 1, msg: sails.__('update.fail')});
+      return res.json({code: 0, msg: sails.__('update.ok')});
+    });
+  },
+  delete: function (req, res) {
+    var id = req.params.id;
+    if (id == 1) {
+      return res.json({code: 2, msg: sails.__('delete.not')});
+    }
+    Sys_unit.findOne({id: id}).exec(function (err, obj) {
+      if (err || !obj)return res.json({code: 1, msg: sails.__('delete.fail')});
+      Sys_unit.destroy({path: {'like': obj.path + '%'}})
+        .exec(function (err) {
+          console.log(err);
+        });
+      return res.json({code: 0, msg: sails.__('delete.ok')});
+    });
   }
 };

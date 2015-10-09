@@ -31,5 +31,6 @@
   "add.fail":"添加失败",
   "add.ok":"添加成功",
   "delete.fail":"删除失败",
-  "delete.ok":"删除成功"
+  "delete.ok":"删除成功",
+  "delete.not":"不允许删除"
 }
