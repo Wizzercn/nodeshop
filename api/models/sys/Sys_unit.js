@@ -68,6 +68,10 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
+    },
+    users: {
+      collection: 'Sys_user',
+      via: 'unitid'
     }
   }
 };

@@ -79,6 +79,9 @@ module.exports = {
     roles: {
       collection: 'Sys_role',
       via: 'users'
+    },
+    unitid: {
+      model: 'Sys_unit'
     }
   }
 };
