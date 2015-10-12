@@ -14,7 +14,7 @@ module.exports = {
     var pageSize = parseInt(req.query.length);
     var start = parseInt(req.query.start);
     var page = start / pageSize + 1;
-    var draw = parseInt(req.query.draw) + 1;
+    var draw = parseInt(req.query.draw);
     var where = {unitid: 1};
 
     Sys_user.count(where).exec(function (err, count) {

@@ -24,6 +24,7 @@
   </header>
   <div class=panel-body>
     <div class="table-responsive no-border">
+      <input id="unitid" type="hidden">
       <table class="table table-bordered table-striped mg-t datatable">
         <thead>
         <tr>
@@ -150,14 +151,23 @@
           "language": {
             "url": "/plugins/datatables/cn.json"
           },
-          "processingDisplay": function () {
+          "preDrawCallback": function () {
+            sublime.closeLoadingbar($(".main-content"));
             sublime.showLoadingbar($(".main-content"));
           },
-          "initComplete": function () {
+          "drawCallback": function () {
             sublime.closeLoadingbar($(".main-content"));
           },
-          "ajax": "/private/sys/user/data",
-          "order": [[ 1, "asc" ]],
+          "aaSorting": [
+            [ 1, "desc" ]
+          ],
+          "ajax": {
+            "url": "/private/sys/user/data",
+            "data": function (d) {
+              d.unitid = $('#unitid').val();
+            }
+          },
+          "order": [[0, "asc"]],
           "columns": [
             {"data": "loginname"},
             {"data": "nickname"},
@@ -180,24 +190,35 @@
                   '</ul></div>';
               },
               "targets": 4
+            },
+            {
+              "render": function (data, type, row) {
+                if (data) {
+                  return '<i class="fa fa-circle text-success ml5"></i>';
+                } else {
+                  return '<i class="fa fa-circle text-danger ml5"></i>';
+                }
+              },
+              "targets": 3
+            },
+            {
+              "render": function (data, type, row) {
+                if (!data) {
+                  return '<i class="fa fa-circle text-success ml5"></i>';
+                } else {
+                  return '<i class="fa fa-circle text-danger ml5"></i>';
+                }
+              },
+              "targets": 2
             }
           ]
         });
         t.on('click', 'tr', function () {
           $(this).toggleClass('selected');
         });
-        t.on('order.dt search.dt', function () {
-          t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1;
-          });
-        }).draw();
-        $('.chosen').chosen({width: '80px'});
       }
     };
   }();
-  $(function () {
-    demoDataTables.init();
-  });
   var unitTreeTable;
   var selected = [];
   function initTreeView() {
@@ -215,10 +236,13 @@
       var id = selected.selected;
       $("#unitid").val(id);
       $("#searchForm").find("input[type='text']").val("");
+      demoDataTables.init();
     }).on("loaded.jstree", function (node, jstree) {
       var id = $(node.target).find("li:first").attr("id");
-      if (id)
+      if (id) {
         jstree.instance.select_node(id);
+        demoDataTables.init();
+      }
     });
   }
   function del(id) {
