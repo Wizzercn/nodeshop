@@ -1,6 +1,334 @@
-
-<section class="main-content" id="container">
-  <div class="content-wrap">
-    task..
+<aside class="sidebar-250 canvas-right bg-default ">
+  <header class="header navbar clearfix bb bg-default pl0 pr0">
+    <p class="navbar-text"><i class="fa fa-sitemap mr5"></i> 单位列表</p>
+  </header>
+  <div class="content-wrap no-p">
+    <div class="wrapper2">
+      <div class="m5">
+        <div id="jsTreeUnit"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+<section class="content-wrap bg-white">
+  <header class="header navbar bg-white shadow">
+    <div class="btn-group tool-button">
+      <a class="btn btn-primary navbar-btn" href="/private/sys/user/add" data-pjax><i class="ti-plus"></i> 新建用户</a>
+      <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    </div>
+    <div class="pull-right offscreen-right">
+      <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
+          class="fa fa-sliders"></i> 筛选
+      </button>
+    </div>
+  </header>
+  <div class=panel-body>
+    <div class="table-responsive no-border">
+      <table class="table table-bordered table-striped mg-t datatable">
+        <thead>
+        <tr>
+          <th>用户名</th>
+          <th>姓名</th>
+          <th>状态</th>
+          <th>是否在线</th>
+          <th>操作</th>
+      </table>
+    </div>
   </div>
 </section>
+<div class="cd-panel from-right">
+  <header class="cd-panel-header">
+    <h4>高级筛选</h4>
+    <a href="javascript:;" class="cd-panel-close text-center"><i class="ti-close"></i> </a>
+  </header>
+  <div class="cd-panel-container">
+    <div class="cd-panel-content shadow">
+      <form id="searchForm" role="form">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <input type="text" id="username" name="username" class="form-control" placeholder="用户名/登录名" autofocus>
+        </div>
+        <div class="form-group">
+          <label for="nickname">姓名</label>
+          <input type="text" id="nickname" name="nickname" class="form-control" placeholder="姓名/昵称">
+        </div>
+        <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- 删除用户 -->
+<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">删除用户</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            用户删除后无法恢复，确定删除吗？ <br/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 删除选中用户 -->
+<div id="dialogDeleteCheck" class="modal fade bs-modal-lg" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">删除用户</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12 mb10">
+            确定删除以下用户吗？
+          </div>
+          <div class="col-xs-12">
+            <ul id="checkedUser" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 用户详情 -->
+<div id="dialogUserDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+<div id="dialogUserRightDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+<div id="dialogPaasword" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">重置密码</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">知道了</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script language="JavaScript">
+  var demoDataTables = function () {
+    return {
+      init: function () {
+        var t = $('.datatable').DataTable({
+          "processing": false,
+          "serverSide": true,
+          "select": true,
+          "language": {
+            "url": "/plugins/datatables/cn.json"
+          },
+          "processingDisplay": function () {
+            sublime.showLoadingbar($(".main-content"));
+          },
+          "initComplete": function () {
+            sublime.closeLoadingbar($(".main-content"));
+          },
+          "ajax": "/private/sys/user/data",
+          "order": [[ 1, "asc" ]],
+          "columns": [
+            {"data": "loginname"},
+            {"data": "nickname"},
+            {"data": "disabled"},
+            {"data": "online"},
+          ],
+          "columnDefs": [
+            {
+              "render": function (data, type, row) {
+                return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                  ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu"><li><a href="/private/sys/user/info/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
+                  '<li><a href="/private/sys/user/role/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+                  '<li class="divider"></li>' +
+                  '<li><a href="/private/sys/user/edit/577c2790e2c645d1aa3af4fd2f1c16f2">修改信息</a></li>' +
+                  '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
+                  '<li><a href="javascript:;" onclick="del()">删除</a></li>' +
+                  '<li class="divider"></li>' +
+                  '<li><a href="javascript:;" onclick="enableUser()">启用</a></li>' +
+                  '<li><a href="javascript:;" onclick="disableUser()">禁用</a></li>' +
+                  '</ul></div>';
+              },
+              "targets": 4
+            }
+          ]
+        });
+        t.on('click', 'tr', function () {
+          $(this).toggleClass('selected');
+        });
+        t.on('order.dt search.dt', function () {
+          t.column(0, {search: 'applied', order: 'applied'}).nodes().each(function (cell, i) {
+            cell.innerHTML = i + 1;
+          });
+        }).draw();
+        $('.chosen').chosen({width: '80px'});
+      }
+    };
+  }();
+  $(function () {
+    demoDataTables.init();
+  });
+  var unitTreeTable;
+  var selected = [];
+  function initTreeView() {
+    $("#jsTreeUnit").jstree({
+      plugins: ["wholerow"],
+      core: {
+        data: {
+          url: function (node) {
+            return node.id === "#" ? "/private/sys/user/tree" : "/private/sys/user/tree?pid=" + node.id
+          }
+        },
+        multiple: false
+      }
+    }).on("select_node.jstree", function (node, selected) {
+      var id = selected.selected;
+      $("#unitid").val(id);
+      $("#searchForm").find("input[type='text']").val("");
+    }).on("loaded.jstree", function (node, jstree) {
+      var id = $(node.target).find("li:first").attr("id");
+      if (id)
+        jstree.instance.select_node(id);
+    });
+  }
+  function del(id) {
+    var dialog = $("#dialogDelete");
+    dialog.modal("show");
+    dialog.find("#ok").unbind("click");
+    dialog.find("#ok").bind("click", function (event) {
+      var btn = $(this);
+      btn.button("loading");
+      $.post("/private/sys/user/delete/" + id, {}, function (data) {
+        if (data.type == "success") {
+          $("#" + id).removeClass().addClass("hinge animated").one(
+            "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
+              $("#" + id).remove();
+            })
+        } else {
+          Toast.error(data.content);
+        }
+        //重置按钮状态，关闭提示框
+        btn.button("reset");
+        dialog.modal("hide");
+      }, "json");
+    });
+  }
+  function delCheck() {
+    var chks = $("#data td input[type='checkbox']:checked");
+    if (chks.length > 0) {
+      var ids = new Array();
+      $("#checkedUser").html("");//清空
+      $.each(chks, function (i, n) {
+        var chk = $(n);
+        ids.push(n.value);
+        $("#checkedUser").append("<li class=\"list-group-item\">" + chk.parents("tr").attr("name") + "</li>");
+      });
+      var dialog = $("#dialogDeleteCheck");
+      dialog.modal("show");
+      dialog.find("#ok").unbind("click");
+      dialog.find("#ok").bind("click", function (event) {
+        var btn = $(this);
+        btn.button("loading");
+        $.post("/private/sys/user/delete", {ids: ids.toString()}, function (data) {
+          if (data.type == "success") {
+            window.location.reload();
+          } else {
+            Toast.error(data.content);
+          }
+          btn.button("reset");
+          dialog.modal("hide");
+        }, "json");
+      });
+    } else {
+      Toast.warning("请先选择要删除的用户！");
+    }
+  }
+  function enableUser(id) {
+    $.post("/private/sys/user/enable/" + id, {}, function (data) {
+      if (data.type == "success") {
+        $("#td_status_" + id).find("i").attr("class", "fa fa-circle text-success ml5");
+      } else {
+        Toast.error(data.content);
+      }
+    }, "json");
+  }
+  function disableUser(id) {
+    $.post("/private/sys/user/disable/" + id, {}, function (data) {
+      if (data.type == "success") {
+        $("#td_status_" + id).find("i").attr("class", "fa fa-circle text-danger ml5");
+      } else {
+        Toast.error(data.content);
+      }
+    }, "json");
+  }
+  //密码重置
+  function resetPwd(id) {
+    $.post("/private/sys/user/resetPwd/" + id, {}, function (data) {
+      var dialog = $("#dialogPaasword");
+      if (data.type == "success") {
+        dialog.find(".col-xs-12").html("密码重置成功，请复制新密码：" + data.data);
+        dialog.modal("show");
+      } else {
+        dialog.find(".col-xs-12").html(data.content);
+        dialog.modal("show");
+      }
+    }, "json");
+  }
+  function initCheckBox() {
+    var chkAll = $("#data th input[type='checkbox']");
+    chkAll.on("ifChecked", function (event) {
+      $("#data td input[type='checkbox']").iCheck("check");
+    });
+    chkAll.on("ifUnchecked", function (event) {
+      $("#data td input[type='checkbox']").iCheck("uncheck");
+    });
+  }
+  $(document).ready(function () {
+    initTreeView();
+    initCheckBox();
+    $("#searchBtn").on("click", function () {
+      __jumpPage(1);
+    });
+    //删除页面缓存
+    $("#dialogUserDetail").on("hidden.bs.modal", function () {
+      $(this).removeData("bs.modal");
+    });
+    $("#dialogUserRightDetail").on("hidden.bs.modal", function () {
+      $(this).removeData("bs.modal");
+    });
+    $("#dialogPaasword").on("hidden.bs.modal", function () {
+      $(this).removeData("bs.modal");
+    });
+  });
+
+</script>

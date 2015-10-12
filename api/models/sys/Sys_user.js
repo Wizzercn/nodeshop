@@ -36,6 +36,14 @@ module.exports = {
       size: 100,
       required: true
     },
+    disabled:{
+      type:'boolean',
+      defaultsTo: function (){ return false; }
+    },
+    online:{
+      type:'boolean',
+      defaultsTo: function (){ return false; }
+    },
     lastIp:{
       type: 'string',
       size: 20
@@ -46,10 +54,6 @@ module.exports = {
       defaultsTo:function(){
         return 0;
       }
-    },
-    disabled:{
-      type:'boolean',
-      defaultsTo: function (){ return false; }
     },
     loginTheme:{
       type: 'string',

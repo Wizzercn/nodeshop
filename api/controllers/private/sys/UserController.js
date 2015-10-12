@@ -5,16 +5,70 @@ var bcrypt = require('bcrypt');
 module.exports = {
   index: function (req, res) {
     var data = req.data;
+    data.pageData = {pageNum: 20};
     return res.view('private/sys/user/index.ejs', data);
 
+  },
+  data: function (req, res) {
+    console.log('p::::' + JSON.stringify(req.query));
+    var pageSize = parseInt(req.query.length);
+    var start = parseInt(req.query.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.query.draw) + 1;
+    var where = {unitid: 1};
+
+    Sys_user.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Sys_user.find(where)
+          .paginate({page: page}, {limit: pageSize})
+          .exec(function (err, list) {
+            console.log('err::' + err);
+            console.log('list::::' + JSON.stringify(list));
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  list: function (req, res) {
+    return res.view('private/sys/user/list', req.data);
+  },
+  tree: function (req, res) {
+    var pid = req.query.pid;
+    if (!pid)pid = '0';
+    Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
+      var str = [];
+      if (objs) {
+        objs.forEach(function (o) {
+          var obj = {};
+          obj.id = o.id;
+          obj.text = o.name;
+          obj.children = o.hasChildren;
+          str.push(obj);
+        });
+      }
+
+      return res.json(str);
+    });
   },
   doChangePassword: function (req, res) {
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;
-    console.log('oldPassword::'+oldPassword);
-    console.log('newPassword::'+newPassword);
+    console.log('oldPassword::' + oldPassword);
+    console.log('newPassword::' + newPassword);
     var user = req.session.user;
-    console.log('password::'+user.password);
+    console.log('password::' + user.password);
 
     if (bcrypt.compareSync(oldPassword, user.password)) {
       var salt = bcrypt.genSaltSync(10);

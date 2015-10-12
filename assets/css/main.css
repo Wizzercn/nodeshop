@@ -647,6 +647,16 @@ aside > .fffix > footer p {
     overflow-x: hidden;
     overflow-y: auto;
   }
+  section .wrapper2,
+  aside .wrapper2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
   section.main-content > footer,
   section.main-content > .fffix > footer,
   aside > footer,
@@ -692,8 +702,12 @@ aside > .fffix > footer p {
   .content-wrap {
     position: relative;
     height: 100%;
+    width: 100%;
   }
   .header + .content-wrap .wrapper {
+    top: 50px;
+  }
+  .header + .content-wrap .wrapper2 {
     top: 50px;
   }
   .slimscroll {

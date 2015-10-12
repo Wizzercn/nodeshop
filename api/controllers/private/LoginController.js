@@ -127,6 +127,7 @@ module.exports = {
         });
         req.session.roleCodes = roleCodes;
         Sys_user.update(user.id, {
+          online:true,
           lastIp: req.ip,
           loginCount: user.loginCount + 1
         }, function (err) {

@@ -32,7 +32,7 @@ module.exports.policies = {
   'private/sys/UnitController': {
     '*': 'private'
   },
-  'private/sys/TaskController': {
+  'private/sys/UserController': {
     '*': 'private'
   }
 };
