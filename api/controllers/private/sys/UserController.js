@@ -22,10 +22,10 @@ module.exports = {
     var sort = {};
     var where = {unitid: unitid};
     if (loginname) {
-      where.loginname = {'like':'%'+loginname+'%'};
+      where.loginname = {'like': '%' + loginname + '%'};
     }
     if (nickname) {
-      where.nickname = {'like':'%'+nickname+'%'};
+      where.nickname = {'like': '%' + nickname + '%'};
     }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
@@ -53,13 +53,40 @@ module.exports = {
       }
     });
   },
-  list: function (req, res) {
-    return res.view('private/sys/user/list', req.data);
+  enable: function (req, res) {
+    var id = req.params.id;
+    Sys_user.update({id: id}, {disabled: false}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      }
+    });
+  },
+  disable: function (req, res) {
+    var id = req.params.id;
+    Sys_user.update({id: id}, {disabled: true}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      }
+    });
+  },
+  delete: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    Sys_user.destroy({id: ids}).exec(function (err) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('delete.ok')});
+      }
+    });
   },
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
-    Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
+    Sys_unit.find().where({parentId: pid}).sort('id asc').sort('path asc').exec(function (err, objs) {
       var str = [];
       if (objs) {
         objs.forEach(function (o) {

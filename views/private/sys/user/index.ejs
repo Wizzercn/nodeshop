@@ -44,15 +44,15 @@
   </header>
   <div class="cd-panel-container">
     <div class="cd-panel-content shadow">
-        <div class="form-group">
-          <label for="loginname">用户名</label>
-          <input type="text" id="loginname" name="loginname" class="form-control" placeholder="用户名/登录名" autofocus>
-        </div>
-        <div class="form-group">
-          <label for="nickname">姓名</label>
-          <input type="text" id="nickname" name="nickname" class="form-control" placeholder="姓名/昵称">
-        </div>
-        <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+      <div class="form-group">
+        <label for="loginname">用户名</label>
+        <input type="text" id="loginname" name="loginname" class="form-control" placeholder="用户名/登录名" autofocus>
+      </div>
+      <div class="form-group">
+        <label for="nickname">姓名</label>
+        <input type="text" id="nickname" name="nickname" class="form-control" placeholder="姓名/昵称">
+      </div>
+      <button id="searchBtn" type="button" class="btn btn-default">查询</button>
     </div>
   </div>
 </div>
@@ -89,7 +89,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-xs-12 mb10">
-            确定删除以下用户吗？
+            用户删除后无法恢复，确定删除已选用户吗？
           </div>
           <div class="col-xs-12">
             <ul id="checkedUser" class="list-group"></ul>
@@ -160,11 +160,11 @@
         "type": "post",
         "data": function (d) {
           d.unitid = $('#unitid').val();
-          d.loginname=$('#loginname').val();
-          d.nickname=$('#nickname').val();
+          d.loginname = $('#loginname').val();
+          d.nickname = $('#nickname').val();
         }
       },
-      "order":[[0,"desc"]],
+      "order": [[0, "desc"]],
       "columns": [
         {"data": "loginname", "bSortable": true},
         {"data": "nickname", "bSortable": true},
@@ -176,15 +176,15 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/sys/user/info/'+row.id+'" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
-              '<li><a href="/private/sys/user/role/'+row.id+'" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+              '<li><a href="/private/sys/user/info/' + row.id + '" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
+              '<li><a href="/private/sys/user/role/' + row.id + '" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="/private/sys/user/edit/'+row.id+'">修改信息</a></li>' +
+              '<li><a href="/private/sys/user/edit/' + row.id + '">修改信息</a></li>' +
               '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
-              '<li><a href="javascript:;" onclick="del('+row.id+')">删除</a></li>' +
+              '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="javascript:;" onclick="enableUser('+row.id+')">启用</a></li>' +
-              '<li><a href="javascript:;" onclick="disableUser('+row.id+')">禁用</a></li>' +
+              '<li><a href="javascript:;" onclick="enableUser(' + row.id + ')">启用</a></li>' +
+              '<li><a href="javascript:;" onclick="disableUser(' + row.id + ')">禁用</a></li>' +
               '</ul></div>';
           },
           "targets": 4
@@ -202,9 +202,9 @@
         {
           "render": function (data, type, row) {
             if (!data) {
-              return '<i class="fa fa-circle text-success ml5"></i>';
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
             } else {
-              return '<i class="fa fa-circle text-danger ml5"></i>';
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
             }
           },
           "targets": 2
@@ -214,9 +214,12 @@
     datatable.on('click', 'tr', function () {
       $(this).toggleClass('selected');
     });
-    $("#searchBtn").on('click',function(){
-      datatable.ajax.reload(null, false);
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
     });
+  }
+  function search() {
+
   }
   var unitTreeTable;
   var selected = [];
@@ -235,9 +238,10 @@
       var id = selected.selected;
       $("#unitid").val(id);
       $("#searchForm").find("input[type='text']").val("");
-      if(datatable){
-        datatable.ajax.reload(null, false);
-      }else{
+      if (datatable) {
+        $(".cd-panel-content").find("input").val("");
+        datatable.ajax.reload();
+      } else {
         initDatatable();
       }
     }).on("loaded.jstree", function (node, jstree) {
@@ -255,13 +259,10 @@
       var btn = $(this);
       btn.button("loading");
       $.post("/private/sys/user/delete/" + id, {}, function (data) {
-        if (data.type == "success") {
-          $("#" + id).removeClass().addClass("hinge animated").one(
-            "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
-              $("#" + id).remove();
-            })
+        if (data.code == 0) {
+          datatable.ajax.reload(null,false);
         } else {
-          Toast.error(data.content);
+          Toast.error(data.msg);
         }
         //重置按钮状态，关闭提示框
         btn.button("reset");
@@ -270,14 +271,11 @@
     });
   }
   function delCheck() {
-    var chks = $("#data td input[type='checkbox']:checked");
+    var chks = datatable.rows('.selected').data();
     if (chks.length > 0) {
-      var ids = new Array();
-      $("#checkedUser").html("");//清空
-      $.each(chks, function (i, n) {
-        var chk = $(n);
-        ids.push(n.value);
-        $("#checkedUser").append("<li class=\"list-group-item\">" + chk.parents("tr").attr("name") + "</li>");
+      var ids = [];
+      $.each(datatable.rows('.selected').data(), function (i, n) {
+        ids.push(n.id);
       });
       var dialog = $("#dialogDeleteCheck");
       dialog.modal("show");
@@ -285,11 +283,11 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/sys/user/delete", {ids: ids.toString()}, function (data) {
-          if (data.type == "success") {
-            window.location.reload();
+        $.post("/private/sys/user/delete", {ids: ids}, function (data) {
+          if (data.code == 0) {
+            datatable.ajax.reload(null,false);
           } else {
-            Toast.error(data.content);
+            Toast.error(data.msg);
           }
           btn.button("reset");
           dialog.modal("hide");
@@ -301,19 +299,19 @@
   }
   function enableUser(id) {
     $.post("/private/sys/user/enable/" + id, {}, function (data) {
-      if (data.type == "success") {
-        $("#td_status_" + id).find("i").attr("class", "fa fa-circle text-success ml5");
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
       } else {
-        Toast.error(data.content);
+        Toast.error(data.msg);
       }
     }, "json");
   }
   function disableUser(id) {
     $.post("/private/sys/user/disable/" + id, {}, function (data) {
-      if (data.type == "success") {
-        $("#td_status_" + id).find("i").attr("class", "fa fa-circle text-danger ml5");
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
       } else {
-        Toast.error(data.content);
+        Toast.error(data.msg);
       }
     }, "json");
   }

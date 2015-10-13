@@ -43,3 +43,7 @@ export JAVA_HOME CLASSPATH PATH
 ------------------------------------
 http://blog.csdn.net/tiantiandjava/article/details/17242345
 >>npm install ccap
+
+7.事务支持
+------------------------------------
+http://blog.evizija.si/sails-js-waterline-mysql-transactions/
