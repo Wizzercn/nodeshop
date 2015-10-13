@@ -10,20 +10,33 @@ module.exports = {
 
   },
   data: function (req, res) {
-    console.log('p::::' + JSON.stringify(req.query));
-    var pageSize = parseInt(req.query.length);
-    var start = parseInt(req.query.start);
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
-    var draw = parseInt(req.query.draw);
-    var where = {unitid: 1};
-
+    var draw = parseInt(req.body.draw);
+    var unitid = req.body.unitid || 1;
+    var loginname = req.body.loginname || '';
+    var nickname = req.body.nickname || '';
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {unitid: unitid};
+    if (loginname) {
+      where.loginname = {'like':'%'+loginname+'%'};
+    }
+    if (nickname) {
+      where.nickname = {'like':'%'+nickname+'%'};
+    }
+    console.log('where:::'+JSON.stringify(where));
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
     Sys_user.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Sys_user.find(where)
-          .paginate({page: page}, {limit: pageSize})
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
-            console.log('err::' + err);
-            console.log('list::::' + JSON.stringify(list));
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
@@ -65,11 +78,7 @@ module.exports = {
   doChangePassword: function (req, res) {
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;
-    console.log('oldPassword::' + oldPassword);
-    console.log('newPassword::' + newPassword);
     var user = req.session.user;
-    console.log('password::' + user.password);
-
     if (bcrypt.compareSync(oldPassword, user.password)) {
       var salt = bcrypt.genSaltSync(10);
       var hash = bcrypt.hashSync(newPassword, salt);

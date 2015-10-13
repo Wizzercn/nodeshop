@@ -44,17 +44,15 @@
   </header>
   <div class="cd-panel-container">
     <div class="cd-panel-content shadow">
-      <form id="searchForm" role="form">
         <div class="form-group">
-          <label for="username">用户名</label>
-          <input type="text" id="username" name="username" class="form-control" placeholder="用户名/登录名" autofocus>
+          <label for="loginname">用户名</label>
+          <input type="text" id="loginname" name="loginname" class="form-control" placeholder="用户名/登录名" autofocus>
         </div>
         <div class="form-group">
           <label for="nickname">姓名</label>
           <input type="text" id="nickname" name="nickname" class="form-control" placeholder="姓名/昵称">
         </div>
         <button id="searchBtn" type="button" class="btn btn-default">查询</button>
-      </form>
     </div>
   </div>
 </div>
@@ -141,84 +139,85 @@
 </div>
 
 <script language="JavaScript">
-  var demoDataTables = function () {
-    return {
-      init: function () {
-        var t = $('.datatable').DataTable({
-          "processing": false,
-          "serverSide": true,
-          "select": true,
-          "language": {
-            "url": "/plugins/datatables/cn.json"
+  var datatable;
+  function initDatatable() {
+    datatable = $('.datatable').DataTable({
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "preDrawCallback": function () {
+        sublime.closeLoadingbar($(".main-content"));
+        sublime.showLoadingbar($(".main-content"));
+      },
+      "drawCallback": function () {
+        sublime.closeLoadingbar($(".main-content"));
+      },
+      "ajax": {
+        "url": "/private/sys/user/data",
+        "type": "post",
+        "data": function (d) {
+          d.unitid = $('#unitid').val();
+          d.loginname=$('#loginname').val();
+          d.nickname=$('#nickname').val();
+        }
+      },
+      "order":[[0,"desc"]],
+      "columns": [
+        {"data": "loginname", "bSortable": true},
+        {"data": "nickname", "bSortable": true},
+        {"data": "disabled", "bSortable": true},
+        {"data": "online", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu"><li><a href="/private/sys/user/info/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
+              '<li><a href="/private/sys/user/role/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="/private/sys/user/edit/577c2790e2c645d1aa3af4fd2f1c16f2">修改信息</a></li>' +
+              '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
+              '<li><a href="javascript:;" onclick="del()">删除</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="javascript:;" onclick="enableUser()">启用</a></li>' +
+              '<li><a href="javascript:;" onclick="disableUser()">禁用</a></li>' +
+              '</ul></div>';
           },
-          "preDrawCallback": function () {
-            sublime.closeLoadingbar($(".main-content"));
-            sublime.showLoadingbar($(".main-content"));
-          },
-          "drawCallback": function () {
-            sublime.closeLoadingbar($(".main-content"));
-          },
-          "aaSorting": [
-            [ 1, "desc" ]
-          ],
-          "ajax": {
-            "url": "/private/sys/user/data",
-            "data": function (d) {
-              d.unitid = $('#unitid').val();
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
+            if (data) {
+              return '<i class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i class="fa fa-circle text-danger ml5"></i>';
             }
           },
-          "order": [[0, "asc"]],
-          "columns": [
-            {"data": "loginname"},
-            {"data": "nickname"},
-            {"data": "disabled"},
-            {"data": "online"},
-          ],
-          "columnDefs": [
-            {
-              "render": function (data, type, row) {
-                return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                  ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu"><li><a href="/private/sys/user/info/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
-                  '<li><a href="/private/sys/user/role/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
-                  '<li class="divider"></li>' +
-                  '<li><a href="/private/sys/user/edit/577c2790e2c645d1aa3af4fd2f1c16f2">修改信息</a></li>' +
-                  '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
-                  '<li><a href="javascript:;" onclick="del()">删除</a></li>' +
-                  '<li class="divider"></li>' +
-                  '<li><a href="javascript:;" onclick="enableUser()">启用</a></li>' +
-                  '<li><a href="javascript:;" onclick="disableUser()">禁用</a></li>' +
-                  '</ul></div>';
-              },
-              "targets": 4
-            },
-            {
-              "render": function (data, type, row) {
-                if (data) {
-                  return '<i class="fa fa-circle text-success ml5"></i>';
-                } else {
-                  return '<i class="fa fa-circle text-danger ml5"></i>';
-                }
-              },
-              "targets": 3
-            },
-            {
-              "render": function (data, type, row) {
-                if (!data) {
-                  return '<i class="fa fa-circle text-success ml5"></i>';
-                } else {
-                  return '<i class="fa fa-circle text-danger ml5"></i>';
-                }
-              },
-              "targets": 2
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            if (!data) {
+              return '<i class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i class="fa fa-circle text-danger ml5"></i>';
             }
-          ]
-        });
-        t.on('click', 'tr', function () {
-          $(this).toggleClass('selected');
-        });
-      }
-    };
-  }();
+          },
+          "targets": 2
+        }
+      ]
+    });
+    datatable.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click',function(){
+      datatable.ajax.reload(null, false);
+    });
+  }
   var unitTreeTable;
   var selected = [];
   function initTreeView() {
@@ -236,12 +235,15 @@
       var id = selected.selected;
       $("#unitid").val(id);
       $("#searchForm").find("input[type='text']").val("");
-      demoDataTables.init();
+      if(datatable){
+        datatable.ajax.reload(null, false);
+      }else{
+        initDatatable();
+      }
     }).on("loaded.jstree", function (node, jstree) {
       var id = $(node.target).find("li:first").attr("id");
       if (id) {
         jstree.instance.select_node(id);
-        demoDataTables.init();
       }
     });
   }
@@ -315,7 +317,6 @@
       }
     }, "json");
   }
-  //密码重置
   function resetPwd(id) {
     $.post("/private/sys/user/resetPwd/" + id, {}, function (data) {
       var dialog = $("#dialogPaasword");
@@ -328,22 +329,9 @@
       }
     }, "json");
   }
-  function initCheckBox() {
-    var chkAll = $("#data th input[type='checkbox']");
-    chkAll.on("ifChecked", function (event) {
-      $("#data td input[type='checkbox']").iCheck("check");
-    });
-    chkAll.on("ifUnchecked", function (event) {
-      $("#data td input[type='checkbox']").iCheck("uncheck");
-    });
-  }
   $(document).ready(function () {
+    initDatatable();
     initTreeView();
-    initCheckBox();
-    $("#searchBtn").on("click", function () {
-      __jumpPage(1);
-    });
-    //删除页面缓存
     $("#dialogUserDetail").on("hidden.bs.modal", function () {
       $(this).removeData("bs.modal");
     });
