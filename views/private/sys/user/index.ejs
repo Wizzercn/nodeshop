@@ -176,15 +176,16 @@
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu"><li><a href="/private/sys/user/info/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
-              '<li><a href="/private/sys/user/role/577c2790e2c645d1aa3af4fd2f1c16f2" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+              '<li><a href="/private/sys/user/info/'+row.id+'" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
+              '<li><a href="/private/sys/user/role/'+row.id+'" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="/private/sys/user/edit/577c2790e2c645d1aa3af4fd2f1c16f2">修改信息</a></li>' +
+              '<li><a href="/private/sys/user/edit/'+row.id+'">修改信息</a></li>' +
               '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
-              '<li><a href="javascript:;" onclick="del()">删除</a></li>' +
+              '<li><a href="javascript:;" onclick="del('+row.id+')">删除</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="javascript:;" onclick="enableUser()">启用</a></li>' +
-              '<li><a href="javascript:;" onclick="disableUser()">禁用</a></li>' +
+              '<li><a href="javascript:;" onclick="enableUser('+row.id+')">启用</a></li>' +
+              '<li><a href="javascript:;" onclick="disableUser('+row.id+')">禁用</a></li>' +
               '</ul></div>';
           },
           "targets": 4

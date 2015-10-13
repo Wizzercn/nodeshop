@@ -27,7 +27,6 @@ module.exports = {
     if (nickname) {
       where.nickname = {'like':'%'+nickname+'%'};
     }
-    console.log('where:::'+JSON.stringify(where));
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
