@@ -505,20 +505,22 @@ var sublime = function () {
                 clz += " full";
             }
             obj = obj || $("body");
+          if($("#loadingbar").length<1){
             obj.prepend("<div id=\"loadingbar\"></div>");
             $("#loadingbar").addClass(clz).append($("<dt/><dd/>"));
             $("#loadingbar").width((50 + Math.random() * 30) + "%");
             var width = (50 + Math.random() * 30);
             var interval = setInterval(function(){
-                width = width + 10;
-                if(width<100){
-                    $("#loadingbar").width(width + "%");
-                }else{
-                    $("#loadingbar").width("101%");
-                    clearInterval(interval);
-                }
+              width = width + 10;
+              if(width<100){
+                $("#loadingbar").width(width + "%");
+              }else{
+                $("#loadingbar").width("101%");
+                clearInterval(interval);
+              }
             }, 1000);
             $("#loadingbar").attr("interval", interval);
+          }
         },
         closeLoadingbar : function(obj){//关闭顶部进度条
             obj = obj || $("body");
