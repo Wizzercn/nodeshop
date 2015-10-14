@@ -15,9 +15,19 @@ module.exports = {
     return res.view('private/sys/user/index', data);
 
   },
+  /**
+   * 添加用户
+   * @param req
+   * @param res
+   */
   add: function (req, res) {
     return res.view('private/sys/user/add', req.data);
   },
+  /**
+   * 保存用户
+   * @param req
+   * @param res
+   */
   addDo: function (req, res) {
     var body = req.body;
     var loginname = body.loginname;
@@ -32,22 +42,53 @@ module.exports = {
         body.disabled = false;
         body.online = false;
         Sys_user.create(body).exec(function (e, o) {
-          if (e || !o)return res.json({code: 1, msg: JSON.stringify(e)});
+          if (e)return res.json({code: 1, msg: JSON.stringify(e)});
           return res.json({code: 0, msg: sails.__('add.ok')});
         });
       }
     });
   },
+  /**
+   * 修改用户
+   * @param req
+   * @param res
+   */
   edit: function (req, res) {
     var id = req.params.id;
     Sys_user.findOne({id: id}).populate('unitid').exec(function (err, obj) {
-      if(obj.unitid){
+      if (obj.unitid) {
         obj.unitName = obj.unitid.name;
       }
       req.data.obj = obj;
       return res.view('private/sys/user/edit', req.data);
     });
-
+  },
+  /**
+   * 保存修改
+   * @param req
+   * @param res
+   */
+  editDo: function (req, res) {
+    var body = req.body;
+    var oldLoginname=body.oldLoginname;
+    var loginname=body.loginname;
+    if(loginname!=oldLoginname){//如果修改用户名则需判断是否已存在
+      Sys_user.findOne({loginname: loginname}).exec(function (err, obj) {
+        if (obj) {
+          return res.json({code: 1, msg: sails.__('private.sys.user.loginname')});
+        }else{
+          Sys_user.update({id: body.id}, body).exec(function (err, obj) {
+            if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+            return res.json({code: 0, msg: sails.__('update.ok')});
+          });
+        }
+      });
+    }else{//讨厌的回调，不这样写会取不到数据
+      Sys_user.update({id: body.id}, body).exec(function (err, obj) {
+        if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      });
+    }
   },
   /**
    * 用户分页查询(jQuery.datatables)
@@ -211,7 +252,7 @@ module.exports = {
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
-    Sys_unit.find().where({parentId: pid}).sort('id asc').sort('path asc').exec(function (err, objs) {
+    Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
       var str = [];
       if (objs) {
         objs.forEach(function (o) {
