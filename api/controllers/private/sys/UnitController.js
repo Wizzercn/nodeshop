@@ -4,12 +4,22 @@
 var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
 module.exports = {
+  /**
+   * 单位管理首页
+   * @param req
+   * @param res
+   */
   index: function (req, res) {
     Sys_unit.find().where({parentId: 0}).sort('location asc').sort('path asc').exec(function (err, objs) {
       req.data.unit = objs;
       return res.view('private/sys/unit/index', req.data);
     });
   },
+  /**
+   * 查找子单位
+   * @param req
+   * @param res
+   */
   child: function (req, res) {
     var id = req.params.id;
     if (!id)id = '0';
@@ -18,13 +28,23 @@ module.exports = {
       return res.view('private/sys/unit/child', req.data);
     });
   },
+  /**
+   * 单位详情
+   * @param req
+   * @param res
+   */
   detail: function (req, res) {
     Sys_unit.findOne({id: req.params.id}).exec(function (err, obj) {
-      req.data.moment = require("moment");
+      req.data.moment = moment;
       req.data.obj = obj;
       return res.view('private/sys/unit/detail', req.data);
     });
   },
+  /**
+   * 选择单位(树形结构)
+   * @param req
+   * @param res
+   */
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
@@ -53,6 +73,11 @@ module.exports = {
     //  return res.json(JSON.parse(json));
     //});
   },
+  /**
+   * 添加单位
+   * @param req
+   * @param res
+   */
   add: function (req, res) {
     var pid = req.query.pid;
     if (pid) {
@@ -64,6 +89,11 @@ module.exports = {
       return res.view('private/sys/unit/add', req.data);
     }
   },
+  /**
+   * 保存添加
+   * @param req
+   * @param res
+   */
   addDo: function (req, res) {
     var body = req.body;
     var parentId = parseInt(body.parentId);
@@ -92,6 +122,11 @@ module.exports = {
     });
 
   },
+  /**
+   * 修改单位
+   * @param req
+   * @param res
+   */
   edit: function (req, res) {
     var id = req.params.id;
     Sys_unit.findOne({id: id}).exec(function (err, obj) {
@@ -106,6 +141,11 @@ module.exports = {
       }
     });
   },
+  /**
+   * 保存修改
+   * @param req
+   * @param res
+   */
   editDo: function (req, res) {
     var body = req.body;
     Sys_unit.update({id: body.id}, body).exec(function (err, obj) {
@@ -113,6 +153,11 @@ module.exports = {
       return res.json({code: 0, msg: sails.__('update.ok')});
     });
   },
+  /**
+   * 删除单位,更新父级单位状态
+   * @param req
+   * @param res
+   */
   delete: function (req, res) {
     var id = req.params.id;
     if (id == 1) {

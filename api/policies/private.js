@@ -22,8 +22,8 @@ module.exports = function (req, res, next) {
         path = obj.path || '';
         permission = obj.permission;
       }
-      var hasPermission = req.session.permission;
-      var roleCodes = req.session.roleCodes;
+      var hasPermission = req.session.permission||[];
+      var roleCodes = req.session.roleCodes||[];
       //如果角色是sysadmin,或者是后台首页,或是有Permission权限则通过
       if (roleCodes.indexOf('sysadmin') > -1 || hasPermission.indexOf(permission) > -1 || '/sysadmin/home' == req.url) {
         var data = {

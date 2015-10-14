@@ -3,6 +3,7 @@
  */
 var ccap = require('ccap');
 var bcrypt = require('bcrypt');
+var moment = require('moment');
 module.exports = {
   /**
    * 切换语言
@@ -129,6 +130,7 @@ module.exports = {
         Sys_user.update(user.id, {
           online:true,
           lastIp: req.ip,
+          loginAt:moment().format('X'),
           loginCount: user.loginCount + 1
         }, function (err) {
         });

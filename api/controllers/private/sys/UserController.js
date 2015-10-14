@@ -2,13 +2,58 @@
  * Created by root on 9/25/15.
  */
 var bcrypt = require('bcrypt');
+var moment = require('moment');
+var StringUtil = require('../../../common/StringUtil');
 module.exports = {
+  /**
+   * 用户管理
+   * @param req
+   * @param res
+   */
   index: function (req, res) {
     var data = req.data;
-    data.pageData = {pageNum: 20};
-    return res.view('private/sys/user/index.ejs', data);
+    return res.view('private/sys/user/index', data);
 
   },
+  add: function (req, res) {
+    return res.view('private/sys/user/add', req.data);
+  },
+  addDo: function (req, res) {
+    var body = req.body;
+    var loginname = body.loginname;
+    Sys_user.findOne({loginname: loginname}).exec(function (err, obj) {
+      if (obj) {
+        return res.json({code: 1, msg: sails.__('private.sys.user.loginname')});
+      } else {
+        var salt = bcrypt.genSaltSync(10);
+        var hash = bcrypt.hashSync(body.password, salt);
+        body.password = hash;
+        body.createdBy = req.session.user.id;
+        body.disabled = false;
+        body.online = false;
+        Sys_user.create(body).exec(function (e, o) {
+          if (e || !o)return res.json({code: 1, msg: JSON.stringify(e)});
+          return res.json({code: 0, msg: sails.__('add.ok')});
+        });
+      }
+    });
+  },
+  edit: function (req, res) {
+    var id = req.params.id;
+    Sys_user.findOne({id: id}).populate('unitid').exec(function (err, obj) {
+      if(obj.unitid){
+        obj.unitName = obj.unitid.name;
+      }
+      req.data.obj = obj;
+      return res.view('private/sys/user/edit', req.data);
+    });
+
+  },
+  /**
+   * 用户分页查询(jQuery.datatables)
+   * @param req
+   * @param res
+   */
   data: function (req, res) {
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
@@ -53,6 +98,11 @@ module.exports = {
       }
     });
   },
+  /**
+   * 启用用户
+   * @param req
+   * @param res
+   */
   enable: function (req, res) {
     var id = req.params.id;
     Sys_user.update({id: id}, {disabled: false}).exec(function (err, obj) {
@@ -63,6 +113,11 @@ module.exports = {
       }
     });
   },
+  /**
+   * 禁用用户
+   * @param req
+   * @param res
+   */
   disable: function (req, res) {
     var id = req.params.id;
     Sys_user.update({id: id}, {disabled: true}).exec(function (err, obj) {
@@ -73,6 +128,13 @@ module.exports = {
       }
     });
   },
+  /**
+   * 删除用户
+   * 1.../private/sys/user/delete/:id  删除单个用户
+   * 2...POST 提交ids 批量删除用户
+   * @param req
+   * @param res
+   */
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
     Sys_user.destroy({id: ids}).exec(function (err) {
@@ -83,6 +145,69 @@ module.exports = {
       }
     });
   },
+  /**
+   * 用户详情
+   * @param req
+   * @param res
+   */
+  detail: function (req, res) {
+    var id = req.params.id;
+    Sys_user.findOne({id: id}).populate('roles', {disabled: false}).exec(function (err, user) {
+      if (err)res.end();
+      req.data.obj = user;
+      req.data.moment = moment;
+      return res.view('private/sys/user/detail', req.data);
+    });
+  },
+  /**
+   * 查询用户有权限的菜单列表
+   * @param req
+   * @param res
+   */
+  menu: function (req, res) {
+    var id = req.params.id;
+    Sys_user.findOne({id: id}).populate('roles', {disabled: false}).exec(function (err, user) {
+      if (err)res.end();
+      req.data.obj = user;
+      var roleIds = [], userRoles = user.roles;
+      if (userRoles) {
+        userRoles.forEach(function (obj) {
+          roleIds.push(obj.id);
+        });
+      }
+      var firstMenus = [], secondMenus = [];
+      if (roleIds.length > 0) {
+        Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (e, role) {
+          if (role) {
+
+            role.forEach(function (m) {
+              m.menus.forEach(function (obj) {
+                if (obj.path.length == 4) {
+                  firstMenus.push(obj);
+                } else {
+                  secondMenus.push(obj);
+                }
+              });
+
+            });
+            req.data.userFirstMenus = firstMenus;
+            req.data.userSecondMenus = secondMenus;
+            return res.view('private/sys/user/menu', req.data);
+          }
+        });
+      } else {
+        req.data.userFirstMenus = firstMenus;
+        req.data.userSecondMenus = secondMenus;
+        return res.view('private/sys/user/menu', req.data);
+      }
+
+    });
+  },
+  /**
+   * 左侧单位树
+   * @param req
+   * @param res
+   */
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
@@ -101,6 +226,29 @@ module.exports = {
       return res.json(str);
     });
   },
+  /**
+   * 重置密码
+   * @param req
+   * @param res
+   */
+  resetPwd: function (req, res) {
+    var id = req.params.id;
+    var password = StringUtil.randomString(6);
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(password, salt);
+    Sys_user.update({id: id}, {password: hash}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok'), data: password});
+      }
+    });
+  },
+  /**
+   * 右上角修改密码
+   * @param req
+   * @param res
+   */
   doChangePassword: function (req, res) {
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;

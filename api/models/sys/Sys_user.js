@@ -27,9 +27,7 @@ module.exports = {
       maxLength: 50
     },
     email: {
-      type: 'email',
-      unique: true,
-      required: true
+      type: 'email'
     },
     password:{
       type: 'string',
@@ -47,6 +45,12 @@ module.exports = {
     lastIp:{
       type: 'string',
       size: 20
+    },
+    loginAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return moment().format('X');
+      }
     },
     loginCount:{
       type: 'integer',

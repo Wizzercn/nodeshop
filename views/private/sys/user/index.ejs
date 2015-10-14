@@ -176,11 +176,11 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/sys/user/info/' + row.id + '" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
-              '<li><a href="/private/sys/user/role/' + row.id + '" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+              '<li><a href="/private/sys/user/detail/' + row.id + '" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
+              '<li><a href="/private/sys/user/menu/' + row.id + '" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/sys/user/edit/' + row.id + '">修改信息</a></li>' +
-              '<li><a href="javascript:;" onclick="resetPwd()">密码重置</a></li>' +
+              '<li><a href="javascript:;" onclick="resetPwd(' + row.id + ')">密码重置</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="javascript:;" onclick="enableUser(' + row.id + ')">启用</a></li>' +
@@ -318,11 +318,11 @@
   function resetPwd(id) {
     $.post("/private/sys/user/resetPwd/" + id, {}, function (data) {
       var dialog = $("#dialogPaasword");
-      if (data.type == "success") {
+      if (data.code == 0) {
         dialog.find(".col-xs-12").html("密码重置成功，请复制新密码：" + data.data);
         dialog.modal("show");
       } else {
-        dialog.find(".col-xs-12").html(data.content);
+        dialog.find(".col-xs-12").html(data.msg);
         dialog.modal("show");
       }
     }, "json");
