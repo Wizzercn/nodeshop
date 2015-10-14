@@ -34,5 +34,8 @@ module.exports.policies = {
   },
   'private/sys/UserController': {
     '*': 'private'
+  },
+  'private/sys/RoleController': {
+    '*': 'private'
   }
 };
