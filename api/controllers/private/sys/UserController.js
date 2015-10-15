@@ -70,20 +70,20 @@ module.exports = {
    */
   editDo: function (req, res) {
     var body = req.body;
-    var oldLoginname=body.oldLoginname;
-    var loginname=body.loginname;
-    if(loginname!=oldLoginname){//如果修改用户名则需判断是否已存在
+    var oldLoginname = body.oldLoginname;
+    var loginname = body.loginname;
+    if (loginname != oldLoginname) {//如果修改用户名则需判断是否已存在
       Sys_user.findOne({loginname: loginname}).exec(function (err, obj) {
         if (obj) {
           return res.json({code: 1, msg: sails.__('private.sys.user.loginname')});
-        }else{
+        } else {
           Sys_user.update({id: body.id}, body).exec(function (err, obj) {
             if (err)return res.json({code: 1, msg: sails.__('update.fail')});
             return res.json({code: 0, msg: sails.__('update.ok')});
           });
         }
       });
-    }else{//讨厌的回调，不这样写会取不到数据
+    } else {//讨厌的回调，不这样写会取不到数据
       Sys_user.update({id: body.id}, body).exec(function (err, obj) {
         if (err)return res.json({code: 1, msg: sails.__('update.fail')});
         return res.json({code: 0, msg: sails.__('update.ok')});
@@ -100,13 +100,16 @@ module.exports = {
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
     var draw = parseInt(req.body.draw);
-    var unitid = req.body.unitid || 1;
+    var unitid = req.body.unitid || 0;
     var loginname = req.body.loginname || '';
     var nickname = req.body.nickname || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
-    var where = {unitid: unitid};
+    var where = {};
+    if (unitid > 0) {
+      where.unitid = unitid;
+    }
     if (loginname) {
       where.loginname = {'like': '%' + loginname + '%'};
     }
@@ -254,6 +257,13 @@ module.exports = {
     if (!pid)pid = '0';
     Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
       var str = [];
+      if(pid=='0'){
+        var obj = {};
+        obj.id = '0';
+        obj.text = '所有用户';
+        obj.children = false;
+        str.push(obj);
+      }
       if (objs) {
         objs.forEach(function (o) {
           var obj = {};

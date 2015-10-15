@@ -21,7 +21,7 @@ module.exports = {
       var str = [];
       if(pid=='0'){
         var obj = {};
-        obj.id = '_system';
+        obj.id = '0';
         obj.text = '系统角色';
         obj.children = false;
         str.push(obj);
@@ -37,6 +37,49 @@ module.exports = {
       }
 
       return res.json(str);
+    });
+  },
+  /**
+   * 角色分页(jQuery.datatables)
+   * @param req
+   * @param res
+   */
+  data: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var unitid = req.body.unitid || 0;
+    var loginname = req.body.loginname || '';
+    var nickname = req.body.nickname || '';
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {unitid: unitid};
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Sys_role.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Sys_role.find(where)
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
     });
   }
 };
