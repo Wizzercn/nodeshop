@@ -8,7 +8,7 @@ module.exports.email = {
   HostName: 'smtp.qq.com',
   SmtpPort: 465,
   UserName: 'wizzer@qq.com',
-  Password: '@#et567z',
+  Password: 'xxxxx',
   SSLOnConnect: true,
   From: '11624317@qq.com'
 };
