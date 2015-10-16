@@ -242,7 +242,7 @@
             core : {
               data : {
                 url : function(node){
-                  return node.id === "#" ? "${base}/private/sys/role/menu/"+unitId : "${base}/private/sys/role/menu/"+unitId+"?pid="+node.id
+                  return node.id === "#" ? "/private/sys/role/menuTree" : "/private/sys/role/menuTree?pid="+node.id
                 }
               }
             },
@@ -269,14 +269,6 @@
           for(var i=0;i<nodes.length;i++){
             var node = nodes[i];
             each(node,tree,nodes);
-          }
-          if(nodes.length>0){
-            $("#divResBtn").html("<img src='${base}/include/img/loading.gif'/>正在加载...");
-            $.get("${base}/private/sys/role/btn", {ids:nodes.toString()}, function(html){
-              $("#divResBtn").html(html);
-            });
-          }else{
-            $("#divResBtn").html("<div class='alert alert-warning'>未分配任何菜单，如需分配菜单权限，请到第2步中选择菜单！</div>");
           }
         }
       }
@@ -316,19 +308,19 @@
         }
       },
       success : function(data, statusText, xhr, form) {
-        if(data.type == "success"){
+        if(data.code==0){
           Toast.success("角色增加成功！");
           form.resetForm();
           $("#addRoleForm input[name='resourceIds']:hidden").val("");
-          delAllBtn();
           //回到第一个step
           $(".stepy").stepy("step", 1);
         }else{
-          Toast.error(data.error);
+          Toast.error(data.msg);
         }
         form.find("button:submit").button("reset");
       }
     });
     initTreeView();
+    myForm.init();
   });
 </script>

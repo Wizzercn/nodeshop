@@ -18,6 +18,25 @@ module.exports = {
     var data = req.data;
     return res.view('private/sys/role/add', data);
   },
+  menuTree: function (req, res) {
+    var pid = req.query.pid;
+    if (!pid)pid = '0';
+    Sys_menu.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
+      var str = [];
+      if (objs) {
+        objs.forEach(function (o) {
+          var obj = {};
+          obj.id = o.id;
+          obj.text = o.name;
+          obj.children = o.hasChildren;
+          obj.icon = o.icon;
+          obj.data = o.url || '';
+          str.push(obj);
+        });
+      }
+      return res.json(str);
+    });
+  },
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';

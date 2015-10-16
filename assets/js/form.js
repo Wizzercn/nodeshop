@@ -48,6 +48,3 @@ var myForm = function() {
 		}
 	}
 }();
-$(document).ready(function () {
-	myForm.init()
-});

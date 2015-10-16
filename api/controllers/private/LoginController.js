@@ -11,7 +11,7 @@ module.exports = {
    * @param res
    */
   lang: function (req, res) {
-    req.setLocale(req.param('lang'));
+    req.setLocale(req.params.lang);
     console.log('lang::' + req.getLocale());
     var url = req.headers['referer'] || '/';
     res.redirect(url);
@@ -88,9 +88,9 @@ module.exports = {
    * @returns {*}
    */
   doLogin: function (req, res) {
-    var username = req.param('username'),
-      password = req.param('password'),
-      captcha = req.param('captcha'),
+    var username = req.body.username,
+      password = req.body.password,
+      captcha = req.body.captcha,
       captchaText = req.session.captchaText || '',
       captchaMust = req.session.captchaMust || false,
       errCount = req.session.errorCount || 0;
