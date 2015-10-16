@@ -14,7 +14,7 @@
     <div class="row mb15">
       <div class="col-lg-12">
         <form id="addRoleForm" class="form-horizontal stepy" method="post" action="/private/sys/role/add/do">
-          <input type="hidden" name="resourceIds"/>
+          <input type="hidden" name="menuIds"/>
           <input type="hidden" name="userIds"/>
           <fieldset title="第 1 步&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
             <legend>基本信息</legend>
@@ -38,14 +38,16 @@
               <label for="name" class="col-sm-1 control-label">角色名称</label>
 
               <div class="col-sm-11">
-                <input type="text" class="form-control" id="name" name="name" validate="true" placeholder="角色名称" maxlength="20">
+                <input type="text" class="form-control" id="name" name="name" validate="true" placeholder="角色名称"
+                       maxlength="20">
               </div>
             </div>
             <div class="form-group">
               <label for="code" class="col-sm-1 control-label">权限标识</label>
 
               <div class="col-sm-11">
-                <input type="text" class="form-control" id="code" name="code" validate="true" placeholder="权限标识" maxlength="50">
+                <input type="text" class="form-control" id="code" name="code" validate="true" placeholder="权限标识"
+                       maxlength="50">
               </div>
             </div>
             <div class="form-group">
@@ -54,7 +56,7 @@
               <div class="col-sm-11 switcha">
                 <div class="mr15">
                   <input type="checkbox" id="disabled" name="disabled" class="form-control js-switch-blue"
-                         >
+                    >
                 </div>
               </div>
             </div>
@@ -78,7 +80,7 @@
                     <h5>菜单<b>描述</b></h5>
                   </div>
                   <div id="menuDescript" class="panel-body">
-                    <div class='alert alert-info'>鼠标在左侧菜单树节点上悬浮，可以查看菜单描述</div>
+                    <div class='alert alert-info'>请勾选每一个需要分配的菜单</div>
                   </div>
                 </div>
               </div>
@@ -189,31 +191,31 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取  消</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
         <button type="button" class="btn btn-primary" onclick="selectParentMenu()">确认选择</button>
       </div>
     </div>
   </div>
 </div>
 <script language="JavaScript">
-  function initTreeView(){
+  function initTreeView() {
     $("#jsTreeUnit").jstree({
-      plugins : [ "wholerow"],
-      core : {
-        data : {
-          async : true,
-          url : function(node){
-            return node.id === "#" ? "/private/sys/role/tree" : "/private/sys/role/tree?pid="+node.id
+      plugins: ["wholerow"],
+      core: {
+        data: {
+          async: true,
+          url: function (node) {
+            return node.id === "#" ? "/private/sys/role/tree" : "/private/sys/role/tree?pid=" + node.id
           }
         },
-        multiple : false
+        multiple: false
       }
-    }).on("dblclick.jstree", function(node){
+    }).on("dblclick.jstree", function (node) {
       selectParentMenu();
     });
   }
   //选择父菜单
-  function selectParentMenu(){
+  function selectParentMenu() {
     var tree = $.jstree.reference("#jsTreeUnit");
     var node = tree.get_selected(true);
     $("#addRoleForm #unitName").val(node[0].text);
@@ -221,100 +223,102 @@
 
     $("#dialogSelectUnit").modal("hide");
   }
-  $(function(){
+  $(function () {
     var jsTreeMenu;
     $(".stepy").stepy({
-      backLabel : "上一步",
-      nextLabel : "下一步",
-      errorImage : true,
-      block : true,
-      validate : true,
-      legend : false,
-      select : function(idx){
-        if(idx == 2){
+      backLabel: "上一步",
+      nextLabel: "下一步",
+      errorImage: true,
+      block: true,
+      validate: true,
+      legend: false,
+      select: function (idx) {
+        if (idx == 2) {
           var unitId = $("#addRoleForm input[name='unitid']").val();
           //刷新树
-          if(jsTreeMenu != undefined)
-            $.jstree.reference("#jsTreeMenu").destroy();
-          //初始化选择菜单树
-          jsTreeMenu = $("#jsTreeMenu").jstree({
-            plugins : [ "wholerow", "checkbox" ],
-            core : {
-              data : {
-                url : function(node){
-                  return node.id === "#" ? "/private/sys/role/menuTree" : "/private/sys/role/menuTree?pid="+node.id
+          if (!jsTreeMenu) {
+            //$.jstree.reference("#jsTreeMenu").destroy();
+            //初始化选择菜单树
+            jsTreeMenu = $("#jsTreeMenu").jstree({
+              plugins: ["wholerow", "checkbox"],
+              core: {
+                data: {
+                  url: function (node) {
+                    return node.id === "#" ? "/private/sys/role/menuTree" : "/private/sys/role/menuTree?pid=" + node.id
+                  }
                 }
+              },
+              checkbox: {
+                three_state: false,
+                cascade: 'down'
               }
-            },
-            checkbox : {
-              three_state : false,
-              cascade : 'down'
-            }
-          }).on("hover_node.jstree", function(e,data){
-            if(data.node.data)
-              $("#menuDescript").text(data.node.data);
-          }).on("dehover_node.jstree", function(e,data){
-            $("#menuDescript").html("<div class='alert alert-info'>鼠标在左侧菜单树节点上悬浮，可以查看菜单描述</div>");//清空菜单描述
-          }).bind("loaded.jstree", function(){
-            //立即加载树下所有节点
-            $("#jsTreeMenu").jstree("load_all");
-          });
-          $("#addRoleForm input[name='resourceIds']:hidden").val("");
-
-        }else if(idx == 3){
+            }).on("hover_node.jstree", function (e, data) {
+              if (data.node.data)
+                $("#menuDescript").text(data.node.data);
+            }).on("dehover_node.jstree", function (e, data) {
+              $("#menuDescript").html("<div class='alert alert-info'>请勾选每一个需要分配的菜单</div>");//清空菜单描述
+            }).bind("loaded.jstree", function () {
+              //立即加载树下所有节点
+              $("#jsTreeMenu").jstree("load_all");
+            });
+          }
+        } else if (idx == 3) {
           //获取所选菜单
           var tree = $.jstree.reference("#jsTreeMenu");
           var nodes = tree.get_selected();
           //查询所选节点的所有父节点
-          for(var i=0;i<nodes.length;i++){
+          for (var i = 0; i < nodes.length; i++) {
             var node = nodes[i];
-            each(node,tree,nodes);
+            each(node, tree, nodes);
           }
+          alert(nodes.toString());
+          $("#addRoleForm input[name='menuIds']:hidden").val(nodes);
         }
       }
     });
     $(".stepy").validate({
-      errorPlacement : function(error) {
+      errorPlacement: function (error) {
         $(".stepy .stepy-errors").append(error)
       },
-      rules : {
-        unitName : "required",
-        name : "required",
-        code : "required"
+      rules: {
+        unitName: "required",
+        name: "required",
+        code: "required"
       },
-      messages : {
-        unitName : {
-          required : "必须选择单位"
+      messages: {
+        unitName: {
+          required: "必须选择单位"
         },
-        name : {
-          required : "角色名不能为空"
+        name: {
+          required: "角色名不能为空"
         },
-        code : {
-          required : "权限标识不能为空"
+        code: {
+          required: "权限标识不能为空"
         }
       }
     });
     //表单ajax提交
     $("#addRoleForm").ajaxForm({
-      dataType:  'json',
-      beforeSubmit:function(arr, form, options){
+      dataType: 'json',
+      beforeSubmit: function (arr, form, options) {
+
         //获取选择的菜单
         form.find("button:submit").button("loading");
-        if(form.attr("isSubmit") == undefined){//与stepy结合使用时，要避免二次提交的问题
+        if (form.attr("isSubmit") == undefined) {//与stepy结合使用时，要避免二次提交的问题
           form.attr("isSubmit", true);
-        }else{
+        } else {
           form.removeAttr("isSubmit");
           return false;
         }
       },
-      success : function(data, statusText, xhr, form) {
-        if(data.code==0){
+      success: function (data, statusText, xhr, form) {
+        if (data.code == 0) {
           Toast.success("角色增加成功！");
           form.resetForm();
-          $("#addRoleForm input[name='resourceIds']:hidden").val("");
+          $("#addRoleForm input[name='menuIds']:hidden").val("");
           //回到第一个step
           $(".stepy").stepy("step", 1);
-        }else{
+        } else {
           Toast.error(data.msg);
         }
         form.find("button:submit").button("reset");
@@ -323,4 +327,15 @@
     initTreeView();
     myForm.init();
   });
+  function complete() {
+    $('#addRoleForm').submit();
+  }
+  function each(node, tree, nodes) {
+    var p = tree.get_parent(node);
+    if (p.length > 1) {
+      if (!isExists(p, nodes))
+        nodes.push(p);
+      each(p, tree, nodes);
+    }
+  }
 </script>
