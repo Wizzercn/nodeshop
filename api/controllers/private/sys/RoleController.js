@@ -14,12 +14,16 @@ module.exports = {
     var data = req.data;
     return res.view('private/sys/role/index', data);
   },
+  add: function (req, res) {
+    var data = req.data;
+    return res.view('private/sys/role/add', data);
+  },
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
     Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
       var str = [];
-      if(pid=='0'){
+      if (pid == '0') {
         var obj = {};
         obj.id = '0';
         obj.text = '系统角色';

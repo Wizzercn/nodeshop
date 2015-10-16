@@ -30,6 +30,7 @@
       </table>
     </div>
   </div>
+
 </section>
 <!-- 删除角色 -->
 <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
@@ -107,11 +108,13 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/sys/role/detail/' + row.id + '" data-toggle="modal" data-target="#dialogUserDetail">基本信息</a></li>' +
-              '<li><a href="/private/sys/role/menu/' + row.id + '" data-toggle="modal" data-target="#dialogUserRightDetail">查看权限</a></li>' +
+              '<li><a href="/private/sys/role/user/' + row.id + '" data-toggle="modal" data-target="#dialogUserDetail">查看用户</a></li>' +
+              '<li><a href="/private/sys/role/menu/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查看权限</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/sys/role/edit/' + row.id + '">修改信息</a></li>' +
-              '<li><a href="javascript:;" onclick="resetPwd(' + row.id + ')">密码重置</a></li>' +
+              '<li><a href="/private/sys/role/editMenu/' + row.id + '">修改权限</a></li>' +
+              '<li><a href="/private/sys/role/editUser/' + row.id + '">分配用户</a></li>' +
+              '<li class="divider"></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="javascript:;" onclick="enableRole(' + row.id + ')">启用</a></li>' +

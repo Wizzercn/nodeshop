@@ -1,8 +1,6 @@
 var myForm = function() {
 	return {
 		init : function() {
-			//引入jquery.form
-			$("body").append("<script type=\"text/javascript\" src=\""+base+"/include/plugins/jquery.form.js\"></script>");
 			try{
 				//开关
 				var elems = Array.prototype.slice.call(document
@@ -20,21 +18,21 @@ var myForm = function() {
 						disabled : true
 					});
 				});
-				
+
 				var greens = $(".js-switch-green");
 				$.each(greens, function(i,green){
 					var switchery = new Switchery(green, {
 						color : "#15db81"
 					});
 				});
-				
+
 				var reds = $(".js-switch-red");
 				$.each(reds, function(i, red){
 					var switchery = new Switchery(red, {
 						color : "#FF604F"
 					});
 				});
-				
+
 				var secondarys = $(".js-switch-secondary");
 				$.each(secondarys, function(i,secondary){
 					var switchery = new Switchery(secondary, {
@@ -42,10 +40,10 @@ var myForm = function() {
 						secondaryColor : "#ff8787"
 					});
 				});
-				
-				
+
+
 			}catch(e){
-				
+
 			}
 		}
 	}
