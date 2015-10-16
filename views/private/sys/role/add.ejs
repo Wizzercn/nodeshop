@@ -24,45 +24,37 @@
               <div class="col-sm-8">
                 <div class="input-group">
                   <input id="unitName" name="unitName" type="text" class="form-control" validate="true"
-                         placeholder="不选择单位则为系统角色" readonly/>
+                         placeholder="请选择单位or系统角色" readonly/>
 				                             		<span class="input-group-btn">
 				                             			<button type="button" class="btn btn-primary" data-toggle="modal"
                                                   data-target="#dialogSelectUnit"><i class="ti-plus"></i> 选择
                                           </button>
 				                             		</span>
                 </div>
-                <input type="hidden" name="unitid" value="0"/>
+                <input type="hidden" name="unitid" value=""/>
               </div>
             </div>
             <div class="form-group">
               <label for="name" class="col-sm-1 control-label">角色名称</label>
 
               <div class="col-sm-11">
-                <input type="text" class="form-control" id="name" name="name" validate="true" placeholder="角色名称">
+                <input type="text" class="form-control" id="name" name="name" validate="true" placeholder="角色名称" maxlength="20">
               </div>
             </div>
             <div class="form-group">
               <label for="code" class="col-sm-1 control-label">权限标识</label>
 
               <div class="col-sm-11">
-                <input type="text" class="form-control" id="code" name="code" validate="true" placeholder="权限标识">
+                <input type="text" class="form-control" id="code" name="code" validate="true" placeholder="权限标识" maxlength="50">
               </div>
             </div>
             <div class="form-group">
-              <label for="description" class="col-sm-1 control-label">描述</label>
-
-              <div class="col-sm-11">
-                <textarea id="description" name="description" class="form-control" rows="3"
-                          placeholder="角色详细描述"></textarea>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="enabled" class="col-sm-1 control-label">是否启用</label>
+              <label for="enabled" class="col-sm-1 control-label">是否禁用</label>
 
               <div class="col-sm-11 switcha">
                 <div class="mr15">
-                  <input type="checkbox" id="enabled" name="enabled" class="form-control js-switch-blue"
-                         checked="checked">
+                  <input type="checkbox" id="disabled" name="disabled" class="form-control js-switch-blue"
+                         >
                 </div>
               </div>
             </div>
@@ -300,13 +292,13 @@
       },
       messages : {
         unitName : {
-          required : "必须选择机构"
+          required : "必须选择单位"
         },
         name : {
-          required : "角色名不能为空!"
+          required : "角色名不能为空"
         },
         code : {
-          required : "权限标识不能为空!"
+          required : "权限标识不能为空"
         }
       }
     });

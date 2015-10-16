@@ -24,8 +24,8 @@ module.exports = {
     },
     code: {
       type: 'string',
-      size: 20,
-      maxLength: 20,
+      size: 50,
+      maxLength: 50,
       required: true,
       unique: true
     },
