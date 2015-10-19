@@ -25,17 +25,10 @@ module.exports.policies = {
    * access)                                                                  *
    *                                                                          *
    ***************************************************************************/
-  '*': true,
-  'private/HomeController': {
-    '*': 'private'
+  'private/LoginController': {
+    'login':'login',
+    'doLogin':'login',
+    'captcha':'login'
   },
-  'private/sys/UnitController': {
-    '*': 'private'
-  },
-  'private/sys/UserController': {
-    '*': 'private'
-  },
-  'private/sys/RoleController': {
-    '*': 'private'
-  }
+  '*': 'sessionAuth'
 };

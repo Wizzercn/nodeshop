@@ -28,14 +28,14 @@ module.exports = {
       } else {
         body.createdBy = req.session.user.id;
         body.location = 0;
-        Sys_role.create(body).exec(function (e, o) {
-          if (e) {
+        Sys_role.create(body).exec(function (ce, o) {
+          if (ce) {
             return res.json({code: 1, msg: sails.__('add.fail')});
           } else {
-            Sys_role.findOne(o.id).exec(function (e2, role) {
+            Sys_role.findOne(o.id).exec(function (fe, role) {
               if (role && menuIds) {
                 role.menus.add(menuIds.split(','));
-                role.save(function (err) {
+                role.save(function (se) {
                 });
               }
             });
@@ -43,6 +43,13 @@ module.exports = {
           }
         });
       }
+    });
+  },
+  editUser: function (req, res) {
+    var data = req.data;
+    Sys_role.findOne(req.params.id).exec(function (err, role) {
+      data.role = role;
+      return res.view('private/sys/role/editUser', data);
     });
   },
   menuTree: function (req, res) {

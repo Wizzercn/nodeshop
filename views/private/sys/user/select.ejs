@@ -1,0 +1,88 @@
+<section class="content-wrap bg-white">
+  <header class="header navbar bg-white shadow">
+    <div class="pull-left offscreen-left">
+      <div class="form-group">
+        <input name="loginname" type="text" placeholder="请输入用户名或昵称">
+      </div>
+    </div>
+    <div class="pull-right offscreen-right btn-group tool-button">
+      <a class="btn btn-primary navbar-btn" href="/private/sys/user/add" data-pjax>全选</a>
+      <a class="btn btn-primary navbar-btn" href="/private/sys/user/add" data-pjax>确定</a>
+    </div>
+  </header>
+  <div class=panel-body>
+    <div class="table-responsive no-border">
+      <input id="unitid" type="hidden">
+      <table id="datatable_select" class="table table-bordered table-striped mg-t datatable">
+        <thead>
+        <tr>
+          <th>用户名</th>
+          <th>姓名</th>
+          <th>状态</th>
+          <th>单位</th>
+      </table>
+    </div>
+  </div>
+</section>
+<script language="JavaScript">
+  var datatable;
+  function initDatatable() {
+    datatable = $('#datatable_select').DataTable({
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "ajax": {
+        "url": "/private/sys/user/selectData",
+        "type": "post",
+        "data": function (d) {
+          d.unitid = $('#unitid').val();
+          d.loginname = $('#loginname').val();
+          d.nickname = $('#nickname').val();
+        }
+      },
+      "order": [[0, "desc"]],
+      "columns": [
+        {"data": "loginname", "bSortable": true},
+        {"data": "nickname", "bSortable": true},
+        {"data": "disabled", "bSortable": true},
+        {"data": "online", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if (data) {
+              return '<i class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i class="fa fa-circle text-danger ml5"></i>';
+            }
+          },
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            if (!data) {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+            }
+          },
+          "targets": 2
+        }
+      ]
+    });
+    datatable.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
+    });
+  }
+   $(document).ready(function () {
+    initDatatable();
+  });
+
+</script>
