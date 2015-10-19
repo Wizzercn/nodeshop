@@ -4,7 +4,6 @@
  */
 module.exports = function (req, res, next) {
   if (req.options.controller.indexOf('private/') == 0) {
-    console.log('controller::::'+req.options.controller);
     if (req.url == '/favicon.ico')return res.end('');
     if (req.session.auth && !req.session.user.disabled) {
       Sys_menu.findOne({url: '/'+req.options.controller}).sort({url: 'desc', path: 'desc'}).exec(function (err, obj) {

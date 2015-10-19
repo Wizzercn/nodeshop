@@ -97,10 +97,10 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/sys/user/data",
+        "url": "/private/sys/role/userData",
         "type": "post",
         "data": function (d) {
-          d.unitid = $('#unitid').val();
+          d.roleid = $('#roleid').val();
           d.loginname = $('#loginname').val();
           d.nickname = $('#nickname').val();
         }

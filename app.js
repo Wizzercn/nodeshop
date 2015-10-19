@@ -21,7 +21,7 @@
 // Ensure we're in the project directory, so relative paths work as expected
 // no matter where we actually lift from.
 process.chdir(__dirname);
-
+//process.env.LOG_QUERIES = 'true';
 // Ensure a "sails" can be located:
 (function() {
   var sails;

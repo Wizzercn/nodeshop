@@ -138,5 +138,117 @@ module.exports = {
         });
       }
     });
+  },
+  /**
+   * 用户分页查询(jQuery.datatables)
+   * @param req
+   * @param res
+   */
+  userData: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var roleid = req.body.roleid || 0;
+    var loginname = req.body.loginname || '';
+    var nickname = req.body.nickname || '';
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {};
+    if (roleid > 0) {
+
+    }
+    if (loginname) {
+      where.loginname = {'like': '%' + loginname + '%'};
+    }
+    if (nickname) {
+      where.nickname = {'like': '%' + nickname + '%'};
+    }
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Sys_user.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Sys_user.find(where)
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  /**
+   * 用户选择器
+   * @param req
+   * @param res
+   */
+  selectUser: function (req, res) {
+    var data = req.data;
+    return res.view('private/sys/role/selectUser', data);
+
+  },
+  /**
+   * 用户分页查询(jQuery.datatables)
+   * @param req
+   * @param res
+   */
+  selectData: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var unitid = req.body.unitid || 0;
+    var name = req.body.name || '';
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {};
+    if (unitid > 0) {
+      where.unitid = unitid;
+    }
+    if (loginname) {
+      var loginname={'loginname':{'like': '%' + name + '%'}};
+      var nickname={'nickname':{'like': '%' + name + '%'}};
+      where.or =[].push(loginname).push(nickname);
+    }
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Sys_user.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Sys_user.find(where)
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
   }
 };
