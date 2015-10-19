@@ -18,6 +18,33 @@ module.exports = {
     var data = req.data;
     return res.view('private/sys/role/add', data);
   },
+  addDo: function (req, res) {
+    var body = req.body;
+    var code = body.code;
+    var menuIds = body.menuIds;
+    Sys_role.findOne({code: code}).exec(function (err, obj) {
+      if (obj) {
+        return res.json({code: 1, msg: sails.__('private.sys.role.code')});
+      } else {
+        body.createdBy = req.session.user.id;
+        body.location = 0;
+        Sys_role.create(body).exec(function (e, o) {
+          if (e) {
+            return res.json({code: 1, msg: sails.__('add.fail')});
+          } else {
+            Sys_role.findOne(o.id).exec(function (e2, role) {
+              if (role && menuIds) {
+                role.menus.add(menuIds.split(','));
+                role.save(function (err) {
+                });
+              }
+            });
+            return res.json({code: 0, msg: sails.__('add.ok')});
+          }
+        });
+      }
+    });
+  },
   menuTree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';

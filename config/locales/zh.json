@@ -27,6 +27,7 @@
   "private.index.userpassword":"修改密码",
   "private.index.panel":"自定义皮肤和布局",
   "private.sys.user.loginname":"用户名已存在",
+  "private.sys.role.code":"权限标识已存在",
   "update.fail":"修改失败",
   "update.ok":"修改成功",
   "add.fail":"添加失败",

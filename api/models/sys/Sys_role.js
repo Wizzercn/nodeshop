@@ -1,7 +1,7 @@
 /**
  * Created by root on 9/10/15.
  */
-//var uuid=require('node-uuid');
+var moment = require('moment');
 module.exports = {
   schema: true,
   autoCreatedAt: false,
@@ -12,7 +12,7 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    unitId: {
+    unitid: {
       type: 'integer',
       size:10
     },

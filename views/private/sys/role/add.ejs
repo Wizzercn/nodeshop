@@ -13,9 +13,9 @@
   <div class="wrapper">
     <div class="row mb15">
       <div class="col-lg-12">
-        <form id="addRoleForm" class="form-horizontal stepy" method="post" action="/private/sys/role/add/do">
-          <input type="hidden" name="menuIds"/>
-          <input type="hidden" name="userIds"/>
+        <form id="addRoleForm" class="form-horizontal stepy" method="post" action="/private/sys/role/addDo">
+          <input type="hidden" id="menuIds" name="menuIds"/>
+          <input type="hidden" id="userIds" name="userIds"/>
           <fieldset title="第 1 步&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
             <legend>基本信息</legend>
             <div class="form-group">
@@ -31,7 +31,7 @@
                                           </button>
 				                             		</span>
                 </div>
-                <input type="hidden" name="unitid" value=""/>
+                <input type="hidden" id="unitid" name="unitid" value=""/>
               </div>
             </div>
             <div class="form-group">
@@ -86,90 +86,6 @@
               </div>
             </div>
           </fieldset>
-          <fieldset title="第 3 步&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;">
-            <legend>选择用户</legend>
-            <div class="form-group">
-              <div class="col-sm-8">
-                <div class="panel">
-                  <div class="panel-body">
-                    <div class="input-group input-rounded mb15 ">
-                      <input type="hidden" id="type" name="type" value="1">
-                      <input type="text" class="form-control" onclick="this.value='';" name="keyword"
-                             placeholder="搜索用户...">
-
-                      <div class="input-group-btn">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">搜索
-                          <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu pull-right">
-                          <li><a href="javascript:search(1);">按用户名</a></li>
-                          <li><a href="javascript:search(2);">按姓名</a></li>
-                          <li class="divider"></li>
-                          <li><a href="javascript:search(3);">全部匹配</a></li>
-                        </ul>
-                      </div>
-                    </div>
-
-                    <table id="data" class="table no-m">
-                      <thead>
-                      <tr>
-                        <th class="col-md-3 pd-l-lg">
-                          <span class="pd-l-sm"></span>用户名
-                        </th>
-                        <th class="col-md-3">姓名</th>
-                        <th class="col-md-3">邮箱</th>
-                        <th class="col-md-1">
-                          <button type="button" class="btn btn-default" onclick="allBtn()">全选</button>
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-
-                      </tbody>
-                    </table>
-
-                  </div>
-                  <div class="row bt" id="__page">
-                    <div class="col-lg-12">
-                      <div class="pull-left mt20" id="__pageLeft">
-                        第1/1页，每页显示0条，共0条数据
-                      </div>
-                      <div class="pull-right">
-                        <ul id="__pageControl" class="pagination">
-
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <input id="uids" name="uids" type="hidden">
-                <section class="panel no-b">
-                  <div class="panel-heading no-b">
-                    <h5><b>已选择的</b>用户</h5>
-                  </div>
-                  <div class="panel-body">
-                    <table id="xz" class="table no-m">
-                      <thead>
-                      <tr>
-                        <th class="col-md-4 pd-l-lg">
-                          <span class="pd-l-sm"></span>用户名
-                        </th>
-                        <th class="col-md-4">姓名</th>
-                        <th class="col-md-1">
-                          <button type="button" class="btn btn-default" onclick="delAllBtn()">全删</button>
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
-              </div>
-            </div>
-          </fieldset>
           <button class="stepy-finish btn btn-primary pull-right" data-loading-text="正在提交...">完成</button>
         </form>
       </div>
@@ -218,9 +134,8 @@
   function selectParentMenu() {
     var tree = $.jstree.reference("#jsTreeUnit");
     var node = tree.get_selected(true);
-    $("#addRoleForm #unitName").val(node[0].text);
-    $("#addRoleForm input[name='unitid']").val(node[0].id);
-
+    $("#unitName").val(node[0].text);
+    $("#unitid").val(node[0].id);
     $("#dialogSelectUnit").modal("hide");
   }
   $(function () {
@@ -234,7 +149,7 @@
       legend: false,
       select: function (idx) {
         if (idx == 2) {
-          var unitId = $("#addRoleForm input[name='unitid']").val();
+          var unitId = $("#unitid").val();
           //刷新树
           if (!jsTreeMenu) {
             //$.jstree.reference("#jsTreeMenu").destroy();
@@ -262,18 +177,17 @@
               $("#jsTreeMenu").jstree("load_all");
             });
           }
-        } else if (idx == 3) {
-          //获取所选菜单
-          var tree = $.jstree.reference("#jsTreeMenu");
-          var nodes = tree.get_selected();
-          //查询所选节点的所有父节点
-          for (var i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
-            each(node, tree, nodes);
-          }
-          alert(nodes.toString());
-          $("#addRoleForm input[name='menuIds']:hidden").val(nodes);
         }
+      }, finish: function(index) {
+        var tree = $.jstree.reference("#jsTreeMenu");
+        var nodes = tree.get_selected();
+        //查询所选节点的所有父节点
+        for (var i = 0; i < nodes.length; i++) {
+          var node = nodes[i];
+          each(node, tree, nodes);
+        }
+        $("#menuIds").val(nodes);
+
       }
     });
     $(".stepy").validate({
@@ -301,7 +215,6 @@
     $("#addRoleForm").ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {
-
         //获取选择的菜单
         form.find("button:submit").button("loading");
         if (form.attr("isSubmit") == undefined) {//与stepy结合使用时，要避免二次提交的问题
@@ -315,7 +228,7 @@
         if (data.code == 0) {
           Toast.success("角色增加成功！");
           form.resetForm();
-          $("#addRoleForm input[name='menuIds']:hidden").val("");
+          $("#menuIds").val("");
           //回到第一个step
           $(".stepy").stepy("step", 1);
         } else {
