@@ -156,9 +156,6 @@ module.exports = {
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
-    if (roleid > 0) {
-
-    }
     if (loginname) {
       where.loginname = {'like': '%' + loginname + '%'};
     }
@@ -168,16 +165,20 @@ module.exports = {
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
-    Sys_user.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        Sys_user.find(where)
-          .sort(sort)
-          .paginate({page: page, limit: pageSize})
-          .exec(function (err, list) {
+    Sys_role.query('SELECT COUNT(id) AS num FROM sys_role_users__sys_user_roles WHERE sys_role_users=?', [roleid], function (err, count) {
+      if (!err && count[0].num > 0) {
+        Sys_role.find()
+          .where({id: roleid})
+          .populate('users', {where: where, skip: start, limit: pageSize, sort: sort})
+          .exec(function (err, obj) {
+            var list = [];
+            if (!err && obj.length > 0) {
+              list = obj[0].users;
+            }
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
-              "recordsFiltered": count,
+              "recordsFiltered": count[0].num,
               "data": list
             });
           });
@@ -211,44 +212,42 @@ module.exports = {
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
     var draw = parseInt(req.body.draw);
-    var unitid = req.body.unitid || 0;
+    var roleid = req.body.roleid || 0;
     var name = req.body.name || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
-    var sort = {};
-    var where = {};
-    if (unitid > 0) {
-      where.unitid = unitid;
-    }
-    if (loginname) {
-      var loginname={'loginname':{'like': '%' + name + '%'}};
-      var nickname={'nickname':{'like': '%' + name + '%'}};
-      where.or =[].push(loginname).push(nickname);
+    var count_sql = "SELECT count(a.id) as num FROM sys_user a WHERE a.id NOT IN(SELECT sys_user_roles FROM sys_role_users__sys_user_roles WHERE sys_role_users=?) ";
+    var sql = "SELECT a.* FROM sys_user a WHERE a.id NOT IN(SELECT sys_user_roles FROM sys_role_users__sys_user_roles WHERE sys_role_users=?) ";
+
+    if (name) {
+      count_sql += "AND (a.loginname LIKE ? OR a.nickname LIKE ?) ";
+      sql += "AND (a.loginname LIKE ? OR a.nickname LIKE ?) ";
     }
     if (order.length > 0) {
-      sort[columns[order[0].column].data] = order[0].dir;
+      sql += " order by a." + columns[order[0].column].data + " " + order[0].dir;
     }
-    Sys_user.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        Sys_user.find(where)
-          .sort(sort)
-          .paginate({page: page, limit: pageSize})
-          .exec(function (err, list) {
+    sql += " LIMIT " + pageSize + " OFFSET " + start;
+    Sys_user.query(count_sql
+      , [roleid, name, name]
+      , function (err, count) {
+        console.log('count:::'+JSON.stringify(count));
+        if (!err && count[0].num > 0) {
+          Sys_user.query(sql, [roleid, name, name], function (err, obj) {
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
-              "recordsFiltered": count,
-              "data": list
+              "recordsFiltered": count[0].num,
+              "data": obj
             });
           });
-      } else {
-        return res.json({
-          "draw": draw,
-          "recordsTotal": pageSize,
-          "recordsFiltered": 0,
-          "data": []
-        });
-      }
-    });
+        } else {
+          return res.json({
+            "draw": draw,
+            "recordsTotal": pageSize,
+            "recordsFiltered": 0,
+            "data": []
+          });
+        }
+      });
   }
 };

@@ -1,13 +1,13 @@
 <section class="content-wrap bg-white">
   <header class="header navbar bg-white shadow">
-    <div class="pull-left offscreen-left">
+    <div class="pull-left offscreen-left" style="padding-top:10px;">
       <div class="form-group">
-        <input name="loginname" type="text" placeholder="请输入用户名或昵称">
+        <input id="name" type="text" placeholder="请输入用户名或昵称后回车">
       </div>
     </div>
     <div class="pull-right offscreen-right btn-group tool-button">
-      <a class="btn btn-primary navbar-btn" href="/private/sys/user/add" data-pjax>全选</a>
-      <a class="btn btn-primary navbar-btn" href="/private/sys/user/add" data-pjax>确定</a>
+      <a class="btn btn-primary navbar-btn" onclick="_selectAll()">全选</a>
+      <a class="btn btn-primary navbar-btn" onclick="_selectOn()">确定</a>
     </div>
   </header>
   <div class=panel-body>
@@ -25,9 +25,9 @@
   </div>
 </section>
 <script language="JavaScript">
-  var datatable;
-  function initDatatable() {
-    datatable = $('#datatable_select').DataTable({
+  var datatable_select;
+  function initdatatable_select() {
+    datatable_select = $('#datatable_select').DataTable({
       "processing": false,
       "serverSide": true,
       "select": true,
@@ -36,12 +36,11 @@
         "url": "/plugins/datatables/cn.json"
       },
       "ajax": {
-        "url": "/private/sys/user/selectData",
+        "url": "/private/sys/role/selectData",
         "type": "post",
         "data": function (d) {
-          d.unitid = $('#unitid').val();
-          d.loginname = $('#loginname').val();
-          d.nickname = $('#nickname').val();
+          d.roleid = $('#roleid').val();
+          d.name = $('#name').val();
         }
       },
       "order": [[0, "desc"]],
@@ -74,15 +73,23 @@
         }
       ]
     });
-    datatable.on('click', 'tr', function () {
+    datatable_select.on('click', 'tr', function () {
       $(this).toggleClass('selected');
     });
-    $("#searchBtn").on('click', function () {
-      datatable.ajax.reload();
+    $("#name").on('keyup', function () {
+      datatable_select.ajax.reload();
     });
   }
-   $(document).ready(function () {
-    initDatatable();
+  function _selectAll(){
+    $("#datatable_select").find("tr").each(function(){
+      $(this).toggleClass('selected');
+    });
+  }
+  function _selectOn(){
+    $('#homeChangePassword').modal('hide');
+  }
+  $(document).ready(function () {
+    initdatatable_select();
   });
 
 </script>

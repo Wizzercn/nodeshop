@@ -1,7 +1,8 @@
 /**
  * Created by wizzer on 2015/9/6.
  */
-var ccap = require('ccap');
+//var ccap = require('ccap');
+var captchapng = require('captchapng');
 var bcrypt = require('bcrypt');
 var moment = require('moment');
 module.exports = {
@@ -146,12 +147,13 @@ module.exports = {
             if (role) {
               var firstMenus = [], secondMenus = {}, permission = [];
               role.forEach(function (m) {
+
                 m.menus.forEach(function (obj) {
                   if (obj.path.length == 4) {
                     firstMenus.push(obj);
                   } else {
                     var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
-                    if (s) {
+                    if (JSON.stringify(s).indexOf(JSON.stringify(obj))<0) {
                       s.push(obj);
                     }
                     secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
@@ -189,20 +191,32 @@ module.exports = {
    */
   captcha: function (req, res) {
     if (req.url == '/favicon.ico')return res.end('');//Intercept request favicon.ico
-    var str_ary = ['2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-      'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-    var str_num = 6,
-      r_num = str_ary.length,
-      text = '';
-    for (var i = 0; i < str_num; i++) {
-      var pos = Math.floor(Math.random() * r_num);
-      text += str_ary[pos];//生成随机数
-    }
-    var cc=ccap({generate:function(){return text}});
-    var ary = cc.get();
-    var txt = ary[0];
-    var buf = ary[1];
-    req.session.captchaText = txt.toLowerCase();
-    res.end(buf);
+    //var str_ary = ['2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+    //  'I', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    //var str_num = 6,
+    //  r_num = str_ary.length,
+    //  text = '';
+    //for (var i = 0; i < str_num; i++) {
+    //  var pos = Math.floor(Math.random() * r_num);
+    //  text += str_ary[pos];//生成随机数
+    //}
+    //var cc=ccap({generate:function(){return text}});
+    //var ary = cc.get();
+    //var txt = ary[0];
+    //var buf = ary[1];
+    //req.session.captchaText = txt.toLowerCase();
+    //res.end(buf);
+    var txt=parseInt(Math.random()*9000+1000);
+    var p = new captchapng(80,30,txt); // width,height,numeric captcha
+    p.color(0, 0, 0, 0);  // First color: background (red, green, blue, alpha)
+    p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha)
+
+    var img = p.getBase64();
+    var imgbase64 = new Buffer(img,'base64');
+    req.session.captchaText = txt;
+    res.writeHead(200, {
+      'Content-Type': 'image/png'
+    });
+    res.end(imgbase64);
   }
 };

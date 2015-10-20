@@ -14,7 +14,7 @@ module.exports = {
     },
     unitid: {
       type: 'integer',
-      size:10
+      size: 10
     },
     name: {
       type: 'string',
@@ -29,20 +29,22 @@ module.exports = {
       required: true,
       unique: true
     },
-    disabled:{
-      type:'boolean',
-      defaultsTo: function (){ return false; }
+    disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
     },
     location: {
       type: 'integer',
       size: 11
     },
-    createdBy:{
+    createdBy: {
       type: 'integer'
     },
-    createdAt:{
-      type:'integer',
-      defaultsTo:function(){
+    createdAt: {
+      type: 'integer',
+      defaultsTo: function () {
         return moment().format('X');
       }
     },
