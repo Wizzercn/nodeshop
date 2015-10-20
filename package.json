@@ -7,6 +7,7 @@
   "dependencies": {
     "async": "^1.4.2",
     "bcrypt": "^0.8.5",
+    "captchapng": "0.0.1",
     "connect-redis": "1.4.5",
     "ejs": "~0.8.4",
     "grunt": "0.4.2",
