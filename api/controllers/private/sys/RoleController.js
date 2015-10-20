@@ -228,11 +228,11 @@ module.exports = {
     }
     sql += " LIMIT " + pageSize + " OFFSET " + start;
     Sys_user.query(count_sql
-      , [roleid, name, name]
+      , [roleid, '%'+name+'%', '%'+name+'%']
       , function (err, count) {
         console.log('count:::'+JSON.stringify(count));
         if (!err && count[0].num > 0) {
-          Sys_user.query(sql, [roleid, name, name], function (err, obj) {
+          Sys_user.query(sql, [roleid, '%'+name+'%', '%'+name+'%'], function (err, obj) {
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
