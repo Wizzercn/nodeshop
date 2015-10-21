@@ -12,7 +12,7 @@
       </button>
     </div>
   </header>
-  <div class=panel-body>
+  <div class=panel-body style="padding-top: 50px;">
     <div class="table-responsive no-border">
       <input id="unitid" type="hidden">
       <input id="roleid" type="hidden" value="<%=role.id%>">
@@ -57,6 +57,8 @@
   var datatable;
   function initDatatable() {
     datatable = $('.datatable').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching":false,
       "processing": false,
       "serverSide": true,
       "select": true,

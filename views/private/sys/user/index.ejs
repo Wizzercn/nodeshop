@@ -22,7 +22,7 @@
       </button>
     </div>
   </header>
-  <div class=panel-body>
+  <div class=panel-body style="padding-top: 50px;">
     <div class="table-responsive no-border">
       <input id="unitid" type="hidden">
       <table class="table table-bordered table-striped mg-t datatable">
@@ -142,6 +142,8 @@
   var datatable;
   function initDatatable() {
     datatable = $('.datatable').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching":false,
       "processing": false,
       "serverSide": true,
       "select": true,

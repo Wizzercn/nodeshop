@@ -10,7 +10,7 @@
       <a class="btn btn-primary navbar-btn" onclick="_selectOn()">确定</a>
     </div>
   </header>
-  <div class=panel-body>
+  <div class=panel-body style="padding-top: 50px;">
     <div class="table-responsive no-border">
       <input id="unitid" type="hidden">
       <table id="datatable_select" class="table table-bordered table-striped mg-t datatable">
@@ -28,6 +28,8 @@
   var datatable_select;
   function initdatatable_select() {
     datatable_select = $('#datatable_select').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching":false,
       "processing": false,
       "serverSide": true,
       "select": true,
