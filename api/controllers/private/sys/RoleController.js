@@ -228,11 +228,11 @@ module.exports = {
     }
     sql += " LIMIT " + pageSize + " OFFSET " + start;
     Sys_user.query(count_sql
-      , [roleid, '%'+name+'%', '%'+name+'%']
+      , [roleid, '%' + name + '%', '%' + name + '%']
       , function (err, count) {
-        console.log('count:::'+JSON.stringify(count));
+        console.log('count:::' + JSON.stringify(count));
         if (!err && count[0].num > 0) {
-          Sys_user.query(sql, [roleid, '%'+name+'%', '%'+name+'%'], function (err, obj) {
+          Sys_user.query(sql, [roleid, '%' + name + '%', '%' + name + '%'], function (err, obj) {
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
@@ -249,5 +249,19 @@ module.exports = {
           });
         }
       });
+  },
+  pushUser: function (req, res) {
+    var ids = req.body.ids;
+    var roleid = req.body.roleid;
+    Sys_role.findOne(roleid).exec(function (err, role) {
+      if (role && ids) {
+        role.users.add(ids);
+        role.save(function (se) {
+        });
+        return res.json({code: 0, msg: sails.__('add.ok')});
+      }else{
+        return res.json({code: 1, msg: sails.__('add.fail')});
+      }
+    });
   }
 };

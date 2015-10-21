@@ -80,13 +80,31 @@
       datatable_select.ajax.reload();
     });
   }
-  function _selectAll(){
-    $("#datatable_select").find("tr").each(function(){
-      $(this).toggleClass('selected');
+  function _selectAll() {
+    $("#datatable_select").find("tr").each(function () {
+      if (!$(this).hasClass('selected'))
+        $(this).addClass('selected');
     });
   }
-  function _selectOn(){
-    $('#homeChangePassword').modal('hide');
+  function _selectOn() {
+    var chks = datatable_select.rows('.selected').data();
+    if (chks.length > 0) {
+      var ids = [];
+      $.each(datatable_select.rows('.selected').data(), function (i, n) {
+        ids.push(n.id);
+      });
+      $.post("/private/sys/role/pushUser", {ids: ids,roleid: $('#roleid').val()}, function (data) {
+        if (data.code == 0) {
+          datatable_select.ajax.reload();
+          datatable.ajax.reload();
+        } else {
+          Toast.error(data.msg);
+        }
+        $('#dialogUserSelect').modal('hide');
+      }, "json");
+    }else{
+      Toast.warning("请先选择用户！");
+    }
   }
   $(document).ready(function () {
     initdatatable_select();
