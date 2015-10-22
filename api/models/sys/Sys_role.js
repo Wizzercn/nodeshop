@@ -13,8 +13,7 @@ module.exports = {
       primaryKey: true
     },
     unitid: {
-      type: 'integer',
-      size: 10
+      model: 'Sys_unit'
     },
     name: {
       type: 'string',

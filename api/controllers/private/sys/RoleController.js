@@ -386,10 +386,76 @@ module.exports = {
           secondMenus.push(obj);
         }
       });
-      req.data.obj=role;
+      req.data.obj = role;
       req.data.roleFirstMenus = firstMenus;
       req.data.roleSecondMenus = secondMenus;
       return res.view('private/sys/role/menu', req.data);
+    });
+  },
+  edit: function (req, res) {
+    var id = req.params.id;
+    Sys_role.findOne({id: id}).populate('unitid').exec(function (err, obj) {
+      if (obj.unitid) {
+        obj.unit_name = obj.unitid.name;
+        obj.unit_id = obj.unitid.id;
+      } else {
+        obj.unit_name = '系统角色';
+        obj.unit_id = 0;
+      }
+      req.data.obj = obj;
+      return res.view('private/sys/role/edit', req.data);
+    });
+  },
+  editDo: function (req, res) {
+    var body = req.body;
+    var old_code = body.old_code;
+    var code = body.code;
+    if (code != old_code) {//如果修改code则需判断是否已存在
+      Sys_role.findOne({code: code}).exec(function (err, obj) {
+        if (obj) {
+          return res.json({code: 1, msg: sails.__('private.sys.role.code')});
+        } else {
+          Sys_role.update({id: body.id}, body).exec(function (err, obj) {
+            if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+            return res.json({code: 0, msg: sails.__('update.ok')});
+          });
+        }
+      });
+    } else {
+      Sys_role.update({id: body.id}, body).exec(function (err, obj) {
+        if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      });
+    }
+  },
+  /**
+   * 启用角色
+   * @param req
+   * @param res
+   */
+  enable: function (req, res) {
+    var id = req.params.id;
+    Sys_role.update({id: id}, {disabled: false}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      }
+    });
+  },
+  /**
+   * 禁用角色
+   * @param req
+   * @param res
+   */
+  disable: function (req, res) {
+    var id = req.params.id;
+    Sys_role.update({id: id}, {disabled: true}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      }
     });
   }
 };

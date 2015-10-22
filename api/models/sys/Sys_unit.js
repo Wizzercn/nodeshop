@@ -73,6 +73,10 @@ module.exports = {
     users: {
       collection: 'Sys_user',
       via: 'unitid'
+    },
+    roles: {
+      collection: 'Sys_role',
+      via: 'unitid'
     }
   }
 };
