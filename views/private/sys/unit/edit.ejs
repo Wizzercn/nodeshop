@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/sys/unit" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    <a class="btn btn-primary navbar-btn" href="/private/sys/unit" data-pjax id="goback"><i class="ti-angle-left"></i> 返回</a>
   </div>
 </header>
 
@@ -112,11 +112,9 @@
       success: function (data, statusText, xhr, form) {
         if (data.code==0) {
           Toast.success(data.msg);
-          //刷新父级菜单
-          $.jstree.reference("#jsTreeParentUnit").refresh();
-          var parentName = $("#unitAddForm #parentId").val();
-          form.resetForm();
-          $("#unitAddForm #parentId").val(parentName);
+          setTimeout(function () {
+            $("#goback").trigger("click");
+          }, 1000);
         } else {
           Toast.error(data.msg);
         }

@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/sys/user" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    <a class="btn btn-primary navbar-btn" href="/private/sys/user" data-pjax id="goback"><i class="ti-angle-left"></i> 返回</a>
   </div>
 </header>
 
@@ -132,8 +132,8 @@
         if (data.code == 0) {
           Toast.success(data.msg);
           setTimeout(function () {
-            window.location.href = "/private/sys/user";
-          }, 2000);
+            $("#goback").trigger("click");
+          }, 1000);
         } else {
           Toast.error(data.msg);
         }

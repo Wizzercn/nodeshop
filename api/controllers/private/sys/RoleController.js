@@ -255,7 +255,6 @@ module.exports = {
     Sys_user.query(count_sql
       , [roleid, '%' + name + '%', '%' + name + '%']
       , function (err, count) {
-        console.log('count:::' + JSON.stringify(count));
         if (!err && count[0].num > 0) {
           Sys_user.query(sql, [roleid, '%' + name + '%', '%' + name + '%'], function (err, obj) {
             return res.json({
@@ -289,7 +288,7 @@ module.exports = {
         role.save(function (se) {
         });
         return res.json({code: 0, msg: sails.__('add.ok')});
-      }else{
+      } else {
         return res.json({code: 1, msg: sails.__('add.fail')});
       }
     });
@@ -308,7 +307,7 @@ module.exports = {
         role.save(function (se) {
         });
         return res.json({code: 0, msg: sails.__('delete.ok')});
-      }else{
+      } else {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       }
     });
@@ -331,7 +330,66 @@ module.exports = {
     });
   },
   editMenu: function (req, res) {
+    var id = req.params.id;
     var data = req.data;
-    return res.view('private/sys/role/editMenu', data);
+    Sys_menu.find().sort('location asc').sort('path asc').exec(function (err, objs) {
+      var str = [];
+      if (objs) {
+        objs.forEach(function (o) {
+          var obj = {};
+          obj.id = o.id;
+          obj.text = o.name;
+          obj.icon = o.icon;
+          obj.data = o.url || '';
+          obj.parent = o.parentId == 0 ? "#" : o.parentId;
+          str.push(obj);
+        });
+      }
+      data.menu = str;
+      data.roleid = id;
+      return res.view('private/sys/role/editMenu', data);
+
+    });
+
+  },
+  editMenuDo: function (req, res) {
+    var ids = req.body.ids;
+    var roleid = req.body.roleid;
+    Sys_role.query('DELETE FROM sys_menu_roles__sys_role_menus WHERE sys_role_menus=?', [roleid], function () {
+      Sys_role.findOne(roleid).exec(function (err, role) {
+        if (role && ids) {
+          role.menus.add(ids);
+          role.save(function (se) {
+          });
+          return res.json({code: 0, msg: sails.__('update.ok')});
+        } else {
+          return res.json({code: 1, msg: sails.__('update.fail')});
+        }
+      });
+    });
+
+  },
+  /**
+   * 查询角色有权限的菜单列表
+   * @param req
+   * @param res
+   */
+  menu: function (req, res) {
+    var id = req.params.id;
+    Sys_role.findOne({id: id}).populate('menus').exec(function (err, role) {
+      if (err)res.end();
+      var firstMenus = [], secondMenus = [];
+      role.menus.forEach(function (obj) {
+        if (obj.path.length == 4) {
+          firstMenus.push(obj);
+        } else {
+          secondMenus.push(obj);
+        }
+      });
+      req.data.obj=role;
+      req.data.roleFirstMenus = firstMenus;
+      req.data.roleSecondMenus = secondMenus;
+      return res.view('private/sys/role/menu', req.data);
+    });
   }
 };

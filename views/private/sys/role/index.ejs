@@ -63,14 +63,6 @@
     </div>
   </div>
 </div>
-<!-- 查看用户信息 -->
-<div id="dialogUserDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-
-    </div>
-  </div>
-</div>
 
 
 <script language="JavaScript">
@@ -110,9 +102,11 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/sys/role/edit/' + row.id + '" data-pjax>修改信息</a></li>' +
-              '<li><a href="/private/sys/role/editMenu/' + row.id + '" data-pjax>分配权限</a></li>' +
+              '<li><a href="/private/sys/role/menu/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">查看权限</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="/private/sys/role/editMenu/' + row.id + '" data-pjax>分配菜单</a></li>' +
               '<li><a href="/private/sys/role/editUser/' + row.id + '" data-pjax>分配用户</a></li>' +
+              '<li><a href="/private/sys/role/edit/' + row.id + '" data-pjax>修改信息</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '<li class="divider"></li>' +
@@ -239,13 +233,7 @@
   $(function () {
     initDatatable();
     initTreeView();
-    $("#dialogUserDetail").on("hidden.bs.modal", function () {
-      $(this).removeData("bs.modal");
-    });
-    $("#dialogUserRightDetail").on("hidden.bs.modal", function () {
-      $(this).removeData("bs.modal");
-    });
-    $("#dialogPaasword").on("hidden.bs.modal", function () {
+    $("#dialogDetail").on("hidden.bs.modal", function () {
       $(this).removeData("bs.modal");
     });
   });
