@@ -32,7 +32,8 @@ module.exports = {
     name: {
       type: 'string',
       size: 20,
-      maxLength: 20
+      maxLength: 20,
+      required: true
     },
     description: {
       type: 'string',

@@ -14,10 +14,20 @@ module.exports = {
     var data = req.data;
     return res.view('private/sys/role/index', data);
   },
+  /**
+   * 添加角色
+   * @param req
+   * @param res
+   */
   add: function (req, res) {
     var data = req.data;
     return res.view('private/sys/role/add', data);
   },
+  /**
+   * 提交添加,判断code是否存在
+   * @param req
+   * @param res
+   */
   addDo: function (req, res) {
     var body = req.body;
     var code = body.code;
@@ -45,6 +55,11 @@ module.exports = {
       }
     });
   },
+  /**
+   * 分配用户
+   * @param req
+   * @param res
+   */
   editUser: function (req, res) {
     var data = req.data;
     Sys_role.findOne(req.params.id).exec(function (err, role) {
@@ -52,6 +67,11 @@ module.exports = {
       return res.view('private/sys/role/editUser', data);
     });
   },
+  /**
+   * 菜单树
+   * @param req
+   * @param res
+   */
   menuTree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
@@ -71,6 +91,11 @@ module.exports = {
       return res.json(str);
     });
   },
+  /**
+   * 单位树
+   * @param req
+   * @param res
+   */
   tree: function (req, res) {
     var pid = req.query.pid;
     if (!pid)pid = '0';
@@ -140,7 +165,7 @@ module.exports = {
     });
   },
   /**
-   * 用户分页查询(jQuery.datatables)
+   * 查询角色下用户
    * @param req
    * @param res
    */
@@ -203,7 +228,7 @@ module.exports = {
 
   },
   /**
-   * 用户分页查询(jQuery.datatables)
+   * 用户选择分页查询,排除当前角色的用户
    * @param req
    * @param res
    */
@@ -250,6 +275,11 @@ module.exports = {
         }
       });
   },
+  /**
+   * 添加用户到角色
+   * @param req
+   * @param res
+   */
   pushUser: function (req, res) {
     var ids = req.body.ids;
     var roleid = req.body.roleid;
@@ -263,5 +293,45 @@ module.exports = {
         return res.json({code: 1, msg: sails.__('add.fail')});
       }
     });
+  },
+  /**
+   * 从角色中移除用户
+   * @param req
+   * @param res
+   */
+  delUser: function (req, res) {
+    var ids = req.body.ids;
+    var roleid = req.body.roleid;
+    Sys_role.findOne(roleid).exec(function (err, role) {
+      if (role && ids) {
+        role.users.remove(ids);
+        role.save(function (se) {
+        });
+        return res.json({code: 0, msg: sails.__('delete.ok')});
+      }else{
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      }
+    });
+  },
+  /**
+   * 删除角色
+   * 1.../private/sys/user/delete/:id  删除单个角色
+   * 2...POST 提交ids 批量删除角色
+   * @param req
+   * @param res
+   */
+  delete: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    Sys_user.destroy({id: ids}).exec(function (err) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('delete.ok')});
+      }
+    });
+  },
+  editMenu: function (req, res) {
+    var data = req.data;
+    return res.view('private/sys/role/editMenu', data);
   }
 };

@@ -28,7 +28,8 @@ module.exports.policies = {
   'private/LoginController': {
     'login':'login',
     'doLogin':'login',
-    'captcha':'login'
+    'captcha':'login',
+    'logout':'login'
   },
   '*': 'sessionAuth'
 };

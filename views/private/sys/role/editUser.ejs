@@ -118,7 +118,25 @@
       datatable.ajax.reload();
     });
   }
-
+  function delCheck(){
+    var chks = datatable.rows('.selected').data();
+    if (chks.length > 0) {
+      var ids = [];
+      $.each(datatable.rows('.selected').data(), function (i, n) {
+        ids.push(n.id);
+      });
+      $.post("/private/sys/role/delUser", {ids: ids,roleid: $('#roleid').val()}, function (data) {
+        if (data.code == 0) {
+          Toast.success(data.msg);
+          datatable.ajax.reload();
+        } else {
+          Toast.error(data.msg);
+        }
+      }, "json");
+    }else{
+      Toast.warning("请先选择用户！");
+    }
+  }
   $(document).ready(function () {
     initDatatable();
     $("#dialogUserSelect").on("hidden.bs.modal", function () {
