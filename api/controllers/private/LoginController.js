@@ -129,9 +129,9 @@ module.exports = {
         });
         req.session.roleCodes = roleCodes;
         Sys_user.update(user.id, {
-          online:true,
+          online: true,
           lastIp: req.ip,
-          loginAt:moment().format('X'),
+          loginAt: moment().format('X'),
           loginCount: user.loginCount + 1
         }, function (err) {
         });
@@ -142,7 +142,7 @@ module.exports = {
         }).exec(function (err) {
         });
         if (roleIds.length > 0) {
-          Sys_role.find().where({id: roleIds}).populate('menus', {disabled: false}).exec(function (err, role) {
+          Sys_role.find().where({id: roleIds}).sort({id:"desc"}).populate('menus', {disabled: false}).exec(function (err, role) {
 
             if (role) {
               var firstMenus = [], secondMenus = {}, permission = [];
@@ -150,10 +150,12 @@ module.exports = {
 
                 m.menus.forEach(function (obj) {
                   if (obj.path.length == 4) {
-                    firstMenus.push(obj);
+                    if (JSON.stringify(firstMenus).indexOf(JSON.stringify(obj)) < 0) {
+                      firstMenus.push(obj);
+                    }
                   } else {
                     var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
-                    if (JSON.stringify(s).indexOf(JSON.stringify(obj))<0) {
+                    if (JSON.stringify(s).indexOf(JSON.stringify(obj)) < 0) {
                       s.push(obj);
                     }
                     secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
@@ -206,13 +208,13 @@ module.exports = {
     //var buf = ary[1];
     //req.session.captchaText = txt.toLowerCase();
     //res.end(buf);
-    var txt=parseInt(Math.random()*9000+1000);
-    var p = new captchapng(80,30,txt); // width,height,numeric captcha
+    var txt = parseInt(Math.random() * 9000 + 1000);
+    var p = new captchapng(80, 30, txt); // width,height,numeric captcha
     p.color(0, 0, 0, 0);  // First color: background (red, green, blue, alpha)
     p.color(80, 80, 80, 255); // Second color: paint (red, green, blue, alpha)
 
     var img = p.getBase64();
-    var imgbase64 = new Buffer(img,'base64');
+    var imgbase64 = new Buffer(img, 'base64');
     req.session.captchaText = txt;
     res.writeHead(200, {
       'Content-Type': 'image/png'
