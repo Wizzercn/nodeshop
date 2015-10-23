@@ -321,7 +321,7 @@ module.exports = {
    */
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Sys_user.destroy({id: ids}).exec(function (err) {
+    Sys_role.destroy({id: ids}).exec(function (err) {
       if (err) {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {

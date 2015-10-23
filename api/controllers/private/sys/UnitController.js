@@ -166,18 +166,22 @@ module.exports = {
     Sys_unit.findOne({id: id}).exec(function (err, obj) {
       if (err || !obj)return res.json({code: 1, msg: sails.__('delete.fail')});
       //设置被删除单位用户状态为禁用
-      Sys_user.query('UPDATE sys_user SET disabled=TRUE,unitid=0 WHERE unitid=? or unitid IN(SELECT id FROM sys_unit WHERE path LIKE ?)', [id, obj.path + '%'], function (e, o) {
-        Sys_unit.destroy({path: {'like': obj.path + '%'}})
-          .exec(function (de) {
-            //更新父级节点状态
-            Sys_unit.count({parentId: obj.parentId}).exec(function (ce, num) {
-              if (num == 0) {
-                Sys_unit.update({id: obj.parentId}, {hasChildren: false}).exec(function (ue, o2) {
-                });
-              }
-            });
-          });
+      Sys_user.query('UPDATE sys_user SET disabled=TRUE WHERE unitid=? or unitid IN(SELECT id FROM sys_unit WHERE path LIKE ?)', [id, obj.path + '%'], function (e, o) {
       });
+      //设置被删除单位角色状态为禁用
+      Sys_user.query('UPDATE sys_role SET disabled=TRUE WHERE unitid=? or unitid IN(SELECT id FROM sys_unit WHERE path LIKE ?)', [id, obj.path + '%'], function (e, o) {
+      });
+      Sys_unit.destroy({path: {'like': obj.path + '%'}})
+        .exec(function (de) {
+          //更新父级节点状态
+          Sys_unit.count({parentId: obj.parentId}).exec(function (ce, num) {
+            if (num == 0) {
+              Sys_unit.update({id: obj.parentId}, {hasChildren: false}).exec(function (ue, o2) {
+              });
+            }
+          });
+        });
+
       return res.json({code: 0, msg: sails.__('delete.ok')});
     });
   }

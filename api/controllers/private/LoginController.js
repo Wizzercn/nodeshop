@@ -142,7 +142,10 @@ module.exports = {
         }).exec(function (err) {
         });
         if (roleIds.length > 0) {
-          Sys_role.find().where({id: roleIds}).sort({id:"desc"}).populate('menus', {disabled: false}).exec(function (err, role) {
+          Sys_role.find().where({id: roleIds}).sort({id: "desc"}).populate('menus', {
+            disabled: false,
+            sort: {location: 'asc'}
+          }).exec(function (err, role) {
 
             if (role) {
               var firstMenus = [], secondMenus = {}, permission = [];
