@@ -1,6 +1,6 @@
 # nodeshop
     nodejs shop
- 
+
 1.CentOS6.5 安装 nodejs 并配置到环境
 -----------------------------------
 
@@ -41,11 +41,7 @@
     >>git commit -am 'note'
     >>git push
 
-6.验证码组件ccap,需安装python2.7
-------------------------------------
-http://blog.csdn.net/tiantiandjava/article/details/17242345
-    >>npm install ccap
 
-7.事务支持
+6.事务支持
 ------------------------------------
 http://blog.evizija.si/sails-js-waterline-mysql-transactions/
