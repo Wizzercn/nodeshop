@@ -266,39 +266,7 @@
           </div>
         </div>
       </li>
-      <li class="dropdown hidden-xs">
-        <a href="javascript:;" class="pg-toggle">
-          <i class="ti-palette"></i>
-        </a>
-      </li>
 
-      <!-- START Language list-->
-      <li class="language-dropdown dropdown hidden-xs">
-        <a href="javascript:;" data-toggle="dropdown" id="language">
-          <% if('zh' == lang){ %>
-          <img src="/img/flags/cn.png" class="flag">
-          <span class="language"></span>
-          <% }else{ %>
-          <img src="/img/flags/us.png" class="flag">
-          <span class="language"></span>
-          <% } %>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right animated fadeInUp">
-          <li>
-            <a href="/private/login/lang/en">
-              <img src="/img/flags/us.png" class="flag">
-              <span class="language">English</span>
-            </a>
-          </li>
-          <li>
-            <a href="/private/login/lang/zh">
-              <img src="/img/flags/cn.png" class="flag">
-              <span class="language">中文</span>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <!-- END Language list    -->
 
       <li class="off-right">
         <a href="javascript:;" data-toggle="dropdown">
@@ -308,6 +276,11 @@
         <ul class="dropdown-menu animated fadeInLeft">
           <li>
             <a href="#"><%= sails.__('private.index.usersetting') %></a>
+          </li>
+          <li class="dropdown hidden-xs">
+            <a href="javascript:;" class="pg-toggle">
+              修改页面布局
+            </a>
           </li>
           <li>
             <a href="#" data-toggle="modal"

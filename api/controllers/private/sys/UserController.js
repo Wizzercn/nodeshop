@@ -42,7 +42,7 @@ module.exports = {
         body.disabled = false;
         body.online = false;
         Sys_user.create(body).exec(function (e, o) {
-          if (e)return res.json({code: 1, msg: JSON.stringify(e)});
+          if (e)return res.json({code: 1, msg: sails.__('add.fail')});
           return res.json({code: 0, msg: sails.__('add.ok')});
         });
       }
