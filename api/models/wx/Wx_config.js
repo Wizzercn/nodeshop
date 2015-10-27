@@ -16,12 +16,22 @@ module.exports = {
       type: 'string',
       required: true
     },
+    ghid: {//原始ID
+      type: 'string',
+      unique: true,
+      required: true
+    },
     appid: {
       type: 'string',
       unique: true,
       required: true
     },
     appsecret: {
+      type: 'string',
+      unique: true,
+      required: true
+    },
+    encodingAESKey:{
       type: 'string',
       unique: true,
       required: true

@@ -4,5 +4,6 @@
 module.exports.system = {
   AppName:'上城电子商城系统',
   AppShrotName:'上城Shop',
-  AppCopyright:'Wizzer.cn'
+  AppCopyright:'Wizzer.cn',
+  WxConfig:{}
 };
