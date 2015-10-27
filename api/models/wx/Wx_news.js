@@ -1,5 +1,5 @@
 /**
- * Created by root on 10/25/15.
+ * Created by root on 10/27/15.
  */
 var moment = require('moment');
 module.exports = {
@@ -12,43 +12,21 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    appname: {
+    title: {
       type: 'string',
       required: true
     },
-    ghid: {//原始ID
+    description: {
       type: 'string',
-      unique: true,
       required: true
     },
-    appid: {
+    picUrl: {
       type: 'string',
-      unique: true,
       required: true
     },
-    appsecret: {
+    url: {
       type: 'string',
-      unique: true,
       required: true
-    },
-    encodingAESKey:{
-      type: 'string',
-      unique: true,
-      required: true
-    },
-    token: {
-      type: 'string',
-      unique: true,
-      required: true
-    },
-    access_token: {
-      type: 'string'
-    },
-    expire_time: {
-      type:'integer',
-      defaultsTo:function(){
-        return 0;
-      }
     },
     createdBy:{
       type: 'integer'
@@ -58,10 +36,6 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
-    },
-    replys: {
-      collection: 'Wx_reply',
-      via: 'wxid'
     }
   }
 };

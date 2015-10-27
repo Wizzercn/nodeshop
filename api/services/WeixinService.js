@@ -33,7 +33,6 @@ module.exports = {
     xml2js.parseString(body, function (err, json) {
       if (err) {
       } else {
-        console.log('json::' + JSON.stringify(json));
         data.type = json.xml.MsgType;
         data.openid = json.xml.FromUserName;
         if (data.type == 'text') {
