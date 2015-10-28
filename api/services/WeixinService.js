@@ -33,12 +33,14 @@ module.exports = {
     xml2js.parseString(body, function (err, json) {
       if (err) {
       } else {
-        data.type = json.xml.MsgType;
-        data.openid = json.xml.FromUserName;
+        data.type = json.xml.MsgType.toString();
+        data.openid = json.xml.FromUserName.toString();
         if (data.type == 'text') {
-          data.txt = json.xml.Content;
+          data.txt = json.xml.Content.toString();
         } else if (data.type == 'image') {
-          data.pic = json.xml.PicUrl;
+          data.pic = json.xml.PicUrl.toString();
+        }else if (data.type == 'event') {
+          data.event = json.xml.Event.toString();
         }
         return callback(data);
       }

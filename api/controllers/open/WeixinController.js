@@ -8,45 +8,86 @@ module.exports = {
       if (err)return res.send(200, 'fail');
       if (req.body) {
         WeixinService.loop(req, function (data) {
-          if (data.type = 'text') {//用户发送纯文本
-            var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: 'Node.js Test...'};
-            WeixinService.sendTextMsg(res, msg);//向用户回复消息
-            //var articles = [];
-            //articles[0] = {
-            //  title : "PHP依赖管理工具Composer入门",
-            //  description : "PHP依赖管理工具Composer入门",
-            //  picUrl : "http://weizhifeng.net/images/tech/composer.png",
-            //  url : "http://weizhifeng.net/manage-php-dependency-with-composer.html"
-            //};
-            //
-            //articles[1] = {
-            //  title : "八月西湖",
-            //  description : "八月西湖",
-            //  picUrl : "http://weizhifeng.net/images/poem/bayuexihu.jpg",
-            //  url : "http://weizhifeng.net/bayuexihu.html"
-            //};
-            //
-            //articles[2] = {
-            //  title : "「翻译」Redis协议",
-            //  description : "「翻译」Redis协议",
-            //  picUrl : "http://weizhifeng.net/images/tech/redis.png",
-            //  url : "http://weizhifeng.net/redis-protocol.html"
-            //};
-            //var msg = {
-            //  toUserName: data.openid, fromUserName: conf.ghid,
-            //  articles : articles
-            //};
-            //WeixinService.sendNewsMsg(res, msg);//向用户回复消息
-
+          if (data.type == 'text') {//用户发送纯文本
+            var txt = data.txt;
+            Wx_reply.findOne({wxid: id, type: 'keyword', keyword: txt}).exec(function (err, obj) {
+              if (obj) {
+                if (obj.msgtype == 'txt') {
+                  Wx_txt.findOne({id: obj.content}).exec(function (e, o) {
+                    if (o) {
+                      var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: o.content};
+                      WeixinService.sendTextMsg(res, msg);//向用户回复消息
+                    } else {
+                      res.send(200, 'fail');
+                    }
+                  });
+                } else if (obj.msgtype == 'news') {
+                  var sql = 'SELECT * FROM wx_news WHERE id IN (' + obj.content + ') ORDER BY INSTR(\'' + obj.content + '\',id)';
+                  //按id数组顺序排序
+                  Wx_news.query(sql, [], function (e, o) {
+                    if (o.length > 0) {
+                      var msg = {
+                        toUserName: data.openid, fromUserName: conf.ghid,
+                        articles: o
+                      };
+                      WeixinService.sendNewsMsg(res, msg);//向用户回复消息
+                    } else {
+                      res.send(200, 'fail');
+                    }
+                  });
+                } else {
+                  res.send(200, 'fail');
+                }
+              }
+            });
+          } else if (data.type == 'event') {
+            if (data.event == 'subscribe') {//关注事件
+              Wx_reply.findOne({wxid: id, type: 'follow'}).exec(function (err, obj) {
+                if (obj) {
+                  if (obj.msgtype == 'txt') {
+                    Wx_txt.findOne({id: obj.content}).exec(function (e, o) {
+                      if (o) {
+                        var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: o.content};
+                        WeixinService.sendTextMsg(res, msg);//向用户回复消息
+                      } else {
+                        res.send(200, 'fail');
+                      }
+                    });
+                  } else if (obj.msgtype == 'news') {
+                    var sql = 'SELECT * FROM wx_news WHERE id IN (' + obj.content + ') ORDER BY INSTR(\'' + obj.content + '\',id)';
+                    //按id数组顺序排序
+                    Wx_news.query(sql, [], function (e, o) {
+                      if (o.length > 0) {
+                        var msg = {
+                          toUserName: data.openid, fromUserName: conf.ghid,
+                          articles: o
+                        };
+                        WeixinService.sendNewsMsg(res, msg);//向用户回复消息
+                      } else {
+                        res.send(200, 'fail');
+                      }
+                    });
+                  } else {
+                    res.send(200, 'fail');
+                  }
+                }
+              });
+            } else {
+              res.send(200, 'fail');
+            }
+          } else {
+            res.send(200, 'fail');
           }
         });
-      }
-      //签名
-      if (WeixinService.checkSignature(req, conf.token)) {
-        res.send(200, req.query.echostr);
       } else {
-        res.send(200, 'fail');
+        //签名
+        if (WeixinService.checkSignature(req, conf.token)) {
+          res.send(200, req.query.echostr);
+        } else {
+          res.send(200, 'fail');
+        }
       }
+
     });
   }
 };
