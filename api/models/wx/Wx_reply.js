@@ -12,10 +12,6 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    name: {
-      type: 'string',
-      required: true
-    },
     type: {
       type: 'string',
       size: 10,
@@ -28,8 +24,7 @@ module.exports = {
     },
     keyword: {
       type: 'string',
-      size: 20,
-      required: true
+      size: 20
     },
     content: {
       type: 'string',
