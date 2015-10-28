@@ -38,9 +38,39 @@ CREATE TABLE `sys_log` (
   `createdAt` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `createdAt` (`createdAt`)
-) ENGINE=InnoDB AUTO_INCREMENT=189 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_log` */
+
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (3,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445826247);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (4,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445827451);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (6,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445830107);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (8,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445830141);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (9,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445837995);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (10,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1445838058);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (11,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445838059);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (12,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445842411);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (13,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1445849993);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (14,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.21',1445849995);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (15,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445851430);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (16,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.21',1445909177);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (17,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445911837);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (18,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445927241);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (19,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1445931122);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (20,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445931124);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (21,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1445931168);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (22,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445931169);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (23,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445933109);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (24,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445933390);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (25,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445995773);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (26,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1445997040);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (27,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1445997041);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (28,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1446003940);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (29,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1446004748);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (30,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1446004749);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (31,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1446009916);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (32,'system','/private/login/logout','退出系统',NULL,NULL,NULL,1446013305);
+insert  into `sys_log`(`id`,`type`,`url`,`note`,`createdBy`,`createdByName`,`createdIp`,`createdAt`) values (33,'system','/private/login/doLogin','登陆成功',1,'超级管理员','::ffff:192.168.1.11',1446013306);
 
 /*Table structure for table `sys_menu` */
 
@@ -61,62 +91,72 @@ CREATE TABLE `sys_menu` (
   `createdBy` int(11) DEFAULT NULL,
   `createdAt` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_menu` */
 
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (1,0,'0001','系统',NULL,'',NULL,'','system',0,0,1,2,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (2,1,'00010001','系统管理',NULL,'',NULL,'ti-settings','system:sys',0,0,1,1,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (3,2,'000100010001','单位管理',NULL,'/private/sys/unit','data-pjax','','system:sys:unit',0,0,0,9,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (4,2,'000100010002','用户管理',NULL,'/private/sys/user','data-pjax','','system:sys:user',0,0,0,10,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (5,2,'000100010003','角色管理',NULL,'/private/sys/role','data-pjax','','system:sys:role',0,0,0,11,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (6,2,'000100010004','菜单管理',NULL,'/private/sys/menu','data-pjax','','system:sys:menu',0,0,0,12,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (7,1,'00010002','定时任务',NULL,'',NULL,'ti-time','system:task',0,0,1,2,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (8,7,'000100020001','定时任务',NULL,'/private/sys/task','data-pjax','','system:task:job',0,0,0,13,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (9,1,'00010003','系统安全',NULL,'',NULL,'ti-user','system:safe',0,0,1,3,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (10,9,'000100030001','操作日志',NULL,'/private/sys/log',NULL,NULL,'system:safe:log',0,0,0,20,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (11,9,'000100030002','访问控制',NULL,'/private/sys/ip',NULL,NULL,'system:safe:ip',0,0,0,21,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (1,0,'0001','系统',NULL,'',NULL,'','system',0,0,1,1,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (2,1,'00010001','系统管理',NULL,'',NULL,'ti-settings','system:sys',0,0,1,4,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (3,2,'000100010001','单位管理',NULL,'/private/sys/unit','data-pjax','','system:sys:unit',0,0,0,3,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (4,2,'000100010002','用户管理',NULL,'/private/sys/user','data-pjax','','system:sys:user',0,0,0,4,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (5,2,'000100010003','角色管理',NULL,'/private/sys/role','data-pjax','','system:sys:role',0,0,0,5,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (6,2,'000100010004','菜单管理',NULL,'/private/sys/menu','data-pjax','','system:sys:menu',0,0,0,6,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (7,1,'00010002','定时任务',NULL,'',NULL,'ti-time','system:task',0,0,1,5,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (8,7,'000100020001','定时任务',NULL,'/private/sys/task','data-pjax','','system:task:job',0,0,0,27,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (9,1,'00010003','系统安全',NULL,'',NULL,'ti-user','system:safe',0,0,1,6,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (10,9,'000100030001','操作日志',NULL,'/private/sys/log',NULL,NULL,'system:safe:log',0,0,0,7,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (11,9,'000100030002','访问控制',NULL,'/private/sys/ip',NULL,NULL,'system:safe:ip',0,0,0,8,1,NULL);
 insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (12,0,'0002','配置',NULL,'',NULL,'','config',0,0,1,3,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (13,12,'00020001','商店配置',NULL,NULL,NULL,'ti-settings','config:shop',0,0,1,4,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (14,13,'000200010001','商店设置',NULL,NULL,NULL,NULL,'config:shop:setting',0,0,0,1,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (15,13,'000200010002','邮件短信设置',NULL,NULL,NULL,NULL,'config:shop:mailsms',0,0,0,2,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (13,12,'00020001','商店配置',NULL,NULL,NULL,'ti-settings','config:shop',0,0,1,7,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (14,13,'000200010001','商店设置',NULL,NULL,NULL,NULL,'config:shop:setting',0,0,0,9,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (15,13,'000200010002','邮件短信设置',NULL,NULL,NULL,NULL,'config:shop:mailsms',0,0,0,10,1,NULL);
 insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (16,0,'0003','订单',NULL,NULL,NULL,NULL,'order',0,0,1,4,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (17,16,'00030001','订单列表',NULL,NULL,NULL,'ti-shopping-cart-full','order:list',0,0,1,5,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (18,17,'000300010001','订单',NULL,NULL,NULL,NULL,'order:list:orders',0,0,0,3,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (19,17,'000300010002','收款单',NULL,NULL,NULL,NULL,'order:list:cashs',0,0,0,4,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (20,17,'000300010003','发货单',NULL,NULL,NULL,NULL,'order:list:sends',0,0,0,5,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (21,17,'000300010004','售后单',NULL,NULL,NULL,NULL,'order:list:services',0,0,0,6,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (22,17,'000300010005','退货单',NULL,NULL,NULL,NULL,'order:list:returns',0,0,0,7,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (23,17,'000300010006','退款单',NULL,NULL,NULL,NULL,'order:list:refunds',0,0,0,8,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (17,16,'00030001','订单列表',NULL,NULL,NULL,'ti-shopping-cart-full','order:list',0,0,1,8,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (18,17,'000300010001','订单',NULL,NULL,NULL,NULL,'order:list:orders',0,0,0,19,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (19,17,'000300010002','收款单',NULL,NULL,NULL,NULL,'order:list:cashs',0,0,0,20,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (20,17,'000300010003','发货单',NULL,NULL,NULL,NULL,'order:list:sends',0,0,0,21,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (21,17,'000300010004','售后单',NULL,NULL,NULL,NULL,'order:list:services',0,0,0,22,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (22,17,'000300010005','退货单',NULL,NULL,NULL,NULL,'order:list:returns',0,0,0,23,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (23,17,'000300010006','退款单',NULL,NULL,NULL,NULL,'order:list:refunds',0,0,0,24,1,NULL);
 insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (24,0,'0004','商品',NULL,NULL,NULL,NULL,'goods',0,0,1,5,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (25,24,'00040001','商品管理',NULL,NULL,NULL,NULL,'goods:manage',0,0,1,6,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (26,25,'000400010001','商品列表',NULL,NULL,NULL,NULL,'goods:manage:list',0,0,0,14,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (27,24,'00040002','商品配置',NULL,NULL,NULL,NULL,'goods:manage:setting',0,0,1,7,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (28,27,'000400020001','商品分类',NULL,NULL,NULL,NULL,'goods:manage:class',0,0,0,30,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (29,27,'000400020002','商品类型',NULL,NULL,NULL,NULL,'goods:manage:type',0,0,0,31,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (30,27,'000400020003','商品规格',NULL,NULL,NULL,NULL,'goods:manage:format',0,0,0,32,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (31,27,'000400020004','商品品牌',NULL,NULL,NULL,NULL,'goods:manage:brand',0,0,0,33,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (32,27,'000400020005','虚拟分类',NULL,NULL,NULL,NULL,'goods:manage:vmclass',0,0,0,34,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (25,24,'00040001','商品管理',NULL,NULL,NULL,NULL,'goods:manage',0,0,1,9,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (26,25,'000400010001','商品列表',NULL,NULL,NULL,NULL,'goods:manage:list',0,0,0,11,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (27,24,'00040002','商品配置',NULL,NULL,NULL,NULL,'goods:manage:setting',0,0,1,10,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (28,27,'000400020001','商品分类',NULL,NULL,NULL,NULL,'goods:manage:class',0,0,0,12,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (29,27,'000400020002','商品类型',NULL,NULL,NULL,NULL,'goods:manage:type',0,0,0,13,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (30,27,'000400020003','商品规格',NULL,NULL,NULL,NULL,'goods:manage:format',0,0,0,14,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (31,27,'000400020004','商品品牌',NULL,NULL,NULL,NULL,'goods:manage:brand',0,0,0,15,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (32,27,'000400020005','虚拟分类',NULL,NULL,NULL,NULL,'goods:manage:vmclass',0,0,0,16,1,NULL);
 insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (33,0,'0005','会员',NULL,NULL,NULL,NULL,'member',0,0,1,6,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (34,33,'00050001','会员管理',NULL,NULL,NULL,NULL,'member:manage',0,0,1,11,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (35,34,'000500010001','会员列表',NULL,NULL,NULL,NULL,'member:manage:list',0,0,0,22,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (36,34,'000500010002','会员等级',NULL,NULL,NULL,NULL,'member:manage:level',0,0,0,23,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (37,34,'000500010003','注册协议',NULL,NULL,NULL,NULL,'member:manage:reg',0,0,0,24,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (38,34,'000500010004','隐私保护',NULL,NULL,NULL,NULL,'member:manage:hide',0,0,0,25,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (39,33,'00050002','咨询评论',NULL,NULL,NULL,NULL,'member:msg',0,0,1,12,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (40,39,'000500020001','咨询列表',NULL,NULL,NULL,NULL,'member:msg:faq',0,0,0,26,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (41,39,'000500020002','评论列表',NULL,NULL,NULL,NULL,'member:msg:review',0,0,0,27,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (42,39,'000500020003','站内消息',NULL,NULL,NULL,NULL,'member:msg:site',0,0,0,28,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (43,39,'000500020004','消息设置',NULL,NULL,NULL,NULL,'member:msg:setting',0,0,0,29,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (34,33,'00050001','会员管理',NULL,NULL,NULL,NULL,'member:manage',0,0,1,14,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (35,34,'000500010001','会员列表',NULL,NULL,NULL,NULL,'member:manage:list',0,0,0,37,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (36,34,'000500010002','会员等级',NULL,NULL,NULL,NULL,'member:manage:level',0,0,0,38,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (37,34,'000500010003','注册协议',NULL,NULL,NULL,NULL,'member:manage:reg',0,0,0,39,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (38,34,'000500010004','隐私保护',NULL,NULL,NULL,NULL,'member:manage:hide',0,0,0,40,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (39,33,'00050002','咨询评论',NULL,NULL,NULL,NULL,'member:msg',0,0,1,15,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (40,39,'000500020001','咨询列表',NULL,NULL,NULL,NULL,'member:msg:faq',0,0,0,33,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (41,39,'000500020002','评论列表',NULL,NULL,NULL,NULL,'member:msg:review',0,0,0,34,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (42,39,'000500020003','站内消息',NULL,NULL,NULL,NULL,'member:msg:site',0,0,0,35,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (43,39,'000500020004','消息设置',NULL,NULL,NULL,NULL,'member:msg:setting',0,0,0,36,1,NULL);
 insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (44,0,'0006','站点',NULL,NULL,NULL,NULL,'site',0,0,1,7,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (45,44,'00060001','站点管理',NULL,NULL,NULL,NULL,'site:manage',0,0,1,8,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (46,45,'000600010001','导航菜单',NULL,NULL,NULL,NULL,'site:manage:menu',0,0,0,18,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (47,45,'000600010002','站点配置',NULL,NULL,NULL,NULL,'site:manage:setting',0,0,0,19,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (48,44,'00060002','内容管理',NULL,NULL,NULL,NULL,'site:cms',0,0,1,9,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (49,48,'000600020001','栏目管理',NULL,NULL,NULL,NULL,'site:cms:column',0,0,0,15,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (50,48,'000600020002','文章管理',NULL,NULL,NULL,NULL,'site:cms:article',0,0,0,16,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (51,44,'00060003','友情链接',NULL,NULL,NULL,NULL,'site:link',0,0,1,10,1,NULL);
-insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (52,51,'000600030001','友情链接',NULL,NULL,NULL,NULL,'site:link:list',0,0,0,17,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (45,44,'00060001','站点管理',NULL,NULL,NULL,NULL,'site:manage',0,0,1,11,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (46,45,'000600010001','导航菜单',NULL,NULL,NULL,NULL,'site:manage:menu',0,0,0,28,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (47,45,'000600010002','站点配置',NULL,NULL,NULL,NULL,'site:manage:setting',0,0,0,29,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (48,44,'00060002','内容管理',NULL,NULL,NULL,NULL,'site:cms',0,0,1,12,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (49,48,'000600020001','栏目管理',NULL,NULL,NULL,NULL,'site:cms:column',0,0,0,30,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (50,48,'000600020002','文章管理',NULL,NULL,NULL,NULL,'site:cms:article',0,0,0,31,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (51,44,'00060003','友情链接',NULL,NULL,NULL,NULL,'site:link',0,0,1,13,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (52,51,'000600030001','友情链接',NULL,NULL,NULL,NULL,'site:link:list',0,0,0,32,1,NULL);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (53,0,'0007','微信',NULL,'',NULL,'','weixin',0,0,1,2,1,1445825925);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (54,53,'00070001','微信配置',NULL,'',NULL,'fa fa-weixin','weixin:manage',0,0,1,3,1,1445826142);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (55,54,'000700010001','帐号配置',NULL,'/private/wx/config','data-pjax','','weixin:manage:config',0,0,0,25,1,1445826178);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (56,54,'000700010002','菜单配置',NULL,'/private/wx/menu','data-pjax','','weixin:manage:menu',0,0,0,26,1,1445830074);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (57,53,'00070002','消息管理',NULL,'','','ti-pencil-alt','weixin:msg',0,0,1,1,1,1445843697);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (58,57,'000700020001','文字消息',NULL,'/private/wx/txt','data-pjax','','weixin:msg:txt',0,0,0,1,1,1445843720);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (59,57,'000700020002','图文消息',NULL,'/private/wx/news','data-pjax','','weixin:msg:news',0,0,0,2,1,1445843889);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (60,53,'00070003','自动回复',NULL,'',NULL,'ti-back-left','weixin:reply',0,0,1,2,1,1445929792);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (61,60,'000700030001','关注自动回复',NULL,'/private/wx/reply?type=follow','data-pjax','','weixin:reply:follow',0,0,0,17,1,1445929848);
+insert  into `sys_menu`(`id`,`parentId`,`path`,`name`,`type`,`url`,`target`,`icon`,`permission`,`hidden`,`disabled`,`hasChildren`,`location`,`createdBy`,`createdAt`) values (62,60,'000700030002','关键词回复',NULL,'/private/wx/reply?type=keyword','data-pjax','','weixin:reply:keyword',0,0,0,18,1,1445929868);
 
 /*Table structure for table `sys_menu_roles__sys_role_menus` */
 
@@ -125,62 +165,10 @@ CREATE TABLE `sys_menu_roles__sys_role_menus` (
   `sys_menu_roles` int(11) DEFAULT NULL,
   `sys_role_menus` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=293 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=355 DEFAULT CHARSET=utf8;
 
 /*Data for the table `sys_menu_roles__sys_role_menus` */
 
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (1,1,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (2,2,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (3,3,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (4,4,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (5,5,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (6,6,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (7,7,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (8,8,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (9,9,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (10,10,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (11,11,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (12,12,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (13,13,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (14,14,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (15,15,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (16,16,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (17,17,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (18,18,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (19,19,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (20,20,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (21,21,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (22,22,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (23,23,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (24,24,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (25,25,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (26,26,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (27,27,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (28,28,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (29,29,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (30,30,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (31,31,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (32,32,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (33,33,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (34,34,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (35,35,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (36,36,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (37,37,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (38,38,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (39,39,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (40,40,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (41,41,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (42,42,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (43,43,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (44,44,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (45,45,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (46,46,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (47,47,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (48,48,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (49,49,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (50,50,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (51,51,2);
-insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (52,52,2);
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (257,12,1);
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (258,14,1);
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (259,13,1);
@@ -193,6 +181,68 @@ insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_me
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (290,1,20);
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (291,2,20);
 insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (292,9,20);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (293,53,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (294,3,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (295,54,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (296,55,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (297,1,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (298,2,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (299,4,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (300,5,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (301,6,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (302,7,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (303,8,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (304,9,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (305,10,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (306,11,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (307,12,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (308,13,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (309,14,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (310,15,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (311,16,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (312,17,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (313,18,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (314,19,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (315,20,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (316,21,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (317,22,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (318,23,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (319,24,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (320,25,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (321,26,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (322,27,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (323,28,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (324,29,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (325,30,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (326,31,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (327,32,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (328,33,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (329,34,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (330,35,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (331,36,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (332,37,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (333,38,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (334,39,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (335,40,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (336,41,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (337,42,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (338,43,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (339,44,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (340,45,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (341,46,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (342,47,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (343,48,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (344,49,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (345,51,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (346,52,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (347,50,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (348,56,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (349,57,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (350,58,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (351,59,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (352,60,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (353,61,2);
+insert  into `sys_menu_roles__sys_role_menus`(`id`,`sys_menu_roles`,`sys_role_menus`) values (354,62,2);
 
 /*Table structure for table `sys_role` */
 
@@ -300,7 +350,7 @@ CREATE TABLE `sys_user` (
 
 /*Data for the table `sys_user` */
 
-insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (1,'superadmin','超级管理员','wizzer@qq.com','$2a$10$VHurQGznw79I8lKA86PJgOyOWX91cCQBG/HDSs..B4Lp.JGQNMy4a',0,1,'::ffff:192.168.1.11',1445587761,185,'palette.css',0,0,0,NULL,NULL,1);
+insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (1,'superadmin','超级管理员','wizzer@qq.com','$2a$10$VHurQGznw79I8lKA86PJgOyOWX91cCQBG/HDSs..B4Lp.JGQNMy4a',0,1,'::ffff:192.168.1.11',1446013306,208,'palette.css',0,1,0,NULL,NULL,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (2,'rrrrrr!!!!','2','2@qq.com','2',1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (3,'3333','333',NULL,NULL,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (4,'44444','444',NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
@@ -311,10 +361,91 @@ insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (9,'9999','999','','$2a$10$yuHpyQDd/zYimhBbsypn/e5C8eoF.u9ZU/nxjszqMDKVVTudtefy.',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (11,'11111','1111',NULL,'$2a$10$6xyBA02aM.FRrcZyVc/1n.LN9ra8f8N.PiZRZi1MeNZUnh1DJ.opW',NULL,1,'::ffff:192.168.1.11',1444804958,2,NULL,NULL,NULL,NULL,NULL,NULL,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (12,'121212','12121',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1);
-insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (13,'yyyy','yyy','6@q.com','$2a$10$t.KDX1ntJTRGKVglyP1yl.UPvDCY.0P8Do.Bst2WfE4sWG.GAF5JC',0,0,NULL,1444815191,0,NULL,0,0,0,1,1444815191,1);
+insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (13,'yyyy','yyy','6@q.com','$2a$10$p3v5yjYZb/Vgx1rkel2bAO/KnqmFxLJl83IrWebnZE5WdAq5UwkoC',0,0,NULL,1444815191,0,NULL,0,0,0,1,1444815191,1);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (14,'ddd','ddd','','$2a$10$VcOoldmGUKohaz3Xte1RNeoT.LgoypPzO/RX371VZDJQifVOOD4Ym',0,0,NULL,1444815321,0,NULL,0,0,0,1,1444815321,2);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (15,'1','2','','$2a$10$h5ikeK2UEVkBJH9iSV9jROGqBB9k0UA2W9QuHhyyiWfa0zPnll8Oe',1,0,NULL,1445562925,0,NULL,0,0,0,1,1445562925,0);
 insert  into `sys_user`(`id`,`loginname`,`nickname`,`email`,`password`,`disabled`,`online`,`lastIp`,`loginAt`,`loginCount`,`loginTheme`,`loginSidebar`,`loginScroll`,`loginBoxed`,`createdBy`,`createdAt`,`unitid`) values (16,'tt','tt','','$2a$10$Ah8r0ZufypphHvPgeVr3zuK/eOZcSR.1NGjqJenKilsb8PrFnrQqe',1,0,NULL,1445563059,0,NULL,0,0,0,1,1445563059,0);
+
+/*Table structure for table `wx_config` */
+
+CREATE TABLE `wx_config` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `appname` varchar(255) DEFAULT NULL,
+  `ghid` varchar(255) DEFAULT NULL,
+  `appid` varchar(255) DEFAULT NULL,
+  `appsecret` varchar(255) DEFAULT NULL,
+  `encodingAESKey` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `access_token` varchar(255) DEFAULT NULL,
+  `expire_time` int(11) DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `createdAt` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ghid` (`ghid`),
+  UNIQUE KEY `appid` (`appid`),
+  UNIQUE KEY `appsecret` (`appsecret`),
+  UNIQUE KEY `encodingAESKey` (`encodingAESKey`),
+  UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Data for the table `wx_config` */
+
+insert  into `wx_config`(`id`,`appname`,`ghid`,`appid`,`appsecret`,`encodingAESKey`,`token`,`access_token`,`expire_time`,`createdBy`,`createdAt`) values (1,'微数据','gh_ebe6545f95cc','wx477d239c3e0a80ab','f1b8f6d26856eef97d08d5735c8fd431','VMMB8PICkJGUKqbsLs7BFimIzybSMUDxBwvyvO92TEy','wizzer',NULL,0,1,1445828740);
+
+/*Table structure for table `wx_news` */
+
+CREATE TABLE `wx_news` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `picUrl` varchar(255) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `createdAt` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+/*Data for the table `wx_news` */
+
+insert  into `wx_news`(`id`,`title`,`description`,`picUrl`,`url`,`createdBy`,`createdAt`) values (1,'测试1','百度','https://www.baidu.com/img/bd_logo1.png','https://www.baidu.com',1,1445935192);
+insert  into `wx_news`(`id`,`title`,`description`,`picUrl`,`url`,`createdBy`,`createdAt`) values (2,'测试2','Nutz','http://imglf.nosdn.127.net/img/YTk1a21YVE9xOVZTNlhnVzlwVkMxQmI4akErVkg0MlAwMmJEa2NneE5acmYrRU5uU1BCVGZBPT0.jpg?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg','https://nutz.cn/yvr/t/48lqu7vp4kja8qoverokm4e5of',1,1446015092);
+
+/*Table structure for table `wx_reply` */
+
+CREATE TABLE `wx_reply` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) DEFAULT NULL,
+  `msgtype` varchar(10) DEFAULT NULL,
+  `keyword` varchar(20) DEFAULT NULL,
+  `content` varchar(255) DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `createdAt` int(11) DEFAULT NULL,
+  `wxid` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+
+/*Data for the table `wx_reply` */
+
+insert  into `wx_reply`(`id`,`type`,`msgtype`,`keyword`,`content`,`createdBy`,`createdAt`,`wxid`) values (1,'follow','txt',NULL,'4',1,1446020979,1);
+insert  into `wx_reply`(`id`,`type`,`msgtype`,`keyword`,`content`,`createdBy`,`createdAt`,`wxid`) values (3,'keyword','txt','a','4',1,1446022793,1);
+insert  into `wx_reply`(`id`,`type`,`msgtype`,`keyword`,`content`,`createdBy`,`createdAt`,`wxid`) values (4,'keyword','news','b','1',1,1446022817,1);
+insert  into `wx_reply`(`id`,`type`,`msgtype`,`keyword`,`content`,`createdBy`,`createdAt`,`wxid`) values (5,'keyword','news','c','2,1',1,1446022835,1);
+insert  into `wx_reply`(`id`,`type`,`msgtype`,`keyword`,`content`,`createdBy`,`createdAt`,`wxid`) values (8,'keyword','news','d','1,2',1,1446024971,1);
+
+/*Table structure for table `wx_txt` */
+
+CREATE TABLE `wx_txt` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) DEFAULT NULL,
+  `content` varchar(500) DEFAULT NULL,
+  `createdBy` int(11) DEFAULT NULL,
+  `createdAt` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+/*Data for the table `wx_txt` */
+
+insert  into `wx_txt`(`id`,`title`,`content`,`createdBy`,`createdAt`) values (4,'关注自动回复','Node.js Test...',1,1446020591);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
