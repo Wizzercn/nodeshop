@@ -85,7 +85,22 @@ module.exports = {
     var id = req.params.id;
     Wx_reply.findOne({id: id}).exec(function (err, obj) {
       req.data.obj = obj;
-      return res.view('private/wx/reply/edit', req.data);
+      Wx_config.find().exec(function (errc, list) {
+        req.data.list = list;
+        if (obj.msgtype == 'txt') {
+          Wx_txt.findOne({id: obj.content}).exec(function (e, o) {
+            req.data.content = o;
+            return res.view('private/wx/reply/edit', req.data);
+          });
+        } else if (obj.msgtype == 'news') {
+          var sql = 'SELECT * FROM wx_news WHERE id IN (' + obj.content + ') ORDER BY INSTR(\'' + obj.content + '\',id)';
+          //按id数组顺序排序
+          Wx_news.query(sql, [], function (e, o) {
+            req.data.content = o;
+            return res.view('private/wx/reply/edit', req.data);
+          });
+        }
+      });
     });
   },
   editDo: function (req, res) {

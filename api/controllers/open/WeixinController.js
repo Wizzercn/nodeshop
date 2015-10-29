@@ -3,7 +3,7 @@
  */
 module.exports = {
   api: function (req, res) {
-    var id = req.query.wxid;
+    var id = req.params.id;
     Wx_config.findOne(id).exec(function (err, conf) {
       if (err)return res.send(200, 'fail');
       if (req.body) {
@@ -12,32 +12,15 @@ module.exports = {
             var txt = data.txt;
             Wx_reply.findOne({wxid: id, type: 'keyword', keyword: txt}).exec(function (err, obj) {
               if (obj) {
-                if (obj.msgtype == 'txt') {
-                  Wx_txt.findOne({id: obj.content}).exec(function (e, o) {
-                    if (o) {
-                      var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: o.content};
-                      WeixinService.sendTextMsg(res, msg);//向用户回复消息
-                    } else {
-                      res.send(200, 'fail');
-                    }
-                  });
-                } else if (obj.msgtype == 'news') {
-                  var sql = 'SELECT * FROM wx_news WHERE id IN (' + obj.content + ') ORDER BY INSTR(\'' + obj.content + '\',id)';
-                  //按id数组顺序排序
-                  Wx_news.query(sql, [], function (e, o) {
-                    if (o.length > 0) {
-                      var msg = {
-                        toUserName: data.openid, fromUserName: conf.ghid,
-                        articles: o
-                      };
-                      WeixinService.sendNewsMsg(res, msg);//向用户回复消息
-                    } else {
-                      res.send(200, 'fail');
-                    }
-                  });
-                } else {
-                  res.send(200, 'fail');
-                }
+                Wx_reply.sendMsg(req, res, obj, conf.ghid, data);
+              } else {//查找默认回复内容
+                Wx_reply.findOne({wxid: id, type: 'keyword', keyword: 'default'}).exec(function (err2, obj2) {
+                  if (obj) {
+                    Wx_reply.sendMsg(req, res, obj2, conf.ghid, data);
+                  } else {
+                    return res.send(200, req.query.echostr);
+                  }
+                });
               }
             });
           } else if (data.type == 'event') {
@@ -50,7 +33,7 @@ module.exports = {
                         var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: o.content};
                         WeixinService.sendTextMsg(res, msg);//向用户回复消息
                       } else {
-                        res.send(200, 'fail');
+                        return res.send(200, req.query.echostr);
                       }
                     });
                   } else if (obj.msgtype == 'news') {
@@ -64,27 +47,27 @@ module.exports = {
                         };
                         WeixinService.sendNewsMsg(res, msg);//向用户回复消息
                       } else {
-                        res.send(200, 'fail');
+                        return res.send(200, req.query.echostr);
                       }
                     });
                   } else {
-                    res.send(200, 'fail');
+                    return res.send(200, req.query.echostr);
                   }
                 }
               });
             } else {
-              res.send(200, 'fail');
+              return res.send(200, req.query.echostr);
             }
           } else {
-            res.send(200, 'fail');
+            return res.send(200, req.query.echostr);
           }
         });
       } else {
         //签名
         if (WeixinService.checkSignature(req, conf.token)) {
-          res.send(200, req.query.echostr);
+          return res.send(200, req.query.echostr);
         } else {
-          res.send(200, 'fail');
+          return res.send(200, 'fail');
         }
       }
 
