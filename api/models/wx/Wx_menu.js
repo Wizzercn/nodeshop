@@ -1,8 +1,6 @@
 /**
- * 资源菜单
- * Created by root on 9/10/15.
+ * Created by root on 10/28/15.
  */
-//var uuid = require('node-uuid');
 var moment = require('moment');
 module.exports = {
   schema: true,
@@ -28,36 +26,13 @@ module.exports = {
       required: true
     },
     type: {
-      type: 'string',
-      size: 10
+      type: 'string'
+    },
+    key: {
+      type: 'string'
     },
     url: {
-      type: 'string',
-      size: 100
-    },
-    target: {
-      type: 'string',
-      size: 100
-    },
-    icon: {
-      type: 'string',
-      size: 100
-    },
-    permission:{
-      type: 'string',
-      size: 100
-    },
-    hidden: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
-    },
-    disabled: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
+      type: 'string'
     },
     hasChildren: {
       type: 'boolean',
@@ -78,9 +53,8 @@ module.exports = {
         return moment().format('X');
       }
     },
-    roles: {
-      collection: 'Sys_role',
-      via: 'menus'
+    wxid: {
+      model: 'Wx_config'
     }
   }
 };

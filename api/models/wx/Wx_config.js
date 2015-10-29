@@ -62,6 +62,11 @@ module.exports = {
     replys: {
       collection: 'Wx_reply',
       via: 'wxid'
+    },
+    menus: {
+      collection: 'Wx_menu',
+      via: 'wxid'
     }
+
   }
 };

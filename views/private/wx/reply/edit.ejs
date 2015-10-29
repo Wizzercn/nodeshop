@@ -61,15 +61,15 @@
             <div class="form-group">
               <label for="content" class="col-sm-2 control-label">绑定类型</label>
 
-              <div class="col-sm-8" style="padding-top: 6px;">
-                <label>
+              <div class="col-sm-8">
+                <div class="radio"><label>
                   <input type="radio" name="msgtype" value="txt" <% if('txt' == obj.msgtype){ %>checked
                     <% } %>
-                    >文本消息
-
+                    >文本消息</label></div>
+                  <div class="radio"><label>
                   <input type="radio" name="msgtype" value="news" <% if('news' == obj.msgtype){ %>checked
                     <% } %>
-                    >图文消息</label>
+                    >图文消息</label></div>
 
 
               </div>
