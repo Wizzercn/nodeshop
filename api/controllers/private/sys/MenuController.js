@@ -206,7 +206,6 @@ module.exports = {
   sortDo: function (req, res) {
     var i = 0, j = 0, k = 0;
     var ids = req.body.ids;
-    console.log('ids::' + JSON.stringify(ids));
     ids.forEach(function (obj) {
       i++;
       var id1 = obj.id || obj['[id]'];

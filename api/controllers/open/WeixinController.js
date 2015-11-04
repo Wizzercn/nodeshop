@@ -55,6 +55,16 @@ module.exports = {
                   }
                 }
               });
+            }
+            if (data.event == 'CLICK') {
+              Wx_reply.findOne({wxid: id, type: 'keyword', keyword: data.eventKey}).exec(function (err, obj) {
+                if (obj) {
+                  Wx_reply.sendMsg(req, res, obj, conf.ghid, data);
+                } else {
+                  return res.send(200, req.query.echostr);
+                }
+              });
+
             } else {
               return res.send(200, req.query.echostr);
             }

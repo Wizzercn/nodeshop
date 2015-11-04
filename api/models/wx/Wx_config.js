@@ -38,7 +38,6 @@ module.exports = {
     },
     token: {
       type: 'string',
-      unique: true,
       required: true
     },
     access_token: {

@@ -39,8 +39,11 @@ module.exports = {
           data.txt = json.xml.Content.toString();
         } else if (data.type == 'image') {
           data.pic = json.xml.PicUrl.toString();
-        }else if (data.type == 'event') {
+        } else if (data.type == 'event') {
           data.event = json.xml.Event.toString();
+          if (data.event == 'CLICK') {
+            data.eventKey = json.xml.EventKey.toString();
+          }
         }
         return callback(data);
       }

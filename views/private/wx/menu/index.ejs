@@ -18,6 +18,9 @@
   </div>
   <div class="pull-right">
     <div class="btn-group tool-button">
+      <button class="btn btn-primary navbar-btn" onclick="sort()"> 保存排序</button>
+    </div>
+    <div class="btn-group tool-button">
       <button class="btn btn-primary navbar-btn" onclick="complete()"><i class="ti-share"></i> 推送到微信</button>
     </div>
   </div>
@@ -80,9 +83,63 @@
     </div>
   </div>
 </div>
+<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">删除菜单</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            删除后无法恢复，请谨慎操作！
+            <br/>确定要删除吗？
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script type="text/javascript">
+  function del(id){
+    var dialog = $("#dialogDelete");
+    dialog.modal("show");
+    dialog.find("#ok").unbind("click");
+    dialog.find("#ok").bind("click", function(event){
+      var btn = $(this);
+      btn.button("loading");
+      $.post("/private/wx/menu/delete/"+id,{},function(data){
+        //重置按钮状态，关闭提示框
+        dialog.modal("hide");
+        if(data.code==0){
+          Toast.success(data.msg);
+          treeTable.treetable("removeNode", id);
+          //从表格中移除此行
+        }else{
+          Toast.error(data.msg);
+        }
+        btn.button("reset");
+      },"json");
+    });
+  }
+  function sort(){
+    $.post("/private/wx/menu/sortDo", {wxid:'<%=wxid%>',ids: $("#nestable3").nestable('serialize')}, function (data) {
+      if (data.code == 0) {
+        Toast.success(data.msg);
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
   function complete(){
-    $.post("/private/sys/menu/sortDo", {ids: $("#nestable3").nestable('serialize')}, function (data) {
+    sublime.showLoadingbar($(".main-content"));
+    $.post("/private/wx/menu/pushMenu", {wxid:'<%=wxid%>'}, function (data) {
+      sublime.closeLoadingbar($(".main-content"));
       if (data.code == 0) {
         Toast.success(data.msg);
 
