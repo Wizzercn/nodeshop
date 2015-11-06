@@ -13,6 +13,12 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
+    shopid:{//预留店铺ID
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
     parentId: {
       type: 'integer'
     },
@@ -76,9 +82,9 @@ module.exports = {
         return moment().format('X');
       }
     },
-    contents: {
-      collection: 'Cms_content',
-      via: 'channelId'
+    articles: {
+      collection: 'Cms_article',
+      via: 'channel'
     }
   }
 };

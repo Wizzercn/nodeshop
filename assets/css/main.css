@@ -1950,6 +1950,7 @@ a.list-group-item:focus {
 .panel {
   box-shadow: none;
   border-radius: 2px;
+  padding-top: 10px;
 }
 .panel-heading {
   border-color: #eeeff8;

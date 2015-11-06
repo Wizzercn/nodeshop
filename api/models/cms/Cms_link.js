@@ -1,5 +1,5 @@
 /**
- * Created by root on 11/4/15.
+ * Created by root on 11/5/15.
  */
 var moment = require('moment');
 module.exports = {
@@ -12,27 +12,33 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    title: {
+    name: {
       type: 'string',
+      size: 100,
       required: true
     },
-    disabled:{
-      type:'boolean',
-      defaultsTo: function (){ return false; }
+    type: {
+      type: 'string',
+      size: 20
     },
-    createdBy:{
+    picurl: {
+      type: 'string'
+    },
+    url: {
+      type: 'string'
+    },
+    createdBy: {
       type: 'integer'
     },
-    createdAt:{
-      type:'integer',
-      defaultsTo:function(){
+    createdAt: {
+      type: 'integer',
+      defaultsTo: function () {
         return moment().format('X');
       }
     },
-    channelId: {
-      model: 'Cms_channel',
-      index:true
+    class: {
+      model: 'Cms_linkClass',
+      index: true
     }
   }
 };
-

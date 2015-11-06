@@ -1,0 +1,71 @@
+/**
+ * Created by root on 11/4/15.
+ */
+var moment = require('moment');
+module.exports = {
+  schema: true,
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
+  attributes: {
+    id: {
+      type: 'integer',
+      autoIncrement: true,
+      primaryKey: true
+    },
+    shopid:{//预留店铺ID
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    title: {
+      type: 'string',
+      required: true
+    },
+    author: {
+      type: 'string'
+    },
+    publishAt: {
+      type: 'integer'
+    },
+    disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    picurl: {
+      type: 'string'
+    },
+    seo_title: {
+      type: 'string',
+      size: 100
+    },
+    seo_keywords: {
+      type: 'string',
+      size: 100
+    },
+    seo_description: {
+      type: 'string',
+      size: 100
+    },
+    createdBy: {
+      type: 'integer'
+    },
+    createdAt: {
+      type: 'integer',
+      defaultsTo: function () {
+        return moment().format('X');
+      }
+    },
+    channel: {
+      model: 'Cms_channel',
+      index: true
+    },
+    content: {
+      model: 'Cms_article_content',
+      index: true
+    }
+  }
+};
+

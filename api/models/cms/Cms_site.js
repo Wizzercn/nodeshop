@@ -15,6 +15,12 @@ module.exports = {
         return 1;
       }
     },
+    shopid:{//预留店铺ID
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
     name: {
       type: 'string',
       size: 100,
