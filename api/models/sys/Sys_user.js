@@ -18,69 +18,81 @@ module.exports = {
       unique: true,
       size: 100,
       required: true,
-      maxLength: 100
+      maxLength: 100,
+      index: true
     },
     nickname: {
       type: 'string',
       size: 50,
       required: true,
-      maxLength: 50
+      maxLength: 50,
+      index:true
     },
     email: {
       type: 'email'
     },
-    password:{
+    password: {
       type: 'string',
       size: 100,
       required: true
     },
-    disabled:{
-      type:'boolean',
-      defaultsTo: function (){ return false; }
+    disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
     },
-    online:{
-      type:'boolean',
-      defaultsTo: function (){ return false; }
+    online: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
     },
-    lastIp:{
+    lastIp: {
       type: 'string',
       size: 20
     },
-    loginAt:{
-      type:'integer',
-      defaultsTo:function(){
+    loginAt: {
+      type: 'integer',
+      defaultsTo: function () {
         return moment().format('X');
       }
     },
-    loginCount:{
+    loginCount: {
       type: 'integer',
       size: 11,
-      defaultsTo:function(){
+      defaultsTo: function () {
         return 0;
       }
     },
-    loginTheme:{
+    loginTheme: {
       type: 'string',
-      size:20
+      size: 20
     },
-    loginSidebar:{
+    loginSidebar: {
       type: 'boolean',
-      defaultsTo: function (){ return false; }
+      defaultsTo: function () {
+        return false;
+      }
     },
-    loginScroll:{
+    loginScroll: {
       type: 'boolean',
-      defaultsTo: function (){ return false; }
+      defaultsTo: function () {
+        return false;
+      }
     },
-    loginBoxed:{
+    loginBoxed: {
       type: 'boolean',
-      defaultsTo: function (){ return false; }
+      defaultsTo: function () {
+        return false;
+      }
     },
-    createdBy:{
+    createdBy: {
       type: 'integer'
     },
-    createdAt:{
-      type:'integer',
-      defaultsTo:function(){
+    createdAt: {
+      type: 'integer',
+      defaultsTo: function () {
         return moment().format('X');
       }
     },
@@ -89,7 +101,8 @@ module.exports = {
       via: 'users'
     },
     unitid: {
-      model: 'Sys_unit'
+      model: 'Sys_unit',
+      index: true
     }
   }
 };

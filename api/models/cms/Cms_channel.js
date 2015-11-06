@@ -1,6 +1,5 @@
 /**
- * 资源菜单
- * Created by root on 9/10/15.
+ * Created by root on 11/4/15.
  */
 //var uuid = require('node-uuid');
 var moment = require('moment');
@@ -19,8 +18,7 @@ module.exports = {
     },
     path: {
       type: 'string',
-      size: 100,
-      index:true
+      size: 100
     },
     name: {
       type: 'string',
@@ -28,23 +26,19 @@ module.exports = {
       maxLength: 20,
       required: true
     },
-    type: {
-      type: 'string',
-      size: 10
-    },
     url: {
       type: 'string',
       size: 100
     },
-    target: {
+    seo_title: {
       type: 'string',
       size: 100
     },
-    icon: {
+    seo_keywords:{
       type: 'string',
       size: 100
     },
-    permission:{
+    seo_description:{
       type: 'string',
       size: 100
     },
@@ -54,11 +48,14 @@ module.exports = {
         return false;
       }
     },
-    disabled: {
+    homepage: {
       type: 'boolean',
       defaultsTo: function () {
         return false;
       }
+    },
+    content: {
+      type: 'text'
     },
     hasChildren: {
       type: 'boolean',
@@ -79,9 +76,9 @@ module.exports = {
         return moment().format('X');
       }
     },
-    roles: {
-      collection: 'Sys_role',
-      via: 'menus'
+    contents: {
+      collection: 'Cms_content',
+      via: 'channelId'
     }
   }
 };
