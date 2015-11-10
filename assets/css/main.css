@@ -705,7 +705,7 @@ aside > .fffix > footer p {
     width: 100%;
   }
   .header + .content-wrap .wrapper {
-    top: 43px;
+    top: 50px;
   }
   .header + .content-wrap .wrapper2 {
     top: 50px;
@@ -6977,4 +6977,22 @@ td.no-b {
   .search-box{
     width: 100%;
   }
+}
+.uploadifive-button {
+  background-position: center top;
+  background-repeat: no-repeat;
+  -webkit-border-radius: 30px;
+  -moz-border-radius: 30px;
+  border: 1px solid #e3e6f3;
+  border-radius: 2px;
+  color: cornflowerblue;
+  font: 12px Arial, Helvetica, sans-serif;
+  text-align: center;
+  width: 100%;
+}
+.uploadifive-button:hover {
+  background-color: lightseagreen;
+  color: #FFF;
+  font: 12px Arial, Helvetica, sans-serif;
+  text-align: center;
 }

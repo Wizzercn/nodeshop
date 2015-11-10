@@ -35,5 +35,8 @@
   "add.exist":"添加的项已存在",
   "delete.fail":"删除失败",
   "delete.ok":"删除成功",
-  "delete.not":"不允许删除"
+  "delete.not":"不允许删除",
+  "file.upload.only.image":"只允许上传图片",
+  "file.upload.err":"文件上传出错",
+  "file.upload.ok":"文件上传成功"
 }
