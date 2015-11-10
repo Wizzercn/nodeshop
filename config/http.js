@@ -10,6 +10,9 @@
  */
 
 module.exports.http = {
+  customMiddleware: function (app) {
+    app.use('/upload', require('../node_modules/sails/node_modules/express')['static'](require('path').normalize(__dirname + '/../upload')));
+  },
 
   /****************************************************************************
    *                                                                           *
@@ -29,10 +32,16 @@ module.exports.http = {
      * router is invoked by the "router" middleware below.)                     *
      *                                                                          *
      ***************************************************************************/
-    rawParser: function(req, res, next) {
-      switch(req.headers['content-type']) {
+    /**
+     * 微信接口
+     * @param req
+     * @param res
+     * @param next
+     */
+    rawParser: function (req, res, next) {
+      switch (req.headers['content-type']) {
         case 'text/xml':
-          require('body-parser').raw({ type: 'text/xml' })(req, res, next);
+          require('body-parser').raw({type: 'text/xml'})(req, res, next);
           break;
         default :
           next();
@@ -79,7 +88,7 @@ module.exports.http = {
      ***************************************************************************/
 
     //bodyParser: require('skipper')
-   },
+  },
 
   /***************************************************************************
    *                                                                          *
