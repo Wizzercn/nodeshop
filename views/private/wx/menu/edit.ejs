@@ -123,24 +123,8 @@
       remote: "/private/wx/menu/keyword/<%=wxid%>"
     });
   }
-  function checkDo(){
-    $.post("/private/wx/menu/checkDo", {wxid:'<%=wxid%>',parentId:$("#parentId").val()}, function (data) {
-      if (data.code == 0) {
-        $("#errMsg").val("false");
-      } else {
-        $("#errMsg").val("true");
-      }
-      $("#_errMsg").html(data.msg);
-
-    }, "json");
-
-  }
   $(document).ready(function () {
-    checkDo();
     clickRadio('<%-obj.type%>');
-    $("#parentId").on("change",function(){
-      checkDo();
-    });
     $("#dialogKeySelect").on("hidden.bs.modal", function () {
       $(this).removeData("bs.modal");
     });
