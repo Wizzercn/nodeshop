@@ -63,7 +63,7 @@
                           onclick="$('#file_upload').uploadifive('upload')">上传<i class="ti-upload ml5"></i></button>
                   </span>
                 </div>
-                <div id="img"></div>
+                <div id="img" style="padding: 5px;"></div>
                 <input type="hidden" id="picurl" name="picurl">
               </div>
             </div>
@@ -106,7 +106,7 @@
         data = JSON.parse(data);
         if (data.code == 0) {
           Toast.success(data.msg);
-          $("#img").html("<img src='" + data.path + "' style=''>");
+          $("#img").html("<img src='" + data.path + "' style='width:150px;height:95px;'>");
           $("#picurl").val(data.path);
         } else {
           clearFile();
