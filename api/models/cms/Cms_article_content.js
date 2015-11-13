@@ -15,7 +15,7 @@ module.exports = {
     content: {
       type: 'text'
     },
-    article: {
+    articleId: {
       model: 'Cms_article',
       index: true
     }

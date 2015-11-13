@@ -84,7 +84,7 @@ module.exports = {
     },
     articles: {
       collection: 'Cms_article',
-      via: 'channel'
+      via: 'channelId'
     }
   }
 };

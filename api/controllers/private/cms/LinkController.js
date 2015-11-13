@@ -5,7 +5,15 @@ var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
-    return res.view('private/cms/link/index', req.data);
+    var classId = req.params.id || '';
+    Cms_linkClass.find().exec(function (err, list) {
+      if (!classId && list && list.length > 0) {
+        classId = list[0].id;
+      }
+      req.data.list = list;
+      req.data.classId = classId;
+      return res.view('private/cms/link/index', req.data);
+    });
   },
   data: function (req, res) {
     var pageSize = parseInt(req.body.length);
@@ -43,8 +51,10 @@ module.exports = {
     });
   },
   add: function (req, res) {
+    var classId = req.params.id || '';
     Cms_linkClass.find().exec(function (err, list) {
       req.data.list = list;
+      req.data.classId=classId;
       return res.view('private/cms/link/add', req.data);
     });
   },

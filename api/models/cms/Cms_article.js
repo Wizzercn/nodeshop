@@ -58,11 +58,11 @@ module.exports = {
         return moment().format('X');
       }
     },
-    channel: {
+    channelId: {
       model: 'Cms_channel',
       index: true
     },
-    content: {
+    contentId: {
       model: 'Cms_article_content',
       index: true
     }

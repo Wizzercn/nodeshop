@@ -28,7 +28,7 @@ module.exports = {
     },
     links: {
       collection: 'Cms_link',
-      via: 'class'
+      via: 'classId'
     }
   }
 };

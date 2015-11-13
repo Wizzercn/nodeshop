@@ -27,6 +27,9 @@ module.exports = {
     url: {
       type: 'string'
     },
+    target: {
+      type: 'string'
+    },
     createdBy: {
       type: 'integer'
     },
@@ -36,7 +39,7 @@ module.exports = {
         return moment().format('X');
       }
     },
-    class: {
+    classId: {
       model: 'Cms_linkClass',
       index: true
     }
