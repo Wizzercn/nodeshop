@@ -21,26 +21,37 @@ module.exports = {
         return 0;
       }
     },
-    name: {
+    site_name: {
       type: 'string',
       size: 100,
       required: true
     },
-    domain: {
+    site_domain: {
       type: 'string'
     },
-    icp: {
+    site_icp: {
       type: 'string',
       size: 50
     },
-    qq: {
+    site_logo:{
+      type: 'string'
+    },
+    site_qq: {
       type: 'string',
       size: 20
     },
-    email: {
+    site_email: {
       type: 'string'
     },
+    site_tel: {
+      type: 'string',
+      size: 20
+    },
     weibo_name: {
+      type: 'string',
+      size: 100
+    },
+    weibo_url: {
       type: 'string',
       size: 100
     },
@@ -51,12 +62,12 @@ module.exports = {
       type: 'string',
       size: 100
     },
+    wechat_id: {
+      type: 'string',
+      size: 100
+    },
     wechat_qrcode: {
       type: 'string'
-    },
-    telphone: {
-      type: 'string',
-      size: 20
     },
     seo_title: {
       type: 'string'
