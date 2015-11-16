@@ -2,6 +2,8 @@
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/cms/link/add/<%=classId%>" data-pjax><i class="ti-plus"></i> 添加链接</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <a href="/private/cms/link/index/<%=classId%>" data-pjax id="_reload"></a>
+
   </div>
   <div class="btn-group">
     <div >
@@ -75,7 +77,7 @@
         "url": "/private/cms/link/data",
         "type": "post",
         "data": function (d) {
-          d.classId='<%classId%>';
+          d.classId='<%=classId%>';
         }
       },
       "order": [[0, "desc"]],
@@ -95,6 +97,16 @@
               '</ul></div>';
           },
           "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
+            if("txt"==data){
+              return "文字链接";
+            }
+            return "图片链接";
+
+          },
+          "targets": 1
         }
       ]
     });
@@ -152,6 +164,10 @@
     }
   }
   $(function () {
+    $("#classId").on("change",function(){
+      $("#_reload").attr("href","/private/cms/link/index/"+$(this).val());
+      $("#_reload").trigger("click");
+    });
     initDatatable();
   });
 </script>

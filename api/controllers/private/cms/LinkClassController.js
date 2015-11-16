@@ -80,6 +80,9 @@ module.exports = {
       if (err) {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {
+        Cms_link.destroy({classId: ids}).exec(function (err) {
+
+        });
         return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });
