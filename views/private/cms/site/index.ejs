@@ -4,13 +4,13 @@
   <header class="header navbar bg-white shadow">
   <div class="pull-right">
     <div class="btn-group tool-button">
-      <button class="btn btn-primary navbar-btn" type="submit"> 保存</button>
+      <button class="btn btn-primary navbar-btn" type="button" id="save"> 保存</button>
     </div>
   </div>
 </header>
 
 <div class="content-wrap">
-  <div class="wrapper" style="min-height:500px;">
+  <div class="wrapper" style="min-height:500px;height: 100%;">
 
 
       <div class="box-tab">
@@ -68,6 +68,13 @@
                     <%}%>
                   </div>
                   <input type="hidden" id="site_logo" name="site_logo" value="<%=obj.site_logo||''%>" >
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="footer_content" class="col-sm-2 control-label">底部信息</label>
+
+                <div class="col-sm-8">
+                  <textarea id="footer_content" name="footer_content" style="width:100%;height:200px;"><%=obj.footer_content||''%></textarea>
                 </div>
               </div>
             </div>
@@ -130,6 +137,8 @@
                   <div id="img_weibo" style="padding: 5px;">
                     <%if(obj.weibo_qrcode){%>
                     <img src='<%=obj.weibo_qrcode||''%>' style='width:150px;height:95px;'>
+                    <i class="fa fa-close" onclick="$('#weibo_qrcode').val('');$('#img_weibo').html('');"></i>
+
                     <%}%>
                   </div>
                   <input type="hidden" id="weibo_qrcode" name="weibo_qrcode" value="<%=obj.weibo_qrcode||''%>">
@@ -167,6 +176,8 @@
                   <div id="img_wechat" style="padding: 5px;">
                     <%if(obj.wechat_qrcode){%>
                     <img src='<%=obj.wechat_qrcode||''%>' style='width:150px;height:95px;'>
+                    <i class="fa fa-close" onclick="$('#wechat_qrcode').val('');$('#img_wechat').html('');"></i>
+
                     <%}%>
                   </div>
                   <input type="hidden" id="wechat_qrcode" name="wechat_qrcode" value="<%=obj.wechat_qrcode||''%>">
@@ -224,6 +235,7 @@
     $("#wechat_qrcode").val("");
   }
   $(document).ready(function () {
+    var ue = UE.getEditor('footer_content');
     $('#file_upload').uploadifive({
       'auto': false,
       'multi': false,
@@ -322,6 +334,10 @@
       'onCancel': function () {
         clearFile_wechat();
       }
+    });
+    $("#save").on("click",function(){
+      $("#footer_content").val(ue.getContent());
+      $('#addForm').submit();
     });
       $('#addForm').ajaxForm({
         dataType: 'json',
