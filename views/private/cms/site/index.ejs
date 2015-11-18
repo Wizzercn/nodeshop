@@ -16,6 +16,7 @@
       <div class="box-tab">
         <ul class="nav nav-tabs">
           <li class="active"><a href="#home1" data-toggle="tab">基本信息</a>
+
           </li>
           <li><a href="#profile1" data-toggle="tab">联系方式</a>
           </li>
@@ -235,7 +236,8 @@
     $("#wechat_qrcode").val("");
   }
   $(document).ready(function () {
-    var ue = UE.getEditor('footer_content');
+    var ue = new baidu.editor.ui.Editor();
+    ue.render('footer_content');
     $('#file_upload').uploadifive({
       'auto': false,
       'multi': false,

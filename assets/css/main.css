@@ -4952,6 +4952,7 @@ html[dir="rtl"] .select2-container .select2-choice .select2-arrow {
 .parsley-errors-list {
   list-style: none;
   padding: 0;
+  margin-bottom:0;
 }
 .parsley-success {
   border-color: #15db81;
