@@ -13,7 +13,7 @@ module.exports = {
     if (req.session.auth && !req.session.user.disabled) {
 
       req.file('Filedata').upload({
-        dirname: 't'
+        maxBytes: 2048000
       }, function (err, uploadedFiles) {
         if (err) {
           return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
