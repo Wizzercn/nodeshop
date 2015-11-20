@@ -104,18 +104,29 @@ module.exports = {
             var start = parseInt(req.query.start) || 0;
             var items = [];
             var i = 0;
-            fs.walk(sails.config.appPath + '/upload/image/',streamOptions)
+            fs.walk(sails.config.appPath + '/upload/image/')
               .on('data', function (item) {
-                console.log('item::' + JSON.stringify(item));
                 if (item.path.indexOf('.') > 0) {
-                  i++;
-                  if (i > start && i <= start + size){
-                    items.push({url: item.path.replace(sails.config.appPath, ''), mtime: item.stats.mtime});
-                  }
+                  items.push({
+                    url: item.path.replace(sails.config.appPath, ''),
+                    mtime: parseInt(moment(item.stats.mtime).format('x'))
+                  });
                 }
               })
               .on('end', function () {
                 if (items.length > 0) {
+                  //文件按修改时间倒序排序
+                  items.sort(function (a, b) {
+                    return a.mtime < b.mtime ? 1 : -1;
+                  });
+                  var list = [];
+                  items.forEach(function (obj) {
+                    i++;
+                    //分页
+                    if (i > start && i <= start + size) {
+                      list.push(obj);
+                    }
+                  });
                   return res.json({
                     state: 'SUCCESS',
                     list: items,
