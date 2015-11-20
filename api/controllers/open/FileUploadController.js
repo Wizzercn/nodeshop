@@ -1,7 +1,7 @@
 /**
  * Created by root on 11/9/15.
  */
-var fs=require('../../../node_modules/sails/node_modules/fs-extra');
+var fs = require('fs-extra');
 var moment = require("moment");
 module.exports = {
   /**

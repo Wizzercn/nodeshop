@@ -1,7 +1,8 @@
 /**
  * Created by root on 11/16/15.
  */
-var fs = require('../../../node_modules/sails/node_modules/fs-extra');
+var fs = require('fs-extra');
+var moment = require("moment");
 module.exports = {
   index: function (req, res) {
     if (req.session.auth && !req.session.user.disabled) {
@@ -14,14 +15,122 @@ module.exports = {
             return res.send(config_txt);
             break;
           case 'uploadimage':
-            console.log('uploadimage:::' + config.imageAllowFiles);
+
             req.file('Filedata').upload({
               maxBytes: config.imageMaxSize
             }, function (err, uploadedFiles) {
               if (err)return res.json({state: sails.__('file.upload.err')});
+              var filename = uploadedFiles[0].filename;
+              var type = uploadedFiles[0].type;
+              var fd = uploadedFiles[0].fd;
+              var size = uploadedFiles[0].size;
+              if (config.imageAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
+                return res.json({state: sails.__('file.upload.err')});
+              var file = fd.substring(fd.lastIndexOf('/'));
+              var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
 
+              fs.copy(fd, sails.config.appPath + newPath, function (err) {
+                if (err)return res.json({state: sails.__('file.upload.err')});
+                return res.json({
+                  state: 'SUCCESS',
+                  url: newPath,
+                  title: filename,
+                  original: filename,
+                  type: type,
+                  size: size
+                });
+              })
 
             });
+            break;
+          case 'uploadvideo':
+
+            req.file('Filedata').upload({
+              maxBytes: config.videoMaxSize
+            }, function (err, uploadedFiles) {
+              if (err)return res.json({state: sails.__('file.upload.err')});
+              var filename = uploadedFiles[0].filename;
+              var type = uploadedFiles[0].type;
+              var fd = uploadedFiles[0].fd;
+              var size = uploadedFiles[0].size;
+              if (config.videoAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
+                return res.json({state: sails.__('file.upload.err')});
+              var file = fd.substring(fd.lastIndexOf('/'));
+              var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/video/" + moment().format("YYYYMMDD") + file;
+              fs.copy(fd, sails.config.appPath + newPath, function (err) {
+                if (err)return res.json({state: sails.__('file.upload.err')});
+                return res.json({
+                  state: 'SUCCESS',
+                  url: newPath,
+                  title: filename,
+                  original: filename,
+                  type: type,
+                  size: size
+                });
+              })
+
+            });
+            break;
+          case 'uploadfile':
+
+            req.file('Filedata').upload({
+              maxBytes: config.fileMaxSize
+            }, function (err, uploadedFiles) {
+              if (err)return res.json({state: sails.__('file.upload.err')});
+              var filename = uploadedFiles[0].filename;
+              var type = uploadedFiles[0].type;
+              var fd = uploadedFiles[0].fd;
+              var size = uploadedFiles[0].size;
+              if (config.fileAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
+                return res.json({state: sails.__('file.upload.err')});
+              var file = fd.substring(fd.lastIndexOf('/'));
+              var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/file/" + moment().format("YYYYMMDD") + file;
+              fs.copy(fd, sails.config.appPath + newPath, function (err) {
+                if (err)return res.json({state: sails.__('file.upload.err')});
+                return res.json({
+                  state: 'SUCCESS',
+                  url: newPath,
+                  title: filename,
+                  original: filename,
+                  type: type,
+                  size: size
+                });
+              })
+
+            });
+            break;
+          case 'listimage':
+            var size = parseInt(req.query.size) || config.imageManagerListSize;
+            var start = parseInt(req.query.start) || 0;
+            var items = [];
+            var i = 0;
+            fs.walk(sails.config.appPath + '/upload/image/',streamOptions)
+              .on('data', function (item) {
+                console.log('item::' + JSON.stringify(item));
+                if (item.path.indexOf('.') > 0) {
+                  i++;
+                  if (i > start && i <= start + size){
+                    items.push({url: item.path.replace(sails.config.appPath, ''), mtime: item.stats.mtime});
+                  }
+                }
+              })
+              .on('end', function () {
+                if (items.length > 0) {
+                  return res.json({
+                    state: 'SUCCESS',
+                    list: items,
+                    start: start,
+                    total: i
+                  });
+                } else {
+                  return res.json({
+                    state: 'no match file',
+                    list: [],
+                    start: 0,
+                    total: 0
+                  });
+                }
+              });
             break;
         }
       });
