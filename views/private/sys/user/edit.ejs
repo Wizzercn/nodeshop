@@ -6,7 +6,7 @@
 
 <div class="content-wrap">
   <div class="wrapper" style="min-height:500px;">
-    <section class="panel">
+    <section class="panel panel-form">
       <form id="unitAddForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
             action="/private/sys/user/editDo" method="post">
         <div class="row mb10">
@@ -26,7 +26,7 @@
 			                             		</span>
                 </div>
                 <input type="hidden" name="id" value="<%= obj.id %>">
-                <input type="hidden" name="unitid" value="<%= obj.unitid.id || 0 %>">
+                <input type="hidden" name="unitid" value="<%if(obj.unitid){%><%= obj.unitid.id || 0 %><%}%>">
                 <input type="hidden" name="oldLoginname" value="<%= obj.loginname || '' %>">
               </div>
             </div>
