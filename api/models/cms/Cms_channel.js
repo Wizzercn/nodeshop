@@ -48,12 +48,6 @@ module.exports = {
       type: 'string',
       size: 100
     },
-    hidden: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
-    },
     homepage: {
       type: 'boolean',
       defaultsTo: function () {
@@ -62,6 +56,12 @@ module.exports = {
     },
     content: {
       type: 'text'
+    },
+    disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
     },
     hasChildren: {
       type: 'boolean',
