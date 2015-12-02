@@ -25,6 +25,10 @@ module.exports = {
     author: {
       type: 'string'
     },
+    client:{
+      type:'string',
+      size:10
+    },
     publishAt: {
       type: 'integer'
     },
