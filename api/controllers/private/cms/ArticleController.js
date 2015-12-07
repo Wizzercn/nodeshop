@@ -20,7 +20,16 @@ module.exports = {
    * @param res
    */
   add: function (req, res) {
-    return res.view('private/cms/article/add', req.data);
+    req.data.moment = moment;
+    var channelId = req.query.channelId;
+    if (channelId) {
+      Cms_channel.findOne({id: channelId}).exec(function (err, obj) {
+        req.data.channel = obj;
+        return res.view('private/cms/article/add', req.data);
+      });
+    } else {
+      return res.view('private/cms/article/add', req.data);
+    }
   },
   /**
    * 保存
@@ -29,9 +38,17 @@ module.exports = {
    */
   addDo: function (req, res) {
     var body = req.body;
+    body.publishAt = moment(body.publishAt).format('x') / 1000;
     body.createdBy = req.session.user.id;
+    body.disabled = body.publish != 'true';
     Cms_article.create(body).exec(function (e, o) {
       if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      var c = {};
+      c.articleId = o.id;
+      c.content = body.content;
+      Cms_article_content.create(c).exec(function (e1, o1) {
+
+      });
       return res.json({code: 0, msg: sails.__('add.ok')});
     });
   },
@@ -58,9 +75,9 @@ module.exports = {
   editDo: function (req, res) {
     var body = req.body;
     Cms_article.update({id: body.id}, body).exec(function (err, obj) {
-        if (err)return res.json({code: 1, msg: sails.__('update.fail')});
-        return res.json({code: 0, msg: sails.__('update.ok')});
-      });
+      if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+      return res.json({code: 0, msg: sails.__('update.ok')});
+    });
 
   },
   /**
@@ -74,12 +91,16 @@ module.exports = {
     var page = start / pageSize + 1;
     var draw = parseInt(req.body.draw);
     var channelId = req.body.channelId || 0;
+    var title = req.body.title;
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
     if (channelId > 0) {
       where.channelId = channelId;
+    }
+    if(title){
+      where.title = {'like':'%'+title+'%'};
     }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
@@ -150,6 +171,9 @@ module.exports = {
       if (err) {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {
+        Cms_article_content.destroy({articleId: ids}).exec(function (err) {
+
+        });
         return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });
@@ -181,7 +205,7 @@ module.exports = {
       if (pid == '0') {
         var obj = {};
         obj.id = '0';
-        obj.text = '全部文章';
+        obj.text = '所有栏目';
         obj.children = false;
         str.push(obj);
       }
