@@ -17,7 +17,7 @@
               <label for="class" class="col-sm-2 control-label">所属分类</label>
 
               <div class="col-sm-8">
-                <select id="classId" name="classId" data-parsley-required="true">
+                <select id="classId" name="classId" data-parsley-required="true" class="form-control">
                   <option value="">请选择所属分类</option>
                   <% if(list){
                     list.forEach(function(o){ %>
@@ -31,7 +31,7 @@
               <label for="type" class="col-sm-2 control-label">链接类型</label>
 
               <div class="col-sm-8">
-                <select id="type" name="type" data-parsley-required="true">
+                <select id="type" name="type" data-parsley-required="true" class="form-control">
                   <option value="txt" <%if('txt'==obj.type){%>selected<%}%>>文字</option>
                   <option value="img" <%if('img'==obj.type){%>selected<%}%>>图片</option>
                 </select>
@@ -41,7 +41,7 @@
               <label for="target" class="col-sm-2 control-label">打开方式</label>
 
               <div class="col-sm-8">
-                <select id="target" name="target" data-parsley-required="true">
+                <select id="target" name="target" data-parsley-required="true" class="form-control">
                   <option value="_blank" <%if('_blank'==obj.target){%>selected<%}%>>新页面打开</option>
                   <option value="_self" <%if('_self'==obj.target){%>selected<%}%>>本页面打开</option>
                 </select>

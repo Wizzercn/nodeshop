@@ -46,8 +46,10 @@ module.exports = {
       var c = {};
       c.articleId = o.id;
       c.content = body.content;
-      Cms_article_content.create(c).exec(function (e1, o1) {
-
+      Cms_article_content.create(c).exec(function (e1, content) {
+        if (content)
+          Cms_article.update(o.id, {contentId: content.id}).exec(function (e2, article) {
+          });
       });
       return res.json({code: 0, msg: sails.__('add.ok')});
     });
@@ -64,6 +66,7 @@ module.exports = {
         obj.channelName = obj.channelId.name;
       }
       req.data.obj = obj;
+      req.data.moment = moment;
       return res.view('private/cms/article/edit', req.data);
     });
   },
@@ -74,8 +77,17 @@ module.exports = {
    */
   editDo: function (req, res) {
     var body = req.body;
+    body.publishAt = moment(body.publishAt).format('x') / 1000;
+    body.createdBy = req.session.user.id;
+    body.disabled = body.publish != 'true';
     Cms_article.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+      var c = {};
+      c.articleId = body.id;
+      c.content = body.content;
+      Cms_article_content.update({articleId: body.id}, c).exec(function (e1, content) {
+
+      });
       return res.json({code: 0, msg: sails.__('update.ok')});
     });
 
@@ -99,8 +111,8 @@ module.exports = {
     if (channelId > 0) {
       where.channelId = channelId;
     }
-    if(title){
-      where.title = {'like':'%'+title+'%'};
+    if (title) {
+      where.title = {'like': '%' + title + '%'};
     }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;

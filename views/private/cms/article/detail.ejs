@@ -5,10 +5,11 @@
         <header class="panel-heading clearfix brtl brtr">
           <div class="overflow-hidden">
             <a href="javascript:;" class="h4 show no-m pt5"><%= obj.title||'' %></a>
+            <small><%= obj.author||'' %>  <%=moment(obj.publishAt*1000).format('YYYY-MM-DD HH:mm:ss')%> <%=obj.client%></small>
           </div>
         </header>
-        <div class="list-group">
-         <%=JSON.stringify(obj)%>
+        <div class="list-group" style="padding: 5px;">
+          <%-typeof obj.contentId!='undefined'?obj.contentId.content:"" %>
         </div>
       </section>
     </div>
