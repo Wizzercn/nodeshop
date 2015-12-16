@@ -12,25 +12,29 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    spec_value: {
+    name: {
       type: 'string',
       size: 100,
       required: true
     },
-    spec_alias: {
+    type: {
       type: 'string',
       size: 10
     },
-    spec_picurl: {
+    memo: {
       type: 'string',
-      size: 255
+      size: 100
+    },
+    alias: {
+      type: 'string',
+      size: 100
     },
     location: {
       type: 'integer'
     },
-    specId: {
-      model: 'B2c_goods_specification',
-      index: true
+    articles: {
+      collection: 'Shop_goods_spec_values',
+      via: 'specId'
     }
   }
 };
