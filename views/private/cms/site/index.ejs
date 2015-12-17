@@ -64,7 +64,7 @@
                   </div>
                   <div id="img" style="padding: 5px;">
                     <%if(obj.site_logo){%>
-                    <img src='<%=obj.site_logo||''%>' style='width:150px;height:95px;'>
+                    <img src='<%=obj.site_logo||''%>' style='width:150px;'>
                     <i class="fa fa-close" onclick="$('#site_logo').val('');$('#img').html('');"></i>
                     <%}%>
                   </div>
@@ -254,7 +254,7 @@
         data = JSON.parse(data);
         if (data.code == 0) {
           Toast.success(data.msg);
-          $("#img").html("<img src='" + data.path + "' style='width:150px;height:95px;'>");
+          $("#img").html("<img src='" + data.path + "' style='width:150px;'>");
           $("#site_logo").val(data.path);
         } else {
           clearFile();

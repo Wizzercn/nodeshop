@@ -17,10 +17,6 @@ module.exports = {
       size: 100,
       required: true
     },
-    type: {
-      type: 'string',
-      size: 10
-    },
     note: {
       type: 'text'
     },

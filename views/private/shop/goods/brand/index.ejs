@@ -11,6 +11,8 @@
       <thead>
       <tr>
         <th>品牌名称</th>
+        <th>品牌别名</th>
+        <th>网址</th>
         <th>操作</th>
     </table>
   </div>
@@ -64,6 +66,8 @@
       "order": [[0, "desc"]],
       "columns": [
         {"data": "name", "bSortable": true},
+        {"data": "alias", "bSortable": true},
+        {"data": "domain", "bSortable": true}
       ],
       "columnDefs": [
         {
@@ -74,7 +78,7 @@
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 1
+          "targets": 3
         }
       ]
     });
