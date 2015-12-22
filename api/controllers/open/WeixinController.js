@@ -77,6 +77,7 @@ module.exports = {
         if (WeixinService.checkSignature(req, conf.token)) {
           return res.send(200, req.query.echostr);
         } else {
+          sails.log.error('weixin checkSignature fail');
           return res.send(200, 'fail');
         }
       }

@@ -29,7 +29,7 @@ module.exports = {
       type: 'integer'
     },
     specId: {
-      model: 'Shop_goods_specification',
+      model: 'Shop_goods_spec',
       index: true
     }
   }
