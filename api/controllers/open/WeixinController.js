@@ -4,10 +4,12 @@
 module.exports = {
   api: function (req, res) {
     var id = req.params.id;
+
     Wx_config.findOne(id).exec(function (err, conf) {
       if (err)return res.send(200, 'fail');
       if (req.body) {
         WeixinService.loop(req, function (data) {
+          sails.log.warn(JSON.stringify(data));
           if (data.type == 'text') {//用户发送纯文本
             var txt = data.txt;
             Wx_reply.findOne({wxid: id, type: 'keyword', keyword: txt}).exec(function (err, obj) {
@@ -25,6 +27,32 @@ module.exports = {
             });
           } else if (data.type == 'event') {
             if (data.event == 'subscribe') {//关注事件
+              req.body.wxid=id;
+              Wx_user.count({openid:data.openid,wxid:id}).exec(function (err, c) {
+                if(!err && c>0){
+                  WechatService.init(req, res, function (api) {
+                    api.getUser({openid: data.openid, lang: 'zh_CN'}, function(result){
+                      sails.log.warn(JSON.stringify(result));
+                      if(result){
+                        result.subscribe=1;
+                        Wx_user.update({openid:data.openid,wxid:id}, result).exec(function (e3, o3) {
+                        });
+                      }
+                    });
+                  });
+                }else{
+                  Wx_user.create({openid:data.openid,wxid:id}).exec(function (e2, obj) {
+                    if(obj){
+                      WechatService.init(req, res, function (api) {
+                        api.getUser({openid: data.openid, lang: 'zh_CN'}, function(result){
+                          Wx_user.update({openid:data.openid,wxid:id}, result).exec(function (e3, o3) {
+                          });
+                        });
+                      });
+                    }
+                  });
+                }
+              });
               Wx_reply.findOne({wxid: id, type: 'follow'}).exec(function (err, obj) {
                 if (obj) {
                   if (obj.msgtype == 'txt') {
@@ -54,6 +82,11 @@ module.exports = {
                     return res.send(200, req.query.echostr);
                   }
                 }
+              });
+            }
+            if (data.event == 'unsubscribe') {//取消关注事件
+              Wx_user.update({openid:data.openid,wxid:id}, {subscribe:0}).exec(function (err, obj) {
+
               });
             }
             if (data.event == 'CLICK') {
