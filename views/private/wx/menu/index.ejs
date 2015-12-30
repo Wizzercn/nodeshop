@@ -32,10 +32,11 @@
     <div class="panel-body" style="padding-top: 30px;">
       <%
       var firstMenus = [], secondMenus = {};
+      if(menus!=undefined){
       menus.forEach(function (obj) {
-        if (obj.path.length == 4) {
+        if (obj&&obj.path.length == 4) {
           firstMenus.push(obj);
-        } else {
+        } else if(obj){
           var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
           if (JSON.stringify(s).indexOf(JSON.stringify(obj)) < 0) {
             s.push(obj);
@@ -43,6 +44,7 @@
           secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
         }
       });
+      }
       %>
       <div class="cf nestable-lists">
         <div class="dd" id="nestable3">

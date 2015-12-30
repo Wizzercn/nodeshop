@@ -17,6 +17,7 @@ module.exports = {
           return res.view('private/wx/menu/index', req.data);
         });
       } else {
+        req.data.menus=[];
         return res.view('private/wx/menu/index', req.data);
       }
     });

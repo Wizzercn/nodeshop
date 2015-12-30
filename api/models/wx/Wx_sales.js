@@ -16,16 +16,14 @@ module.exports = {
       type: 'string',
       required: true
     },
-    code: {//唯一标识
-      type: 'string',
-      required: true,
-      unique:true
-    },
     type: {//活动类型
       type: 'string',
       required: true
     },
     picurl: {//标题图
+      type: 'string'
+    },
+    audiourl: {//标题图
       type: 'string'
     },
     note: {//活动简介
@@ -35,6 +33,9 @@ module.exports = {
       type: 'string'
     },
     sendType : {//0:固定  1:随机
+      type: 'integer'
+    },
+    joinType : {//0:新关注用户  1:全部用户
       type: 'integer'
     },
     budget : {//预算

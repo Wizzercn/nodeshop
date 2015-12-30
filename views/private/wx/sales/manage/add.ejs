@@ -1,0 +1,170 @@
+<header class="header navbar bg-white shadow">
+  <div class="btn-group tool-button">
+    <a class="btn btn-primary navbar-btn" href="/private/wx/sales/manage" data-pjax><i class="ti-angle-left"></i> 返回</a>
+  </div>
+</header>
+
+<div class="content-wrap">
+  <div class="wrapper" style="min-height:500px;">
+    <section class="panel panel-form">
+      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
+            action="/private/wx/sales/manage/addDo" method="post">
+        <div class="row mb10">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <label for="title" class="col-sm-2 control-label">公众号</label>
+
+              <div class="col-sm-8">
+                <select name="wxid" class="form-control">
+                  <% if(list){
+                    list.forEach(function(o){
+                  %>
+                  <option value="<%= o.id %>"><%- o.appname %></option>
+                  <%
+                  });
+                  } %>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="appname" class="col-sm-2 control-label">活动类型</label>
+
+              <div class="col-sm-8">
+                <select name="type" class="form-control">
+                  <option value="1">拆红包</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="name" class="col-sm-2 control-label">活动名称</label>
+
+              <div class="col-sm-8">
+                <input type="text" id="name" class="form-control" name="name" data-parsley-required="true"
+                       placeholder="活动名称">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="budget" class="col-sm-2 control-label">活动预算</label>
+
+              <div class="col-sm-8">
+                <input type="text" id="budget" class="form-control" name="budget" data-parsley-required="true"
+                       data-parsley-type="integer"
+                       placeholder="活动预算">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sendType" class="col-sm-2 control-label">活动方式</label>
+
+              <div class="col-sm-8">
+                <input type="radio" name="sendType" value="0" checked>固定金额<input type="text" value="" placeholder="每个红包金额" class="form-control">
+                <input type="radio" name="sendType" value="1">随机金额<input type="text" value="" placeholder="每个红包最大金额" class="form-control">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="time" class="col-sm-2 control-label">活动时间</label>
+
+              <div class="col-sm-8">
+                <div class='col-md-5'>
+                  <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                      <input name="startTime" type='text' class="form-control" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                    </div>
+                  </div>
+                </div>
+                <div class='col-md-5'>
+                  <div class="form-group">
+                    <div class='input-group date' id='datetimepicker2'>
+                      <input name="endTime" type='text' class="form-control" />
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="note" class="col-sm-2 control-label">活动简介</label>
+
+              <div class="col-sm-8">
+                <textarea name="note" id="note" style="width:300px;height:100px;"></textarea>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="encodingAESKey" class="col-sm-2 control-label">EncodingAESKey</label>
+
+              <div class="col-sm-8">
+                <input type="text" id="encodingAESKey" class="form-control" name="encodingAESKey" data-parsley-required="true"
+                       placeholder="encodingAESKey">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="token" class="col-sm-2 control-label">Token</label>
+
+              <div class="col-sm-8">
+                <input type="text" id="token" class="form-control" name="token" data-parsley-required="true"
+                       placeholder="token">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3"></div>
+        <div class="col-lg-6">
+          <div class="form-group text-center">
+            <label></label>
+
+            <div>
+              <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </section>
+
+  </div>
+</div>
+<script language="JavaScript">
+  $(document).ready(function () {
+    $('#datetimepicker1').datetimepicker({      language:  'zh-CN',
+      format:'yyyy-mm-dd hh:ii:ss',
+      weekStart: 1,
+      todayBtn:  1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 1});
+    $('#datetimepicker2').datetimepicker({      language:  'zh-CN',
+      format:'yyyy-mm-dd hh:ii:ss',
+      weekStart: 1,
+      todayBtn:  1,
+      autoclose: 1,
+      todayHighlight: 1,
+      startView: 2,
+      forceParse: 0,
+      showMeridian: 1});
+    $("#datetimepicker1").on("dp.change",function (e) {
+      $('#datetimepicker2').data("DateTimePicker").minDate(e.date);
+    });
+    $("#datetimepicker2").on("dp.change",function (e) {
+      $('#datetimepicker1').data("DateTimePicker").maxDate(e.date);
+    });
+    $('#addForm').ajaxForm({
+      dataType: 'json',
+      beforeSubmit: function (arr, form, options) {
+        form.find("button:submit").button("loading");
+      },
+      success: function (data, statusText, xhr, form) {
+        if (data.code == 0) {
+          Toast.success(data.msg);
+          //刷新父级菜单
+          form.resetForm();
+        } else {
+          Toast.error(data.msg);
+        }
+        form.find("button:submit").button("reset");
+      }
+    });
+  });
+</script>

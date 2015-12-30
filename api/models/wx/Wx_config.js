@@ -19,21 +19,21 @@ module.exports = {
     ghid: {//原始ID
       type: 'string',
       unique: true,
+      size:50,
       required: true
     },
     appid: {
       type: 'string',
       unique: true,
+      size:50,
       required: true
     },
     appsecret: {
       type: 'string',
-      unique: true,
       required: true
     },
     encodingAESKey:{
       type: 'string',
-      unique: true,
       required: true
     },
     token: {
