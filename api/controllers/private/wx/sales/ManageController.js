@@ -4,6 +4,7 @@
 var moment = require('moment');
 module.exports = {
   index: function (req, res) {
+    req.data.types=[{'id':1,name:'拆红包'}];
     return res.view('private/wx/sales/manage/index', req.data);
   },
   data: function (req, res) {
@@ -22,6 +23,7 @@ module.exports = {
       if (!err && count > 0) {
         Wx_sales.find(where)
           .sort(sort)
+          .populate('wxid')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({
@@ -44,6 +46,7 @@ module.exports = {
   add: function (req, res) {
     Wx_config.find().exec(function (err, list) {
       req.data.list = list;
+      req.data.types=[{'id':1,name:'拆红包'}];
       return res.view('private/wx/sales/manage/add', req.data);
     });
   },
@@ -51,9 +54,16 @@ module.exports = {
     var body = req.body;
     var appid = body.appid;
     Wx_sales.findOne({appid: appid}).exec(function (err, obj) {
+      sails.log.warn(JSON.stringify(body));
       if (obj) {
         return res.json({code: 1, msg: sails.__('add.exist')});
       } else {
+        if(body.startTime){
+          body.startTime=moment(body.startTime).format('X');
+        }
+        if(body.endTime){
+          body.endTime=moment(body.endTime).format('X');
+        }
         body.createdBy = req.session.user.id;
         Wx_sales.create(body).exec(function (e, o) {
           if (e)return res.json({code: 1, msg: sails.__('add.fail')});

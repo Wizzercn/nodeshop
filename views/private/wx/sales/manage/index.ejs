@@ -10,10 +10,11 @@
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
+        <th>活动名称</th>
+        <th>活动类型</th>
         <th>公众号</th>
-        <th>Appid</th>
-        <th>Appsecret</th>
-        <th>Token</th>
+        <th>活动预算</th>
+        <th>活动状态</th>
         <th>操作</th>
     </table>
   </div>
@@ -41,6 +42,7 @@
 </div>
 <script language="JavaScript">
   var datatable;
+  var types=<%-JSON.stringify(types)%>;
   function initDatatable() {
     datatable = $('.datatable').DataTable({
       "dom": '<"toolbar">frtip',
@@ -59,19 +61,36 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/wx/config/data",
+        "url": "/private/wx/sales/manage/data",
         "type": "post",
         "data": function (d) {
         }
       },
       "order": [[0, "desc"]],
       "columns": [
-        {"data": "appname", "bSortable": true},
-        {"data": "appid", "bSortable": true},
-        {"data": "appsecret", "bSortable": true},
-        {"data": "token", "bSortable": true}
+        {"data": "name", "bSortable": true},
+        {"data": "type", "bSortable": true},
+        {"data": "wxid", "bSortable": false},
+        {"data": "budget", "bSortable": true},
+        {"data": "disabled", "bSortable": true}
       ],
       "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            $.each(types,function(k,o){
+              alert(o.name);
+              if(o.id==data)
+              return o.name;
+            });
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            return row.wxid.appname;
+          },
+          "targets": 2
+        },
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
@@ -80,7 +99,7 @@
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 4
+          "targets": 5
         }
       ]
     });
