@@ -5,7 +5,10 @@ var moment = require('moment');
 module.exports = {
   index: function (req, res) {
     req.data.type = req.query.type;
-    return res.view('private/wx/reply/index', req.data);
+    Wx_config.find({select: ['id','appname']}).exec(function (err, list) {
+      req.data.wxlist = list;
+      return res.view('private/wx/reply/index', req.data);
+    });
   },
   data: function (req, res) {
     var pageSize = parseInt(req.body.length);
@@ -24,7 +27,6 @@ module.exports = {
       if (!err && count > 0) {
         Wx_reply.find(where)
           .sort(sort)
-          .populate('wxid')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({

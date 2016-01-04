@@ -4,8 +4,11 @@
 var moment = require('moment');
 module.exports = {
   index: function (req, res) {
-    req.data.types=[{'id':1,name:'拆红包'}];
-    return res.view('private/wx/sales/manage/index', req.data);
+    req.data.types = [{'id': 1, name: '拆红包'}];
+    Wx_config.find({select: ['id','appname']}).exec(function (err, list) {
+      req.data.wxlist = list;
+      return res.view('private/wx/sales/manage/index', req.data);
+    });
   },
   data: function (req, res) {
     var pageSize = parseInt(req.body.length);
@@ -23,7 +26,6 @@ module.exports = {
       if (!err && count > 0) {
         Wx_sales.find(where)
           .sort(sort)
-          .populate('wxid')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({
@@ -46,7 +48,7 @@ module.exports = {
   add: function (req, res) {
     Wx_config.find().exec(function (err, list) {
       req.data.list = list;
-      req.data.types=[{'id':1,name:'拆红包'}];
+      req.data.types = [{'id': 1, name: '拆红包'}];
       return res.view('private/wx/sales/manage/add', req.data);
     });
   },
@@ -57,11 +59,11 @@ module.exports = {
       if (obj) {
         return res.json({code: 1, msg: sails.__('add.exist')});
       } else {
-        if(body.startTime){
-          body.startTime=moment(body.startTime).format('X');
+        if (body.startTime) {
+          body.startTime = moment(body.startTime).format('X');
         }
-        if(body.endTime){
-          body.endTime=moment(body.endTime).format('X');
+        if (body.endTime) {
+          body.endTime = moment(body.endTime).format('X');
         }
         body.createdBy = req.session.user.id;
         Wx_sales.create(body).exec(function (e, o) {
@@ -73,23 +75,23 @@ module.exports = {
   },
   edit: function (req, res) {
     var id = req.params.id;
-    req.data.moment=moment;
+    req.data.moment = moment;
     Wx_config.find().exec(function (err, list) {
       Wx_sales.findOne({id: id}).exec(function (err, obj) {
         req.data.obj = obj;
         req.data.list = list;
-        req.data.types=[{'id':1,name:'拆红包'}];
+        req.data.types = [{'id': 1, name: '拆红包'}];
         return res.view('private/wx/sales/manage/edit', req.data);
       });
     });
   },
   editDo: function (req, res) {
     var body = req.body;
-    if(body.startTime){
-      body.startTime=moment(body.startTime).format('X');
+    if (body.startTime) {
+      body.startTime = moment(body.startTime).format('X');
     }
-    if(body.endTime){
-      body.endTime=moment(body.endTime).format('X');
+    if (body.endTime) {
+      body.endTime = moment(body.endTime).format('X');
     }
     Wx_sales.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});

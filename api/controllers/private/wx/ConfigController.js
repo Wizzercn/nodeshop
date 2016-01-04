@@ -80,6 +80,9 @@ module.exports = {
       if (err) {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {
+        Wx_sales.destroy({wxid: ids}).exec(function (e1) {});
+        Wx_menu.destroy({wxid: ids}).exec(function (e2) {});
+        Wx_reply.destroy({wxid: ids}).exec(function (e3) {});
         return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });

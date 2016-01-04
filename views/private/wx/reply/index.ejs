@@ -41,6 +41,8 @@
 </div>
 <script language="JavaScript">
   var datatable;
+  var wxlist=<%-JSON.stringify(wxlist)%>;
+
   function initDatatable() {
     datatable = $('.datatable').DataTable({
       "dom": '<"toolbar">frtip',
@@ -67,7 +69,7 @@
       },
       "order": [[0, "desc"]],
       "columns": [
-        {"data": "id", "bSortable": true},
+        {"data": "wxid", "bSortable": true},
         {"data": "keyword", "bSortable": true},
         {"data": "type", "bSortable": false},
         {"data": "msgtype", "bSortable": false},
@@ -103,7 +105,12 @@
         },
         {
           "render": function (data, type, row) {
-            return row.wxid.appname;
+            for(var i=0;i<wxlist.length;i++){
+              var o=wxlist[i];
+              if(o.id+''==data)
+                return o.appname;
+            }
+            return '';
           },
           "targets": 0
         }
