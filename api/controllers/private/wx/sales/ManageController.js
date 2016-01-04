@@ -54,7 +54,6 @@ module.exports = {
     var body = req.body;
     var appid = body.appid;
     Wx_sales.findOne({appid: appid}).exec(function (err, obj) {
-      sails.log.warn(JSON.stringify(body));
       if (obj) {
         return res.json({code: 1, msg: sails.__('add.exist')});
       } else {
@@ -74,13 +73,24 @@ module.exports = {
   },
   edit: function (req, res) {
     var id = req.params.id;
-    Wx_sales.findOne({id: id}).exec(function (err, obj) {
-      req.data.obj = obj;
-      return res.view('private/wx/sales/manage/edit', req.data);
+    req.data.moment=moment;
+    Wx_config.find().exec(function (err, list) {
+      Wx_sales.findOne({id: id}).exec(function (err, obj) {
+        req.data.obj = obj;
+        req.data.list = list;
+        req.data.types=[{'id':1,name:'拆红包'}];
+        return res.view('private/wx/sales/manage/edit', req.data);
+      });
     });
   },
   editDo: function (req, res) {
     var body = req.body;
+    if(body.startTime){
+      body.startTime=moment(body.startTime).format('X');
+    }
+    if(body.endTime){
+      body.endTime=moment(body.endTime).format('X');
+    }
     Wx_sales.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
       return res.json({code: 0, msg: sails.__('update.ok')});
@@ -93,6 +103,26 @@ module.exports = {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {
         return res.json({code: 0, msg: sails.__('delete.ok')});
+      }
+    });
+  },
+  enable: function (req, res) {
+    var id = req.params.id;
+    Wx_sales.update({id: id}, {disabled: false}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
+      }
+    });
+  },
+  disable: function (req, res) {
+    var id = req.params.id;
+    Wx_sales.update({id: id}, {disabled: true}).exec(function (err, obj) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('update.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('update.ok')});
       }
     });
   }

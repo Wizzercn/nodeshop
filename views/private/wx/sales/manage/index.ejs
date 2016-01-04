@@ -77,11 +77,12 @@
       "columnDefs": [
         {
           "render": function (data, type, row) {
-            $.each(types,function(k,o){
-              alert(o.name);
-              if(o.id==data)
-              return o.name;
-            });
+            for(var i=0;i<types.length;i++){
+              var o=types[i];
+              if(o.id+''==data)
+                return o.name;
+            }
+
           },
           "targets": 1
         },
@@ -93,10 +94,23 @@
         },
         {
           "render": function (data, type, row) {
+            if (data) {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+            } else {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+            }
+          },
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/wx/config/edit/' + row.id + '" data-pjax>修改</a></li>' +
+              '<li><a href="/private/wx/sales/manage/edit/' + row.id + '" data-pjax>修改</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="javascript:;" onclick="enableIt(' + row.id + ')">启用</a></li>' +
+              '<li><a href="javascript:;" onclick="disableIt(' + row.id + ')">禁用</a></li>' +
               '</ul></div>';
           },
           "targets": 5
@@ -109,6 +123,24 @@
     $("#searchBtn").on('click', function () {
       datatable.ajax.reload();
     });
+  }
+  function enableIt(id) {
+    $.post("/private/wx/sales/manage/enable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
+  function disableIt(id) {
+    $.post("/private/wx/sales/manage/disable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
   }
   function del(id) {
     var dialog = $("#dialogDelete");
