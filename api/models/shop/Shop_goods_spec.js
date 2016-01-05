@@ -17,7 +17,7 @@ module.exports = {
       size: 100,
       required: true
     },
-    type: {
+    type: {//0 文字  1 图片
       type: 'string',
       size: 10
     },

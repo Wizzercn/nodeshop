@@ -257,7 +257,7 @@ module.exports = {
     if (!pid)pid = '0';
     Sys_unit.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
       var str = [];
-      if(pid=='0'){
+      if (pid == '0') {
         var obj = {};
         obj.id = '0';
         obj.text = '所有用户';
