@@ -1,0 +1,117 @@
+<header class="header navbar bg-white shadow">
+  <a href="/private/wx/user/index/<%=wxid%>" data-pjax id="_reload"></a>
+
+  <div class="btn-group" style="padding-top: 5px;">
+    <div >
+      <select id="wxid" name="wxid" class="form-control">
+        <% if(wxlist){
+          wxlist.forEach(function(o){
+        %>
+        <option value="<%= o.id %>" <%if(o.id==wxid){%>selected<%}%>><%- o.appname %></option>
+        <%
+        });
+        } %>
+      </select>
+    </div>
+  </div>
+</header>
+<div class=panel-body style="padding-top: 50px;">
+  <div class="table-responsive no-border">
+    <input id="unitid" type="hidden">
+    <table class="table table-bordered table-striped mg-t datatable">
+      <thead>
+      <tr>
+        <th>Openid</th>
+        <th>昵称</th>
+        <th>是否关注</th>
+        <th>关注时间</th>
+        <th>性别</th>
+    </table>
+  </div>
+</div>
+<script language="JavaScript">
+  var datatable;
+  function initDatatable() {
+    datatable = $('.datatable').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching": false,
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "preDrawCallback": function () {
+        sublime.showLoadingbar($(".main-content"));
+      },
+      "drawCallback": function () {
+        sublime.closeLoadingbar($(".main-content"));
+      },
+      "ajax": {
+        "url": "/private/wx/user/data",
+        "type": "post",
+        "data": function (d) {
+          d.wxid='<%=wxid%>';
+        }
+      },
+      "order": [[0, "desc"]],
+      "columns": [
+        {"data": "openid", "bSortable": true},
+        {"data": "nickname", "bSortable": true},
+        {"data": "subscribe", "bSortable": true},
+        {"data": "createdAt", "bSortable": true},
+        {"data": "sex", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if(data=='1'){
+              return '是';
+            }
+            if(data=='0'){
+              return '否';
+            }
+          },
+          "targets": 2
+        },
+        {
+          "render": function (data, type, row) {
+            if (data) {
+              return new Date(parseInt(data*1000)).format("yyyy-MM-dd hh:mm:ss"); ;
+            }
+            return '';
+          },
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            if(data=='1'){
+              return '男';
+            }
+            if(data=='2'){
+              return '女';
+            }
+            if(data=='0'){
+              return '未知';
+            }
+          },
+          "targets": 4
+        }
+      ]
+    });
+    datatable.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
+    });
+  }
+  $(function () {
+    initDatatable();
+    $("#wxid").on("change",function(){
+      $("#_reload").attr("href","/private/wx/menu/index/"+$(this).val());
+      $("#_reload").trigger("click");
+    });
+  });
+</script>
