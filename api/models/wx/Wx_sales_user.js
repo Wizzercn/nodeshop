@@ -28,9 +28,21 @@ module.exports = {
     fromId: {
       type: 'integer'
     },
-    status:{
+    share:{
       type:'integer',
       defaultsTo:function(){ //0 not share 1 share
+        return 0;
+      }
+    },
+    money:{
+      type:'integer',
+      defaultsTo:function(){
+        return 0;
+      }
+    },
+    status:{
+      type:'integer',
+      defaultsTo:function(){ //0 not use 1 used
         return 0;
       }
     },
