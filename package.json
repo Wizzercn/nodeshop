@@ -38,6 +38,7 @@
     "skipper": "^0.5.8",
     "synchronize": "^0.9.14",
     "wechat-api": "^1.19.0",
+    "wechat-oauth": "^1.1.0",
     "xml2js": "^0.4.13"
   },
   "scripts": {

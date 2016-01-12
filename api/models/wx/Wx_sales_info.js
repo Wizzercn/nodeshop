@@ -1,5 +1,5 @@
 /**
- * Created by root on 10/27/15.
+ * Created by root on 10/25/15.
  */
 var moment = require('moment');
 module.exports = {
@@ -12,27 +12,16 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    openid: {
+    title: {
       type: 'string',
-      required: true,
-      size:50
+      required: true
     },
-    name: {//用户的昵称
+    note: {
       type: 'string',
-      size:50
+      size:500
     },
-    nickname: {//用户的昵称
-      type: 'string',
-      size:50
-    },
-    fromId: {
+    createdBy:{
       type: 'integer'
-    },
-    status:{
-      type:'integer',
-      defaultsTo:function(){ //0 not share 1 share
-        return 0;
-      }
     },
     createdAt:{
       type:'integer',

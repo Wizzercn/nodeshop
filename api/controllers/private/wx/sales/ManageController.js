@@ -5,7 +5,7 @@ var moment = require('moment');
 module.exports = {
   index: function (req, res) {
     req.data.types = [{'id': 1, name: '拆红包'}];
-    Wx_config.find({select: ['id','appname']}).exec(function (err, list) {
+    Wx_config.find({select: ['id', 'appname']}).exec(function (err, list) {
       req.data.wxlist = list;
       return res.view('private/wx/sales/manage/index', req.data);
     });
@@ -125,6 +125,91 @@ module.exports = {
         return res.json({code: 1, msg: sails.__('update.fail')});
       } else {
         return res.json({code: 0, msg: sails.__('update.ok')});
+      }
+    });
+  },
+  info: function (req, res) {
+    var id = req.params.id;
+    Wx_sales.findOne({select: ['id', 'name'], where: {id: id}}).exec(function (err, sales) {
+      req.data.sales = sales;
+      return res.view('private/wx/sales/info/index', req.data);
+    });
+  },
+  info_data: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var salesid = req.body.salesid || [];
+    var sort = {};
+    var where = {};
+    if (salesid) {
+      where.salesid = salesid;
+    }
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Wx_sales_info.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Wx_sales_info.find(where).sort({createdAt:'desc'})
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  info_add: function (req, res) {
+    var id = req.params.id;
+    Wx_sales.findOne({select: ['id', 'name', 'wxid'], where: {id: id}}).exec(function (err, sales) {
+      req.data.sales = sales;
+      return res.view('private/wx/sales/info/add', req.data);
+    });
+  },
+  info_addDo: function (req, res) {
+    var body = req.body;
+    body.createdBy = req.session.user.id;
+    Wx_sales_info.create(body).exec(function (e, o) {
+      if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      return res.json({code: 0, msg: sails.__('add.ok')});
+    });
+  },
+  info_edit: function (req, res) {
+    var id = req.params.id;
+    Wx_sales_info.findOne({id: id}).exec(function (err, obj) {
+      req.data.obj = obj;
+      return res.view('private/wx/sales/info/edit', req.data);
+    });
+  },
+  info_editDo: function (req, res) {
+    var body = req.body;
+    Wx_sales_info.update({id: body.id}, body).exec(function (err, obj) {
+      if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+      return res.json({code: 0, msg: sails.__('update.ok')});
+    });
+  },
+  info_delete: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    Wx_sales_info.destroy({id: ids}).exec(function (err) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });
   }

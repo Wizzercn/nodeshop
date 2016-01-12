@@ -41,6 +41,10 @@ module.exports = function (req, res, next) {
       return res.redirect('/private/login/login');
     }
   } else {
+    var data = {
+      layout: 'layouts/public'
+    };
+    req.data = data;
     return next();
   }
 };

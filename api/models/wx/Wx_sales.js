@@ -16,14 +16,17 @@ module.exports = {
       type: 'string',
       required: true
     },
+    code: {//唯一标识
+      type: 'string',
+      required: true,
+      unique:true,
+      size:20
+    },
     type: {//活动类型
       type: 'string',
       required: true
     },
     picurl: {//标题图
-      type: 'string'
-    },
-    audiourl: {//标题图
       type: 'string'
     },
     note: {//活动简介
