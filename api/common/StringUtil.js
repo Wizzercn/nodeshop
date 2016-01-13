@@ -21,5 +21,10 @@ module.exports = {
       pwd += $chars.charAt(Math.floor(Math.random() * maxPos));
     }
     return pwd;
+  },
+  randomInt:function(min,max){
+    var Range = max - min;
+    var Rand = Math.random();
+    return(min + Math.round(Rand * Range));
   }
 };

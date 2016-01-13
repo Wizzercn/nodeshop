@@ -29,6 +29,9 @@ module.exports = {
     picurl: {//标题图
       type: 'string'
     },
+    audiourl: {//标题图
+      type: 'string'
+    },
     note: {//活动简介
       type: 'string'
     },
@@ -38,13 +41,22 @@ module.exports = {
     sendType : {//0:固定  1:随机
       type: 'integer'
     },
-    joinType : {//0:新关注用户  1:全部用户
+    joinType : {//0:all 1:新关注用户
       type: 'integer'
     },
     budget : {//预算
       type: 'integer'
     },
+    hasMoney : {//预算
+      type: 'integer'
+    },
     money : {//金额
+      type: 'integer'
+    },
+    moneyMin : {//金额
+      type: 'integer'
+    },
+    moneyMax : {//金额
       type: 'integer'
     },
     startTime: {

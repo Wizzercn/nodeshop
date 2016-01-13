@@ -16,6 +16,9 @@ module.exports = {
       type: 'string',
       required: true
     },
+    picurl: {
+      type: 'string'
+    },
     note: {
       type: 'string',
       size:500

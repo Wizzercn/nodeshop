@@ -63,17 +63,22 @@
               <label for="sendType" class="col-sm-2 control-label">发送方式</label>
 
               <div class="col-sm-8">
-                <input id="money" name="money" type="hidden" value="<%=obj.money%>">
-                <input type="radio" name="sendType" value="0" <%if(obj.sendType==0){%>checked<%}%>>固定金额<input id="money1" type="text" value="<%if(obj.sendType==0){%><%=obj.money%><%}%>" <%if(obj.sendType==1){%>disabled<%}%> placeholder="每个红包金额" class="form-control">
-                <input type="radio" name="sendType" value="1" <%if(obj.sendType==1){%>checked<%}%>>随机金额<input id="money2" type="text" value="<%if(obj.sendType==1){%><%=obj.money%><%}%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最大金额" class="form-control">
-              </div>
+                <input type="radio" name="sendType" value="0" <%if(obj.sendType==0){%>checked<%}%>>固定金额:
+                <input id="money" name="money" type="text" value="<%=obj.money%>" <%if(obj.sendType==1){%>disabled<%}%> placeholder="每个红包金额" class="form-control">
+                <input type="radio" name="sendType" value="1" <%if(obj.sendType==1){%>checked<%}%>>随机金额:
+                <div>
+                  <input style="float: left" id="moneyMin" name="moneyMin" type="text" value="<%=obj.moneyMin||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最小金额" >
+                  <span style="float: left"> 至 </span>
+                  <input style="float: left" id="moneyMax" name="moneyMax" type="text" value="<%=obj.moneyMax||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最大金额" >
+                </div>
+             </div>
             </div>
             <div class="form-group">
               <label for="sendType" class="col-sm-2 control-label">活动范围</label>
 
               <div class="col-sm-8">
-                <input type="radio" name="joinType" value="0"  <%if(obj.joinType==0){%>checked<%}%>>新关注用户
-                <input type="radio" name="joinType" value="1"  <%if(obj.joinType==1){%>checked<%}%>>全部用户
+                <input type="radio" name="joinType" value="0"  <%if(obj.joinType==0){%>checked<%}%>>全部用户
+                <input type="radio" name="joinType" value="1"  <%if(obj.joinType==1){%>checked<%}%>>新关注用户
               </div>
             </div>
             <div class="form-group">
@@ -151,17 +156,18 @@
   }
   function checkMoney(){
     if('1'==$("input[name=sendType]:checked").val()){
-      if(''==$("#money2").val()){
-        $("#money2").focus();
+      if(''==$("#moneyMin").val()){
+        $("#moneyMin").focus();
+        Toast.error('请填写金额');return false;
+      }else if(''==$("#moneyMax").val()){
+        $("#moneyMax").focus();
         Toast.error('请填写金额');return false;
       }
-      $("#money").val($("#money2").val());
     }else{
-      if(''==$("#money1").val()){
-        $("#money1").focus();
+      if(''==$("#money").val()){
+        $("#money").focus();
         Toast.error('请填写金额');return false;
       }
-      $("#money").val($("#money1").val());
     }
     return true;
   }
@@ -169,11 +175,13 @@
     myForm.init();
     $("input[name=sendType]").on("change",function(){
       if('1'==$(this).val()){
-        $("#money1").attr("disabled",true);
-        $("#money2").attr("disabled",false);
+        $("#money").attr("disabled",true);
+        $("#moneyMin").attr("disabled",false);
+        $("#moneyMax").attr("disabled",false);
       }else{
-        $("#money2").attr("disabled",true);
-        $("#money1").attr("disabled",false);
+        $("#moneyMin").attr("disabled",true);
+        $("#moneyMax").attr("disabled",true);
+        $("#money").attr("disabled",false);
       }
     });
     $('#file_upload').uploadifive({

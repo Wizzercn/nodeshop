@@ -57,6 +57,12 @@ module.exports = {
     },
     salesid: {
       model: 'Wx_sales'
+    },
+    infoid: {
+      model: 'Wx_sales_info'
+    },
+    logid: {
+      model: 'Wx_sales_log'
     }
 
   }

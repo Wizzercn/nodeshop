@@ -49,6 +49,18 @@ module.exports = {
         return 0;
       }
     },
+    jsapi_ticket:{
+      type: 'string'
+    },
+    jsapi_time:{
+      type:'integer',
+      defaultsTo:function(){
+        return 0;
+      }
+    },
+    qrcode:{
+      type: 'string'
+    },
     createdBy:{
       type: 'integer'
     },

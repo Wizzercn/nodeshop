@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html style="width:100%;height:100%">
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <link rel="stylesheet" type="text.css" href="/public/xiren/css/css.css">
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta content="yes" name="apple-mobile-web-app-capable" />
+  <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+  <meta content="telephone=no" name="format-detection" />
+  <script src="/plugins/jquery-1.11.1.min.js"></script>
+  <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</head>
+<body style="background:url(/public/xiren/img/bg_a.jpg) no-repeat center center;background-size:100% 100%; width:100%; height:100%;">
+<div class="hot_a">
+  <%if(allMoney>0){
+    %>
+  <span>￥<i><%=money||''%></i></span><p><em>恭喜你</em><br>
+    获得<%=money||''%>元红包</p>
+  <%
+  }else{%>
+  <span>￥<i>0</i></span><p><em>对不起</em><br>
+    红包已领完</p>
+  <%}%>
+
+</div>
+<div style="text-align: center;padding-top: 246px;color: #FFFFFF;font-size: 12px;">
+  长按二维码扫描并关注公众号，领取红包~~<br>
+  <img src="<%=config.qrcode%>" width="125" height="125"></div>
+<div class="notice_m"><div class="hot_c"><p>活动说明</p></div>
+  <div class="notice"><%-sales.note||''%>
+  </div></div>
+<script type="text/javascript">
+  wx.config(<%-JSON.stringify(jsconfig)%>);
+  wx.ready(function(){
+    wx.onMenuShareTimeline({
+      title: '<%=user.name%>的新年花语是：<%-huayu.title%>。打开我的新年花语，领取袭人新年红包。', // 分享标题
+      link: '<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
+      imgUrl: '<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
+      success: function () {
+        $("#share").hide();
+        $.ajax({
+          type: 'POST',
+          url: '/public/wx/sales/xiren/share',
+          data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
+          success: function (data) {
+          },
+          dataType: 'json'
+        });
+      },
+      cancel: function () {
+        $("#share").hide();
+      }
+    });
+  });
+  wx.onMenuShareAppMessage({
+    title: '<%=user.name%>的新年花语是：<%-huayu.title%>', // 分享标题
+    desc: '<%-huayu.note%>', // 分享描述
+    link: '<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
+    imgUrl: '<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
+    type: '', // 分享类型,music、video或link，不填默认为link
+    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+    success: function () {
+      $("#share").hide();
+    },
+    cancel: function () {
+      $("#share").hide();
+    }
+  });
+</script>
+</body>
+</html>
