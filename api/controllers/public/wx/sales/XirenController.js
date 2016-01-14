@@ -6,6 +6,10 @@ var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
+    var uagent=req.get('user-agent');
+    if(uagent.indexOf('MicroMessenger')<0){
+      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    }
     var id = req.params.id;
     var fromId = req.query.fromId || 0;
     var code = req.query.code;
@@ -122,6 +126,10 @@ module.exports = {
     });
   },
   huayu: function (req, res) {
+    var uagent=req.get('user-agent');
+    if(uagent.indexOf('MicroMessenger')<0){
+      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -130,6 +138,9 @@ module.exports = {
     data.salesid = salesid;
     data.logid = logid;
     data.wxid = wxid;
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+
+    });
     WechatService.init_js(req, res, function (api) {
       var param = {
         debug: false,
@@ -163,12 +174,16 @@ module.exports = {
     });
   },
   share: function (req, res) {
-    var logid = req.query.logid;
+    var logid = req.body.logid;
     Wx_sales_user.update({logid: logid}, {share: 1}).exec(function (e, o) {
       return res.json({code: 0, msg: ''});
     });
   },
   hongbao: function (req, res) {
+    var uagent=req.get('user-agent');
+    if(uagent.indexOf('MicroMessenger')<0){
+      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -179,6 +194,9 @@ module.exports = {
     data.logid = logid;
     data.wxid = wxid;
     data.my = my;
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+
+    });
     Wx_config.findOne({id: wxid}).exec(function (ec, config) {
       data.config = config;
       Wx_sales.findOne({id: salesid}).exec(function (err, sales) {
@@ -208,9 +226,9 @@ module.exports = {
           data.allMoney = allMoney;
           data.money = money;
           WechatService.init_js(req, res, function (api) {
-            var str='http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/hongbao?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
-            if(my){
-              str=str+'&my='+my;
+            var str = 'http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/hongbao?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
+            if (my) {
+              str = str + '&my=' + my;
             }
             var param = {
               debug: false,
@@ -219,12 +237,13 @@ module.exports = {
             };
             api.getJsConfig(param, function (e1, result) {
               data.jsconfig = result;
-
-              Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
-                data.huayu = info;
-                return res.view('public/wx/sales/xiren/hongbao', data);
+              Wx_user.findOne({openid: user.openid, wxid: user.wxid, subscribe: 1}).exec(function (e7, o7) {
+                data.guanzhu = o7;
+                Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
+                  data.huayu = info;
+                  return res.view('public/wx/sales/xiren/hongbao', data);
+                });
               });
-
             });
           });
 
@@ -234,6 +253,10 @@ module.exports = {
     });
   },
   myhuayu: function (req, res) {
+    var uagent=req.get('user-agent');
+    if(uagent.indexOf('MicroMessenger')<0){
+      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -244,6 +267,9 @@ module.exports = {
     data.logid = logid;
     data.wxid = wxid;
     data.my = my;
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+
+    });
     Wx_config.findOne({id: wxid}).exec(function (ec, config) {
       data.config = config;
       Wx_sales.findOne({id: salesid}).exec(function (err, sales) {
@@ -253,9 +279,9 @@ module.exports = {
           Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
             data.huayu = info;
             WechatService.init_js(req, res, function (api) {
-              var str='http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/myhuayu?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
-              if(my){
-                str=str+'&my='+my;
+              var str = 'http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/myhuayu?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
+              if (my) {
+                str = str + '&my=' + my;
               }
               var param = {
                 debug: false,
@@ -287,9 +313,9 @@ module.exports = {
             var openid = ow.data.openid;
             Wx_sales_user.findOne({openid: openid, salesid: id, wxid: sales.wxid}).exec(function (euer, user) {
               if (user) {
-                res.redirect('/public/wx/sales/xiren/myhuayu?salesid=' + user.salesid + '&logid=' + user.logid + '&wxid=' + user.wxid+'&my=1');
+                return res.redirect('/public/wx/sales/xiren/myhuayu?salesid=' + user.salesid + '&logid=' + user.logid + '&wxid=' + user.wxid + '&my=1');
               } else {
-                res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+oc.appid+'&redirect_uri=http%3A%2F%2F'+sails.config.system.AppDomain+'%2Fpublic%2Fwx%2Fsales%2Fxiren%2Findex%2F'+id+'&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect');
+                return res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + oc.appid + '&redirect_uri=http%3A%2F%2F' + sails.config.system.AppDomain + '%2Fpublic%2Fwx%2Fsales%2Fxiren%2Findex%2F' + id + '&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect');
               }
             });
           }
@@ -297,7 +323,7 @@ module.exports = {
       });
     });
   },
-  myhongbao:function(req, res){
+  myhongbao: function (req, res) {
     var id = req.params.id;
     var code = req.query.code;
     Wx_sales.findOne(id).exec(function (errsales, sales) {
@@ -308,9 +334,9 @@ module.exports = {
             var openid = ow.data.openid;
             Wx_sales_user.findOne({openid: openid, salesid: id, wxid: sales.wxid}).exec(function (euer, user) {
               if (user) {
-                res.redirect('/public/wx/sales/xiren/hongbao?salesid=' + user.salesid + '&logid=' + user.logid + '&wxid=' + user.wxid+'&my=1');
+                return res.redirect('/public/wx/sales/xiren/hongbao?salesid=' + user.salesid + '&logid=' + user.logid + '&wxid=' + user.wxid + '&my=1');
               } else {
-                res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+oc.appid+'&redirect_uri=http%3A%2F%2F'+sails.config.system.AppDomain+'%2Fpublic%2Fwx%2Fsales%2Fxiren%2Findex%2F'+id+'&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect');
+                return res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + oc.appid + '&redirect_uri=http%3A%2F%2F' + sails.config.system.AppDomain + '%2Fpublic%2Fwx%2Fsales%2Fxiren%2Findex%2F' + id + '&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect');
               }
             });
           }

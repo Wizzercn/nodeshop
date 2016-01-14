@@ -29,8 +29,14 @@
 </div>
 <div style="text-align: center;padding-top: 246px;color: #FFFFFF;font-size: 12px;">
 <%if(my){%>
+  <%if(guanzhu){%>
   红包使用状态：<%if(user.status==0){%>未使用<%}else{%>已使用<%}%>
-<input id="btn1" type="button" value="去分享" class="shar_c">
+  <input id="btn1" type="button" value="去分享" class="shar_c">
+  <%}else{%>
+  长按二维码扫描并关注公众号，领取红包~~<br>
+  <img src="<%=config.qrcode%>" width="125" height="125">
+  <%}%>
+
 <%}else{%>
 
   长按二维码扫描并关注公众号，领取红包~~<br>
@@ -56,7 +62,7 @@
         $.ajax({
           type: 'POST',
           url: '/public/wx/sales/xiren/share',
-          data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
+          data: {"salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
           success: function (data) {
           },
           dataType: 'json'
@@ -66,28 +72,29 @@
         $("#share").hide();
       }
     });
-  });
-  wx.onMenuShareAppMessage({
-    title: '<%=user.name%>的新年花语是：<%-huayu.title%>', // 分享标题
-    desc: '<%-huayu.note%>', // 分享描述
-    link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
-    imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
-    type: '', // 分享类型,music、video或link，不填默认为link
-    dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
-    success: function () {
-      $.ajax({
-        type: 'POST',
-        url: '/public/wx/sales/xiren/share',
-        data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
-        success: function (data) {
-        },
-        dataType: 'json'
-      });
-      $("#share").hide();
-    },
-    cancel: function () {
-      $("#share").hide();
-    }
+    wx.onMenuShareAppMessage({
+      title: '<%=user.name%>的新年花语是：<%-huayu.title%>', // 分享标题
+      desc: '打开我的新年花语，领取袭人新年红包。', // 分享描述
+      link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
+      imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
+      type: '', // 分享类型,music、video或link，不填默认为link
+      dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+      success: function () {
+        $("#share").hide();
+        $.ajax({
+          type: 'POST',
+          url: '/public/wx/sales/xiren/share',
+          data: {"salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
+          success: function (data) {
+          },
+          dataType: 'json'
+        });
+
+      },
+      cancel: function () {
+        $("#share").hide();
+      }
+    });
   });
   $(document).ready(function () {
     $("#btn1").on("click",function(){

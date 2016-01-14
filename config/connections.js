@@ -47,7 +47,7 @@ module.exports.connections = {
     password: 'root',
     database: 'nodeshop',
     pool: true,
-    connectionLimit: 10,
+    connectionLimit: 50,
     waitForConnections: true
   },
 

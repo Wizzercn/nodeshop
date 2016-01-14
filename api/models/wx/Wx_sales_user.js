@@ -15,6 +15,7 @@ module.exports = {
     openid: {
       type: 'string',
       required: true,
+      index:true,
       size:50
     },
     name: {//用户的昵称
@@ -34,6 +35,12 @@ module.exports = {
         return 0;
       }
     },
+    subscribe:{
+      type:'integer',
+      defaultsTo:function(){ //0 not share 1 share
+        return 0;
+      }
+    },
     money:{
       type:'integer',
       defaultsTo:function(){
@@ -47,6 +54,12 @@ module.exports = {
       }
     },
     createdAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return moment().format('X');
+      }
+    },
+    usedAt:{
       type:'integer',
       defaultsTo:function(){
         return moment().format('X');
