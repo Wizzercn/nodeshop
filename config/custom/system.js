@@ -4,7 +4,7 @@
 module.exports.system = {
   AppBase:'',
   AppName:'上城电子商城系统',
-  AppDomain:'http://wizzer.wicp.net',
+  AppDomain:'wizzer.wicp.net',
   AppShrotName:'上城Shop',
   AppCopyright:'Wizzer.cn',
   UploadPath:'/upload'

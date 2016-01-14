@@ -17,17 +17,20 @@ module.exports = {
           return res.view('private/wx/menu/index', req.data);
         });
       } else {
-        req.data.menus=[];
+        req.data.menus = [];
         return res.view('private/wx/menu/index', req.data);
       }
     });
   },
   add: function (req, res) {
     var wxid = req.params.id || '';
-    Wx_menu.find({wxid: wxid, parentId: 0}).sort({location: "asc"}).sort({path: "asc"}).exec(function (err, menus) {
-      req.data.menus = menus;
-      req.data.wxid = wxid;
-      return res.view('private/wx/menu/add', req.data);
+    Wx_config.findOne(wxid).exec(function (e2, config) {
+      Wx_menu.find({wxid: wxid, parentId: 0}).sort({location: "asc"}).sort({path: "asc"}).exec(function (err, menus) {
+        req.data.menus = menus;
+        req.data.wxid = wxid;
+        req.data.config = config;
+        return res.view('private/wx/menu/add', req.data);
+      });
     });
   },
   checkDo: function (req, res) {
@@ -82,14 +85,17 @@ module.exports = {
   edit: function (req, res) {
     var id = req.params.id || '';
     Wx_menu.findOne(id).exec(function (e, obj) {
-      Wx_menu.find({
-        wxid: obj.wxid,
-        parentId: 0
-      }).sort({location: "asc"}).sort({path: "asc"}).exec(function (err, menus) {
-        req.data.menus = menus;
-        req.data.wxid = obj.wxid;
-        req.data.obj = obj;
-        return res.view('private/wx/menu/edit', req.data);
+      Wx_config.findOne(obj.wxid).exec(function (e2, config) {
+        Wx_menu.find({
+          wxid: obj.wxid,
+          parentId: 0
+        }).sort({location: "asc"}).sort({path: "asc"}).exec(function (err, menus) {
+          req.data.menus = menus;
+          req.data.wxid = obj.wxid;
+          req.data.obj = obj;
+          req.data.config = config;
+          return res.view('private/wx/menu/edit', req.data);
+        });
       });
     });
   },
@@ -241,7 +247,7 @@ module.exports = {
         var wxmenu = {button: m};
         WechatService.init(req, res, function (api) {
           api.createMenu(wxmenu, function (e, result) {
-            if (e) return res.json({code: 1, msg: '推送失败:'+JSON.stringify(e)});
+            if (e) return res.json({code: 1, msg: '推送失败:' + JSON.stringify(e)});
             return res.json({code: 0, msg: '推送成功'});
           });
         });

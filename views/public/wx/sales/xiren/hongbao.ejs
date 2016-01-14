@@ -12,6 +12,9 @@
   <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 </head>
 <body style="background:url(/public/xiren/img/bg_a.jpg) no-repeat center center;background-size:100% 100%; width:100%; height:100%;">
+<input type="hidden" id="salesid" value="<%=salesid%>">
+<input type="hidden" id="logid" value="<%=logid%>">
+<input type="hidden" id="wxid" value="<%=wxid%>">
 <div class="hot_a">
   <%if(allMoney>0){
     %>
@@ -25,18 +28,29 @@
 
 </div>
 <div style="text-align: center;padding-top: 246px;color: #FFFFFF;font-size: 12px;">
+<%if(my){%>
+  红包使用状态：<%if(user.status==0){%>未使用<%}else{%>已使用<%}%>
+<input id="btn1" type="button" value="去分享" class="shar_c">
+<%}else{%>
+
   长按二维码扫描并关注公众号，领取红包~~<br>
-  <img src="<%=config.qrcode%>" width="125" height="125"></div>
+  <img src="<%=config.qrcode%>" width="125" height="125">
+<%}%>
+</div>
 <div class="notice_m"><div class="hot_c"><p>活动说明</p></div>
   <div class="notice"><%-sales.note||''%>
   </div></div>
+<div id="share" class="share" style="display: none">
+  <img src="/public/xiren/img/shar.png" class="share_a">
+  <p class="share_b">请点击右上角<br>将它发送给指定朋友<br>或分享到朋友圈</p>
+</div>
 <script type="text/javascript">
   wx.config(<%-JSON.stringify(jsconfig)%>);
   wx.ready(function(){
     wx.onMenuShareTimeline({
       title: '<%=user.name%>的新年花语是：<%-huayu.title%>。打开我的新年花语，领取袭人新年红包。', // 分享标题
-      link: '<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
-      imgUrl: '<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
+      link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
+      imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
       success: function () {
         $("#share").hide();
         $.ajax({
@@ -56,16 +70,32 @@
   wx.onMenuShareAppMessage({
     title: '<%=user.name%>的新年花语是：<%-huayu.title%>', // 分享标题
     desc: '<%-huayu.note%>', // 分享描述
-    link: '<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
-    imgUrl: '<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
+    link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
+    imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
     type: '', // 分享类型,music、video或link，不填默认为link
     dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
     success: function () {
+      $.ajax({
+        type: 'POST',
+        url: '/public/wx/sales/xiren/share',
+        data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
+        success: function (data) {
+        },
+        dataType: 'json'
+      });
       $("#share").hide();
     },
     cancel: function () {
       $("#share").hide();
     }
+  });
+  $(document).ready(function () {
+    $("#btn1").on("click",function(){
+      $("#share").show();
+    });
+    $("#share").on("click",function(){
+      $("#share").hide();
+    });
   });
 </script>
 </body>

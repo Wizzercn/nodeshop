@@ -16,6 +16,7 @@
 <input type="hidden" id="salesid" value="<%= sales.id %>">
 <input type="hidden" id="logid" value="<%= log.id %>">
 <input type="hidden" id="wxid" value="<%= sales.wxid %>">
+<input type="hidden" id="fromId" value="<%= fromId %>">
 <audio src="<%= sales.audiourl||'' %>" id="audio" controls autoplay="autoplay" loop style="display:none;height:0;"></audio>
 <div class="land">
 			<span class="land_m"><input id="name" type="text" placeholder="输入您的姓名" class="land_text">
@@ -32,7 +33,7 @@
         $.ajax({
           type: 'POST',
           url: '/public/wx/sales/xiren/join',
-          data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val()},
+          data: {'name': name, "salesid": $("#salesid").val(), "logid": $("#logid").val(), "wxid": $("#wxid").val(), "fromId": $("#fromId").val()},
           success: function (data) {
             if (data.code == 0) {
               window.location.href = '/public/wx/sales/xiren/huayu?salesid=' + $("#salesid").val() + '&logid=' + $("#logid").val() + '&wxid=' + $("#wxid").val();

@@ -60,16 +60,25 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="hasMoney" class="col-sm-2 control-label">已送出金额</label>
+
+              <div class="col-sm-8">
+                <input type="text" id="hasMoney" class="form-control" name="hasMoney" disabled
+                       data-parsley-type="integer"
+                       placeholder="活动预算"  value="<%=obj.hasMoney||0%>">
+              </div>
+            </div>
+            <div class="form-group">
               <label for="sendType" class="col-sm-2 control-label">发送方式</label>
 
               <div class="col-sm-8">
                 <input type="radio" name="sendType" value="0" <%if(obj.sendType==0){%>checked<%}%>>固定金额:
-                <input id="money" name="money" type="text" value="<%=obj.money%>" <%if(obj.sendType==1){%>disabled<%}%> placeholder="每个红包金额" class="form-control">
+                <input id="money" style="width:150px;" name="money" type="text" value="<%=obj.money%>" <%if(obj.sendType==1){%>disabled<%}%> placeholder="每个红包金额" class="form-control">
                 <input type="radio" name="sendType" value="1" <%if(obj.sendType==1){%>checked<%}%>>随机金额:
                 <div>
-                  <input style="float: left" id="moneyMin" name="moneyMin" type="text" value="<%=obj.moneyMin||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最小金额" >
+                  <input class="form-control" style="width:150px;float: left" id="moneyMin" name="moneyMin" type="text" value="<%=obj.moneyMin||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最小金额" >
                   <span style="float: left"> 至 </span>
-                  <input style="float: left" id="moneyMax" name="moneyMax" type="text" value="<%=obj.moneyMax||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最大金额" >
+                  <input class="form-control" style="width:150px;float: left" id="moneyMax" name="moneyMax" type="text" value="<%=obj.moneyMax||''%>" <%if(obj.sendType==0){%>disabled<%}%> placeholder="每个红包最大金额" >
                 </div>
              </div>
             </div>

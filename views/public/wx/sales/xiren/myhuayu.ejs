@@ -10,22 +10,25 @@
   <meta content="telephone=no" name="format-detection" />
   <script src="/plugins/jquery-1.11.1.min.js"></script>
   <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-
 </head>
 <body style="background:url(/public/xiren/img/bg_a.jpg) no-repeat center center;background-size:100% 100%; width:100%; height:100%;">
 <input type="hidden" id="salesid" value="<%=salesid%>">
 <input type="hidden" id="logid" value="<%=logid%>">
 <input type="hidden" id="wxid" value="<%=wxid%>">
-<input type="hidden" id="hid" value="<%=huayu.id%>">
 <audio src="<%= sales.audiourl||'' %>" id="audio" controls autoplay="autoplay" loop style="display:none;height:0;"></audio>
-<div class="title"><%-huayu.title%></div>
+
+<div class="title"><%=huayu.title||''%></div>
 <dl class="shar cf2">
   <dt class="shar_a"><span><img src="<%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>"></span></dt>
-  <dd class="shar_b">
-    <%-huayu.note%></dd>
+  <dd class="shar_b"><%-huayu.note||''%></dd>
 </dl>
+<div class="hot_b">
+<%if(my){%>
 <input id="btn1" type="button" value="去分享" class="shar_c">
-<div class="hot_bag"><a style="cursor: hand" id="link"><img src="/public/xiren/img/hot_bag.png"></a></div>
+<%}else{%>
+<input id="btn" type="button" value="去寻找我的新年花语" class="land_sub" />
+<%}%>
+</div>
 <div id="share" class="share" style="display: none">
   <img src="/public/xiren/img/shar.png" class="share_a">
   <p class="share_b">请点击右上角<br>将它发送给指定朋友<br>或分享到朋友圈</p>
@@ -83,8 +86,8 @@
     $("#share").on("click",function(){
       $("#share").hide();
     });
-    $("#link").on("click",function(){
-      window.location.href = '/public/wx/sales/xiren/hongbao?salesid=' + $("#salesid").val() + '&logid=' + $("#logid").val() + '&wxid=' + $("#wxid").val();
+    $("#btn").on("click",function(){
+      window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=<%=config.appid%>&redirect_uri=http%3A%2F%2F<%=sails.config.system.AppDomain%>%2Fpublic%2Fwx%2Fsales%2Fxiren%2Findex%2F<%=salesid%>%3FfromId%3D<%=logid%>&response_type=code&scope=snsapi_base&state=11624317#wechat_redirect';
     });
   });
 </script>
