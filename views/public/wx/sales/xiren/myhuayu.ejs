@@ -19,18 +19,20 @@
   <audio loop src="<%= sales.audiourl||'' %>" id="media" autoplay preload></audio>
 </div>
 <div class="title"><%=huayu.title||''%></div>
-<dl class="shar cf2">
+<div style="margin:1rem 2rem;" class="cf2 shar">
+<dl class="cf2">
   <dt class="shar_a"><span><img src="<%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>"></span></dt>
   <dd class="shar_b"><%-huayu.note||''%></dd>
 </dl>
+</div>
 <div class="hot_b">
 <%if(my){%>
-<input id="btn1" type="button" value="去分享" class="shar_c">
+<input id="btn1" type="button" value="去分享" class="land_sub">
 <%}else{%>
 <input id="btn" type="button" value="去寻找我的新年花语" class="land_sub" />
 <%}%>
 </div>
-<div id="share" class="share" style="display: none">
+<div id="share" class="share" style="display: none;z-index:210;">
   <img src="/public/xiren/img/shar.png" class="share_a">
   <p class="share_b">请点击右上角<br>将它发送给指定朋友<br>或分享到朋友圈</p>
 </div>
