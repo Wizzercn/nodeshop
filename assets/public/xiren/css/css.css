@@ -80,3 +80,72 @@ input[type="search"], input[type="number"],input[type="button"]{appearance: text
 .peop_b{display:inline-block;background-color:rgba(0,0,0,0.6);padding:0.5rem 1rem;border-radius:0.5rem;margin-top:1rem;color:#fff;font-size:1.4rem;font-family:arial;}
 
 .notice_m{position:absolute;top:65%;display: block;width: 100%;}
+
+/*音乐符*/
+.img_n{display:none;}
+/*音乐修改*/
+.music{position:absolute;top:1rem;right:1rem;z-index:3}
+.music img{width:3rem;}
+/*微信二维码*/
+.weix{width:5rem;height:5rem;position:absolute;top:1rem;left:1rem;box-shadow: 0 .2rem .2rem rgba(0,0,0,.5);}
+.weix{animation: landr 0.8s ease-in-out; -webkit-animation: landr 1.5s ease-in-out;}
+@keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}39%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(5deg);transform-origin: left bottom 0;}75%{transform: rotate(-10deg);transform-origin: left bottom 0;}100%{transform: rotate(0deg);transform-origin: left bottom 0;}}
+@-webkit-keyframes landr{0%{-webkit-transform: rotate(0deg);-webkit-transform-origin: right bottom 0;}39%{-webkit-transform: rotate(5deg);-webkit-transform-origin: right bottom 0;}40%{-webkit-transform: rotate(5deg);-webkit-transform-origin: left bottom 0;}75%{-webkit-transform: rotate(-10deg);-webkit-transform-origin: left bottom 0;}100%{-webkit-transform: rotate(0deg);-webkit-transform-origin: left bottom 0;}}
+
+
+/*star闪闪*/
+@keyframes blink{0%{opacity: 1;}10%{opacity: 0.8;}20%{opacity:0.6}30%{opacity: 0.4;}40%{opacity: 0.2;}50%{opacity: 0;}60%{opacity: 0.2;}
+  70%{opacity: 0.4;}80%{opacity:0.6}90%{opacity: 0.8;} 100%{opacity: 1;}}
+@-webkit-keyframes blink{0%{opacity: 1;}10%{opacity: 0.8;}20%{opacity:0.6}30%{opacity: 0.4;}40%{opacity: 0.2;}50%{opacity: 0;}
+  60%{opacity: 0.2;}70%{opacity: 0.4;}80%{opacity:0.6}90%{opacity: 0.8;} 100%{opacity: 1;}}
+@-moz-keyframes blink{ 0%{opacity: 1;}10%{opacity: 0.8;}20%{opacity:0.6}30%{opacity: 0.4;} 40%{opacity: 0.2;}50%{opacity: 0;}
+  60%{opacity: 0.2;}70%{opacity: 0.4;}80%{opacity:0.6}90%{opacity: 0.8;} 100%{opacity: 1;}}
+@-ms-keyframes blink{0%{opacity: 1;}10%{opacity: 0.8;}20%{opacity:0.6}30%{opacity: 0.4;} 40%{opacity: 0.2;}50%{opacity: 0;} 60%{opacity: 0.2;}
+  70%{opacity: 0.4;}80%{opacity:0.6}90%{opacity: 0.8;} 100%{opacity: 1;}}
+@-o-keyframes blink{ 0%{opacity: 1;}10%{opacity: 0.8;}20%{opacity:0.6}30%{opacity: 0.4;}  40%{opacity: 0.2;}50%{opacity: 0;}
+  60%{opacity: 0.2;}70%{opacity: 0.4;}80%{opacity:0.6}90%{opacity: 0.8;} 100%{opacity: 1;}}
+
+@keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}10%{transform: rotate(5deg);transform-origin: right bottom 0;}20%{transform: rotate(10deg);transform-origin: right bottom 0;}30%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(0deg);transform-origin: right bottom 0;}50%{transform: rotate(3deg);transform-origin: right bottom 0;}60%{transform: rotate(0deg);transform-origin: right bottom 0;}
+  70%{transform: rotate(8deg);transform-origin: right bottom 0;}80%{transform: rotate(0deg);transform-origin: right bottom 0;}90%{transform: rotate(5deg);transform-origin: right bottom 0;} 100%{transform: rotate(0deg);transform-origin: right bottom 0;}}
+@-webkit-keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}10%{transform: rotate(5deg);transform-origin: right bottom 0;}20%{transform: rotate(10deg);transform-origin: right bottom 0;}30%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(0deg);transform-origin: right bottom 0;}50%{transform: rotate(3deg);transform-origin: right bottom 0;}60%{transform: rotate(0deg);transform-origin: right bottom 0;}
+  70%{transform: rotate(8deg);transform-origin: right bottom 0;}80%{transform: rotate(0deg);transform-origin: right bottom 0;}90%{transform: rotate(5deg);transform-origin: right bottom 0;} 100%{transform: rotate(0deg);transform-origin: right bottom 0;}}
+@-moz-keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}10%{transform: rotate(5deg);transform-origin: right bottom 0;}20%{transform: rotate(10deg);transform-origin: right bottom 0;}30%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(0deg);transform-origin: right bottom 0;}50%{transform: rotate(3deg);transform-origin: right bottom 0;}60%{transform: rotate(0deg);transform-origin: right bottom 0;}
+  70%{transform: rotate(8deg);transform-origin: right bottom 0;}80%{transform: rotate(0deg);transform-origin: right bottom 0;}90%{transform: rotate(5deg);transform-origin: right bottom 0;} 100%{transform: rotate(0deg);transform-origin: right bottom 0;}}
+@-ms-keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}10%{transform: rotate(5deg);transform-origin: right bottom 0;}20%{transform: rotate(10deg);transform-origin: right bottom 0;}30%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(0deg);transform-origin: right bottom 0;}50%{transform: rotate(3deg);transform-origin: right bottom 0;}60%{transform: rotate(0deg);transform-origin: right bottom 0;}
+  70%{transform: rotate(8deg);transform-origin: right bottom 0;}80%{transform: rotate(0deg);transform-origin: right bottom 0;}90%{transform: rotate(5deg);transform-origin: right bottom 0;} 100%{transform: rotate(0deg);transform-origin: right bottom 0;}}
+@-o-keyframes landr{0%{transform: rotate(0deg);transform-origin: right bottom 0;}10%{transform: rotate(5deg);transform-origin: right bottom 0;}20%{transform: rotate(10deg);transform-origin: right bottom 0;}30%{transform: rotate(5deg);transform-origin: right bottom 0;}40%{transform: rotate(0deg);transform-origin: right bottom 0;}50%{transform: rotate(3deg);transform-origin: right bottom 0;}60%{transform: rotate(0deg);transform-origin: right bottom 0;}
+  70%{transform: rotate(8deg);transform-origin: right bottom 0;}80%{transform: rotate(0deg);transform-origin: right bottom 0;}90%{transform: rotate(5deg);transform-origin: right bottom 0;} 100%{transform: rotate(0deg);transform-origin: right bottom 0;}}
+/* 定义blink类*/
+.img_k{height: auto;width: auto\9;width:100%; animation: blink 1.5s linear infinite;
+  /* 其它浏览器兼容性前缀 */
+  -webkit-animation: blink 1.5s linear infinite;
+  -moz-animation: blink 1.5s linear infinite;
+  -ms-animation: blink 1.5s linear infinite;
+  -o-animation: blink 1.5s linear infinite;
+  animation:landr 1.5s liner infinite;
+  webkit-animation: landr 1.5s linear infinite;
+  -moz-animation: landr 1.5s linear infinite;
+  -ms-animation: landr 1.5s linear infinite;
+  -o-animation: landr 1.5s linear infinite;
+  color: #dd4814;
+}
+
+
+.flow_t{height: auto;width: auto\9;width:100%;position:absolute;top:0px;z-index:2;}
+.flow_l{height: auto;width: auto\9;width:100%;position:absolute;top:11.5%;width:70%;left:15%;}
+
+#audio_btn{position: absolute;right: 20px;top: 20px;z-index: 200;display: none;width: 30px;height: 30px;background-repeat: no-repeat;}
+.off{background-image: url(../img/music.svg);background-size: contain;background-repeat: no-repeat;}
+.rotate{-webkit-animation: rotating 1.2s linear infinite;-moz-animation: rotating 1.2s linear infinite;-o-animation: rotating 1.2s linear infinite;animation: rotating 1.2s linear infinite;}
+@-webkit-keyframes rotating{from{-webkit-transform:rotate(0deg)}to{-webkit-transform:rotate(360deg)}}@keyframes rotating{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@-moz-keyframes rotating{from{-moz-transform:rotate(0deg)}to{-moz-transform:rotate(360deg)}}
+
+
+.img_f{position:absolute;top:35%;left:17%;animation:mymove 5s infinite;-moz-animation:mymove 5s infinite; -webkit-animation:mymove 5s infinite;}
+/*.img_fa{animation:optiy 5s infinite;-moz-animation:optiy 5s infinite; -webkit-animation:optiy 5s infinite;}*/
+@keyframes mymove{from {left:17px;}to {left:83%;}}
+@-moz-keyframes mymove {from {left:17px;}to {left:83%;}}
+@-webkit-keyframes mymove /*Safari and Chrome*/{from {left:17px;}to {left:83%;}}
+
+@keyframes optiy{from {opacity:1 ;}to {opacity:0;}}
+@-moz-keyframes optiy {from {opacity:1 ;}to {opacity:0;}}
+@-webkit-keyframes optiy /*Safari and Chrome*/{from {opacity:1 ;}to {opacity:0;}}

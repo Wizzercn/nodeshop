@@ -6,9 +6,9 @@ var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
-    var uagent=req.get('user-agent');
-    if(uagent.indexOf('MicroMessenger')<0){
-      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
     }
     var id = req.params.id;
     var fromId = req.query.fromId || 0;
@@ -126,9 +126,9 @@ module.exports = {
     });
   },
   huayu: function (req, res) {
-    var uagent=req.get('user-agent');
-    if(uagent.indexOf('MicroMessenger')<0){
-      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
     }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
@@ -180,9 +180,9 @@ module.exports = {
     });
   },
   hongbao: function (req, res) {
-    var uagent=req.get('user-agent');
-    if(uagent.indexOf('MicroMessenger')<0){
-      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
     }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
@@ -253,9 +253,9 @@ module.exports = {
     });
   },
   myhuayu: function (req, res) {
-    var uagent=req.get('user-agent');
-    if(uagent.indexOf('MicroMessenger')<0){
-      return res.json({code:1,msg:'请使用微信打开~~ www.sunchn.com'});
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
     }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
@@ -276,26 +276,29 @@ module.exports = {
         data.sales = sales;
         Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
           data.user = user;
-          Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
-            data.huayu = info;
-            WechatService.init_js(req, res, function (api) {
-              var str = 'http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/myhuayu?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
-              if (my) {
-                str = str + '&my=' + my;
-              }
-              var param = {
-                debug: false,
-                jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'],
-                url: str
-              };
-              api.getJsConfig(param, function (e1, result) {
-                data.jsconfig = result;
-                Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
-                  data.huayu = info;
-                  return res.view('public/wx/sales/xiren/myhuayu', data);
-                });
+          if (!user) {
+            data.huayu = {};
+            data.jsconfig = {};
+            return res.view('public/wx/sales/xiren/myhuayu', data);
+          }
 
+          WechatService.init_js(req, res, function (api) {
+            var str = 'http://' + sails.config.system.AppDomain + '/public/wx/sales/xiren/myhuayu?salesid=' + salesid + '&logid=' + logid + '&wxid=' + wxid;
+            if (my) {
+              str = str + '&my=' + my;
+            }
+            var param = {
+              debug: false,
+              jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'],
+              url: str
+            };
+            api.getJsConfig(param, function (e1, result) {
+              data.jsconfig = result;
+              Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
+                data.huayu = info;
+                return res.view('public/wx/sales/xiren/myhuayu', data);
               });
+
             });
           });
         });

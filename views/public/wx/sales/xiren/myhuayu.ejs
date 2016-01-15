@@ -15,8 +15,9 @@
 <input type="hidden" id="salesid" value="<%=salesid%>">
 <input type="hidden" id="logid" value="<%=logid%>">
 <input type="hidden" id="wxid" value="<%=wxid%>">
-<audio src="<%= sales.audiourl||'' %>" id="audio" controls autoplay="autoplay" loop style="display:none;height:0;"></audio>
-
+<div id="audio_btn" class="off rotate" style="display: block;">
+  <audio loop src="<%= sales.audiourl||'' %>" id="media" autoplay preload></audio>
+</div>
 <div class="title"><%=huayu.title||''%></div>
 <dl class="shar cf2">
   <dt class="shar_a"><span><img src="<%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>"></span></dt>
@@ -81,7 +82,15 @@
   });
 
   $(document).ready(function () {
-    $('audio').get(0).play();
+    $("#audio_btn").on("click",function(){
+      if($(this).hasClass("rotate")){
+        $('audio').get(0).pause();
+        $("#audio_btn").removeClass("rotate");
+      }else{
+        $('audio').get(0).play();
+        $("#audio_btn").addClass("rotate");
+      }
+    });
     $("#btn1").on("click",function(){
       $("#share").show();
     });
