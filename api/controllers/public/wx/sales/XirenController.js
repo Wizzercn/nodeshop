@@ -214,6 +214,14 @@ module.exports = {
         }
         Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
           data.user = user;
+          if (!user) {
+            data.user={name:'',money:0};
+            data.huayu = {title:''};
+            data.jsconfig = {};
+            data.allMoney = -1;
+            data.money = 0;
+            return res.view('public/wx/sales/xiren/myhuayu', data);
+          }
           if (allMoney > 0 && user.money == 0) {
             var hasMoney = sales.hasMoney + money;
             Wx_sales_user.update({logid: logid}, {money: money}).exec(function (e, o) {
@@ -277,7 +285,8 @@ module.exports = {
         Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
           data.user = user;
           if (!user) {
-            data.huayu = {};
+            data.user={name:''};
+            data.huayu = {title:''};
             data.jsconfig = {};
             return res.view('public/wx/sales/xiren/myhuayu', data);
           }

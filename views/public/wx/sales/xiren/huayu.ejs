@@ -36,7 +36,7 @@
   wx.config(<%-JSON.stringify(jsconfig)%>);
   wx.ready(function(){
     wx.onMenuShareTimeline({
-      title: '<%=user.name%>的新年花语是：<%-huayu.title%>。打开我的新年花语，领取袭人新年红包。', // 分享标题
+      title: '<%=user.name||''%>的新年花语是：<%-huayu.title||''%>。打开我的新年花语，领取袭人新年红包。', // 分享标题
       link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
       imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
       success: function () {
@@ -55,7 +55,7 @@
       }
     });
     wx.onMenuShareAppMessage({
-      title: '<%=user.name%>的新年花语是：<%-huayu.title%>', // 分享标题
+      title: '<%=user.name||''%>的新年花语是：<%-huayu.title||''%>', // 分享标题
       desc: '打开我的新年花语，领取袭人新年红包。', // 分享描述
       link: 'http://<%-sails.config.system.AppDomain+'/public/wx/sales/xiren/myhuayu?salesid='+salesid+'&logid='+logid+"&wxid="+wxid%>', // 分享链接
       imgUrl: 'http://<%=sails.config.system.AppDomain%><%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>', // 分享图标
