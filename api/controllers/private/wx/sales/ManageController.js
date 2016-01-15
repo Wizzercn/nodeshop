@@ -54,24 +54,18 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    var appid = body.appid;
-    Wx_sales.findOne({appid: appid}).exec(function (err, obj) {
-      if (obj) {
-        return res.json({code: 1, msg: sails.__('add.exist')});
-      } else {
-        if (body.startTime) {
-          body.startTime = moment(body.startTime).format('X');
-        }
-        if (body.endTime) {
-          body.endTime = moment(body.endTime).format('X');
-        }
-        body.createdBy = req.session.user.id;
-        Wx_sales.create(body).exec(function (e, o) {
-          if (e)return res.json({code: 1, msg: sails.__('add.fail')});
-          return res.json({code: 0, msg: sails.__('add.ok')});
-        });
-      }
+    if (body.startTime) {
+      body.startTime = moment(body.startTime).format('X');
+    }
+    if (body.endTime) {
+      body.endTime = moment(body.endTime).format('X');
+    }
+    body.createdBy = req.session.user.id;
+    Wx_sales.create(body).exec(function (e, o) {
+      if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      return res.json({code: 0, msg: sails.__('add.ok')});
     });
+
   },
   edit: function (req, res) {
     var id = req.params.id;
@@ -153,7 +147,7 @@ module.exports = {
     }
     Wx_sales_info.count(where).exec(function (err, count) {
       if (!err && count > 0) {
-        Wx_sales_info.find(where).sort({createdAt:'desc'})
+        Wx_sales_info.find(where).sort({createdAt: 'desc'})
           .sort(sort)
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {

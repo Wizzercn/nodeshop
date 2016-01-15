@@ -18,8 +18,6 @@ module.exports = {
     },
     code: {//唯一标识
       type: 'string',
-      required: true,
-      unique:true,
       size:20
     },
     type: {//活动类型
