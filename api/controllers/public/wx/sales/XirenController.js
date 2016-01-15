@@ -158,14 +158,21 @@ module.exports = {
               });
               Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
                 data.user = user;
-                Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
-                  data.sales = sales;
+                if(user){
+                  Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
+                    data.sales = sales;
+                    return res.view('public/wx/sales/xiren/huayu', data);
+                  });
+                }else{
+                  data.huayu = {};
+                  data.user = {name:''};
                   return res.view('public/wx/sales/xiren/huayu', data);
-                });
+                }
               });
             });
           } else {
             data.huayu = {};
+            data.user = {name:''};
             return res.view('public/wx/sales/xiren/huayu', data);
           }
         });

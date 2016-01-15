@@ -60,10 +60,7 @@ module.exports = {
       }
     },
     usedAt:{
-      type:'integer',
-      defaultsTo:function(){
-        return moment().format('X');
-      }
+      type:'integer'
     },
     wxid: {
       model: 'Wx_config'
