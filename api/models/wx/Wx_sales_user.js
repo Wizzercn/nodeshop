@@ -23,8 +23,7 @@ module.exports = {
       size:50
     },
     nickname: {//用户的昵称
-      type: 'string',
-      size:50
+      type: 'string'
     },
     fromId: {
       type: 'integer'
