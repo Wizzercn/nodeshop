@@ -157,22 +157,21 @@ module.exports = {
               Wx_sales_user.update({logid: logid}, {infoid: obj[0].id}).exec(function (e4, u) {
               });
               Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
-                data.user = user;
-                if(user){
-                  Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
-                    data.sales = sales;
+                Wx_sales.findOne(salesid).exec(function (e6, sales) {
+                  data.sales = sales;
+                  if (user) {
+                    data.user = user;
                     return res.view('public/wx/sales/xiren/huayu', data);
-                  });
-                }else{
-                  data.huayu = {};
-                  data.user = {name:''};
-                  return res.view('public/wx/sales/xiren/huayu', data);
-                }
+                  } else {
+                    data.user = {name: ''};
+                    return res.view('public/wx/sales/xiren/huayu', data);
+                  }
+                });
               });
             });
           } else {
             data.huayu = {};
-            data.user = {name:''};
+            data.user = {name: ''};
             return res.view('public/wx/sales/xiren/huayu', data);
           }
         });
@@ -222,8 +221,8 @@ module.exports = {
         Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
           data.user = user;
           if (!user) {
-            data.user={name:'',money:0};
-            data.huayu = {title:''};
+            data.user = {name: '', money: 0};
+            data.huayu = {title: ''};
             data.jsconfig = {};
             data.allMoney = -1;
             data.money = 0;
@@ -292,8 +291,8 @@ module.exports = {
         Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
           data.user = user;
           if (!user) {
-            data.user={name:''};
-            data.huayu = {title:''};
+            data.user = {name: ''};
+            data.huayu = {title: ''};
             data.jsconfig = {};
             return res.view('public/wx/sales/xiren/myhuayu', data);
           }
