@@ -1,6 +1,7 @@
 /**
  * Created by root on 10/25/15.
  */
+var emoji=require('emoji');
 module.exports = {
   api: function (req, res) {
     var id = req.params.id;
@@ -34,6 +35,7 @@ module.exports = {
                     api.getUser({openid: data.openid, lang: 'zh_CN'}, function (er, result) {
                       if (result) {
                         result.subscribe = 1;
+                        result.nickname=emoji.unifiedToHTML(result.nickname);
                         Wx_user.update({openid: data.openid, wxid: id}, result).exec(function (e3, o3) {
                         });
                       }
@@ -46,6 +48,7 @@ module.exports = {
                         api.getUser({openid: data.openid, lang: 'zh_CN'}, function (er, result) {
                           if (result) {
                             result.subscribe = 1;
+                            result.nickname=emoji.unifiedToHTML(result.nickname);
                             Wx_user.update({openid: data.openid, wxid: id}, result).exec(function (e3, o3) {
                             });
                           }
