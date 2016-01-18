@@ -9,6 +9,11 @@
   <meta name="description" content="<%= sails.config.system.AppName %>">
   <meta name="keywords" content="wizzer,node,nodejs,shop">
   <title><%= sails.config.system.AppName %></title>
+  <% if (sails.config.environment === 'production') { %>
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/plugins/jstree/themes/default/style.min.css">
+  <link rel="stylesheet" href="/concat/production.css">
+  <%}else{%>
   <link rel="stylesheet" href="/plugins/stepy/jquery.stepy.css">
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/font-awesome.css">
@@ -24,6 +29,7 @@
   <link rel="stylesheet" href="/plugins/chosen/chosen.min.css">
   <link rel="stylesheet" href="/plugins/datepicker/bootstrap-datetimepicker.min.css">
   <link rel="stylesheet" href="/plugins/emoji/emoji.css">
+  <%}%>
   <!--[if lt IE 9]>
   <script src="/js/html5shiv.js"></script>
   <script src="/js/respond.min.js"></script>
@@ -34,9 +40,8 @@
   <% }else{ %>
   <link rel="stylesheet" href="/css/skins/palette.css" id="skin">
   <% } %>
-  <script src="/plugins/modernizr.js"></script>
   <script src="/plugins/jquery-1.11.1.min.js"></script>
-  <script src="/js/jquery.pjax.js"></script>
+
 </head>
 <body>
 <div class="gallery-loader" style="background-color:transparent;">
@@ -433,12 +438,15 @@
   </div>
 </form>
 <!--script-->
+<% if (sails.config.environment === 'production') { %>
+<script src="/min/production.min.js"></script>
+<%}else{%>
+<script src="/plugins/modernizr.js"></script>
+<script src="/js/jquery.pjax.js"></script>
 <script src="/bootstrap/js/bootstrap.js"></script>
 <script src="/plugins/jquery.form.js"></script>
 <script src="/plugins/parsley.min.js"></script>
-<% if('zh' == lang){ %>
 <script src="/plugins/parsley.zh_cn.js"></script>
-<% } %>
 <script src="/plugins/jquery.sortable.js"></script>
 <script src="/plugins/jquery.nestable.js"></script>
 <script src="/plugins/icheck/icheck.js"></script>
@@ -470,6 +478,7 @@
 <script src="/js/offscreen.js"></script>
 <script src="/js/main.js"></script>
 <script src="/js/date.js"></script>
+<%}%>
 <script type="text/javascript">
   $(document).ready(function () {
     if($.support.pjax) {

@@ -28,6 +28,7 @@
  */
 
 module.exports = {
+  hookTimeout: 120000, // 30 seconds
 
   /***************************************************************************
    * Your SSL certificate and key, if you want to be able to serve HTTP      *
@@ -80,6 +81,6 @@ module.exports = {
    * 'development' environment.                                              *
    ***************************************************************************/
 
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'production'
 
 };

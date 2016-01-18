@@ -15,24 +15,62 @@
 // (if you're using LESS with the built-in default config, you'll want
 //  to change `assets/styles/importer.less` instead.)
 var cssFilesToInject = [
-  'css/**/*.css'
+  'plugins/stepy/jquery.stepy.css',
+  'css/font-awesome.css',
+  'css/themify-icons.css',
+  'css/animate.min.css',
+  'css/skins/palette.css',
+  'css/fonts/font.css',
+  'css/main.css',
+  'css/panel.css',
+  'plugins/treetable/jquery.treetable.css',
+  'plugins/datatables/dataTables.bootstrap.css',
+  'plugins/chosen/chosen.min.css',
+  'plugins/datepicker/bootstrap-datetimepicker.min.css',
+  'plugins/emoji/emoji.css'
 ];
 
 
 // Client-side javascript files to inject in order
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
-
-  // Load sails.io before everything else
-  'js/dependencies/sails.io.js',
-
-  // Dependencies like jQuery, or Angular are brought in here
-  'js/dependencies/**/*.js',
-
-  // All of the rest of your client-side js files
-  // will be injected here in no particular order.
-  'js/**/*.js',
-  'plugins/**/*.js'
+  'plugins/modernizr.js',
+  'js/jquery.pjax.js',
+  'bootstrap/js/bootstrap.js',
+  'plugins/jquery.form.js',
+  'plugins/parsley.min.js',
+  'plugins/parsley.zh_cn.js',
+  'plugins/jquery.sortable.js',
+  'plugins/jquery.nestable.js',
+  'plugins/icheck/icheck.js',
+  'plugins/jquery.slimscroll.min.js',
+  'plugins/jquery.easing.min.js',
+  'plugins/appear/jquery.appear.js',
+  'plugins/jquery.placeholder.js',
+  'plugins/fastclick.js',
+  'plugins/count-to/jquery.countTo.js',
+  'js/toast.js',
+  'plugins/chosen/chosen.jquery.min.js',
+  'plugins/treetable/jquery.treetable.js',
+  'plugins/datatables/jquery.dataTables.js',
+  'plugins/datatables/dataTables.bootstrap.js',
+  'plugins/jstree/jstree.min.js',
+  'plugins/switchery/switchery.js',
+  'plugins/stepy/jquery.stepy.js',
+  'plugins/stepy/jquery.validate.min.js',
+  'plugins/icheck/icheck.js',
+  'plugins/chosen/chosen.jquery.min.js',
+  'plugins/jquery.form.js',
+  'plugins/uploadifive/jquery.uploadifive.min.js',
+  'plugins/ueditor/ueditor.config.js',
+  'plugins/ueditor/ueditor.all.min.js',
+  'plugins/datepicker/bootstrap-datetimepicker.min.js',
+  'plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js',
+  'plugins/emoji/emoji.js',
+  'js/form.js',
+  'js/offscreen.js',
+  'js/main.js',
+  'js/date.js'
 ];
 
 
