@@ -66,7 +66,7 @@ module.exports = {
       if (udata) {
         udata.user_info_list.forEach(function (u) {
           if (u && u.subscribe == 1) {
-            u.nickname = emoji.unifiedToHTML(u.nickname);
+            u.nickname = emoji.unifiedToHTML(u.nickname);//emoji表情替换,支付utf8字符集
             u.wxid = wxid;
             u.createdAt = u.subscribe_time;
             Wx_user.create(u).exec(function (e, log) {
@@ -79,7 +79,7 @@ module.exports = {
   },
   getFollow: function (puling, api, num, wxid) {
     if (puling != '') {
-      api.getFollowers(puling, function (err, data, res) {
+      api.getFollowers(puling, function (err, data, res) {//获取粉丝,大于10000则传递next_openid获取下一页
         var total = data.total;
         var count = data.count;
         var next_openid = data.next_openid;
@@ -91,7 +91,7 @@ module.exports = {
         data.data.openid.forEach(function (o) {
           i++;
           user_list.push(o);
-          if (i % 100 == 0 || i == count) {
+          if (i % 100 == 0 || i == count) {//每100个openid，组成数组获取用户信息
             Wx_user.getUser(wxid, api, user_list);
             user_list = [];
           }
