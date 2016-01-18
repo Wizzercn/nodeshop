@@ -64,7 +64,6 @@ module.exports = {
   getUser: function (wxid, api, user_list) {
     api.batchGetUsers(user_list, function (uerr, udata, ures) {
       if (udata) {
-        sails.log.warn('udata::' + JSON.stringify(udata));
         udata.user_info_list.forEach(function (u) {
           if (u && u.subscribe == 1) {
             u.nickname = emoji.unifiedToHTML(u.nickname);
@@ -85,7 +84,7 @@ module.exports = {
         var count = data.count;
         var next_openid = data.next_openid;
         if (total > 10000 + num) {
-          Wx_user.getFollow(req, res, next_openid, count + num);
+          Wx_user.getFollow(next_openid, api, count + num, wxid);
         }
         var i = 0;
         var user_list = [];
@@ -105,7 +104,7 @@ module.exports = {
         var count = data.count;
         var next_openid = data.next_openid;
         if (total > 10000) {
-          Wx_user.getFollow(req, res, next_openid, count);
+          Wx_user.getFollow(next_openid, api, count + num, wxid);
         }
         var i = 0;
         var user_list = [];
