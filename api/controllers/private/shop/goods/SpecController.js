@@ -52,8 +52,30 @@ module.exports = {
         return res.json({code: 1, msg: sails.__('add.exist')});
       } else {
         body.createdBy = req.session.user.id;
-        Shop_goods_brand.create(body).exec(function (e, o) {
+        Shop_goods_spec.create(body).exec(function (e, o) {
           if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+          var spec_name = body.spec_name;
+          var spec_alias = body.spec_alias;
+          var spec_picurl = body.spec_picurl;
+          if (spec_name.length > 0) {
+            var vobj = {};
+            var i = 0;
+            spec_name.forEach(function (v) {
+              vobj.spec_value = v;
+              if (spec_alias[i]) {
+                vobj.spec_alias = spec_alias[i];
+              }
+              if ('1' == body.type && spec_picurl[i]) {
+                vobj.spec_picurl = spec_picurl[i];
+              }
+              vobj.specid = o.id;
+              vobj.location = i;
+              i++;
+              Shop_goods_spec_values.create(vobj).exec(function (e2, o2) {
+
+              });
+            });
+          }
           return res.json({code: 0, msg: sails.__('add.ok')});
         });
       }
@@ -73,11 +95,18 @@ module.exports = {
       return res.json({code: 0, msg: sails.__('update.ok')});
     });
   },
+  /**
+   * 删除规格前，记得先判断规格是否被使用s
+   * @param req
+   * @param res
+   */
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
     Shop_goods_spec.destroy({id: ids}).exec(function (err) {
       if (err)
         return res.json({code: 1, msg: sails.__('delete.fail')});
+      Shop_goods_spec_values.destroy({specid: ids}).exec(function (err) {
+      });
       return res.json({code: 0, msg: sails.__('delete.ok')});
 
     });

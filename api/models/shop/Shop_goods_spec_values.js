@@ -28,7 +28,7 @@ module.exports = {
     location: {
       type: 'integer'
     },
-    specId: {
+    specid: {
       model: 'Shop_goods_spec',
       index: true
     }

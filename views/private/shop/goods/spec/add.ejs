@@ -23,7 +23,7 @@
               <label for="memo" class="col-sm-2 control-label">规格备注</label>
 
               <div class="col-sm-8">
-                <input type="text" id="memo" class="form-control" name="memo" data-parsley-required="true"
+                <input type="text" id="memo" class="form-control" name="memo"
                        placeholder="规格备注">
               </div>
             </div>
@@ -31,7 +31,7 @@
               <label for="alias" class="col-sm-2 control-label">规格别名</label>
 
               <div class="col-sm-8">
-                <input type="text" id="alias" class="form-control" name="alias" data-parsley-required="true"
+                <input type="text" id="alias" class="form-control" name="alias"
                        placeholder="规格别名">
               </div>
             </div>
@@ -57,7 +57,9 @@
                   <thead>
                   <tr align="center">
                     <td>规格值名称</td>
+                    <td width="2"></td>
                     <td>规格值别名</td>
+                    <td width="2"></td>
                     <td style="display: none">规格图片</td>
                     <td>操作</td>
                   </tr>
@@ -121,35 +123,40 @@
       });
     });
   }
+  function initType(){
+    $("input[type=radio]").on("click",function(){
+      if('1'==$(this).val()){
+        $("#tab tr").each(function () {
+          $(this).children('td').eq(4).show();
+        });
+      }else{
+        $("#tab tr").each(function () {
+          $(this).children('td').eq(4).hide();
+        });
+      }
+    });
+  }
   $(document).ready(function () {
     binEvent();
+    initType();
     $("#btnAdd").on("click",function(){
       var t=$('input:radio[name=type]:checked').val();
       var str="";
       if(t=='0'){
         str='style="display: none"';
       }
-      $("#tab tbody").append('<tr align="center"><td height="45"><input type="text" name="spec_name"></td><td>' +
-        '<input type="text" name="spec_alias"></td>' +
+      $("#tab tbody").append('<tr align="center"><td height="45">' +
+        '<input type="text" name="spec_name" class="form-control" data-parsley-required="true"></td>' +
+        '<td width="2"></td><td><input type="text" name="spec_alias" class="form-control"></td><td width="2"></td>' +
         '<td '+str+'><button type="button" class="btn btn-default btn-sm mr5"> ' +
         '<img src="/img/empty.bmp" style="height: 20px;width: 20px;"> ' +
         '<input name="spec_picurl" type="hidden" value=""><i class="ti-upload ml5"></i> </button></td>' +
-        '<td><i class="up fa fa-arrow-up" style="cursor:pointer;padding: 10px;" title="向上移动"></i>' +
-        '<i class="down fa fa-arrow-down" style="cursor:pointer;padding: 10px;" title="向下移动"></i>' +
-        '<i class="del fa fa-remove" style="cursor:pointer;padding: 10px;" title="删除"></i></td></tr>');
+        '<td><i class="up fa fa-arrow-up" style="cursor:pointer;padding: 5px;" title="向上移动"></i>' +
+        '<i class="down fa fa-arrow-down" style="cursor:pointer;padding: 5px;" title="向下移动"></i>' +
+        '<i class="del fa fa-remove" style="cursor:pointer;padding: 5px;" title="删除"></i></td></tr>');
       binEvent();
     });
-    $("input[type=radio]").on("click",function(){
-      if('1'==$(this).val()){
-        $("#tab tr").each(function () {
-          $(this).children('td').eq(2).show();
-        });
-      }else{
-        $("#tab tr").each(function () {
-          $(this).children('td').eq(2).hide();
-        });
-      }
-    });
+
     $('#addForm').ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {
@@ -160,6 +167,8 @@
           Toast.success(data.msg);
           //刷新父级菜单
           form.resetForm();
+          initType();
+          $("#tab tbody").html("");
         } else {
           Toast.error(data.msg);
         }
