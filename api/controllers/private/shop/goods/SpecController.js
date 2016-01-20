@@ -54,13 +54,13 @@ module.exports = {
         body.createdBy = req.session.user.id;
         Shop_goods_spec.create(body).exec(function (e, o) {
           if (e)return res.json({code: 1, msg: sails.__('add.fail')});
-          var spec_name = body.spec_name;
+          var spec_value = body.spec_value;
           var spec_alias = body.spec_alias;
           var spec_picurl = body.spec_picurl;
-          if (spec_name.length > 0) {
+          if (spec_value.length > 0) {
             var vobj = {};
             var i = 0;
-            spec_name.forEach(function (v) {
+            spec_value.forEach(function (v) {
               vobj.spec_value = v;
               if (spec_alias[i]) {
                 vobj.spec_alias = spec_alias[i];
@@ -83,15 +83,42 @@ module.exports = {
   },
   edit: function (req, res) {
     var id = req.params.id;
-    Shop_goods_spec.findOne({id: id}).exec(function (err, obj) {
+    Shop_goods_spec.findOne(id).exec(function (err, obj) {
       req.data.obj = obj;
-      return res.view('private/shop/goods/spec/edit', req.data);
+      Shop_goods_spec_values.find({specid: obj.id}).sort({location:'asc'}).exec(function (e2, spvlist) {
+        req.data.spvlist = spvlist;
+        return res.view('private/shop/goods/spec/edit', req.data);
+      });
     });
   },
   editDo: function (req, res) {
     var body = req.body;
     Shop_goods_spec.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+      var spec_value = body.spec_value;
+      var spec_alias = body.spec_alias;
+      var spec_picurl = body.spec_picurl;
+      Shop_goods_spec_values.destroy({specid: body.id}).exec(function (err) {
+        if (spec_value.length > 0) {
+          var vobj = {};
+          var i = 0;
+          spec_value.forEach(function (v) {
+            vobj.spec_value = v;
+            if (spec_alias[i]) {
+              vobj.spec_alias = spec_alias[i];
+            }
+            if ('1' == body.type && spec_picurl[i]) {
+              vobj.spec_picurl = spec_picurl[i];
+            }
+            vobj.specid = body.id;
+            vobj.location = i;
+            i++;
+            Shop_goods_spec_values.create(vobj).exec(function (e2, o2) {
+
+            });
+          });
+        }
+      });
       return res.json({code: 0, msg: sails.__('update.ok')});
     });
   },

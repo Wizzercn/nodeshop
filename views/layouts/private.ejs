@@ -11,8 +11,10 @@
   <title><%= sails.config.system.AppName %></title>
   <% if (sails.config.environment === 'production') { %>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/plugins/jstree/themes/default/style.min.css">
   <link rel="stylesheet" href="/concat/production.css">
+  <link rel="stylesheet" href="/plugins/jstree/themes/default/style.min.css">
+  <link rel="stylesheet" href="/plugins/datepicker/bootstrap-datetimepicker.min.css">
+  <link rel="stylesheet" href="/plugins/emoji/emoji.css">
   <%}else{%>
   <link rel="stylesheet" href="/plugins/stepy/jquery.stepy.css">
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
@@ -440,6 +442,8 @@
 <!--script-->
 <% if (sails.config.environment === 'production') { %>
 <script src="/min/production.min.js"></script>
+<script src="/plugins/ueditor/ueditor.config.js"></script>
+<script src="/plugins/ueditor/ueditor.all.min.js"></script>
 <%}else{%>
 <script src="/plugins/modernizr.js"></script>
 <script src="/js/jquery.pjax.js"></script>

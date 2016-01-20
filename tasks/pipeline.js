@@ -25,9 +25,7 @@ var cssFilesToInject = [
   'css/panel.css',
   'plugins/treetable/jquery.treetable.css',
   'plugins/datatables/dataTables.bootstrap.css',
-  'plugins/chosen/chosen.min.css',
-  'plugins/datepicker/bootstrap-datetimepicker.min.css',
-  'plugins/emoji/emoji.css'
+  'plugins/chosen/chosen.min.css'
 ];
 
 
@@ -62,8 +60,6 @@ var jsFilesToInject = [
   'plugins/chosen/chosen.jquery.min.js',
   'plugins/jquery.form.js',
   'plugins/uploadifive/jquery.uploadifive.min.js',
-  'plugins/ueditor/ueditor.config.js',
-  'plugins/ueditor/ueditor.all.min.js',
   'plugins/datepicker/bootstrap-datetimepicker.min.js',
   'plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js',
   'plugins/emoji/emoji.js',
