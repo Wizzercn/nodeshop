@@ -30,7 +30,10 @@ module.exports = {
       size: 100
     },
     location: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     articles: {
       collection: 'Shop_goods_spec_values',

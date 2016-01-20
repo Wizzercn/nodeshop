@@ -26,7 +26,10 @@ module.exports = {
       size: 255
     },
     location: {
-      type: 'integer'
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     specid: {
       model: 'Shop_goods_spec',

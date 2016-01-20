@@ -37,8 +37,6 @@ module.exports = {
    */
   layout: function (req, res) {
     var p = req.body.p, v = req.body.v == 'true';
-    console.log('a...' + typeof(v));
-    console.log('c...' + (v));
     if ('sidebar' == p) {
       req.session.user.loginSidebar = v;
       Sys_user.update({id: req.session.user.id}, {loginSidebar: v}).exec(function (err, obj) {
@@ -70,11 +68,13 @@ module.exports = {
    * @param res
    */
   logout: function (req, res) {
-    if (req.session.user) {
+    var user=req.session.user;
+    if (user) {
       Sys_log.create({
         type: 'system', url: req.url, note: sails.__('private.login.logout'),
-        op_id: req.session.user.id, op_name: req.session.user.nickname, op_ip: req.ip
+        createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
       }).exec(function (err, log) {
+
       });
       req.session.destroy();
       res.redirect('/sysadmin');
