@@ -138,6 +138,9 @@
 </div>
 <script language="JavaScript">
   var msgtype;
+  function delContent(id){
+    $("li[data-id="+id+"]").remove();
+  }
   $(document).ready(function () {
     $("#nestable3").nestable();
     $('input:radio[name=msgtype]').click(function () {
