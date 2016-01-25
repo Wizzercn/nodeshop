@@ -157,7 +157,7 @@ module.exports = {
               Wx_sales_user.update({logid: logid}, {infoid: obj[0].id}).exec(function (e4, u) {
               });
               Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
-                Wx_sales.findOne(salesid).exec(function (e6, sales) {
+                Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
                   data.sales = sales;
                   if (user) {
                     data.user = user;

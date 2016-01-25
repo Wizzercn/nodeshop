@@ -19,15 +19,15 @@
   <audio loop src="<%= sales.audiourl||'' %>" id="media" autoplay preload></audio>
 </div>
 <div class="title"><%=huayu.title||''%></div>
-<div style="margin:1rem 2rem;" class="cf2 shar">
-<dl class="cf2">
+<div class="cf2 shar">
+<dl class="cf2" style="margin:1rem 2rem;" >
   <dt class="shar_a"><span><img src="<%if(huayu.picurl){%><%=huayu.picurl%><%}else{%>/public/xiren/img/pic_a.jpg<%}%>"></span></dt>
   <dd class="shar_b"><%-huayu.note||''%></dd>
 </dl>
 </div>
 <div class="hot_b">
 <%if(my){%>
-<input id="btn1" type="button" value="去分享" class="land_sub">
+<input id="btn1" type="button" value="去分享" class="shar_c">
 <%}else{%>
 <input id="btn" type="button" value="去寻找我的新年花语" class="land_sub" />
 <%}%>

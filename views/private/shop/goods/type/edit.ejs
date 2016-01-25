@@ -1,6 +1,7 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/shop/goods/spec" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    <a class="btn btn-primary navbar-btn" href="/private/shop/goods/type" data-pjax id="goback"><i
+        class="ti-angle-left"></i> 返回</a>
   </div>
 </header>
 
@@ -8,7 +9,9 @@
   <div class="wrapper" style="min-height:500px;">
     <section class="panel panel-form">
       <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
-            action="/private/shop/goods/spec/addDo" method="post">
+            action="/private/shop/goods/type/editDo" method="post">
+        <input id="id" name="id" value="<%= obj.id %>" type="hidden">
+
         <div class="row mb10">
           <div class="col-lg-12">
             <div class="form-group">
@@ -16,7 +19,7 @@
 
               <div class="col-sm-8">
                 <input type="text" id="name" class="form-control" name="name" data-parsley-required="true"
-                       placeholder="规格名称">
+                       placeholder="规格名称" value="<%=obj.name||''%>">
               </div>
             </div>
             <div class="form-group">
@@ -24,7 +27,7 @@
 
               <div class="col-sm-8">
                 <input type="text" id="memo" class="form-control" name="memo"
-                       placeholder="规格备注">
+                       placeholder="规格备注" value="<%=obj.memo||''%>">
               </div>
             </div>
             <div class="form-group">
@@ -32,15 +35,15 @@
 
               <div class="col-sm-8">
                 <input type="text" id="alias" class="form-control" name="alias"
-                       placeholder="规格别名">
+                       placeholder="规格别名" value="<%=obj.alias||''%>">
               </div>
             </div>
             <div class="form-group">
               <label for="type" class="col-sm-2 control-label">显示类型</label>
 
               <div class="col-sm-8">
-                <input type="radio" checked value="0" name="type">文字
-                <input type="radio" value="1" name="type">图片
+                <input type="radio" <%=obj.type==0?'checked':''%> value="0" name="type">文字
+                <input type="radio" <%=obj.type==1?'checked':''%> value="1" name="type">图片
               </div>
             </div>
             <div class="form-group">
@@ -65,7 +68,21 @@
                   </tr>
                   </thead>
                   <TBODY>                  　
-                                 　
+                  　<%if(spvlist){%>
+                  <%spvlist.forEach(function(o){
+                      %>
+                  <tr align="center"><td height="45">
+                      <input type="text" name="spec_value" value="<%=o.spec_value||''%>" class="form-control" data-parsley-required="true"></td>
+                    <td width="2"></td><td><input type="text" name="spec_alias" value="<%=o.spec_alias||''%>" class="form-control"></td><td width="2"></td>
+                    <td <%=obj.type==0?'style="display: none"':''%>><button type="button" class="btn btn-default btn-sm mr5">
+                      <img src="<%=o.spec_picurl||'/img/empty.bmp'%>" style="height: 20px;width: 20px;">
+                      <input name="spec_picurl" type="hidden" value="<%=o.spec_picurl||''%>"><i class="ti-upload ml5"></i> </button></td>
+                    <td><i class="up fa fa-arrow-up" style="cursor:pointer;padding: 5px;" title="向上移动"></i>
+                      <i class="down fa fa-arrow-down" style="cursor:pointer;padding: 5px;" title="向下移动"></i>
+                      <i class="del fa fa-remove" style="cursor:pointer;padding: 5px;" title="删除"></i></td></tr>
+                   <%
+                    });%>
+                    <%}%>
                   </TBODY>
                 </table>
               </div>
@@ -113,6 +130,7 @@
     $("#tab .btn").unbind("click").on("click",function(){
       var btn=$(this);
       $("#buttom").load( "/private/img/image?id=&w=36&h=36&watermark=0&type=", function( response, status, xhr ) {
+        $("#buttom").html(response);
         $("#imgUploadOK").unbind("click").on("click",function(){
           btn.find("img").attr("src",$("#imgUploadPicurl").val());
           btn.find("input[type=hidden]").val($("#imgUploadPicurl").val());
@@ -164,10 +182,9 @@
       success: function (data, statusText, xhr, form) {
         if (data.code == 0) {
           Toast.success(data.msg);
-          //刷新父级菜单
-          form.resetForm();
-          initType();
-          $("#tab tbody").html("");
+          setTimeout(function () {
+            $("#goback").trigger("click");
+          }, 1000);
         } else {
           Toast.error(data.msg);
         }
