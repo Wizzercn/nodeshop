@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
-  <div style="padding-top: 10px;">
-  <div class="btn-group tool-button">
+  <div class="btn-group" style="padding-top: 15px;">
+  <div class="btn-group tool-button" style="padding-right: 5px;">
     <%if(list){%>
     <select id="sales">
       <%list.forEach(function(obj){%>
@@ -16,6 +16,11 @@
     </select>
   </div>
   <div id="res" class="btn-group tool-button"></div>
+  </div>
+  <div class="pull-right">
+    <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
+        class="fa fa-sliders"></i> 筛选
+    </button>
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -36,7 +41,20 @@
     </table>
   </div>
 </div>
-
+<div class="cd-panel from-right">
+  <header class="cd-panel-header">
+    <h4>高级筛选</h4>
+  </header>
+  <div class="cd-panel-container">
+    <div class="cd-panel-content shadow">
+      <div class="form-group">
+        <label for="nickname">昵称</label>
+        <input type="text" id="nickname" name="nickname" onclick="this.value=''" class="form-control" placeholder="昵称">
+      </div>
+      <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+    </div>
+  </div>
+</div>
 <script language="JavaScript">
   var datatable;
   function initDatatable() {
@@ -62,6 +80,7 @@
         "data": function (d) {
           d.salesid=$("#sales").val();
           d.substatus=$("#subscribe").val();
+          d.nickname = $('#nickname').val();
         }
       },
       "order": [[4, "desc"]],
@@ -149,6 +168,9 @@
         $("#res").html("活动浏览量："+data.allip+" 参与人数："+data.alluser+" （其中："+data.allshare+"人分享活动，"+data.subscribe+"人关注公众号）");
         datatable.ajax.reload();
       }, "json");
+    });
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
     });
   }
   function disableIt(id) {

@@ -10,8 +10,8 @@
             <label for="is_physical" class="col-sm-4 control-label">是否为实体商品</label>
 
             <div class="col-sm-6">
-              <input type="radio" checked value="1" name="is_physical">是
-              <input type="radio" value="0" name="is_physical">否
+              <input type="radio" <%if(obj&&obj.is_physical=='0'){}else{%>checked<%}%> value="1" name="is_physical">是
+              <input type="radio" <%if(obj&&obj.is_physical=='0'){%>checked<%}%>value="0" name="is_physical">否
             </div>
           </div>
         </div>

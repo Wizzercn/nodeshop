@@ -33,6 +33,7 @@ module.exports = {
     var columns = req.body.columns || [];
     var salesid = req.body.salesid;
     var substatus = req.body.substatus;
+    var nickname = req.body.nickname;
     var sort = {};
     var where = {};
     if (salesid) {
@@ -40,6 +41,9 @@ module.exports = {
     }
     if (substatus) {
       where.subscribe = substatus;
+    }
+    if (nickname) {
+      where.nickname = {'like': '%' + nickname + '%'};
     }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;

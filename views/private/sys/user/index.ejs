@@ -40,17 +40,16 @@
 <div class="cd-panel from-right">
   <header class="cd-panel-header">
     <h4>高级筛选</h4>
-    <a href="javascript:;" class="cd-panel-close text-center"><i class="ti-close"></i> </a>
   </header>
   <div class="cd-panel-container">
     <div class="cd-panel-content shadow">
       <div class="form-group">
         <label for="loginname">用户名</label>
-        <input type="text" id="loginname" name="loginname" class="form-control" placeholder="用户名/登录名" autofocus>
+        <input type="text" id="loginname" name="loginname" onclick="this.value=''" class="form-control" placeholder="用户名/登录名" autofocus>
       </div>
       <div class="form-group">
         <label for="nickname">姓名</label>
-        <input type="text" id="nickname" name="nickname" class="form-control" placeholder="姓名/昵称">
+        <input type="text" id="nickname" name="nickname" onclick="this.value=''" class="form-control" placeholder="姓名/昵称">
       </div>
       <button id="searchBtn" type="button" class="btn btn-default">查询</button>
     </div>

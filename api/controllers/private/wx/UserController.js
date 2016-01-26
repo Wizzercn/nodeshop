@@ -22,11 +22,15 @@ module.exports = {
     var draw = parseInt(req.body.draw);
     var order = req.body.order || [];
     var wxid = req.body.wxid;
+    var nickname = req.body.nickname;
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
     if (wxid) {
       where.wxid = wxid;
+    }
+    if (nickname) {
+      where.nickname = {'like': '%' + nickname + '%'};
     }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
