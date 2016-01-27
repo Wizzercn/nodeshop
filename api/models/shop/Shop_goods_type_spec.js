@@ -12,11 +12,6 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    type:{//select  flat  disabled
-      type: 'string',
-      size: 20,
-      required: true
-    },
     location: {
       type: 'integer',
       defaultsTo: function () {
@@ -24,8 +19,12 @@ module.exports = {
       }
     },
     typeid: {
-      model: 'Shop_goods_type'
+      model: 'Shop_goods_type',
+      index: true
+    },
+    specid: {
+      model: 'Shop_goods_spec',
+      index: true
     }
-
   }
 };

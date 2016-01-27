@@ -18,8 +18,10 @@ module.exports = {
       required: true
     },
     type: {//0 文字  1 图片
-      type: 'string',
-      size: 10
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     memo: {
       type: 'string',

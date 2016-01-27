@@ -99,7 +99,7 @@ module.exports = {
       var spec_alias = body.spec_alias;
       var spec_picurl = body.spec_picurl;
       Shop_goods_spec_values.destroy({specid: body.id}).exec(function (err) {
-        if (spec_value.length > 0) {
+        if (spec_value&&spec_value.length > 0) {
           var vobj = {};
           var i = 0;
           spec_value.forEach(function (v) {
