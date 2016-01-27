@@ -86,17 +86,21 @@ module.exports = {
    */
   addDo: function (req, res) {
     var body = req.body;
-    var parentId = parseInt(body.parentId);
+    var parentId = 0;
+    if(body.parentId){
+      parentId=parseInt(body.parentId);
+    }
     Cms_channel.findOne({id: parentId}).exec(function (err, unit) {
       var path = '';
       if (unit)path = unit.path || '';
       Cms_channel.find().where({parentId: parentId}).sort({path: 'desc'}).limit(1).exec(function (ferr, objs) {
-        if (objs.length > 0) {
+        if (objs&&objs.length > 0) {
           var num = parseInt(objs[0].path) + 1;
           path = StringUtil.getPath(num, objs[0].path.length);
         } else {
           path = path + '0001';
         }
+        body.parentId=parentId;
         body.path = path;
         body.location = 0;
         body.createdBy = req.session.user.id;

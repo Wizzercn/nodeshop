@@ -44,12 +44,14 @@ module.exports = {
   next: function (req, res) {
     var id = req.params.id||0;
     id=parseInt(id);
+    req.data.id=id;
     if(id>0){
       Shop_goods_type.findOne(id).exec(function (err, obj) {
         req.data.obj=obj;
         return res.view('private/shop/goods/type/next', req.data);
       });
     }else{
+      req.data.obj={};
       return res.view('private/shop/goods/type/next', req.data);
     }
 
@@ -59,7 +61,7 @@ module.exports = {
     req.data.use_props=req.query.use_props||'0';
     req.data.use_params=req.query.use_params||'0';
     req.data.use_spec=req.query.use_spec||'0';
-    req.data.use_tabs=req.use_tabs.use_spec||'0';
+    req.data.use_tabs=req.query.use_tabs||'0';
     return res.view('private/shop/goods/type/add', req.data);
   },
   addDo: function (req, res) {

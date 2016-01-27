@@ -150,19 +150,19 @@
   }
   function next(id){
     $("#typeHtml").load("/private/shop/goods/type/next/"+id, function (response, status, xhr) {
-      $("#typeDialog").on("hidden.bs.modal", function () {
-        //hide.bs.modal      hide方法调用之后立即触发该事件
-        //hidden.bs.modal    此事件在模态框被隐藏
-        $("#link").attr("href", "/private/shop/goods/type/add?id="+id+
-          "&is_physical="+$('input:radio[name=is_physical]:checked').val()+
-          "&use_props="+$('input:radio[name=use_props]:checked').val()+
-          "&use_params="+$('input:radio[name=use_params]:checked').val()+
-          "&use_spec="+$('input:radio[name=use_spec]:checked').val()+
-          "&use_tabs="+$('input:radio[name=use_tabs]:checked').val()
-        ).trigger("click");
-      });
       $("#typeDialog").modal("show");
       $("#nextOK").on("click",function(){
+        $("#typeDialog").unbind("hidden.bs.modal").on("hidden.bs.modal", function () {
+          //hide.bs.modal      hide方法调用之后立即触发该事件
+          //hidden.bs.modal    此事件在模态框被隐藏
+          $("#link").attr("href", "/private/shop/goods/type/add?id="+id+
+            "&is_physical="+$('input:radio[name=is_physical]:checked').val()+
+            "&use_props="+$('input:radio[name=use_props]:checked').val()+
+            "&use_params="+$('input:radio[name=use_params]:checked').val()+
+            "&use_spec="+$('input:radio[name=use_spec]:checked').val()+
+            "&use_tabs="+$('input:radio[name=use_tabs]:checked').val()
+          ).trigger("click");
+        });
         $("#typeDialog").modal("hide");
       });
     });
