@@ -7,5 +7,7 @@ module.exports.system = {
   AppDomain:'wizzer.wicp.net',
   AppShrotName:'上城Shop',
   AppCopyright:'Wizzer.cn',
-  UploadPath:'/upload'
+  UploadPath:'/upload',
+  MyConfig:{}
+
 };

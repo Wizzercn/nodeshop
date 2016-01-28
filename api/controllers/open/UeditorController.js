@@ -104,7 +104,7 @@ module.exports = {
             var start = parseInt(req.query.start) || 0;
             var items = [];
             var i = 0;
-            fs.walk(sails.config.appPath + '/upload/image/')
+            fs.walk(sails.config.appPath + sails.config.system.UploadPath+'/image/')
               .on('data', function (item) {
                 if (item.path.indexOf('.') > 0) {
                   items.push({
@@ -148,7 +148,7 @@ module.exports = {
             var start = parseInt(req.query.start) || 0;
             var items = [];
             var i = 0;
-            fs.walk(sails.config.appPath + '/upload/file/')
+            fs.walk(sails.config.appPath + sails.config.system.UploadPath+'/file/')
               .on('data', function (item) {
                 if (item.path.indexOf('.') > 0) {
                   items.push({
