@@ -37,7 +37,7 @@ module.exports = {
         return 0;
       }
     },
-    articles: {
+    values: {
       collection: 'Shop_goods_spec_values',
       via: 'specid'
     }

@@ -15,7 +15,8 @@ module.exports = {
     name: {
       type: 'string',
       size: 100,
-      required: true
+      required: true,
+      unique: true
     },
     alias: {
       type: 'string',
@@ -56,12 +57,6 @@ module.exports = {
     },
     tabs:{
       type: 'longtext'
-    },
-    disabled: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
     },
     props: {
       collection: 'Shop_goods_type_props',

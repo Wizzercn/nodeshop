@@ -30,6 +30,10 @@ module.exports = {
     },
     typeid: {
       model: 'Shop_goods_type'
+    },
+    values: {
+      collection: 'Shop_goods_type_props_values',
+      via: 'propsid'
     }
 
   }

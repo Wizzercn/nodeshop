@@ -24,7 +24,7 @@ module.exports = {
       }
     },
     propsid: {
-      model: 'Shop_goods_type'
+      model: 'Shop_goods_type_props'
     }
 
   }

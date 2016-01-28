@@ -129,13 +129,20 @@ module.exports = {
    */
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Shop_goods_spec.destroy({id: ids}).exec(function (err) {
-      if (err)
-        return res.json({code: 1, msg: sails.__('delete.fail')});
-      Shop_goods_spec_values.destroy({specid: ids}).exec(function (err) {
-      });
-      return res.json({code: 0, msg: sails.__('delete.ok')});
+    Shop_goods_type_spec.count({specid:ids}).exec(function(e,o){
+      if(o>0){
+        return res.json({code: 2, msg: '商品规格已被使用，不可删除'});
+      }else{
+        Shop_goods_spec.destroy({id: ids}).exec(function (err) {
+          if (err)
+            return res.json({code: 1, msg: sails.__('delete.fail')});
+          Shop_goods_spec_values.destroy({specid: ids}).exec(function (err) {
+          });
+          return res.json({code: 0, msg: sails.__('delete.ok')});
 
+        });
+      }
     });
+
   }
 };
