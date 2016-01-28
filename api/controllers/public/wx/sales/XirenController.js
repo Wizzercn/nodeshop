@@ -126,10 +126,10 @@ module.exports = {
     });
   },
   huayu: function (req, res) {
-    var uagent = req.get('user-agent');
-    if (uagent.indexOf('MicroMessenger') < 0) {
-      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    }
+    //var uagent = req.get('user-agent');
+    //if (uagent.indexOf('MicroMessenger') < 0) {
+    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    //}
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -186,10 +186,10 @@ module.exports = {
     });
   },
   hongbao: function (req, res) {
-    var uagent = req.get('user-agent');
-    if (uagent.indexOf('MicroMessenger') < 0) {
-      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    }
+    //var uagent = req.get('user-agent');
+    //if (uagent.indexOf('MicroMessenger') < 0) {
+    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    //}
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -267,10 +267,10 @@ module.exports = {
     });
   },
   myhuayu: function (req, res) {
-    var uagent = req.get('user-agent');
-    if (uagent.indexOf('MicroMessenger') < 0) {
-      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    }
+    //var uagent = req.get('user-agent');
+    //if (uagent.indexOf('MicroMessenger') < 0) {
+    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    //}
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;

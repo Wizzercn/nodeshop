@@ -55,15 +55,20 @@ input[type="search"], input[type="number"],input[type="button"]{appearance: text
 .shar_b{float:right;width:80%;font-size:1.5rem;color:#fff;line-height:1.8rem;text-align:left;}
 .shar_c{width:12rem;padding:0.8rem;font-size:1.6rem;color:#fff;border-radius:0.5rem;background:#d21431;border:none;display:block;position: absolute;
   top: 65%;left: 50%;margin-left: -6rem !important;}
+.shar_ct{text-align:center;width:20rem;padding:0.8rem;font-size:1.4rem;color:#fff;border:none;display:block;margin:0 auto;}
+.shar_ct2{text-align:center;width:12rem;padding:0.8rem;font-size:1.4rem;color:#fff;border:none;display:block;margin:0 auto;}
+.shar_cc{margin-top:1rem;width:12rem;padding:1rem;font-size:1.6rem;color:#fff;border-radius:0.5rem;background:#d21431;border:none;display:block;}
+.shar_cf{ text-align:center;width:100%;font-size:1.2rem;color:#fff;border:none;display:block;position: absolute;top: 41%;}
 
 .hot_bag{margin:1rem 0;position: absolute;top: 72%;width: 64%;left: 18%;}
 .hot_bag a{width:100%;display:block;}
 .hot_bag a img{width:100%;}
 /*已拆开红包*/
-.hot_a{text-align:center;width:17rem;height:17rem;display:block;background:url(../img/bag_bg.png) no-repeat center center;background-size:100%; position: absolute;  top: 11%;left: 50%; margin-left: -8.5rem;}
-.hot_a span{position:relative;top:3.5rem;padding-right:0.8rem;font-size:1.6rem;font-weight:600;-webkit-text-stroke: 2px write;color:#f14040;text-shadow:2px 2px 0 #fff,-1px -1px 0 #fff, 1px -1px 0 #fff,-1px 1px 0 #fff,1px 1px 0 #fff;}
+.hot_a{text-align:center;width:15rem;height:15rem;display:block;background:url(../img/bag_bg.png) no-repeat center center;background-size:100%;
+   margin:3rem auto 0 auto;}
+.hot_a span{position:relative;top:2.5rem;padding-right:0.8rem;font-size:1.6rem;font-weight:600;-webkit-text-stroke: 2px write;color:#f14040;text-shadow:2px 2px 0 #fff,-1px -1px 0 #fff, 1px -1px 0 #fff,-1px 1px 0 #fff,1px 1px 0 #fff;}
 .hot_a span i{font-size:4rem;}
-.hot_a p{position:relative;top:4.2rem;font-size:1.2rem;color:#fff;text-align:center;}
+.hot_a p{position:relative;top:3.2rem;font-size:1.2rem;color:#fff;text-align:center;}
 .hot_a p em{font-size:1.5rem;}
 .hot_b{position: absolute;top: 69%;width: 87%;left: 6.5%;}
 .hot_b1{position: absolute;top: 52.2%;width: 82%;left: 9%;}

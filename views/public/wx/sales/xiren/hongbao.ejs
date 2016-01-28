@@ -27,22 +27,31 @@
   <%}%>
 
 </div>
-<div style="text-align: center;padding-top: 246px;color: #FFFFFF;font-size: 12px;">
+
 <%if(my){%>
   <%if(guanzhu){%>
-  红包使用状态：<%if(user.status==0){%>未使用<%}else{%>已使用<%}%>
-  <input id="btn1" type="button" value="去分享" class="shar_c">
+<div class="shar_ct">
+  <span>红包使用状态：<%if(user.status==0){%>未使用<%}else{%>已使用<%}%></span>
+  <div  style="padding-top: 1rem;">
+  </div>
+<div class="shar_ct2">
+  <input id="btn1" type="button" value="去分享" class="shar_cc">
+  </div>
+</div>
   <%}else{%>
+<div class="shar_cf">
   长按二维码扫描并关注公众号，领取红包~~<br>
   <img src="<%=config.qrcode%>" width="125" height="125">
+</div>
   <%}%>
 
 <%}else{%>
-
+<div class="shar_cf">
   长按二维码扫描并关注公众号，领取红包~~<br>
   <img src="<%=config.qrcode%>" width="125" height="125">
-<%}%>
 </div>
+<%}%>
+
 <div class="notice_m"><div class="hot_c"><p>活动说明</p></div>
   <div class="notice"><%-sales.note||''%>
   </div></div>
