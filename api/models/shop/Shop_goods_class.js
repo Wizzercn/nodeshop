@@ -1,6 +1,6 @@
 /**
- * 资源菜单
- * Created by root on 9/10/15.
+ *
+ * Created by root on 1/28/16.
  */
 //var uuid = require('node-uuid');
 var moment = require('moment');
@@ -28,32 +28,8 @@ module.exports = {
       maxLength: 20,
       required: true
     },
-    type: {
-      type: 'string',
-      size: 10
-    },
-    url: {
-      type: 'string',
-      size: 100,
-      index:true
-    },
-    target: {
-      type: 'string',
-      size: 100
-    },
-    icon: {
-      type: 'string',
-      size: 100
-    },
-    permission:{
-      type: 'string',
-      size: 100
-    },
-    hidden: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
+    settings: {
+      type: 'text'
     },
     disabled: {
       type: 'boolean',
@@ -80,9 +56,8 @@ module.exports = {
         return moment().format('X');
       }
     },
-    roles: {
-      collection: 'Sys_role',
-      via: 'menus'
+    typeid: {
+      model: 'Shop_goods_type'
     }
   }
 };

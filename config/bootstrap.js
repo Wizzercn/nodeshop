@@ -12,6 +12,7 @@
 module.exports.bootstrap = function(cb) {
   // It's very important to trigger this callback method when you are finished
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+  //加载数据库里的x配置项
   Sys_config.find().exec(function(e,o){
     if(e)sails.log.warn('bootstrap.sys_config.err::'+JSON.stringify(e));
     if(o){
