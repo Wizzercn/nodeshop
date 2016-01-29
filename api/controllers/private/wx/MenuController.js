@@ -109,7 +109,7 @@ module.exports = {
   delete: function (req, res) {
     var id = req.params.id;
     Wx_menu.findOne(id).exec(function (e, menu) {
-      Wx_menu.destroy({id: id}).exec(function (err) {
+      Wx_menu.destroy({path: {like:menu.path+'%'}}).exec(function (err) {
         if (err) {
           return res.json({code: 1, msg: sails.__('delete.fail')});
         } else {

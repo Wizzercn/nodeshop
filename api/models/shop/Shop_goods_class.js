@@ -29,7 +29,7 @@ module.exports = {
       required: true
     },
     settings: {
-      type: 'text'
+      type: 'json'
     },
     disabled: {
       type: 'boolean',

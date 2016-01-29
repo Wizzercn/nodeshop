@@ -17,8 +17,9 @@ module.exports = {
       size: 100,
       required: true
     },
-    type:{//select  input
+    type:{
       type: 'string',
+      enum: ['select', 'input'],
       size: 20,
       required: true
     },

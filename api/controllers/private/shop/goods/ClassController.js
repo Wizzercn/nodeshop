@@ -110,7 +110,7 @@ module.exports = {
         body.path = path;
         body.location = 0;
         if (title || keywords || description) {
-          body.settings = JSON.stringify({title: title, keywords: keywords, description: description});
+          body.settings = {title: title, keywords: keywords, description: description};
         }
         body.createdBy = req.session.user.id;
         Shop_goods_class.create(body).exec(function (cerr, obj) {
@@ -158,7 +158,7 @@ module.exports = {
     var keywords = body.keywords || '';
     var description = body.description || '';
     if (title || keywords || description) {
-      body.settings = JSON.stringify({title: title, keywords: keywords, description: description});
+      body.settings = {title: title, keywords: keywords, description: description};
     }
     Shop_goods_class.update({id: body.id}, body).exec(function (err, obj) {
       if (err || !obj)return res.json({code: 1, msg: sails.__('update.fail')});
@@ -173,7 +173,7 @@ module.exports = {
   delete: function (req, res) {
     var id = req.params.id;
     Shop_goods_class.findOne(id).exec(function (e, menu) {
-      Shop_goods_class.destroy({id: id}).exec(function (err) {
+      Shop_goods_class.destroy({path: {like:menu.path+'%'}}).exec(function (err) {
         if (err) {
           return res.json({code: 1, msg: sails.__('delete.fail')});
         } else {
