@@ -102,7 +102,7 @@ module.exports = {
     qrcode:{
       type:'string'
     },
-    //商品图片
+    //商品默认图片
     imageid: {
       model: 'Img_image',
       size:50
