@@ -126,10 +126,10 @@ module.exports = {
     });
   },
   huayu: function (req, res) {
-    //var uagent = req.get('user-agent');
-    //if (uagent.indexOf('MicroMessenger') < 0) {
-    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    //}
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -152,21 +152,27 @@ module.exports = {
         Wx_sales_info.count({salesid: salesid}).exec(function (e2, count) {
           if (count > 0) {
             var num = StringUtil.randomInt(0, count - 1);
-            Wx_sales_info.query('SELECT * FROM wx_sales_info LIMIT ?,1', [num], function (e3, obj) {
-              data.huayu = obj[0];
-              Wx_sales_user.update({logid: logid}, {infoid: obj[0].id}).exec(function (e4, u) {
-              });
+            Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
+              data.sales = sales;
               Wx_sales_user.findOne({logid: logid}).exec(function (e5, user) {
-                Wx_sales.findOne({id: salesid}).exec(function (e6, sales) {
-                  data.sales = sales;
-                  if (user) {
-                    data.user = user;
+                if (user && user.infoid) {
+                  data.user = user;
+                  Wx_sales_info.findOne(user.infoid).exec(function (e3, obj) {
+                    data.huayu = obj;
                     return res.view('public/wx/sales/xiren/huayu', data);
-                  } else {
-                    data.user = {name: ''};
+                  });
+                } else if (user) {
+                  data.user = user;
+                  Wx_sales_info.query('SELECT * FROM wx_sales_info LIMIT ?,1', [num], function (e3, obj) {
+                    data.huayu = obj[0];
+                    Wx_sales_user.update({logid: logid}, {infoid: obj[0].id}).exec(function (e4, u) {
+                    });
                     return res.view('public/wx/sales/xiren/huayu', data);
-                  }
-                });
+                  });
+                } else {
+                  data.user = {name: ''};
+                  return res.view('public/wx/sales/xiren/huayu', data);
+                }
               });
             });
           } else {
@@ -186,10 +192,10 @@ module.exports = {
     });
   },
   hongbao: function (req, res) {
-    //var uagent = req.get('user-agent');
-    //if (uagent.indexOf('MicroMessenger') < 0) {
-    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    //}
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -213,7 +219,7 @@ module.exports = {
         if (sendType == 0) {
           money = sales.money;
         } else {
-          money = StringUtil.randomInt(sales.moneyMin, sales.moneyMax);
+          money = StringUtil.randomInt5(sales.moneyMin, sales.moneyMax);
           if (allMoney > 0 && money > allMoney) {
             money = allMoney;//最后一个红包
           }
@@ -267,10 +273,10 @@ module.exports = {
     });
   },
   myhuayu: function (req, res) {
-    //var uagent = req.get('user-agent');
-    //if (uagent.indexOf('MicroMessenger') < 0) {
-    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    //}
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;

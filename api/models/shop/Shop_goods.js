@@ -48,6 +48,16 @@ module.exports = {
         return 0;
       }
     },
+    //重量
+    weight:{
+      type:'string',
+      size:20
+    },
+    //计量单位
+    unit:{
+      type:'string',
+      size:20
+    },
     //库存
     stock:{
       type:'integer',
@@ -88,9 +98,14 @@ module.exports = {
     brandid: {
       model: 'Shop_goods_brand'
     },
+    //二维码
+    qrcode:{
+      type:'string'
+    },
     //商品图片
     imageid: {
-      model: 'Img_image'
+      model: 'Img_image',
+      size:50
     },
     //商品图册
     images: {
@@ -137,6 +152,10 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
+    },
+    products:{
+      collection: 'Shop_goods_products',
+      via: 'goodsid'
     }
 
   }

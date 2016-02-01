@@ -26,5 +26,19 @@ module.exports = {
     var Range = max - min;
     var Rand = Math.random();
     return(min + Math.round(Rand * Range));
+  },
+  randomInt5:function(min,max){
+    var s=[];
+    for(var i=min;i<=max;i=i+5){
+      s.push(i);
+    }
+    var Range = s.length-1;
+    var Rand = Math.random();
+    var p=Math.round(Rand * Range);
+    if(s[p]){
+      return(s[p]);
+    }else{
+      return(max);
+    }
   }
 };

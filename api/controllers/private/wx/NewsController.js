@@ -46,17 +46,10 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    var appid = body.appid;
-    Wx_news.findOne({appid: appid}).exec(function (err, obj) {
-      if (obj) {
-        return res.json({code: 1, msg: sails.__('add.exist')});
-      } else {
-        body.createdBy = req.session.user.id;
-        Wx_news.create(body).exec(function (e, o) {
-          if (e)return res.json({code: 1, msg: sails.__('add.fail')});
-          return res.json({code: 0, msg: sails.__('add.ok')});
-        });
-      }
+    body.createdBy = req.session.user.id;
+    Wx_news.create(body).exec(function (e, o) {
+      if (e)return res.json({code: 1, msg: '添加失败,请检查所有字段是否填写完毕'});
+      return res.json({code: 0, msg: sails.__('add.ok')});
     });
   },
   edit: function (req, res) {
