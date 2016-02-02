@@ -17,6 +17,7 @@
 
 3.安装必备模块 node-gyp
 -----------------------------------
+    >>yum install gcc-c++ make
     >>npm install node-gyp -g
 
 4.安装WebStorm 并安装JDK7/JDK8
