@@ -1,7 +1,6 @@
 /**
  * Created by root on 10/14/15.
  */
-var bcrypt = require('bcrypt');
 var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
 module.exports = {

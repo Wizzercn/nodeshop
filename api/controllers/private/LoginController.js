@@ -3,7 +3,7 @@
  */
 //var ccap = require('ccap');
 var captchapng = require('captchapng');
-var bcrypt = require('bcrypt');
+var StringUtil = require('../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   /**
@@ -59,7 +59,7 @@ module.exports = {
    * @param res
    */
   login: function (req, res) {
-    //var salt = bcrypt.genSaltSync(10); var hash = bcrypt.hashSync('1', salt); console.log(hash);
+    //console.log(StringUtil.password('1','xradmin',1452828989));
     return res.view('private/login.ejs', {layout: 'layouts/login', lang: req.getLocale()});
   },
   /**
@@ -117,7 +117,7 @@ module.exports = {
       if (!user || err) return res.json({code: 3, msg: sails.__('private.login.nousername')});
       if (user.disabled) {//判断用户状态
         return res.json({code: 6, msg: sails.__('private.login.forbidden')});
-      } else if (bcrypt.compareSync(password, user.password)) {//判断密码
+      } else if (StringUtil.password(password,username,user.createdAt)==user.password) {//判断密码
         req.session.auth = true;
         req.session.user = user;
         req.session.captchaMust = false;

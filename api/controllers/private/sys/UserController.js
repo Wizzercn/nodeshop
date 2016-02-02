@@ -1,7 +1,6 @@
 /**
  * Created by root on 9/25/15.
  */
-var bcrypt = require('bcrypt');
 var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
 module.exports = {
@@ -35,9 +34,10 @@ module.exports = {
       if (obj) {
         return res.json({code: 1, msg: sails.__('private.sys.user.loginname')});
       } else {
-        var salt = bcrypt.genSaltSync(10);
-        var hash = bcrypt.hashSync(body.password, salt);
-        body.password = hash;
+        var at=moment().format('X');
+        var pass=StringUtil.password(body.password,loginname,at);
+        body.createdAt = at;
+        body.password = pass;
         body.createdBy = req.session.user.id;
         body.disabled = false;
         body.online = false;
@@ -285,15 +285,17 @@ module.exports = {
   resetPwd: function (req, res) {
     var id = req.params.id;
     var password = StringUtil.randomString(6);
-    var salt = bcrypt.genSaltSync(10);
-    var hash = bcrypt.hashSync(password, salt);
-    Sys_user.update({id: id}, {password: hash}).exec(function (err, obj) {
-      if (err) {
-        return res.json({code: 1, msg: sails.__('update.fail')});
-      } else {
-        return res.json({code: 0, msg: sails.__('update.ok'), data: password});
-      }
+    Sys_user.findOne(id).exec(function(e,o){
+      var pass=StringUtil.password(password, o.loginname, o.createdAt);
+      Sys_user.update({id: id}, {password: pass}).exec(function (err, obj) {
+        if (err) {
+          return res.json({code: 1, msg: sails.__('update.fail')});
+        } else {
+          return res.json({code: 0, msg: sails.__('update.ok'), data: password});
+        }
+      });
     });
+
   },
   /**
    * 右上角修改密码
@@ -304,10 +306,11 @@ module.exports = {
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;
     var user = req.session.user;
-    if (bcrypt.compareSync(oldPassword, user.password)) {
-      var salt = bcrypt.genSaltSync(10);
-      var hash = bcrypt.hashSync(newPassword, salt);
-      Sys_user.update({id: user.id}, {password: hash}).exec(function (err, obj) {
+    var pass=StringUtil.password(oldPassword, user.loginname, user.createdAt);
+
+    if (pass==user.password) {
+      var newPass=StringUtil.password(newPassword, user.loginname, user.createdAt);
+      Sys_user.update({id: user.id}, {password: newPass}).exec(function (err, obj) {
         if (err) {
           return res.json({code: 2, msg: sails.__('update.fail')});
         } else {

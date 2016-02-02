@@ -11,7 +11,7 @@
 
 module.exports.http = {
   customMiddleware: function (app) {
-    app.use('/upload', require('../node_modules/sails/node_modules/express')['static'](require('path').normalize(__dirname + '/../upload')));
+    app.use('/upload', require('express')['static'](require('path').normalize(__dirname + '/../upload')));
   },
 
   /****************************************************************************

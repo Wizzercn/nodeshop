@@ -33,7 +33,7 @@ module.exports = {
     },
     password: {
       type: 'string',
-      size: 100,
+      size: 50,
       required: true
     },
     disabled: {

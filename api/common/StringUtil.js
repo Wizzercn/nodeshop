@@ -1,7 +1,14 @@
 /**
  * Created by root on 10/1/15.
  */
+var md5 = require('md5');
 module.exports = {
+  /**
+   * 计算树路径自动补0
+   * @param num
+   * @param n
+   * @returns {*}
+     */
   getPath: function (num, n) {
     var str = num.toString();
     var len = str.length;
@@ -11,6 +18,11 @@ module.exports = {
     }
     return str;
   },
+  /**
+   * 取随机字符串
+   * @param len
+   * @returns {string}
+     */
   randomString: function (len) {
     len = len || 6;
     var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
@@ -22,11 +34,23 @@ module.exports = {
     }
     return pwd;
   },
+  /**
+   * 取随机数
+   * @param min
+   * @param max
+   * @returns {*}
+     */
   randomInt:function(min,max){
     var Range = max - min;
     var Rand = Math.random();
     return(min + Math.round(Rand * Range));
   },
+  /**
+   * 取5的倍数随机数
+   * @param min
+   * @param max
+   * @returns {*}
+     */
   randomInt5:function(min,max){
     var s=[];
     for(var i=min;i<=max;i=i+5){
@@ -40,5 +64,9 @@ module.exports = {
     }else{
       return(max);
     }
+  },
+  password:function(password,loginname,createAt){
+    var p=md5(md5(password)+loginname+createAt);
+    return 'w'+ p.substring(0, p.length-1);
   }
 };
