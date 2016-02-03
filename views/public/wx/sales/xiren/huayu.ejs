@@ -27,13 +27,13 @@
     <%-huayu.note%></dd>
 </dl>
 <input id="btn1" type="button" value="去分享" class="shar_c">
-<div class="hot_bag"><a style="cursor: hand" id="link"><img src="/public/xiren/img/hot_bag.png"></a></div>
+<div class="hot_bag"><img id="link" style="cursor: hand;width:100%;display:block;" src="/public/xiren/img/hot_bag.png"></div>
 <div id="share" class="share" style="display: none;z-index:210;">
   <img src="/public/xiren/img/shar.png" class="share_a">
   <p class="share_b">请点击右上角<br>将它发送给指定朋友<br>或分享到朋友圈</p>
 </div>
 <script type="text/javascript">
-  wx.config(<%-JSON.stringify(jsconfig)%>);
+  wx.config(<%-JSON.stringify(jsconfig)||'{}'%>);
   wx.ready(function(){
     wx.onMenuShareTimeline({
       title: '<%=user.name||''%>的新年花语是：<%-huayu.title||''%>。打开我的新年花语，领取袭人新年红包。', // 分享标题
