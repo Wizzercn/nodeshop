@@ -24,7 +24,7 @@ module.exports = {
           if (code) {
             Wx_config.findOne(sales.wxid).exec(function (ec, oc) {
               var api = new OAuth(oc.appid, oc.appsecret);
-			  api.setOpts({timeout: 35000});
+              api.setOpts({timeout: 35000});
               api.getAccessToken(code, function (ew, ow) {
                 if (ow && ow.data) {
                   var openid = ow.data.openid;
@@ -127,10 +127,10 @@ module.exports = {
     });
   },
   huayu: function (req, res) {
-    //var uagent = req.get('user-agent');
-    //if (uagent.indexOf('MicroMessenger') < 0) {
-    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    //}
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -256,7 +256,7 @@ module.exports = {
               jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'],
               url: str
             };
-			api.setOpts({timeout: 35000});
+            api.setOpts({timeout: 35000});
             api.getJsConfig(param, function (e1, result) {
               data.jsconfig = result;
               Wx_user.findOne({openid: user.openid, wxid: user.wxid, subscribe: 1}).exec(function (e7, o7) {
@@ -275,11 +275,10 @@ module.exports = {
     });
   },
   myhuayu: function (req, res) {
-
-    //var uagent = req.get('user-agent');
-    //if (uagent.indexOf('MicroMessenger') < 0) {
-    //  return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
-    //}
+    var uagent = req.get('user-agent');
+    if (uagent.indexOf('MicroMessenger') < 0) {
+      return res.json({code: 1, msg: '请使用微信打开~~ www.sunchn.com'});
+    }
     var salesid = req.query.salesid;
     var logid = req.query.logid;
     var wxid = req.query.wxid;
@@ -316,7 +315,7 @@ module.exports = {
               jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'],
               url: str
             };
-			api.setOpts({timeout: 35000});
+            api.setOpts({timeout: 35000});
             api.getJsConfig(param, function (e1, result) {
               data.jsconfig = result;
               Wx_sales_info.findOne(user.infoid).exec(function (e6, info) {
@@ -336,7 +335,7 @@ module.exports = {
     Wx_sales.findOne(id).exec(function (errsales, sales) {
       Wx_config.findOne(sales.wxid).exec(function (ec, oc) {
         var api = new OAuth(oc.appid, oc.appsecret);
-		api.setOpts({timeout: 35000});
+        api.setOpts({timeout: 35000});
 
         api.getAccessToken(code, function (ew, ow) {
           if (ow && ow.data) {
@@ -359,7 +358,7 @@ module.exports = {
     Wx_sales.findOne(id).exec(function (errsales, sales) {
       Wx_config.findOne(sales.wxid).exec(function (ec, oc) {
         var api = new OAuth(oc.appid, oc.appsecret);
-		api.setOpts({timeout: 35000});
+        api.setOpts({timeout: 35000});
         api.getAccessToken(code, function (ew, ow) {
           if (ow && ow.data) {
             var openid = ow.data.openid;

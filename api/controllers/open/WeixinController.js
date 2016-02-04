@@ -42,7 +42,7 @@ module.exports = {
                     });
                   });
                 } else {
-                  Wx_user.create({openid: data.openid, wxid: id}).exec(function (e2, obj) {
+                  Wx_user.create({openid: data.openid, wxid: id,subscribe:1}).exec(function (e2, obj) {
                     if (obj) {
                       WechatService.init(req, res, function (api) {
                         api.getUser({openid: data.openid, lang: 'zh_CN'}, function (er, result) {

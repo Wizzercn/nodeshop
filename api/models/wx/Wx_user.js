@@ -101,6 +101,9 @@ module.exports = {
       });
     } else {
       api.getFollowers(function (err, data, res) {
+        sails.log.warn('api.getFollowers:::'+JSON.stringify(err));
+        if(data){
+
         var total = data.total;
         var count = data.count;
         var next_openid = data.next_openid;
@@ -117,7 +120,7 @@ module.exports = {
             user_list = [];
           }
         });
-
+        }
       });
     }
   }
