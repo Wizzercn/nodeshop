@@ -27,6 +27,10 @@ module.exports = {
       size: 255,
       required: true
     },
+    //商品简介
+    info:{
+      type: 'string'
+    },
     //销售价格(单位:分)
     price:{
       type:'integer',
@@ -97,10 +101,6 @@ module.exports = {
     //品牌
     brandid: {
       model: 'Shop_goods_brand'
-    },
-    //二维码
-    qrcode:{
-      type:'string'
     },
     //商品默认图片
     imageid: {

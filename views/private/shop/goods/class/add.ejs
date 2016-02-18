@@ -37,7 +37,7 @@
                   <%if(typelist){
                     typelist.forEach(function(o){
                       %>
-                  <option value="<%=o.id%>"><%=o.name%></option>
+                  <option value="<%=o.id%>" <%if(typeof parentUnit!='undefined'){if(o.id==parentUnit.typeid){%>selected<%}}%>><%=o.name%></option>
                   <%
                     });
                   }%>
@@ -102,7 +102,7 @@
   </div>
 </div>
 <a class="exit-offscreen"></a>
-<!-- 选择上级单位 -->
+<!-- 选择上级 -->
 <div id="dialogSelectParentUnit" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
