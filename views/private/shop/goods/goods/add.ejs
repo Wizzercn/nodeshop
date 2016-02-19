@@ -172,6 +172,38 @@
       selectParentMenu();
     });
   }
+  function getProps(id){
+    $.post("/private/shop/goods/goods/getProps/" + id, {}, function (propdata) {
+      if(propdata.code==0){
+        var str='';
+        $.each(propdata.data,function(i,prop){
+          if(prop.type=='select'){
+            str+='<div class="form-group">';
+            str+='<label class="col-sm-2 control-label">'+prop.name+'</label>';
+            str+='<div class="col-sm-8">';
+            str+='<select class="form-control" >';
+            str+='<option value=""></option>';
+            $.each(prop.values,function(j,value){
+              str+='<option value="'+value.name+'">'+value.name+'</option>';
+            });
+            str+='</select>';
+            str+='</div>';
+            str+='</div>';
+          }else {
+            str+='<div class="form-group">';
+            str+='<label class="col-sm-2 control-label">'+prop.name+'</label>';
+            str+='<div class="col-sm-8">';
+            str+='<input class="form-control" />';
+            str+='</div>';
+            str+='</div>';
+          }
+        });
+        $("#kzsx").html(str);
+      }else {
+        $("#kzsx").html('');
+      }
+    }, "json");
+  }
   //选择父菜单
   function selectParentMenu() {
     var tree = $.jstree.reference("#jsTreeParentUnit");
@@ -180,6 +212,20 @@
     $("#addForm #parentId").val(node[0].text);
     $("#addForm input[name='parentId']").val(id);
     $("#dialogSelectParentUnit").modal("hide");
+    $.post("/private/shop/goods/goods/getClass/" + id, {}, function (data) {
+      if(data.code==0){
+        var type=data.data.typeid;
+        if(type){
+          $("#typeid option[value='"+type.id+"']").attr("selected", true);
+          if(type.use_props){
+            $("#kzsx_tab").show();
+            getProps(type.id);
+          }
+        }
+      }else{
+        Toast.error(data.msg);
+      }
+    }, "json");
   }
   function selectFirstMenu() {
     $("#addForm #parentId").val("请选择商品分类");
@@ -191,6 +237,23 @@
     $("#picurl").val("");
   }
   $(document).ready(function () {
+    $("#typeid").on("change",function(){
+      if($(this).val()=='0'){
+        $("#kzsx_tab").hide();
+        $("#kzsx").html('');
+      }else {
+        $.post("/private/shop/goods/goods/getType/" + $(this).val(), {}, function (data) {
+          if(data.code==0){
+            if(data.data.use_props){
+                $("#kzsx_tab").show();
+                getProps(data.data.id);
+            }
+          }else{
+            Toast.error(data.msg);
+          }
+        }, "json");
+      }
+    });
     initTreeView();
     var ue = new baidu.editor.ui.Editor();
     ue.render('note');
