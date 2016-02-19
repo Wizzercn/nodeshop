@@ -2,17 +2,42 @@
  * Created by root on 2/1/16.
  */
 var moment = require('moment');
+var async=require('async');
 module.exports = {
   index: function (req, res) {
     return res.view('private/shop/goods/goods/index', req.data);
   },
   add: function (req, res) {
-    Shop_goods_type.find().exec(function (e1, typelist) {
-      Shop_goods_brand.find().exec(function (e2, brandlist) {
-        req.data.typelist = typelist;
-        req.data.brandlist = brandlist;
-        return res.view('private/shop/goods/goods/add', req.data);
-      });
+    async.parallel({
+      typelist:function(done){
+        Shop_goods_type.find().exec(function (error, obj) {
+          if(!error)
+            done(null,obj);
+          else
+            done(error,null);
+        });
+      },
+      brandlist:function(done){
+        Shop_goods_brand.find().exec(function (error, obj) {
+          if(!error)
+            done(null,obj);
+          else
+            done(error,null);
+        });
+      },
+      lvlist:function(done){
+        Shop_member_lv.find({disabled:false}).exec(function (error, obj) {
+          if(!error)
+            done(null,obj);
+          else
+            done(error,null);
+        });
+      }
+    },function(error,result){
+      req.data.typelist = result.typelist||[];
+      req.data.brandlist = result.brandlist||[];
+      req.data.lvlist = result.lvlist||[];
+      return res.view('private/shop/goods/goods/add', req.data);
     });
   },
   getClass:function(req,res){

@@ -14,35 +14,32 @@ module.exports = {
         return 1;
       }
     },
-    filename: {
-      type: 'string'
-    },
-    src: {
-      type: 'string'
-    },
-    url: {
-      type: 'string'
-    },
-    l_url: {
-      type: 'string'
-    },
-    m_url: {
-      type: 'string'
-    },
-    s_url: {
-      type: 'string'
-    },
-    width: {
+    s_width: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
-    height: {
+    s_height: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
+    },
+    m_width: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    m_height: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    wk_url: {
+      type: 'string'
     },
     watermark: {
       type: 'boolean',
