@@ -41,11 +41,14 @@ module.exports = {
     wk_url: {
       type: 'string'
     },
-    watermark: {
-      type: 'boolean',
+    wk_type:{
+      type: 'integer',
       defaultsTo: function () {
-        return false;
+        return 0;
       }
+    },
+    wk_txt:{
+      type: 'string'
     },
     updatedAt: {
       type: 'integer',
