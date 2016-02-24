@@ -63,7 +63,7 @@ var jsFilesToInject = [
   'plugins/datepicker/bootstrap-datetimepicker.min.js',
   'plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js',
   'plugins/emoji/emoji.js',
-  'plugins/jquery.dragsort-0.5.1.min.js',
+  'plugins/sorttable/Sortable.min.js',
   'js/form.js',
   'js/offscreen.js',
   'js/main.js',

@@ -5,6 +5,9 @@ var fs = require('fs-extra');
 var sizeOf = require('image-size');
 var uuid = require('node-uuid');
 var moment = require("moment");
+var gm = require('gm');
+var imageMagick = gm.subClass({imageMagick: true});
+var async = require('async');
 module.exports = {
   /**
    * 只允许上传图片，并验证是否已登陆
@@ -72,29 +75,101 @@ module.exports = {
           } else {
             var file = fd.substring(fd.lastIndexOf('/'));
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
-
-            fs.copy(fd, sails.config.appPath + newPath, function (err) {
-              if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
-              sizeOf(fd, function (err, dimensions) {
-                var img = {};
-                img.id = uuid.v4().replace(new RegExp(/(-)/g), '');;
-                img.filename = filename;
-                img.src = newPath;
-                img.url = '/open/image/file/' + img.id + suffix;
-                img.width = dimensions.width;
-                img.height = dimensions.height;
-                img.watermark = false;
-                Img_image.create(img).exec(function (e, o) {
-                  if (o) {
-                    return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, path: img.url});
-                  } else {
-                    return res.json({code: 2, msg: sails.__('file.upload.err')});
-                  }
+            //fs.copy(fd, sails.config.appPath + newPath, function (err) {
+            //  if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
+            //  sizeOf(fd, function (err, dimensions) {
+            //    var img = {};
+            //    img.id = uuid.v4().replace(new RegExp(/(-)/g), '');
+            //
+            //    img.filename = filename;
+            //    img.src = newPath;
+            //    img.url = '/open/image/file/' + img.id + suffix;
+            //    img.width = dimensions.width;
+            //    img.height = dimensions.height;
+            //    img.watermark = false;
+            //    Img_image.create(img).exec(function (e, o) {
+            //      if (o) {
+            //        return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, path: img.url});
+            //      } else {
+            //        return res.json({code: 2, msg: sails.__('file.upload.err')});
+            //      }
+            //    });
+            //  });
+            //
+            //
+            //});
+            async.waterfall([function (cb) {
+                fs.copy(fd, sails.config.appPath + newPath, function (err) {
+                  cb(err, newPath);
                 });
+              },
+                function (newPath, cb) {
+                  sizeOf(fd, function (err, dimensions) {
+                    cb(err, dimensions);
+                  });
+                },
+                function (dimensions, cb) {
+                  var img = {};
+                  img.id = uuid.v4().replace(new RegExp(/(-)/g), '');
+                  img.filename = filename;
+                  img.src = newPath;
+                  img.url = '/open/image/file/' + img.id + suffix;
+                  img.width = dimensions.width;
+                  img.height = dimensions.height;
+                  img.watermark = false;
+                  Img_image.create(img).exec(function (err, obj) {
+                    cb(err, obj);
+                  });
+                },
+                function (obj, cb) {
+                  Img_config.findOne(1).exec(function (err, config) {
+                    if(config){
+                      config.imgId=obj.id;
+                      config.imgUrl=obj.url;
+                    }else {
+                      config={};
+                      config.imgId=obj.id;
+                      config.imgUrl=obj.url;
+                    }
+                    cb(null, config);
+                  });
+                },
+                function (config, cb) {
+                  var imgId=config.imgId;
+                  var imgUrl=config.imgUrl;
+                  var s_width=config.s_width||120;var s_height=config.s_height||140;
+                  var m_width=config.m_width||300;var m_height=config.m_height||300;
+                  var s_id = uuid.v4().replace(new RegExp(/(-)/g), '');
+                  var s_src =sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file.substring(0,file.lastIndexOf('.'))+"_s"+suffix;
+                  var m_id = uuid.v4().replace(new RegExp(/(-)/g), '');
+                  var m_src =sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file.substring(0,file.lastIndexOf('.'))+"_m"+suffix;
+                  imageMagick(fd)
+                    .resize(s_width, s_height, '!') //加('!')强行把图片缩放成对应尺寸150*150！
+                    .autoOrient()
+                    .write(sails.config.appPath+ s_src, function(err){
+                      Img_image.update(imgId,{s_src:s_src}).exec(function (e, o) {
+
+                      });
+                    });
+                  imageMagick(fd)
+                    .resize(m_width, m_height, '!') //加('!')强行把图片缩放成对应尺寸150*150！
+                    .autoOrient()
+                    .write(sails.config.appPath+ m_src, function(err){
+                      Img_image.update({id:imgId},{m_src:m_src}).exec(function (e, o) {
+
+                      });
+                    });
+                  cb(null, imgUrl);
+                }],
+              function (err, imgUrl) {
+                if (err) {
+                  return res.json({code: 2, msg: sails.__('file.upload.err')+' err:'+JSON.stringify(err)});
+                } else {
+                  return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, path: imgUrl});
+                }
               });
 
 
-            })
           }
         }
       });

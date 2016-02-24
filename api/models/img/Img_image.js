@@ -25,22 +25,10 @@ module.exports = {
     url: {
       type: 'string'
     },
-    l_src: {
-      type: 'string'
-    },
-    l_url: {
-      type: 'string'
-    },
     m_src: {
       type: 'string'
     },
-    m_url: {
-      type: 'string'
-    },
     s_src: {
-      type: 'string'
-    },
-    s_url: {
       type: 'string'
     },
     width: {

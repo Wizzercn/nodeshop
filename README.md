@@ -17,8 +17,10 @@
 
 3.安装必备模块 node-gyp
 -----------------------------------
-    >>yum install gcc-c++ make
+    >>yum install gcc-c++ make             //若hiredis报错则需安装4.8以上版本（不安装4.8+好像也不影响项目运行）
+    >>yum install ImageMagick-c++.x86_64   //图片缩放配合gm使用
     >>npm install node-gyp -g
+
 
 4.安装WebStorm 并安装JDK7/JDK8
 -----------------------------------

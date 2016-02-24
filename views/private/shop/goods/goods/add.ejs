@@ -1,7 +1,28 @@
 <style>
-  #img{ clear:both;float: left;text-align:left;height: 120px;width:100%; list-style-type:none; margin:0px; }
-  #img li{ float:left; padding:2px; width:106px; height:100px; }
-  .placeHolder div { background-color:white !important; border:dotted 10px grey !important; }
+  #img{
+    list-style-type: none;
+    margin: 2px;
+    height: 120px;
+    float: left;
+  }
+  .divImg{
+    float: left;
+    margin: 2px;
+    padding: 2px;
+    height:118px;
+    width:100px;
+    border: 1px solid #dcdcdc;
+    cursor: move;
+  }
+  .divImgD{
+    float: left;
+    margin: 2px;
+    padding: 2px;
+    height:118px;
+    width:100px;
+    border: 1px solid red;
+    cursor: move;
+  }
 </style>
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
@@ -114,11 +135,9 @@
                         <input id="file_upload" name="file_upload" type="file" multiple="true">
 
                       </div>
-                      <ul id="img">
-
-                      </ul>
-                      <input type="hidden" id="pics" name="pics" value="" >
-                    </div>
+                      <div id="img">
+                      </div>
+                  </div>
                   </div>
                   <div id="sp">
                   <div class="form-group">
@@ -391,7 +410,11 @@
     $("#dialogSelectParentUnit").modal("hide");
   }
   function setImg(id){
-    $("#"+id).style.settings;
+    $("#img").find("div").each(function(){
+      $(this).removeClass("divImgD").addClass("divImg");
+    });
+    $("#"+id).removeClass("divImg");
+    $("#"+id).addClass("divImgD");
   }
   function delImg(id){
     $("#"+id).remove();
@@ -423,6 +446,8 @@
       }
     });
     initTreeView();
+    var container = document.getElementById("img");
+    var sort = Sortable.create(container);
     var ue = new baidu.editor.ui.Editor();
     ue.render('note');
     $('#file_upload').uploadifive({
@@ -442,24 +467,15 @@
         if (data.code == 0) {
           Toast.success(data.msg);
           imgId++;
-          var color="#dcdcdc";
+          var c="divImg";
           if(imgId==1){
-            color="#66a7ad";
+            c="divImgD";
           }
-          $("#img").append("<li><div id='imgId"+imgId+"' style='border:1px solid "+color+";padding: 2px;margin: 1px;float: left;'>" +
-            "<img src='" + data.path + "' style='width:100px;height: 80px;margin-bottom: 1px;'><br>" +
-            "<button type='button' onclick=\"setImg('imgId"+imgId+"')\">默认</button> <button type='button' onclick=\"delImg('imgId"+imgId+"')\">删除</button></div></li>");
-          $("#img").dragsort(
-            {
-              dragSelector: "div",
-              dragBetween: false,
-              dragEnd: function(){
-
-              },
-              placeHolderTemplate:
-                "<li style='border:1px solid "+color+";padding: 2px;margin: 1px;float: left;''></li>"
-            }
-          );
+          $("#img").append("<div id='imgId"+imgId+"' class='"+c+"'>" +
+            "<img src='" + data.path + "?type=s' style='width:100px;height: 80px;margin-bottom: 1px;'><br>" +
+            "<button type='button' onclick=\"setImg('imgId"+imgId+"')\">默认</button> <button type='button' onclick=\"delImg('imgId"+imgId+"')\">删除</button></div>");
+          sort.destroy();
+          sort = Sortable.create(container);
         } else {
           Toast.error(data.msg);
         }
