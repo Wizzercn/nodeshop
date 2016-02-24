@@ -20,6 +20,13 @@ module.exports = {
       unique: true,
       size: 50
     },
+    unionid :{//同一个微信开放平台帐号下的移动应用、网站应用和公众帐号，用户的unionid是唯一的
+      type: 'string',
+      required: true,
+      index: true,
+      unique: true,
+      size: 50
+    },
     nickname: {//用户的昵称
       type: 'string'
     },

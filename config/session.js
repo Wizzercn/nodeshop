@@ -57,7 +57,7 @@ module.exports.session = {
    ttl: 3000,//<redis session TTL in seconds>
   // db: 0,
    pass: '@#etpass',
-   prefix: 'ns_session:',
+   prefix: 'ns_session:'
 
 
   /***************************************************************************
