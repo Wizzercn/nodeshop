@@ -139,9 +139,7 @@ module.exports = {
                   var imgUrl=config.imgUrl;
                   var s_width=config.s_width||120;var s_height=config.s_height||140;
                   var m_width=config.m_width||300;var m_height=config.m_height||300;
-                  var s_id = uuid.v4().replace(new RegExp(/(-)/g), '');
                   var s_src =sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file.substring(0,file.lastIndexOf('.'))+"_s"+suffix;
-                  var m_id = uuid.v4().replace(new RegExp(/(-)/g), '');
                   var m_src =sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file.substring(0,file.lastIndexOf('.'))+"_m"+suffix;
                   imageMagick(fd)
                     .resize(s_width, s_height, '!') //加('!')强行把图片缩放成对应尺寸150*150！
@@ -155,7 +153,7 @@ module.exports = {
                     .resize(m_width, m_height, '!') //加('!')强行把图片缩放成对应尺寸150*150！
                     .autoOrient()
                     .write(sails.config.appPath+ m_src, function(err){
-                      Img_image.update({id:imgId},{m_src:m_src}).exec(function (e, o) {
+                      Img_image.update(imgId,{m_src:m_src}).exec(function (e, o) {
 
                       });
                     });
