@@ -1,0 +1,201 @@
+<div id="dialogSpec" class="modal fade" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width: 1000px;" >
+    <div class="modal-content" style="width: 1000px;" >
+      <div class="modal-header" >
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">商品规格</h4>
+      </div>
+      <div class="modal-body" style="min-height: 300px;">
+        <div class="row">
+          <div class="col-xs-12" style="float: left" >
+            <% list.forEach(function(o){ %>
+            <div class="spec" style="float: left;padding-right: 10px;" data-spec-name="<%= o.name%>" data-spec-type="<%= o.type%>" data-spec-id="<%= o.id||'' %>">
+              <span class="h5 mb10" style="float: left"><input class="specChkAll" type="checkbox"><strong><%= o.name||'' %>:</strong></span>
+              <div style="float: left;padding-left: 20px;">
+                <% o.values.forEach(function(v){ %>
+                <div class="vl" >
+                <input id="s<%= v.id %>" type="checkbox" value="<%= v.id %>"
+                       title="<%= v.spec_value||'' %>"><%if(v.spec_picurl){%><img src="<%=v.spec_picurl||''%>" style="width: 12px;height: 12px;"><%}%><%= v.spec_value||'' %>
+
+                <a href="javascript:selImg('<%= v.id %>');" style="color: #428bca">选择图片</a>
+                <div id="s_img<%= v.id %>"></div>
+                </div>
+                <% }); %>
+              </div>
+            </div>
+              <% }); %>
+
+          </div>
+          <div class="col-xs-12" style="padding-top: 5px;height: 45px;">
+            <button id="doProduct" type="button" class="btn btn-primary btn-sm">生成所有货品</button>
+          </div>
+          <div style="width: 100%;text-align: center;margin-top: 10px;">
+            <table id="plist" class="table table-bordered table-striped table-condensed" style="width: 95%;margin: 20px;">
+              <thead>
+              <tr>
+                <th>规格值</th>
+                <th>货号</th>
+                <th class="numeric">上架</th>
+                <th class="numeric">库存</th>
+                <th class="numeric">销售价</th>
+                <th class="numeric">成本价</th>
+                <th class="numeric">市场价</th>
+                <th class="numeric">重量(g)</th>
+                <th class="numeric">默认货品</th>
+                <th class="numeric">操作</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="dialogSpecOK" type="button" class="btn btn-primary" data-loading-text="保存...">保 存</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dialogImg" class="modal fade" style="padding-top: 20px;" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width: 650px;" >
+    <div class="modal-content" style="width: 650px;" >
+      <div class="modal-header" >
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">选择商品图片</h4>
+      </div>
+      <div class="modal-body" >
+        <div class="row" id="dialogImg_imgs">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="specImgDelBtn" type="button" class="btn btn-danger" data-loading-text="删除...">删 除</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script language="JavaScript">
+  function specSelImg(id,url){
+    $("#s_img"+id).html("<img class='specImg' width='50' height='50' src='"+url+"' style='height: 50px;width: 50px;'>");
+    $("#dialogImg").modal("hide");
+  }
+  function specDelImg(id){
+    $("#s_img"+id).html("");
+  }
+  function selImg(id){
+    var imgs=getImg();
+    $("#dialogImg_imgs").html("");
+    $.each(imgs,function(i,o){
+      var str="<div style='margin:2px;float:left;text-align: center;border: 1px solid #dcdcdc;cursor: pointer;' onclick=\"specSelImg("+id+",'"+o.url+"')\" >" +
+        "<img src='" + o.url + "' style='width:100px;height: 80px;margin-bottom: 1px;'></div>";
+      $("#dialogImg_imgs").append(str);
+      $("#specImgDelBtn").unbind("click").on("click",function(){
+        specDelImg(id);
+        $("#dialogImg").modal("hide");
+      });
+    });
+    $("#dialogImg").modal("show");
+  }
+  function getSpec(){
+    var specs=[];
+    $("#dialogSpec").find("div .spec").each(function(){
+      var self=$(this);
+      var spec={};
+      var spec_values=[];
+      spec.spec_name=$(this).attr("data-spec-name");
+      spec.spec_type=$(this).attr("data-spec-type");
+      spec.spec_id=$(this).attr("data-spec-id");
+
+      self.find("div .vl").each(function(){
+        var v={};
+        v.spec_name=spec.spec_name;
+        v.spec_type=spec.spec_type;
+        v.spec_id=spec.spec_id;
+        var chk=false;
+        $(this).find("img[class='specImg']").each(function(){
+          v.spec_value_imgurl=$(this).attr("src");
+        });
+        $(this).find("input[type=checkbox]").each(function(){
+          v.spec_value_id=$(this).val();
+          v.spec_value_name=$(this).attr("title");
+          chk=$(this).prop("checked");
+        });
+        if(chk){
+          spec_values.push(v);
+          spec.spec_values=spec_values;
+        }
+      });
+      if(spec_values.length>0){
+        specs.push(spec);
+      }
+
+    });
+    return specs;
+  }
+  $(document).ready(function () {
+    $(".specChkAll").on("click",function(){
+      if($(this).prop("checked")){
+        $(this).parent().parent().find("input[type=checkbox]").each(function(){
+          $(this).prop("checked",true);
+        });
+      }else {
+        $(this).parent().parent().find("input[type=checkbox]").each(function(){
+          $(this).prop("checked",false);
+        });
+      }
+    });
+    $("#doProduct").on("click",function(){
+      var specs=getSpec();
+      var product_name=[];
+      var spec_values=[];
+      var size=1;
+      $.each(specs,function(i,s){
+        size=size * s.spec_values.length;
+        $.each(s.spec_values,function(j,o){
+          spec_values.push(o);
+        });
+      });
+      if(spec_values.length<1){
+        Toast.warning("至少选择一种规格");
+        return false;
+      }
+      if(specs.length>1){
+        $.each(spec_values,function(i1,v1){
+          $.each(spec_values,function(i2,v2){
+            if(v1.spec_id!=v2.spec_id&&product_name.length<size){
+              product_name.push(v1.spec_name+":"+v1.spec_value_name+"*"+v2.spec_name+":"+v2.spec_value_name);
+            }
+          });
+        });
+      }else {
+        $.each(spec_values,function(i2,v2){
+          if(product_name.length<size){
+            product_name.push(v2.spec_name+":"+v2.spec_value_name);
+          }
+        });
+      }
+      $("#plist tbody").html("");
+      $.each(product_name,function(i,name){
+        var str="<tr>";
+        str+="<td>"+name+"</td>";
+        str+="<td><input name='pbn[]' type='text' class='form-control' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
+        str+="<td><input name='up[]' type='checkbox' checked></td>";
+        str+="<td><input name='stock[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td style='text-align: left;width: 150px;'><input name='price[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'>" +
+          "<input name='lvprice[]' type='hidden'><a href='javascript:;' style='color: #428bca'>会员价</a></td>";
+        str+="<td><input name='priceMarket[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='priceCost[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='weight[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='is_default[]' type='checkbox'></td>";
+        str+="<td><a class='delSpec' href='javascript:;' style='color: #428bca'>删除</a></td>";
+        $("#plist tbody").append(str);
+      });
+      $("#plist .delSpec").on("click",function(){
+        $(this).parent().parent().remove();
+      });
+    });
+  });
+</script>

@@ -2,26 +2,26 @@
   #img{
     list-style-type: none;
     margin: 2px;
-    height: 120px;
+    height: 118px;
     float: left;
   }
   .divImg{
     float: left;
     margin: 2px;
     padding: 2px;
-    height:118px;
+    height:108px;
     width:100px;
     border: 1px solid #dcdcdc;
-    cursor: move;
+    cursor: pointer;
   }
   .divImgD{
     float: left;
     margin: 2px;
     padding: 2px;
-    height:118px;
+    height:108px;
     width:100px;
     border: 1px solid red;
-    cursor: move;
+    cursor: pointer;
   }
 </style>
 <header class="header navbar bg-white shadow">
@@ -149,7 +149,7 @@
                     <div class="col-sm-8">
                       <input type="text" class="form-control" style="width: 120px;" name="price" placeholder="销售价">
 <%if(lvlist.length>0){%>
-                      <input type="hidden" name="lvprice" value="">
+                      <input type="hidden" name="lvprice[]" value="">
                       <button class="btn btn-primary" style="float: left;margin-top: 2px;" type="button" data-toggle="modal"
                               data-target="#dialogLv">编辑会员价格</button>
 <%}%>
@@ -159,7 +159,7 @@
                     <label for="bn" class="col-sm-2 control-label">市场价</label>
 
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" style="width: 120px;" name="priceMarket" placeholder="市场价">
+                      <input type="text" class="form-control" style="width: 120px;" name="priceMarket[]" placeholder="市场价">
 
                     </div>
                   </div>
@@ -167,7 +167,7 @@
                     <label for="priceCost" class="col-sm-2 control-label">成本价</label>
 
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" style="width: 120px;" name="priceCost" placeholder="前台不显示">
+                      <input type="text" class="form-control" style="width: 120px;" name="priceCost[]" placeholder="前台不显示">
 
                     </div>
                   </div>
@@ -175,7 +175,7 @@
                     <label for="pbn" class="col-sm-2 control-label">货号</label>
 
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" name="pbn" placeholder="货号(不填则自动生成)">
+                      <input type="text" class="form-control" name="pbn[]" placeholder="货号(不填则自动生成)">
 
                     </div>
                   </div>
@@ -183,7 +183,7 @@
                     <label for="weight" class="col-sm-2 control-label">重量</label>
 
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" style="width: 120px;" name="weight" placeholder="克(g)">
+                      <input type="text" class="form-control" style="width: 120px;" name="weight[]" placeholder="克(g)">
 
                     </div>
                   </div>
@@ -191,7 +191,7 @@
                     <label for="stock" class="col-sm-2 control-label">库存</label>
 
                     <div class="col-sm-8">
-                      <input type="text" class="form-control" style="width: 120px;" name="stock" placeholder="库存">
+                      <input type="text" class="form-control" style="width: 120px;" name="stock[]" placeholder="库存">
 
                     </div>
                   </div>
@@ -200,8 +200,7 @@
                     <label for="gg" class="col-sm-2 control-label">规格</label>
 
                     <div class="col-sm-8">
-                      <button class="btn btn-primary" style="float: left;" type="button" data-toggle="modal"
-                              data-target="#dialogLv">开启规格</button>
+                      <button id="specBtn" class="btn btn-primary" style="float: left;" type="button">开启规格</button>
                     </div>
                   </div>
                   </div>
@@ -327,6 +326,7 @@
     </div>
   </div>
 </div>
+<div id="specHtml"></div>
 <script language="JavaScript">
   var imgId=0;
   function initTreeView() {
@@ -422,6 +422,22 @@
   function delImg(id){
     $("#"+id).remove();
   }
+  function getImg(){
+    var imgs=[];
+
+    $("#img").find("div").each(function(){
+      var img={};
+      img.d=false;
+      if($(this).hasClass("divImgD")){
+        img.d=true;
+      }
+      $(this).find("img").each(function(){
+        img.url=$(this).attr("src");
+      });
+      imgs.push(img);
+    });
+    return imgs;
+  }
   $(document).ready(function () {
     $("#typeid").on("change",function(){
       if($(this).val()=='0'){
@@ -448,6 +464,19 @@
         }, "json");
       }
     });
+    $("#specBtn").on("click",function(){
+      $("#specHtml").load("/private/shop/goods/goods/spec/"+$("#typeid").val(), function (response, status, xhr) {
+        $("#dialogSpec").modal("show");
+        $("#dialogSpecOK").on("click",function(){
+          $("#dialogSpec").unbind("hidden.bs.modal").on("hidden.bs.modal", function () {
+
+
+          });
+          $("#dialogSpec").modal("hide");
+        });
+      });
+    });
+
     initTreeView();
     var container = document.getElementById("img");
     var sort = Sortable.create(container);
@@ -475,12 +504,18 @@
             c="divImgD";
           }
           $("#img").append("<div id='imgId"+imgId+"' class='"+c+"'>" +
-            "<img src='" + data.path + "?type=s' style='width:100px;height: 80px;margin-bottom: 1px;'><br>" +
-            "<button type='button' onclick=\"setImg('imgId"+imgId+"')\">默认</button> <button type='button' onclick=\"delImg('imgId"+imgId+"')\">删除</button></div>");
+            "<img  onclick=\"setImg('imgId"+imgId+"')\" src='" + data.path + "?type=s' style='width:100px;height: 80px;margin-bottom: 1px;'><br>" +
+            "<i style='float: right;padding-top: 4px;' class='fa fa-close' onclick=\"delImg('imgId"+imgId+"')\"></i></div>");
           sort.destroy();
           sort = Sortable.create(container);
         } else {
           Toast.error(data.msg);
+        }
+      },
+      'onSelect' : function(queue) {
+        if($("#img").children().length>5){
+        Toast.warning("最大允许上传6张图片");
+        $('#file_upload').uploadifive('cancel', $('.uploadifive-queue-item').first().data('file'));
         }
       }
     });

@@ -117,6 +117,12 @@ module.exports = {
         return false;
       }
     },
+    is_default: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     //上架时间
     upAt:{
       type:'integer'
