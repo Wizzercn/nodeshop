@@ -38,7 +38,7 @@
                 <th class="numeric">上架</th>
                 <th class="numeric">库存</th>
                 <th class="numeric">销售价</th>
-                <th class="numeric">成本价</th>
+                <th class="numeric" style="display: none">成本价</th>
                 <th class="numeric">市场价</th>
                 <th class="numeric">重量(g)</th>
                 <th class="numeric">默认货品</th>
@@ -73,6 +73,38 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
         <button id="specImgDelBtn" type="button" class="btn btn-danger" data-loading-text="删除...">删 除</button>
 
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dialogLvSpec" style="padding-top: 20px;" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">编辑会员价</h4>
+      </div>
+      <div class="modal-body">
+
+        <%lvlist.forEach(function(o){%>
+
+        <div class="row mb10 lvpricecss" data-lv-id="<%=o.id%>">
+          <div class="form-group">
+            <label for="bn" class="col-sm-3 control-label" style="padding-top: 10px;"><%=o.name%></label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" style="width: 120px;" placeholder="">
+
+            </div>
+            <div class="col-sm-3" style="padding-top: 10px;">
+              默认折扣率:<%=o.dis_count%>%
+            </div>
+          </div>
+        </div>
+        <%});%>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
       </div>
     </div>
   </div>
@@ -135,6 +167,27 @@
     });
     return specs;
   }
+  function getProducts(specs) {
+    if (!specs || specs.length == 0) {
+      return [];
+    } else {
+      return joinSpec([[]], specs, 0, specs.length-1);
+    }
+    function joinSpec(prevProducts, specs, i, max) {
+      var currentProducts = [], currentProduct, currentSpecs = specs[i];
+      if ( i > max ) {
+        return prevProducts;
+      }
+      $.each(prevProducts,function(i,prevProduct) {
+        $.each(currentSpecs,function(j,spec) {
+          currentProduct = prevProduct.slice(0);
+          currentProduct.push(spec);
+          currentProducts.push(currentProduct);
+        });
+      });
+      return joinSpec(currentProducts, specs, ++i, max);
+    }
+  }
   $(document).ready(function () {
     $(".specChkAll").on("click",function(){
       if($(this).prop("checked")){
@@ -154,41 +207,48 @@
       var size=1;
       $.each(specs,function(i,s){
         size=size * s.spec_values.length;
+        var t=[];
         $.each(s.spec_values,function(j,o){
-          spec_values.push(o);
+          t.push(o);
         });
+        spec_values.push(t);
+      });
+      $.each(getProducts(spec_values),function(i,v){
+        var n="";
+        $.each(v,function(j,s){
+          n=n+ s.spec_name+":"+ s.spec_value_name;
+          if(j< v.length-1)n+="*";
+        });
+        product_name.push(n);
       });
       if(spec_values.length<1){
         Toast.warning("至少选择一种规格");
         return false;
       }
-      if(specs.length>1){
-        $.each(spec_values,function(i1,v1){
-          $.each(spec_values,function(i2,v2){
-            if(v1.spec_id!=v2.spec_id&&product_name.length<size){
-              product_name.push(v1.spec_name+":"+v1.spec_value_name+"*"+v2.spec_name+":"+v2.spec_value_name);
-            }
-          });
-        });
-      }else {
-        $.each(spec_values,function(i2,v2){
-          if(product_name.length<size){
-            product_name.push(v2.spec_name+":"+v2.spec_value_name);
-          }
-        });
-      }
+      //console.log("product_name::"+JSON.stringify(product_name));
       $("#plist tbody").html("");
+      var i=0;
+      var pbn=$("#pbn").val();
+      var price=$("#price").val();
+      var priceMarket=$("#priceMarket").val();
+      var priceCost=$("#priceCost").val();
+      var weight=$("#weight").val();
       $.each(product_name,function(i,name){
+        i++;
         var str="<tr>";
+        var bn="";
+        if(pbn!=""){
+          bn=pbn+"-"+i;
+        }
         str+="<td>"+name+"</td>";
-        str+="<td><input name='pbn[]' type='text' class='form-control' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
+        str+="<td><input name='pbn[]' type='text' class='form-control'  value='"+bn+"' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
         str+="<td><input name='up[]' type='checkbox' checked></td>";
         str+="<td><input name='stock[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
-        str+="<td style='text-align: left;width: 150px;'><input name='price[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'>" +
-          "<input name='lvprice[]' type='hidden'><a href='javascript:;' style='color: #428bca'>会员价</a></td>";
-        str+="<td><input name='priceMarket[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
-        str+="<td><input name='priceCost[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
-        str+="<td><input name='weight[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td style='text-align: left;width: 150px;'><div style='float: left'><input name='price[]' type='text' value='"+price+"' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></div><div style='float: left'>" +
+          "<input name='lvprice[]' type='hidden' value='[]'><a class='member' href='javascript:;' style='color: #428bca'>会员价</a></div></td>";
+        str+="<td><input name='priceMarket[]' value='"+priceMarket+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td style='display: none'><input name='priceCost[]' value='"+priceCost+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='weight[]' value='"+weight+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
         str+="<td><input name='is_default[]' type='checkbox'></td>";
         str+="<td><a class='delSpec' href='javascript:;' style='color: #428bca'>删除</a></td>";
         $("#plist tbody").append(str);
@@ -196,6 +256,47 @@
       $("#plist .delSpec").on("click",function(){
         $(this).parent().parent().remove();
       });
+      $("#plist .member").on("click",function(){
+        var self=$(this).parent().find("input[type=hidden]");
+        var lvprice=self.val();
+        if(lvprice!=""&&lvprice!="[]"){
+          var lvp=JSON.parse(lvprice);
+          $.each(lvp,function(i,lv){
+            var j=0;
+            $("#dialogLvSpec").find("input[type=text]").each(function(){
+              if(i==j)$(this).val(lv.lv_price);
+              j++;
+            });
+          });
+        }else {
+          $("#dialogLvSpec").find("input[type=text]").each(function(){
+            $(this).val("");
+          });
+        }
+        $("#dialogLvSpec button[type=button]").unbind("click").on("click",function(){
+          var lv=[];
+          $("#dialogLvSpec").find(".lvpricecss").each(function(){
+            var id=$(this).attr("data-lv-id");
+            var price=$(this).find("input[type=text]").val();
+            if(price!="")
+            lv.push({'lv_id':id,'lv_price':price});
+          });
+          self.val(JSON.stringify(lv));
+        });
+        $("#dialogLvSpec").modal("show");
+      });
+    });
+    $("#dialogSpecOK").on("click",function(){
+      var is_default=0;
+      $("#plist tbody").find("input[name='is_default[]']").each(function(){
+        if($(this).prop("checked"))is_default++;
+      });
+      if(is_default==1){
+
+      }else {
+        Toast.warning("请选择一个货品为默认货品");
+        return false;
+      }
     });
   });
 </script>

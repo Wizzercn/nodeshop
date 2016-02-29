@@ -162,9 +162,13 @@ module.exports = {
     var is_physical = body.is_physical || '0';
     var use_props = body.use_props || '0';
     var use_spec = body.use_spec || '0';
+    var use_params = body.use_params || '0';
+    var use_tabs = body.use_tabs || '0';
     body.is_physical = is_physical == '1';
     body.use_props = use_props == '1';
     body.use_spec = use_spec == '1';
+    body.use_params = use_params == '1';
+    body.use_tabs = use_tabs == '1';
     body.createdBy = req.session.user.id;
     Shop_goods_type.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});

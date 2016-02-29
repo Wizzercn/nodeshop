@@ -78,8 +78,12 @@ module.exports = {
         cb(e, o);
       });
     }], function (err, o) {
-      req.data.list = o || [];
-      return res.view('private/shop/goods/goods/spec', req.data);
+      Shop_member_lv.find({disabled: false}).exec(function (error, lvlist) {
+        req.data.list = o || [];
+        req.data.lvlist = lvlist || [];
+        return res.view('private/shop/goods/goods/spec', req.data);
+      });
+
     });
   }
 };
