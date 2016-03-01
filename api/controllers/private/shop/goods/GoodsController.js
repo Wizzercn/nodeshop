@@ -33,11 +33,30 @@ module.exports = {
           else
             done(error, null);
         });
+      },
+      pn:function(done){
+        var y = moment().format('YY');
+        var m = moment().format('MM');
+        var gsn = y + m;
+        var num = 1;
+        Shop_goods.findOne({
+          select: ['gn'],
+          sort: {id: 'desc'},
+          where: {gn: {'like': 'G' + gsn + '%'}},
+          limit: 1
+        }).exec(function (e, o) {
+          if (o) {
+            var temp = o.gn;
+            num = parseInt(temp.substring(5)) + 1;
+          }
+          done(null, 'P'+gsn + StringUtil.getSn(num, 6));
+        });
       }
     }, function (error, result) {
       req.data.typelist = result.typelist || [];
       req.data.brandlist = result.brandlist || [];
       req.data.lvlist = result.lvlist || [];
+      req.data.pn = result.pn || '';
       return res.view('private/shop/goods/goods/add', req.data);
     });
   },
