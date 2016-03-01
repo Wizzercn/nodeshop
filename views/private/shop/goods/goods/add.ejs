@@ -39,6 +39,7 @@
   <div class="wrapper" style="min-height:500px;">
       <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
             action="/private/shop/goods/goods/addDo" method="post">
+        <input type="hidden" name="id" id="id" value="">
         <div class="box-tab tabs-left">
           <ul class="nav nav-tabs">
             <li class="active"><a href="#base" data-toggle="tab">基本信息</a>
@@ -53,11 +54,11 @@
               <div class="row mb10">
                 <div class="col-lg-12">
                   <div class="form-group has-feedback">
-                    <label for="parentId" class="col-sm-2 control-label">商品分类</label>
+                    <label for="classid" class="col-sm-2 control-label">商品分类</label>
 
                     <div class="col-sm-8">
                       <div class="input-group">
-                        <input id="parentId" type="text" class="form-control" placeholder="请选择商品分类" disabled
+                        <input id="classid" type="text" class="form-control" placeholder="请选择商品分类" disabled
                                value="<%=typeof parentUnit!='undefined'?parentUnit.name:'' %>"/>
 
 			                             		<span class="input-group-btn">
@@ -67,7 +68,7 @@
 			                             		</span>
 
                       </div>
-                      <input type="hidden" name="parentId" value="<%=typeof parentUnit!='undefined'?parentUnit.id:0 %>">
+                      <input type="hidden" name="classid" value="<%=typeof parentUnit!='undefined'?parentUnit.id:0 %>">
                     </div>
                   </div>
                   <div class="form-group">
@@ -140,14 +141,16 @@
                       </div>
                   </div>
                   </div>
+                  <div id="sp_new" style="display: none">
+                  </div>
                   <div id="sp">
                   <div class="form-group">
                     <label for="bn" class="col-sm-2 control-label">销售价</label>
 
                     <div class="col-sm-8">
-                      <input type="text" id="price" class="form-control" style="width: 120px;" name="price" placeholder="销售价">
+                      <input type="text" id="price" class="form-control" style="width: 120px;" name="price[]" placeholder="销售价">
 <%if(lvlist.length>0){%>
-                      <input type="hidden" name="lvprice[]" value="">
+                      <input type="hidden" name="lvprice[]" value="[]">
                       <button class="btn btn-primary" style="float: left;margin-top: 2px;" type="button" data-toggle="modal"
                               data-target="#dialogLv">编辑会员价格</button>
 <%}%>
@@ -263,6 +266,11 @@
           </div>
         </div>
         <div class="col-lg-3"></div>
+        <input id="is_spec" name="is_spec" type="hidden" value="false">
+        <input id="specs" name="specs" type="hidden" value="">
+        <input id="images" name="images" type="hidden" value="">
+        <input id="spec_values" name="spec_values" type="hidden" value="[]">
+        <input id="prop_values" name="prop_values" type="hidden" value="[]">
       </form>
 
   </div>
@@ -303,11 +311,11 @@
 
  <%lvlist.forEach(function(o){%>
 
-        <div class="row mb10">
+        <div class="row mb10 lvpricecss"  data-lv-id="<%=o.id%>">
             <div class="form-group">
               <label for="bn" class="col-sm-3 control-label" style="padding-top: 10px;"><%=o.name%></label>
               <div class="col-sm-4">
-                <input type="text" class="form-control" style="width: 120px;" name="lvprice[]" placeholder="">
+                <input type="text" class="form-control" style="width: 120px;" placeholder="">
 
               </div>
               <div class="col-sm-3" style="padding-top: 10px;">
@@ -319,7 +327,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">确认</button>
+        <button type="button" class="btn btn-primary" onclick="lvpriceSet()">确认</button>
       </div>
     </div>
   </div>
@@ -380,8 +388,8 @@
     var tree = $.jstree.reference("#jsTreeParentUnit");
     var node = tree.get_selected(true);
     var id=node[0].id;
-    $("#addForm #parentId").val(node[0].text);
-    $("#addForm input[name='parentId']").val(id);
+    $("#addForm #classid").val(node[0].text);
+    $("#addForm input[name='classid']").val(id);
     $("#dialogSelectParentUnit").modal("hide");
     $.post("/private/shop/goods/goods/getClass/" + id, {}, function (data) {
       if(data.code==0){
@@ -406,8 +414,8 @@
     }, "json");
   }
   function selectFirstMenu() {
-    $("#addForm #parentId").val("请选择商品分类");
-    $("#addForm input[name='parentId']").val("");
+    $("#addForm #classid").val("请选择商品分类");
+    $("#addForm input[name='classid']").val("");
     $("#dialogSelectParentUnit").modal("hide");
   }
   function setImg(id){
@@ -436,15 +444,42 @@
     });
     return imgs;
   }
+  function lvpriceSet(){
+    var lv=[];
+    var self=$("#sp").find("input[type=hidden]");
+    $("#dialogLv").find(".lvpricecss").each(function(){
+      var id=$(this).attr("data-lv-id");
+      var price=$(this).find("input[type=text]").val();
+      if(price!="")
+        lv.push({'lv_id':id,'lv_price':price});
+    });
+    self.val(JSON.stringify(lv));
+    $("#dialogLv").modal("hide");
+  }
   $(document).ready(function () {
+
     $("#typeid").on("change",function(){
       if($(this).val()=='0'){
         $("#kzsx_tab").hide();
         $("#gg").hide();
         $("#kzsx").html('');
+        $("#sp_new").html('').hide();
+        $("#sp").show();
+        $("#is_spec").val("false");
+        $("#specs").val('[]');
+        $("#spec_values").val('[]');
+        $("#prop_values").val('[]');
+
       }else {
         $.post("/private/shop/goods/goods/getType/" + $(this).val(), {}, function (data) {
+
           if(data.code==0){
+            $("#sp_new").html('').hide();
+            $("#sp").show();
+            $("#is_spec").val("false");
+            $("#specs").val('[]');
+            $("#spec_values").val('[]');
+            $("#prop_values").val('[]');
             if(data.data.use_props){
                 $("#kzsx_tab").show();
                 getProps(data.data.id);
@@ -470,13 +505,6 @@
       }
       $("#specHtml").load("/private/shop/goods/goods/spec/"+$("#typeid").val(), function (response, status, xhr) {
         $("#dialogSpec").modal("show");
-//        $("#dialogSpecOK").on("click",function(){
-//          $("#dialogSpec").unbind("hidden.bs.modal").on("hidden.bs.modal", function () {
-//
-//
-//          });
-//          $("#dialogSpec").modal("hide");
-//        });
       });
     });
 
@@ -522,6 +550,47 @@
         }
       }
     });
+    $("#save").on("click",function(){
+      if ($("#is_spec").val() == "false") {
+        var specs = [];
+        var props=[];
+        var self = $("#sp");
+        var spec = "";
+        var gn = self.find("input[name='pbn[]']").val();
+        var disabled = false;
+        var stock = self.find("input[name='stock[]']").val();
+        var price = self.find("input[name='price[]']").val();
+        var lvprice = self.find("input[name='lvprice[]']").val();
+        var priceMarket = self.find("input[name='priceMarket[]']").val();
+        var priceCost = self.find("input[name='priceCost[]']").val();
+        var weight = self.find("input[name='weight[]']").val();
+        var is_default = true;
+        specs.push({
+          'spec': spec,
+          'gn': gn,
+          'disabled': disabled,
+          'stock': stock,
+          'price': price,
+          'lvprice': JSON.parse(lvprice),
+          'priceMarket': priceMarket,
+          'priceCost': priceCost,
+          'weight': weight,
+          'is_default': is_default
+        });
+        $("#specs").val(JSON.stringify(specs));
+      }
+      $("#kzsx").find(".form-group").each(function(){
+        var self=$(this);
+        var obj={};
+        obj.name=self.find("label").text();
+        obj.value=self.find("select").val()||self.find("input").val()||'';
+        props.push(obj);
+      });
+      console.log('props::'+JSON.stringify(props));
+      $("#images").val(JSON.stringify(getImg()));
+      $("#prop_values").val(JSON.stringify(props));
+      $('#addForm').submit();
+    });
     $('#addForm').ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {
@@ -529,9 +598,9 @@
       },
       success: function (data, statusText, xhr, form) {
         if (data.code == 0) {
+          $("#addForm").attr("action","/private/shop/goods/goods/editDo");
+          $("#id").val(data.goodsid);
           Toast.success(data.msg);
-          //刷新父级菜单
-          form.resetForm();
         } else {
           Toast.error(data.msg);
         }

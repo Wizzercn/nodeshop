@@ -213,6 +213,7 @@
         });
         spec_values.push(t);
       });
+//      console.log('spec_values::'+JSON.stringify(spec_values));
       $.each(getProducts(spec_values),function(i,v){
         var n="";
         $.each(v,function(j,s){
@@ -292,7 +293,50 @@
         if($(this).prop("checked"))is_default++;
       });
       if(is_default==1){
-
+        var specs=getSpec();
+        var spec_values=[];
+        var size=1;
+        $.each(specs,function(i,s){
+          size=size * s.spec_values.length;
+          var t=[];
+          $.each(s.spec_values,function(j,o){
+            t.push(o);
+          });
+          spec_values.push(t);
+        });
+        $("#spec_values").val(JSON.stringify(spec_values));
+        var specs=[];
+        var specs_name="";
+        $("#plist tbody").find("tr").each(function(){
+          var self=$(this);
+          var spec=self.find("td:first").text();
+          specs_name+=spec+"|";
+          var gn=self.find("input[name='pbn[]']").val();
+          var disabled=self.find("input[name='up[]']").prop("checked")==false;
+          var stock=self.find("input[name='stock[]']").val();
+          var price=self.find("input[name='price[]']").val();
+          var lvprice=self.find("input[name='lvprice[]']").val();
+          var priceMarket=self.find("input[name='priceMarket[]']").val();
+          var priceCost=self.find("input[name='priceCost[]']").val();
+          var weight=self.find("input[name='weight[]']").val();
+          var is_default=self.find("input[name='is_default[]']").prop("checked")==true;
+          specs.push({'spec':spec,'gn':gn,'disabled':disabled,'stock':stock,'price':price,
+          'lvprice':JSON.parse(lvprice),'priceMarket':priceMarket,'priceCost':priceCost,'weight':weight,'is_default':is_default});
+        });
+        $("#is_spec").val("true");
+        $("#specs").val(JSON.stringify(specs));
+        $("#sp").hide();
+        $("#sp_new").html('<div class="form-group" id="gg_new">'+
+        '<label for="gg_new" class="col-sm-2 control-label">规格</label>'+
+          '<div class="col-sm-8">'+
+          '<button id="specEditBtn" class="btn btn-primary" style="float: left;" type="button">编辑规格</button>'+
+           '<div style="float: left;text-align: left;">已设置'+specs.length+'个规格货品['+ specs_name+']</div>'+
+          '</div>'+
+          '</div>').show();
+        $("#specEditBtn").unbind("click").on("click",function(){
+          $("#dialogSpec").modal("show");
+        });
+        $("#dialogSpec").modal("hide");
       }else {
         Toast.warning("请选择一个货品为默认货品");
         return false;

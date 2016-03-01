@@ -18,14 +18,18 @@ module.exports = {
       size: 100,
       required: true,
       unique: true,
-      index:true,
-      comment:'商品编号'
+      index:true
     },
     //商品名称
     name: {
       type: 'string',
       size: 255,
       required: true
+    },
+    //规格
+    spec: {
+      type: 'string',
+      size: 255
     },
     //销售价格(单位:分)
     price:{
@@ -105,11 +109,6 @@ module.exports = {
     qrcode:{
       type:'string'
     },
-    //货品关联图片
-    imageid: {
-      model: 'Img_image',
-      size:50
-    },
     //是否下架
     disabled: {
       type: 'boolean',
@@ -130,14 +129,6 @@ module.exports = {
     //下架时间
     downAt:{
       type:'integer'
-    },
-    //详细介绍
-    note:{
-      type:'text'
-    },
-    //规格详情
-    spec:{
-      type:'json'
     },
     //排序字段
     location: {

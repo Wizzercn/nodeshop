@@ -18,8 +18,7 @@ module.exports = {
       size: 100,
       required: true,
       unique: true,
-      index:true,
-      comment:'商品编号'
+      index:true
     },
     //商品名称
     name: {
@@ -103,14 +102,14 @@ module.exports = {
       model: 'Shop_goods_brand'
     },
     //商品默认图片
-    imageid: {
-      model: 'Img_image',
-      size:50
+    imgurl: {
+      type: 'string',
+      size:255
     },
     //商品图册
     images: {
-      collection: 'Img_image',
-      via: 'id'
+      collection: 'Shop_images',
+      via: 'goodsid'
     },
     //是否下架
     disabled: {
@@ -130,6 +129,10 @@ module.exports = {
     //详细介绍
     note:{
       type:'text'
+    },
+    //属性详情
+    prop:{
+      type:'json'
     },
     //规格详情
     spec:{
