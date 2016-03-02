@@ -62,7 +62,7 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    sails.log.warn("body::" + JSON.stringify(body));
+    //sails.log.warn("body::" + JSON.stringify(body));
     async.waterfall([function (cb) {
       var y = moment().format('YY');
       var m = moment().format('MM');
@@ -488,6 +488,85 @@ module.exports = {
         return res.view('private/shop/goods/goods/spec', req.data);
       });
 
+    });
+  },
+  data: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {};
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Shop_goods.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Shop_goods.find({
+            select: ['id','name','typeid','classid','disabled','location'],
+            sort: {location: 'desc',id:'asc'},
+            where:where
+           })
+          .populate('typeid')
+          .populate('classid')
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  location:function(req,res){
+    var id=req.body.pk||'0';
+    var value=req.body.value||'0';
+    var name=req.body.name||'';
+    Shop_goods.update(id,{location:StringUtil.getInt(value)}).exec(function(err,obj){
+      return res.json({name:name,pk:id,value:value});
+
+    });
+  },
+  up:function(req,res){
+    var ids = req.params.id || req.body.ids;
+    Shop_goods.update({id:ids},{disabled:false}).exec(function(err,obj){
+      return res.json({code:0,msg:'操作成功'});
+
+    });
+  },
+  down:function(req,res){
+    var ids = req.params.id || req.body.ids;
+    Shop_goods.update({id:ids},{disabled:true}).exec(function(err,obj){
+      return res.json({code:0,msg:'操作成功'});
+
+    });
+  },
+  delete:function(req,res){
+    var ids = req.params.id || req.body.ids;
+    Shop_images.destroy({goodsid: ids}).exec(function (de1) {
+      Shop_goods_products.destroy({goodsid: ids}).exec(function (de2) {
+        Shop_goods_lv_price.destroy({goodsid: ids}).exec(function (de3) {
+          Shop_goods.destroy({id: ids}).exec(function (de4) {
+            if(de1||de2||de3||de4){
+              return res.json({code: 1, msg: sails.__('delete.fail')});
+            }else {
+              return res.json({code: 0, msg: sails.__('delete.ok')});
+            }
+          });
+        });
+      });
     });
   }
 };

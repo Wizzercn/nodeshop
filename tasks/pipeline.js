@@ -25,7 +25,8 @@ var cssFilesToInject = [
   'css/panel.css',
   'plugins/treetable/jquery.treetable.css',
   'plugins/datatables/dataTables.bootstrap.css',
-  'plugins/chosen/chosen.min.css'
+  'plugins/chosen/chosen.min.css',
+  'plugins/x-editable/bootstrap-editable.css'
 ];
 
 
@@ -65,6 +66,7 @@ var jsFilesToInject = [
   'plugins/emoji/emoji.js',
   'plugins/sorttable/Sortable.min.js',
   'plugins/jquery.qrcode.min.js',
+  'plugins/x-editable/bootstrap-editable.js',
   'js/form.js',
   'js/offscreen.js',
   'js/main.js',

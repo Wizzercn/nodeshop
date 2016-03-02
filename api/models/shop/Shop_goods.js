@@ -140,7 +140,7 @@ module.exports = {
     },
     //排序字段
     location: {
-      type: 'boolean',
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
