@@ -34,7 +34,7 @@ module.exports = {
             done(error, null);
         });
       },
-      pn:function(done){
+      pn: function (done) {
         var y = moment().format('YY');
         var m = moment().format('MM');
         var gsn = y + m;
@@ -49,7 +49,7 @@ module.exports = {
             var temp = o.gn;
             num = parseInt(temp.substring(5)) + 1;
           }
-          done(null, 'P'+gsn + StringUtil.getSn(num, 6));
+          done(null, 'P' + gsn + StringUtil.getSn(num, 6));
         });
       }
     }, function (error, result) {
@@ -91,7 +91,7 @@ module.exports = {
       var imgurl = '';
       var dbimgs = [];
       goods.gn = gn;
-      goods.prop=prop_values;
+      goods.prop = prop_values;
       goods.name = body.name;
       goods.info = body.info;
       goods.note = body.note;
@@ -136,6 +136,7 @@ module.exports = {
         p.gn = sobj.gn;
         p.spec = sobj.spec;
         p.lvprice = sobj.lvprice;
+        p.is_default=sobj.is_default;
         if (!p.gn) {
           p.gn = pn;
         }
@@ -155,6 +156,7 @@ module.exports = {
           p.name = body.name;
           p.gn = sobj.gn;
           p.spec = sobj.spec;
+          p.is_default=sobj.is_default;
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);
@@ -213,6 +215,83 @@ module.exports = {
     });
 
   },
+  edit: function (req, res) {
+    var id = req.params.id;
+    async.parallel({
+      goods: function (done) {
+        Shop_goods.findOne(id).populate('classid').populate('products', {sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
+          if (!error) {
+            Shop_goods_type_props.find({typeid: obj.typeid}).sort({location: 'asc'}).populate('values', {sort: {location: 'asc'}}).exec(function (propse, propslist) {
+              async.waterfall([function (cb) {
+                Shop_goods_type_spec.find({typeid: obj.typeid}).sort({location: 'asc'}).exec(function (e, o) {
+                  cb(e, o);
+                });
+              }, function (list, cb) {
+                var ids = [];
+                if (list) {
+                  list.forEach(function (sp) {
+                    ids.push(sp.specid);
+                  });
+                }
+                Shop_goods_spec.find({id: ids}).sort({location: 'asc'}).populate('values', {sort: {location: 'asc'}}).exec(function (e, o) {
+                  cb(e, o);
+                });
+              }], function (err, o) {
+                obj.propslist = propslist || [];
+                obj.speclist = o || [];
+                done(null, obj);
+              });
+
+
+            });
+
+          }
+          else
+            done(error, null);
+        });
+      },
+      lvpricelist: function (done) {
+        Shop_goods_lv_price.find({goodsid: id}).sort({lvid: 'asc'}).exec(function (error, obj) {
+          if (!error)
+            done(null, obj);
+          else
+            done(error, null);
+        });
+      },
+      typelist: function (done) {
+        Shop_goods_type.find().exec(function (error, obj) {
+          if (!error)
+            done(null, obj);
+          else
+            done(error, null);
+        });
+      },
+      brandlist: function (done) {
+        Shop_goods_brand.find().exec(function (error, obj) {
+          if (!error)
+            done(null, obj);
+          else
+            done(error, null);
+        });
+      },
+      lvlist: function (done) {
+        Shop_member_lv.find({disabled: false}).exec(function (error, obj) {
+          if (!error)
+            done(null, obj);
+          else
+            done(error, null);
+        });
+      }
+    }, function (error, result) {
+      req.data.goods = result.goods || {};
+      req.data.brandlist = result.brandlist || [];
+      req.data.typelist = result.typelist || [];
+      req.data.lvlist = result.lvlist || [];
+      req.data.lvpricelist = result.lvpricelist || [];
+      req.data.StringUtil=StringUtil;
+      return res.view('private/shop/goods/goods/edit', req.data);
+    });
+  },
   editDo: function (req, res) {
     var body = req.body;
     var id = body.id;
@@ -240,7 +319,7 @@ module.exports = {
       var products = [];
       var imgurl = '';
       var dbimgs = [];
-      goods.prop=prop_values;
+      goods.prop = prop_values;
       goods.name = body.name;
       goods.info = body.info;
       goods.note = body.note;
@@ -284,6 +363,7 @@ module.exports = {
         p.name = body.name;
         p.gn = sobj.gn;
         p.spec = sobj.spec;
+        p.is_default=sobj.is_default;
         p.lvprice = sobj.lvprice;
         products.push(p);
       } else {
@@ -302,6 +382,8 @@ module.exports = {
           p.gn = sobj.gn;
           p.spec = sobj.spec;
           p.lvprice = sobj.lvprice;
+          p.is_default=sobj.is_default;
+
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);

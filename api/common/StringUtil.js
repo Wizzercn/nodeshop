@@ -95,6 +95,15 @@ module.exports = {
       return parseInt(str+'00');
     }
   },
+  setPrice:function(str){
+    if(typeof str=='string'&&str.length>2){
+      return str.substring(0,str.length-2)+'.'+str.substring(str.length-2);
+    }
+    if(typeof str=='number'){
+      var s=str.toString();
+      return s.substring(0,s.length-2)+'.'+s.substring(s.length-2);
+    }
+  },
   getInt:function(str){
     if(typeof str=='undefined'||str==''||str==null||str=='null'){
       return 0;

@@ -553,7 +553,6 @@
     $("#save").on("click",function(){
       if ($("#is_spec").val() == "false") {
         var specs = [];
-        var props=[];
         var self = $("#sp");
         var spec = "";
         var gn = self.find("input[name='pbn[]']").val();
@@ -579,6 +578,7 @@
         });
         $("#specs").val(JSON.stringify(specs));
       }
+      var props=[];
       $("#kzsx").find(".form-group").each(function(){
         var self=$(this);
         var obj={};
