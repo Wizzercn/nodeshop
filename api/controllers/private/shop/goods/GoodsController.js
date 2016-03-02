@@ -329,7 +329,6 @@ module.exports = {
       goods.classid = StringUtil.getInt(body.classid);
       goods.typeid = StringUtil.getInt(body.typeid);
       goods.brandid = StringUtil.getInt(body.brandid);
-      goods.location = 0;
       goods.updatedBy = req.session.user.id;
       goods.updatedAt = moment().format('X');
       goods.upAt = moment().format('X');
