@@ -495,12 +495,16 @@ module.exports = {
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
     var draw = parseInt(req.body.draw);
+    var name = req.body.name || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
+    }
+    if(name){
+      where.name={like:'%'+name+'%'};
     }
     Shop_goods.count(where).exec(function (err, count) {
       if (!err && count > 0) {
