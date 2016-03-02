@@ -138,6 +138,24 @@ module.exports = {
     spec:{
       type:'json'
     },
+    view_count: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    buy_count: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    comment_count: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
     //排序字段
     location: {
       type: 'integer',

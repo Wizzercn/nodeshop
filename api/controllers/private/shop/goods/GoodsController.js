@@ -545,14 +545,14 @@ module.exports = {
   },
   up:function(req,res){
     var ids = req.params.id || req.body.ids;
-    Shop_goods.update({id:ids},{disabled:false}).exec(function(err,obj){
+    Shop_goods.update({id:ids},{disabled:false,upAt:moment().format('X')}).exec(function(err,obj){
       return res.json({code:0,msg:'操作成功'});
 
     });
   },
   down:function(req,res){
     var ids = req.params.id || req.body.ids;
-    Shop_goods.update({id:ids},{disabled:true}).exec(function(err,obj){
+    Shop_goods.update({id:ids},{disabled:true,downAt:moment().format('X')}).exec(function(err,obj){
       return res.json({code:0,msg:'操作成功'});
 
     });
