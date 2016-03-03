@@ -31,5 +31,17 @@ module.exports.bootstrap = function(cb) {
       });
     }
   });
+  Shop_config.findOne(1).exec(function(e,o){
+    if(e)sails.log.warn('bootstrap.shop_config.err::'+JSON.stringify(e));
+    if(o){
+      sails.config.system.ShopConfig=o;
+    }
+  });
+  Cms_site.findOne(1).exec(function(e,o){
+    if(e)sails.log.warn('bootstrap.site_config.err::'+JSON.stringify(e));
+    if(o){
+      sails.config.system.SiteConfig=o;
+    }
+  });
   cb();
 };

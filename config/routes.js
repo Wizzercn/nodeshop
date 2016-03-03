@@ -32,9 +32,7 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'homepage'
-  },
+  '/': 'public/shop/pc/IndexController.index',
   '/sysadmin': 'private/LoginController.login',
   '/sysadmin/home': 'private/HomeController.index',
   '/test':'/sysadmin'

@@ -20,7 +20,7 @@
           </li>
           <li><a href="#profile1" data-toggle="tab">联系方式</a>
           </li>
-          <li><a href="#settings1" data-toggle="tab">SEO优化</a>
+          <li><a href="#settings1" data-toggle="tab"  style="display: none">SEO优化</a>
           </li>
         </ul>
         <div class="tab-content">
@@ -75,7 +75,7 @@
                 <label for="footer_content" class="col-sm-2 control-label">底部信息</label>
 
                 <div class="col-sm-8">
-                  <textarea id="footer_content" name="footer_content" style="width:100%;height:200px;"><%=obj.footer_content||''%></textarea>
+                  <textarea id="footer_content" name="footer_content" class="form-control" style="width:100%;height:150px;"><%=obj.footer_content||''%></textarea>
                 </div>
               </div>
             </div>
@@ -236,8 +236,8 @@
     $("#wechat_qrcode").val("");
   }
   $(document).ready(function () {
-    var ue = new baidu.editor.ui.Editor();
-    ue.render('footer_content');
+//    var ue = new baidu.editor.ui.Editor();
+//    ue.render('footer_content');
     $('#file_upload').uploadifive({
       'auto': false,
       'multi': false,
@@ -338,7 +338,7 @@
       }
     });
     $("#save").on("click",function(){
-      $("#footer_content").val(ue.getContent());
+//      $("#footer_content").val(ue.getContent());
       $('#addForm').submit();
     });
       $('#addForm').ajaxForm({

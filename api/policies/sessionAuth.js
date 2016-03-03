@@ -45,8 +45,11 @@ module.exports = function (req, res, next) {
     }
   } else {
     var data = {
-      layout: 'layouts/public'
-    };
+      layout: 'layouts/public',
+      SiteConfig:sails.config.system.SiteConfig,
+      ShopConfig:sails.config.system.ShopConfig,
+      CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css
+  };
     req.data = data;
     return next();
   }

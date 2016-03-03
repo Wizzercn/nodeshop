@@ -1,0 +1,93 @@
+<form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
+      action="/private/conf/shop/editDo" method="post">
+  <input name="id" id="id" value="1" type="hidden">
+  <header class="header navbar bg-white shadow">
+  <div class="pull-right">
+    <div class="btn-group tool-button">
+      <button class="btn btn-primary navbar-btn" type="button" id="save"> 保存</button>
+    </div>
+  </div>
+</header>
+
+<div class="content-wrap">
+  <div class="wrapper" style="min-height:500px;height: 100%;">
+
+
+      <div class="box-tab">
+        <ul class="nav nav-tabs">
+          <li class="active"><a href="#shop_base" data-toggle="tab">基本设置</a>
+          </li>
+          <li><a href="#shop_list" data-toggle="tab">商品列表页设置</a>
+          </li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade active in" id="shop_base">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">商城模板</label>
+
+                <div class="col-sm-8">
+                  <select class="form-control" name="shop_templet">
+                    <option value="default" <%=obj.shop_templet=='default'?'selected':''%>>default</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">商城样式</label>
+
+                <div class="col-sm-8">
+                  <select class="form-control" name="shop_css">
+                    <option value="green" <%=obj.shop_css=='grenn'?'selected':''%>>绿色</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="shop_list">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">商品分页加载方式</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <select class="form-control" name="list_load_type">
+                    <option value="ajax" <%=obj.list_load_type=='ajax'?'selected':''%>>Ajax</option>
+                    <option value="list" <%=obj.list_load_type=='list'?'selected':''%>>分页</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">是否启用快速购买</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="list_quick_buy" value="1" <%=obj.list_quick_buy==true?'checked':''%>>是
+                  <input type="radio" name="list_quick_buy" value="0" <%=obj.list_quick_buy==false?'checked':''%>>否
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+  </div>
+</div>
+</form>
+<script language="JavaScript">
+  $(document).ready(function () {
+    $("#save").on("click",function(){
+      $('#addForm').submit();
+    });
+      $('#addForm').ajaxForm({
+        dataType: 'json',
+        beforeSubmit: function (arr, form, options) {
+          sublime.showLoadingbar($(".main-content"));
+        },
+        success: function (data, statusText, xhr, form) {
+          if (data.code == 0) {
+            Toast.success(data.msg);
+          } else {
+            Toast.error(data.msg);
+          }
+          sublime.closeLoadingbar($(".main-content"));
+        }
+      });
+  });
+</script>
