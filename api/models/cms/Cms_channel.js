@@ -86,5 +86,10 @@ module.exports = {
       collection: 'Cms_article',
       via: 'channelId'
     }
+  },
+  getChannel: function (cb) {
+    Cms_channel.find({select:['id','parentId','path','name','hasChildren'],where:{disabled:false}}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
   }
 };

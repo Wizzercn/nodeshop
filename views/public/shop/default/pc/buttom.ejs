@@ -1,39 +1,25 @@
 <div class="footer_a">
   <div class="footer_af">
     <ul class="footer_w">
-      <li class="footer_ws" id="cart-btn"><img src="<%= CssPath %>/pc/img/weixin_f.jpg"/></li>
-      <li class="footer_wt">商城微信扫描</li>
+      <li class="footer_ws" id="cart-btn"><img src="<%=SiteConfig.wechat_qrcode||''%>"/></li>
+      <li class="footer_wt">商城微信公众号</li>
     </ul>
+    <%channelList.forEach(function(channel1){
+    if(channel1.parentId==0){
+      %>
     <ul class="footer_n">
-      <li class="footer_nf"><a href="#">新手上路</a></li>
-      <li class="footer_s"><a href="#">新用户注册</a></li>
-      <li class="footer_s"><a href="#">预订流程</a></li>
-      <li class="footer_s"><a href="#">购物保障</a></li>
+      <li class="footer_nf"><a href="/channel/<%=channel1.id%>"><%=channel1.name%></a></li>
+      <%channelList.forEach(function(channel2){
+        if(channel2.parentId==channel1.id){
+      %>
+      <li class="footer_s"><a href="/channel/<%=channel2.id%>"><%=channel2.name%></a></li>
+
+      <%}
+      });}%>
     </ul>
-    <ul class="footer_n">
-      <li class="footer_nf"><a href="#">支付/配送</a></li>
-      <li class="footer_s"><a href="#">支付方式</a></li>
-      <li class="footer_s"><a href="#">配送方式预订流程</a></li>
-      <li class="footer_s"><a href="#">配送时间及运费</a></li>
-    </ul>
-    <ul class="footer_n">
-      <li class="footer_nf"><a href="#">公司信息</a></li>
-      <li class="footer_s"><a href="#">关于我们</a></li>
-      <li class="footer_s"><a href="#">用户协议</a></li>
-      <li class="footer_s"><a href="#">隐私声明</a></li>
-    </ul>
-    <ul class="footer_n">
-      <li class="footer_nf"><a href="#">新闻资讯</a></li>
-      <li class="footer_s"><a href="#">站内公告</a></li>
-      <li class="footer_s"><a href="#">活动促销</a></li>
-      <li class="footer_s"><a href="#">公司动态</a></li>
-    </ul>
-    <ul class="footer_n">
-      <li class="footer_nf"><a href="#">帮助中心</a></li>
-      <li class="footer_s"><a href="#">常见问题</a></li>
-      <li class="footer_s"><a href="#">找回密码</a></li>
-      <li class="footer_s"><a href="#">联系我们</a></li>
-    </ul>
+    <%
+    });%>
+
     <ul class="footer_sh">
       <li class="footer_shf"><a href="javascript:;">售后服务</a></li>
       <a href="<%=SiteConfig.site_qq?'http://wpa.qq.com/msgrd?v=3&amp;uin='+SiteConfig.site_qq+'&amp;site=qq&amp;menu=yes':''%>" target="_blank">
