@@ -47,7 +47,7 @@ module.exports = {
   addDo: function (req, res) {
     var body = req.body;
     var name = body.config_key;
-    Sys_config.findOne({config_key: config_key}).exec(function (err, obj) {
+    Sys_config.findOne({config_key: name}).exec(function (err, obj) {
       if (obj) {
         return res.json({code: 1, msg: sails.__('add.exist')});
       } else {
