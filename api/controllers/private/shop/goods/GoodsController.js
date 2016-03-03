@@ -220,7 +220,7 @@ module.exports = {
     async.parallel({
       goods: function (done) {
         Shop_goods.findOne(id).populate('classid').populate('products', {sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
-          if (!error) {
+          if (obj) {
             Shop_goods_type_props.find({typeid: obj.typeid}).sort({location: 'asc'}).populate('values', {sort: {location: 'asc'}}).exec(function (propse, propslist) {
               async.waterfall([function (cb) {
                 Shop_goods_type_spec.find({typeid: obj.typeid}).sort({location: 'asc'}).exec(function (e, o) {
@@ -247,7 +247,7 @@ module.exports = {
 
           }
           else
-            done(error, null);
+            done('undefined', null);
         });
       },
       lvpricelist: function (done) {
@@ -283,13 +283,18 @@ module.exports = {
         });
       }
     }, function (error, result) {
-      req.data.goods = result.goods || {};
-      req.data.brandlist = result.brandlist || [];
-      req.data.typelist = result.typelist || [];
-      req.data.lvlist = result.lvlist || [];
-      req.data.lvpricelist = result.lvpricelist || [];
-      req.data.StringUtil=StringUtil;
-      return res.view('private/shop/goods/goods/edit', req.data);
+      if(error){
+        return res.notFound('没有此商品');
+      }else {
+        req.data.goods = result.goods || {};
+        req.data.brandlist = result.brandlist || [];
+        req.data.typelist = result.typelist || [];
+        req.data.lvlist = result.lvlist || [];
+        req.data.lvpricelist = result.lvpricelist || [];
+        req.data.StringUtil=StringUtil;
+        return res.view('private/shop/goods/goods/edit', req.data);
+      }
+
     });
   },
   editDo: function (req, res) {
