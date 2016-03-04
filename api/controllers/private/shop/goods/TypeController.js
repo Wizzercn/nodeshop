@@ -70,6 +70,8 @@ module.exports = {
     var is_physical = body.is_physical || '0';
     var use_props = body.use_props || '0';
     var use_spec = body.use_spec || '0';
+    var use_params = body.use_params || '0';
+    var use_tabs = body.use_tabs || '0';
     Shop_goods_type.findOne({name: name}).exec(function (err, obj) {
       if (obj) {
         return res.json({code: 1, msg: sails.__('add.exist')});
@@ -78,8 +80,10 @@ module.exports = {
         body.use_props = use_props == '1';
         body.use_spec = use_spec == '1';
         body.createdBy = req.session.user.id;
+        body.use_params = use_params == '1';
+        body.use_tabs = use_tabs == '1';
         Shop_goods_type.create(body).exec(function (e, o) {
-          if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+          if (e)return res.json({code: 1, msg: sails.__('add.fail')+' error:'+JSON.stringify(e)});
           var props_name = body.props_name;
           var props_type = body.props_type;
           var props_values = body.props_values;
