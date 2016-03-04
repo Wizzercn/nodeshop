@@ -20,6 +20,7 @@
             </th>
             <th class="col-md-2">商品类型</th>
             <th class="col-md-2">启用状态</th>
+            <th class="col-md-2">首页展示</th>
             <th class="col-md-2">操作</th>
           </tr>
           </thead>
@@ -32,6 +33,7 @@
             </td>
             <td><%if(obj.typeid){%>[<%=obj.typeid.name%>]<%}else{%>[通用商品]<%}%></td>
             <td><%if(!obj.disabled){%><i id="disable_<%=obj.id%>" class="fa fa-circle text-success ml5"></i><%}else{%><i id="disable_<%=obj.id%>" class="fa fa-circle text-danger ml5"></i><%}%></td>
+            <td><%if(obj.is_index){%><i id="is_index_<%=obj.id%>" class="fa fa-circle text-success ml5"></i><%}else{%><i id="is_index_<%=obj.id%>" class="fa fa-circle text-danger ml5"></i><%}%></td>
             <td>
               <div class="btn-group">
                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">

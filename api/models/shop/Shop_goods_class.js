@@ -43,6 +43,12 @@ module.exports = {
         return false;
       }
     },
+    is_index: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     location: {
       type: 'integer',
       size: 11

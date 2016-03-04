@@ -89,6 +89,7 @@ module.exports = {
    */
   addDo: function (req, res) {
     var body = req.body;
+
     var title = body.title || '';
     var keywords = body.keywords || '';
     var description = body.description || '';
@@ -96,6 +97,8 @@ module.exports = {
     if (body.parentId) {
       parentId = parseInt(body.parentId);
     }
+    body.disabled=body.disabled=='on';
+    body.is_index=body.is_index=='on';
     Shop_goods_class.findOne({id: parentId}).exec(function (err, unit) {
       var path = '';
       if (unit)path = unit.path || '';
@@ -114,7 +117,7 @@ module.exports = {
         }
         body.createdBy = req.session.user.id;
         Shop_goods_class.create(body).exec(function (cerr, obj) {
-          if (cerr || !obj)return res.json({code: 1, msg: sails.__('add.fail')});
+          if (cerr || !obj)return res.json({code: 1, msg: sails.__('add.fail')+' error:'+JSON.stringify(cerr)});
           if (parentId > 0) {
             Shop_goods_class.update({id: parentId}, {hasChildren: true}).exec(function (e, o) {
             });
@@ -160,6 +163,8 @@ module.exports = {
     if (title || keywords || description) {
       body.settings = {title: title, keywords: keywords, description: description};
     }
+    body.disabled=body.disabled=='on';
+    body.is_index=body.is_index=='on';
     Shop_goods_class.update({id: body.id}, body).exec(function (err, obj) {
       if (err || !obj)return res.json({code: 1, msg: sails.__('update.fail')});
       return res.json({code: 0, msg: sails.__('update.ok')});
