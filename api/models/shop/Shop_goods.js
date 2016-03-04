@@ -184,8 +184,9 @@ module.exports = {
   getHotGoods:function(num,cb){
     Shop_goods.find({
         select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
-        where:{disabled:false}})
-      .sort('location asc')
+        where:{disabled:false},
+        limit:num||4})
+      .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
       return cb(list);
     });
@@ -194,7 +195,7 @@ module.exports = {
     Shop_goods.find({
         select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
         where:{disabled:false,classid:classid}})
-      .sort('location asc')
+      .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
       return cb(list);
     });

@@ -16,6 +16,11 @@ module.exports = {
           done(null, list);
         });
       },
+      hotGoodsList:function(done){
+        Shop_goods.getHotGoods(4,function (list) {
+          done(null, list);
+        });
+      },
       indexClassList: function (done) {
         Shop_goods_class.getIndexClass(function (list) {
           done(null, list);
@@ -26,6 +31,7 @@ module.exports = {
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.indexClassList = result.indexClassList || [];
+      req.data.hotGoodsList = result.hotGoodsList || [];
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/index', req.data);
     });
   }
