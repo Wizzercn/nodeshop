@@ -65,5 +65,20 @@ module.exports = {
     typeid: {
       model: 'Shop_goods_type'
     }
+  },
+  getAllClass: function (cb) {
+    Shop_goods_class.find({disabled:false}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
+  },
+  getIndexClass: function (cb) {
+    Shop_goods_class.find({disabled:false,is_index:true,parentId:0}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
+  },
+  getChildrenClass: function (id,cb) {
+    Shop_goods_class.find({disabled:false,parentId:id}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
   }
 };

@@ -10,10 +10,22 @@ module.exports = {
         Cms_channel.getChannel(function (list) {
           done(null, list);
         });
+      },
+      allClassList: function (done) {
+        Shop_goods_class.getAllClass(function (list) {
+          done(null, list);
+        });
+      },
+      indexClassList: function (done) {
+        Shop_goods_class.getIndexClass(function (list) {
+          done(null, list);
+        });
       }
     }, function (err, result) {
 
       req.data.channelList = result.channelList || [];
+      req.data.allClassList = result.allClassList || [];
+      req.data.indexClassList = result.indexClassList || [];
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/index', req.data);
     });
   }

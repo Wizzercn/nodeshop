@@ -172,12 +172,31 @@ module.exports = {
       type:'integer',
       defaultsTo:function(){
         return moment().format('X');
-      }
+      },
+      index:true
     },
     products:{
       collection: 'Shop_goods_products',
       via: 'goodsid'
     }
 
+  },
+  getHotGoods:function(num,cb){
+    Shop_goods.find({
+        select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
+        where:{disabled:false}})
+      .sort('location asc')
+      .sort('updatedAt desc').exec(function (err, list) {
+      return cb(list);
+    });
+  },
+  getGoodsList:function(classid,cb){
+    Shop_goods.find({
+        select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
+        where:{disabled:false,classid:classid}})
+      .sort('location asc')
+      .sort('updatedAt desc').exec(function (err, list) {
+      return cb(list);
+    });
   }
 };

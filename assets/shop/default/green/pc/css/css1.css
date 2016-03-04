@@ -320,7 +320,7 @@ a, a:hover {
 .nav_a{width:100%;}
 .lanrenzhijia{ width:1200px; height:50px; line-height:30px; margin:0 auto;z-index:9;position:relative;background:#00aa3a;}
 .z_nav_li a{font-size:14px;width:160px; color:#fff; text-decoration:none; display:block; float:left; height:50px; line-height:50px;text-align:center;}
-.h-shop{border:none;text-indent:20px !important;text-align:left !important;width:280px !important;display:block;line-height:none !important;height:50px;overflow:hidden;}
+.h-shop{border:none;text-indent:20px !important;text-align:left !important;width:280px !important;display:block;line-height:none !important;height:50px;}
 .h-shop:hover{width:280px !important;display:block;height:auto !important;}
 .lanrenzhijia li{float:left;position:relative; height:50px; line-height:30px;}
 .lanrenzhijia li .second{position:absolute;left:0;display:none; z-index:100;}
@@ -344,13 +344,12 @@ a, a:hover {
   opacity:0.5;}
 .notice:hover dt{transition: all 1s ease 0s;width:100%;height:221px;position:relative;top:-220px;text-indent:40px;z-index:3;color:#fff;line-height:220px;}
 
-.h-shopm{width:100%;height:50px;color:#ffffff;font-size:14px; cursor:pointer;background:none;}
+.h-shopm{width:100%;height:50px;color:#ffffff;font-size:14px; cursor:pointer;background:#194833;}
 .quan{position:relative;top:10px;font-size:18px;}
-.h-shopmf{width:280px;height:auto;background:#fff;display:block;border:1px solid #dddddd;border-top:none !important;
-
+.h-shopmf{width:280px;height:auto;background:#eee;border:1px solid #dddddd;border-top:none !important;
   -moz-opacity:0;
   -khtml-opacity:0;
-  opacity:0;display:inline;SCROLLBAR-FACE-COLOR:#999; /*滚动条凸出部分的颜色*/
+  opacity:0;display:none;SCROLLBAR-FACE-COLOR:#999; /*滚动条凸出部分的颜色*/
   SCROLLBAR-HIGHLIGHT-COLOR:#ccc; /*滚动条空白部分的颜色*/
   SCROLLBAR-SHADOW-COLOR:#ccc; /*立体滚动条阴影的颜色*/
   SCROLLBAR-3DLIGHT-COLOR:#587c00; /*滚动条亮边的颜色*/
@@ -397,7 +396,7 @@ a, a:hover {
 .z_gou3 input{width:116px;height:40px;padding:0;float:right;text-align:center;line-height:40px;display:block;background:#1daa39;color:#fff;border:none;border-radius:3px;}
 
 /*--------定位开始-------*/
-.c_shop{width:100%;min-height:42px;text-align:left;font-size:14px;border-bottom:1px solid #dddddd;}
+.c_shop{width:100%;height:42px;text-align:left;font-size:14px;border-bottom:1px solid #dddddd;}
 .cjs_shop{margin-top:14px;font-size:14px;width:9px;height:13px;display:block;float:left;margin-left:10px;}
 .cj_shop{width:9px;height:13px;display:block;float:left;margin-top:14px;display:none;}
 .c_shop span{width:130px;display:block;float:left;line-height:42px;text-align:left;}
@@ -487,7 +486,7 @@ a, a:hover {
 .footer_a{width:100%;height:236px;min-width:1200px;background:#eeeeee;border-top:1px solid #ddd;overflow:hidden;}
 .footer_af{width:1200px;margin:0 auto;padding-top:30px;}
 .footer_af ul{float:left;}
-.footer_w{width:165px;display:block;background:url(../img/footer_bg.jpg) right top no-repeat;height:206px;}
+.footer_w{width:165px;display:block;height:206px;}
 .footer_wf{width:112px;height:28px;display:block;font-size:14px;text-align:center;line-height:28px;}
 .footer_ws{width:105px;height:105px;display:block;margin-top:13px;}
 .footer_ws img{width:105px;height:105px;}
@@ -1343,7 +1342,7 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 .zixun1a>i,.k_logolfi span{color:#194833;}
 .public_bg,.k_hotc,.order_f1,.shop_t a,.c_jifen,.c_jifens,.s_returnf,.asset,.c_guk{background:#eeeeee;}
 .nav_a,.k_hotcf1h,.about_usm,/*.c_shop:hover,*/.s_pagel:hover,.s_pagel1:hover,.s_pager:hover,.s_pageron,.shuz,.k_hotc .k_hotch li:hover a,.k_hotc .k_hotch0 li:hover a,.k_hotcf1:hover .jiaru input,.jiarua input,.schedulehd4_f,.s_details>li,.c_landf input,.q_header,.member_cfon,.member_cf:hover,.member_crsi,.shop_t span input,.shops_s6 input,.shops_s2s,.xuanze5,.address_more,.passwordh input,.land_six,.password5 .input_2,a.gife_btn,.c_button input,.menu-i,.service-menu .menu-p:hover,.menu-p:visited,.shop_s1 a:hover,.shop_t>a:hover,ul.gife_list li dl,.tan_show p:hover,.assert_fa4 input{ background:#00aa3a;color:#fff;}
-.lanrenzhijia li a:hover,.h-shop,.h-shop:hover,.k_hotcf1h:hover,.about_us,.about_usr i:hover,.footer_li:hover,.thumbs li.curr,
+.lanrenzhijia li a:hover,.k_hotcf1h:hover,.about_us,.about_usr i:hover,.footer_li:hover,.thumbs li.curr,
 .thumbs li:hover,#about,.schedule_hd6n input:hover,.c_landf input:hover,.shop_t span input:hover,.xuanze6,a.gife_btn:hover,.c_button input:hover{ background:#194833;color:#fff;}
 
 .h-shopmf a:hover,.footer_nf a:hover,.footer_s a:hover,.footer_shf a:hover,.k_hotc .k_more:hover,.p_classify1s a:hover,.zixun1a>a:hover,.k_hotcf1a:hover{ text-decoration:underline !important;}
@@ -1543,16 +1542,18 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 
 .z_shopm{display:inline-block;width:150px;height:50px;float:left;}
 
-.nav_first{width:100% !important;height:42px !important;display:block !important;margin-left:0px !important;padding-left:10px;}
+.nav_first{width:100% !important;height:42px !important;display:block !important;margin-left:0px !important;padding-left:10px;position:relative;}
 .nav_first:hover{background:#00aa3a;color:#fff;display:block;}
 .nav_first:hover span{color:#fff !important;}
 .c_shop:hover .nav_first{background:#00aa3a;color:#fff;display:block;}
 .c_shop:hover .nav_first span{color:#fff;}
-.nav_li{display:block;width:100% !important;margin:0 !important;padding:0;}
-.nav_li a{display:block;height:30px;text-indent:40px;line-height:30px !important;}
-.nav_li a:hover{background:#fff !important;}
+.c_shop>.nav_li{display:block;width:100% !important;margin:0 !important;position:absolute;left:279px;top:50px;background-color:#fff;border-top:1px solid #ddd;text-indent:0px !important;min-height:210px;padding:10px 15px;border-right:1px solid #ddd;border-bottom:1px solid #ddd;line-height:30px; opacity:0.92;}
+.nav_li a{min-width:65px;text-align:center;line-height:12px !important;padding:0 10px;margin-left:0px !important;display:inline-block;border-right:1px solid #ccc;font-size:12px;color:#666;}
+.nav_li a:hover{color:#00aa3a !important; text-decoration:none !important;background:none !important;}
+.nav_li a:nth-child(3n){border:none;}
 
 
 .number_text{display:block;width:100%;line-height:97px;border-bottom:1px solid #ddd;}
 .number_text:last-child{border-bottom:none;}
-.nav_li a:hover{color:#00aa3a !important;}
+
+.icon_san{position:absolute !important;right:-7px !important;top:15px !important;z-index:2 !important;}
