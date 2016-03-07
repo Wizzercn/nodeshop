@@ -139,6 +139,12 @@ module.exports = {
     spec:{
       type:'json'
     },
+    is_spec: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     view_count: {
       type: 'integer',
       defaultsTo: function () {
@@ -184,7 +190,7 @@ module.exports = {
   },
   getHotGoods:function(num,cb){
     Shop_goods.find({
-        select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
+        select:['id','gn','name','info','price','priceMarket','is_spec','weight','unit','stock','buyMin','buyMax','imgurl','location'],
         where:{disabled:false},
         limit:num||4})
       .sort('location desc')
@@ -194,7 +200,7 @@ module.exports = {
   },
   getGoodsList:function(classid,num,cb){
     Shop_goods.find({
-        select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
+        select:['id','gn','name','info','price','priceMarket','is_spec','weight','unit','stock','buyMin','buyMax','imgurl','location'],
         where:{disabled:false,classid:classid},
         limit:num||4})
       .sort('location desc')

@@ -166,6 +166,9 @@ module.exports = {
           }
           products.push(p);
         });
+        if(products.length>1){
+          goods.is_spec=true;
+        }
       }
       //console.log('goods:::'+JSON.stringify(goods));
       Shop_goods.create(goods).exec(function (e1, o1) {
@@ -347,6 +350,7 @@ module.exports = {
         k++;
       });
       goods.imgurl = imgurl;
+      goods.is_spec=false;
       if (!is_spec) {
         var sobj = specs[0];
         goods.price = StringUtil.getPrice(sobj.price);
@@ -397,6 +401,9 @@ module.exports = {
           }
           products.push(p);
         });
+        if(products.length>1){
+          goods.is_spec=true;
+        }
       }
       Shop_goods.update(id, goods).exec(function (e1, o1) {
         if (o1) {
