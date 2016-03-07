@@ -4,7 +4,7 @@
 var moment = require('moment');
 module.exports = {
   index: function (req, res) {
-    Img_config.findOne({id: 1}).exec(function (err, obj) {
+    Img_config.findOrCreate({id: 1}).exec(function (err, obj) {
       req.data.obj = obj;
       return res.view('private/conf/img/index', req.data);
     });

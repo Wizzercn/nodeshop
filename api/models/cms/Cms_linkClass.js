@@ -33,8 +33,8 @@ module.exports = {
     }
   },
   getLinkList:function(name,cb){
-    Cms_link.find({name:name})
-      .populate('classId', {sort: {createdAt: 'desc'}}).exec(function (err, list) {
+    Cms_linkClass.findOne({name:name})
+      .populate('links', {sort: {createdAt: 'desc'}}).exec(function (err, list) {
       return cb(list);
     });
   }

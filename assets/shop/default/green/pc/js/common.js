@@ -1,5 +1,6 @@
 $(function(){
   $.ajaxSetup({cache:false});
+  $(".i_banner").slide({titCell:".hd ul",autoPage: true, autoPlay: true, effect:"fold", delayTime: 500, interTime: 6000})
   $(".head-menu-placeholder").addClass("notindex-bg");
   //$(".h-m-i-subitem .hover-panel").addClass("column"+$(".h-m-i-subitem .hover-panel .h-m-i-s-column").length);
   //是否启用菜单停靠

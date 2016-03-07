@@ -3,17 +3,20 @@
   <% include common_banner.ejs %>
 
 </div>
+<%=JSON.stringify(indexClassList)%>
+<%if(bannerLink&&bannerLink.links&&bannerLink.links.length>0){%>
 <div class="i_banner">
   <ul class="bd">
-    <li style="background-image:url(<%= CssPath %>/pc/img/banner1.jpg);"><a href="###"></a></li>
-    <li style="background-image:url(<%= CssPath %>/pc/img/banner1.jpg);"><a href="###"></a></li>
-    <li style="background-image: url(<%= CssPath %>/pc/img/banner1.jpg);"><a href="###"></a></li>
+    <%bannerLink.links.forEach(function(link){%>
+    <li style="background-image:url(<%= link.picurl||'' %>);"><a href="<%=link.url||'javascript:;'%>"></a></li>
+    <%});%>
   </ul>
   <div class="hd">
     <ul></ul>
   </div>
   <div class="ie_shadow ie6_png"></div>
 </div>
+<%}%>
 <div class="wrap">
   <!----产品热卖----->
   <div class="k_hotc"><span style="color:#fe6000">新品热卖</span>
@@ -24,8 +27,8 @@
   <div class="k_hotcf">
     <%hotGoodsList.forEach(function(hotgoods){%>
     <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>"><img src="<%=hotgoods.imgurl||''%>" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
-      <a href="#"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
+      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>"><img src="<%=hotgoods.imgurl||''%>?type=s" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
+      <a href="/goods/<%=hotgoods.id%>"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
       <li class="pro_discript"><%=hotgoods.info||''%></li>
       <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(hotgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(hotgoods.priceMarket)%></del></span><input type="button" value="加入购物车"></li>
 

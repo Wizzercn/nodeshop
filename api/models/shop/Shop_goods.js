@@ -91,7 +91,8 @@ module.exports = {
     },
     //分类
     classid: {
-      model: 'Shop_goods_class'
+      model: 'Shop_goods_class',
+      index: true
     },
     //类型
     typeid: {
@@ -191,10 +192,11 @@ module.exports = {
       return cb(list);
     });
   },
-  getGoodsList:function(classid,cb){
+  getGoodsList:function(classid,num,cb){
     Shop_goods.find({
         select:['id','gn','name','info','price','priceMarket','weight','unit','stock','buyMin','buyMax','imgurl','location'],
-        where:{disabled:false,classid:classid}})
+        where:{disabled:false,classid:classid},
+        limit:num||4})
       .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
       return cb(list);

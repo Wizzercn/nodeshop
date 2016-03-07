@@ -64,18 +64,25 @@ module.exports = {
     },
     typeid: {
       model: 'Shop_goods_type'
+    },
+    goods: {
+      collection: 'Shop_goods',
+      via: 'classid'
     }
   },
+  //获取首页banner，根据名称固定
   getAllClass: function (cb) {
     Shop_goods_class.find({disabled:false}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
     });
   },
+  //获取首页显示的商品分类
   getIndexClass: function (cb) {
     Shop_goods_class.find({disabled:false,is_index:true,parentId:0}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
     });
   },
+  //获取下级商品分类
   getChildrenClass: function (id,cb) {
     Shop_goods_class.find({disabled:false,parentId:id}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
