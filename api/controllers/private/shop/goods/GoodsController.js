@@ -2,7 +2,6 @@
  * Created by root on 2/1/16.
  */
 var moment = require('moment');
-var async = require('async');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {

@@ -1,6 +1,7 @@
 /**
  * Created by root on 3/2/16.
  */
+var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
     console.log('req.data::' + JSON.stringify(req.data));
@@ -25,6 +26,11 @@ module.exports = {
         Shop_goods_class.getIndexClass(function (list) {
           done(null, list);
         });
+      },
+      bannerLinkList:function(done){
+        Cms_linkClass.getLinkList('首页Banner',function(list){
+          done(null, list);
+        });
       }
     }, function (err, result) {
 
@@ -32,6 +38,8 @@ module.exports = {
       req.data.allClassList = result.allClassList || [];
       req.data.indexClassList = result.indexClassList || [];
       req.data.hotGoodsList = result.hotGoodsList || [];
+      req.data.bannerLinkList = result.bannerLinkList || [];
+      req.data.StringUtil=StringUtil;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/index', req.data);
     });
   }

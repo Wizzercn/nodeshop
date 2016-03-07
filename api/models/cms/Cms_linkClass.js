@@ -15,7 +15,8 @@ module.exports = {
     name: {
       type: 'string',
       size: 100,
-      required: true
+      required: true,
+      index:true
     },
     createdBy: {
       type: 'integer'
@@ -30,5 +31,11 @@ module.exports = {
       collection: 'Cms_link',
       via: 'classId'
     }
+  },
+  getLinkList:function(name,cb){
+    Cms_link.find({name:name})
+      .populate('classId', {sort: {createdAt: 'desc'}}).exec(function (err, list) {
+      return cb(list);
+    });
   }
 };

@@ -18,102 +18,19 @@
   <!----产品热卖----->
   <div class="k_hotc"><span style="color:#fe6000">新品热卖</span>
     <ul class="k_hotch">
-      <li class="k_hotchg brn"><a href="#">更多>></a></li>
+      <li class="k_hotchg brn"><a href="/hot">更多>></a></li>
     </ul>
   </div>
   <div class="k_hotcf">
+    <%hotGoodsList.forEach(function(hotgoods){%>
     <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan7.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">超值有机系列套餐</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
+      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>"><img src="<%=hotgoods.imgurl||''%>" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
+      <a href="#"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
+      <li class="pro_discript"><%=hotgoods.info||''%></li>
+      <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(hotgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(hotgoods.priceMarket)%></del></span><input type="button" value="加入购物车"></li>
 
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
     </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan13.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">超值有机系列套餐</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan9.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">超值有机系列套餐</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan10.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">超值有机系列套餐</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
+   <%});%>
   </div>
   <div class="k_hotc cf clear"><span>肉禽蛋品</span>
     <ul class="k_hotch">

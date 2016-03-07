@@ -1,7 +1,7 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/cms/linkclass/add" data-pjax><i class="ti-plus"></i> 添加分类</a>
-    <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <!--<button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>-->
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -68,10 +68,14 @@
       "columnDefs": [
         {
           "render": function (data, type, row) {
+            var s='<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>';
+            if(row.name=='首页Banner'){
+              s='';
+            }
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
               '<li><a href="/private/cms/linkclass/edit/' + row.id + '" data-pjax>修改</a></li>' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
+              s+
               '</ul></div>';
           },
           "targets": 1
