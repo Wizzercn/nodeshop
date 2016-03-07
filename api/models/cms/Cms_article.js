@@ -22,6 +22,10 @@ module.exports = {
       type: 'string',
       required: true
     },
+    info: {
+      type: 'string',
+      size:500
+    },
     author: {
       type: 'string'
     },

@@ -199,6 +199,7 @@ module.exports = {
         limit:num||4})
       .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
+      sails.log.warn('getGoodsList.err::'+JSON.stringify(err));
       return cb(list);
     });
   }

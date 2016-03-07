@@ -30,7 +30,8 @@ module.exports = {
       type: 'string',
       size: 20,
       maxLength: 20,
-      required: true
+      required: true,
+      index:true
     },
     url: {
       type: 'string',
@@ -89,6 +90,11 @@ module.exports = {
   },
   getChannel: function (cb) {
     Cms_channel.find({select:['id','parentId','path','name','hasChildren'],where:{disabled:false}}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
+  },
+  getChannelByName: function (name,num,cb) {
+    Cms_channel.findOne({select:['id','parentId','path','name','hasChildren'],where:{name:name,disabled:false}}).populate('articles', {where:{disabled:false},limit:num,sort: {createdAt: 'desc'}}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
     });
   }

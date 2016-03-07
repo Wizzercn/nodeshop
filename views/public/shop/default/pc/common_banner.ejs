@@ -15,11 +15,12 @@
                   <img src="<%= CssPath %>/pc/img/public/tubiaoa.png" class="cj_shop">
                   <span><%=class1.name%></span>
                   <img src="<%= CssPath %>/pc/img/icon/nav_bg.png" class="icon_san c_hide"></a>
-                <span class="nav_li c_hide">
-                  <%if(class1.hasChildren){allClassList.forEach(function(class2){
+                <%if(class1.hasChildren){%><span class="nav_li c_hide">
+                  <%allClassList.forEach(function(class2){
                   if(class2.parentId==class1.id){%>
                   <a href="/list/<%=class2.id%>"><%=class2.name%></a>
-                  <%}});}%></span>
+                  <%}});%></span>
+                <%}%>
               </div>
               <%}});%>
             </div>

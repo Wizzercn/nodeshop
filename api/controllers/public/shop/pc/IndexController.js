@@ -13,6 +13,18 @@ module.exports = {
           done(null, list);
         });
       },
+      //获取cms栏目内容
+      centerChannel: function (done) {
+        Cms_channel.getChannelByName('关于我们',1,function (list) {
+          done(null, list);
+        });
+      },
+      //获取cms栏目内容
+      buttomChannel: function (done) {
+        Cms_channel.getChannelByName('公司动态',3,function (list) {
+          done(null, list);
+        });
+      },
       //获取所有商品分类
       allClassList: function (done) {
         Shop_goods_class.getAllClass(function (list) {
@@ -27,14 +39,20 @@ module.exports = {
       },
       //获取首页显示的商品分类、子分类及商品
       indexClassList: function (done) {
-        var l = [];
         Shop_goods_class.getIndexClass(function (list) {
           async.waterfall([function (cb) {
             var l=[];
             var j=0;
             list.forEach(function(obj){
+              var ids=[];
+              ids.push(obj.id);
               Shop_goods_class.getChildrenClass(obj.id, function (clist) {
                 obj.children = clist;
+                var k=0;
+                clist.forEach(function(cobj){
+                  ids.push(cobj.id);
+                });
+                obj.goodsids=ids;
                 l.push(obj);
                 j++;
                 if(j==list.length){
@@ -42,13 +60,19 @@ module.exports = {
                 }
               });
             });
-          }, function (list, cb) {
-            var l = [];
-            list.forEach(function (obj) {
-              var ids = [];
-              ids.push(obj.id);
-              obj.children.forEach(function(sobj){
-
+          },function(list,cb){
+            var l=[];
+            var j=0;
+            list.forEach(function(obj){
+              var ids=obj.goodsids;
+              Shop_goods.getGoodsList(ids,8,function(clist){
+                sails.log.warn('clist::'+JSON.stringify(clist));
+                obj.goodslist=clist||[];
+                l.push(obj);
+                j++;
+                if(j==list.length){
+                  cb(null,l);
+                }
               });
             });
           }], function (index_err, list) {
@@ -70,6 +94,8 @@ module.exports = {
       req.data.indexClassList = result.indexClassList || [];
       req.data.hotGoodsList = result.hotGoodsList || [];
       req.data.bannerLink = result.bannerLink || {};
+      req.data.centerChannel = result.centerChannel || [];
+      req.data.buttomChannel = result.buttomChannel || [];
       req.data.StringUtil = StringUtil;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/index', req.data);
     });

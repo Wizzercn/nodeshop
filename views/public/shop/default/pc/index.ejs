@@ -3,12 +3,11 @@
   <% include common_banner.ejs %>
 
 </div>
-<%=JSON.stringify(indexClassList)%>
 <%if(bannerLink&&bannerLink.links&&bannerLink.links.length>0){%>
 <div class="i_banner">
   <ul class="bd">
     <%bannerLink.links.forEach(function(link){%>
-    <li style="background-image:url(<%= link.picurl||'' %>);"><a href="<%=link.url||'javascript:;'%>"></a></li>
+    <li style="background-image:url('<%= link.picurl||'' %>');"><a href="<%=link.url||'javascript:;'%>"></a></li>
     <%});%>
   </ul>
   <div class="hd">
@@ -18,7 +17,7 @@
 </div>
 <%}%>
 <div class="wrap">
-  <!----产品热卖----->
+  <!----新品热卖start----->
   <div class="k_hotc"><span style="color:#fe6000">新品热卖</span>
     <ul class="k_hotch">
       <li class="k_hotchg brn"><a href="/hot">更多>></a></li>
@@ -27,433 +26,69 @@
   <div class="k_hotcf">
     <%hotGoodsList.forEach(function(hotgoods){%>
     <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>"><img src="<%=hotgoods.imgurl||''%>?type=s" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
-      <a href="/goods/<%=hotgoods.id%>"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
+      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>" target="_blank"><img src="<%=hotgoods.imgurl||''%>?type=s" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
+      <a href="/goods/<%=hotgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
       <li class="pro_discript"><%=hotgoods.info||''%></li>
       <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(hotgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(hotgoods.priceMarket)%></del></span><input type="button" value="加入购物车"></li>
 
     </ul>
    <%});%>
   </div>
-  <div class="k_hotc cf clear"><span>肉禽蛋品</span>
+  <!----新品热卖end----->
+  <!----商品分类start----->
+  <%indexClassList.forEach(function(clist1){%>
+  <div class="k_hotc cf clear"><span><%=clist1.name%></span>
     <ul class="k_hotch">
-      <li class="k_hotchg brn"><a href="#">更多>></a></li>
-      <li><a href="#">猪肉</a></li>
-      <li><a href="#">牛羊肉</a></li>
-      <li><a href="#">进口肉品</a></li>
-      <li><a href="#">禽蛋兔</a></li>
+      <li class="k_hotchg brn"><a href="/list/<%=clist1.id%>">更多>></a></li>
+      <%clist1.children.forEach(function(clist2){%>
+      <li><a href="/list/<%=clist2.id%>"><%=clist2.name%></a></li>
+      <%});%>
     </ul>
   </div>
   <div class="k_hotcfg">
+    <%clist1.goodslist.forEach(function(indexgoods){%>
     <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chana.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">肥肠</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
+      <li class="k_hotcf1s"><a href="/goods/<%=indexgoods.id%>" target="_blank"><img src="<%=indexgoods.imgurl||''%>?type=s" title="<%=indexgoods.name%>" alt="<%=indexgoods.name%>"></a></li>
+      <a href="/goods/<%=indexgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=indexgoods.name%></li></a>
+      <li class="pro_discript"><%=indexgoods.info||''%></li>
+      <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(indexgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(indexgoods.priceMarket)%></del></span><input type="button" value="加入购物车"></li>
 
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
     </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chans.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">猪肘</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chand.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">猪肉馅</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chanf.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">草鸡</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chang.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">后腿肉</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chanh.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">精前胛肉</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chank.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">土鸡蛋</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chanl.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">旧院黑鸡 母鸡（半只）</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
+    <%});%>
   </div>
+  <%});%>
+  <!----商品分类end----->
 
-  <!----产品分类----->
-  <div class="k_hotc cf clear"><span>粮油干杂</span>
-    <ul class="k_hotch">
-      <li class="k_hotchg brn"><a href="#">更多>></a></li>
-      <li><a href="#">南北干货</a></li>
-      <li><a href="#">米面粮油</a></li>
-      <li><a href="#">调味品</a></li>
-    </ul>
-  </div>
-
-  <div class="k_hotcfg">
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan1.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">有机尼奥有机儿童意面（迷你）</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan2.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">田园护国陈醋</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan3.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">田园高山黄菜籽油</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan4.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">田园白蕙仁米</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan5.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">郫县陈酿豆瓣（两年）</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan6.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">米耕香茉莉香米4kg装</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan12.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">有机红豆</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-
-    <ul class="k_hotcf1 fl ml20">
-      <li class="k_hotcf1s"><a href="03产品详情.html"><img src="<%=CssPath%>/pc/img/chan11.jpg" title="蔬菜一" alt="蔬菜一"></a></li>
-      <a href="#">
-        <li class="k_hotcf1a">有机玉米喳</li>
-      </a>
-      <li class="k_hotcf1d"><span>&yen;<i>23.00</i></span>/份</li>
-      <li class="h-p-bottom">
-        <div class="h-p-bottom-mask">
-          <a init="true" class="number-box" unit="份" min="1" id="itemCount8282">
-            <span class="nb-content">1份</span>
-            <span class="nb-add"></span>
-            <span class="nb-reduce nb-reduce-disable"></span>
-          </a>
-          <span class="jiaru"><input type="button" value="加入购物车"></span>
-
-          <center><a class="btn-normal-yellow">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a></center>
-        </div>
-      </li>
-    </ul>
-  </div>
 </div>
+<%if(centerChannel&&centerChannel.articles&&centerChannel.articles.length>0){
+  var aobj=centerChannel.articles[0];
+%>
 <div id="about" class="cf clear">
   <div class="about_us cf clear">
     <dl class="about_usm">
-      <dt class="about_usl"><a href="#"><img src="<%=CssPath%>/pc/img/about_l.jpg" title="安徽田园日志农业科技有限公司" alt="安徽田园日志农业科技有限公司"></a></dt>
-      <a href="#"><dd class="about_usr">
-          <p>安徽田园日志农业科技有限公司</p>
-            <span>安徽田园日志农业科技有限公司，成立于2014年9月，位于合肥市。专注于有机农产品的种植与销售。
-田园日志专注都市有机生活！500亩农场开放式种植，全程“0化肥,0农药，0激素。”为合肥市区1000名会员家庭提供从田间到餐桌的有机生鲜宅配到服务，让您和您的家人吃到最安全，最健康的放心食材！</span>
+      <dt class="about_usl"><a href="/info/<%=aobj.id%>" target="_blank">
+          <img src="<%=aobj.picurl||''%>" title="<%=centerChannel.name||''%>" alt="<%=centerChannel.name||''%>">
+        </a>
+      </dt>
+      <a href="/info/<%=aobj.id%>" target="_blank"><dd class="about_usr">
+          <p><%=aobj.title||''%></p>
+            <span><%=aobj.info||''%></span>
           <i>查看详细</i>
         </dd></a>
     </dl>
   </div>
 </div>
+<%}%>
 <div class="about_usnews cf clear">
-  <a href="#"><ul class="about_usnews1">
-      <li class="about_usnews2"><img src="<%=CssPath%>/pc/img/about1.jpg" title="小厨房的大环保" alt="小厨房的大环保"></li>
-      <li class="about_usnews3">家庭环保：小厨房的大环保</li>
-      <li class="about_usnews4">在很多人的观念里，环保可能是很宏大很遥远的东西，它需要花费你无数的时间精力去努力，得到的效果可能还是微不足道的。但对尚作的会员周丽来说，环保其实就是很简单小事，做好厨房垃圾的处理，将那些湿哒哒的垃圾处理好，就是环保。</li>
+  <%if(buttomChannel&&buttomChannel.articles&&buttomChannel.articles.length>0){%>
+  <%buttomChannel.articles.forEach(function(bobj){%>
+  <a href="/info/<%=bobj.id%>" target="_blank"><ul class="about_usnews1">
+      <li class="about_usnews2"><img src="<%=bobj.picurl||''%>" title="<%=bobj.title||''%>" alt="<%=bobj.title||''%>"></li>
+      <li class="about_usnews3"><%=bobj.title||''%></li>
+      <li class="about_usnews4"><%=bobj.info||''%></li>
     </ul></a>
-  <a href="#"><ul class="about_usnews1">
-      <li class="about_usnews2"><img src="<%=CssPath%>/pc/img/about2.jpg" title="我推广健康" alt="我推广健康"></li>
-      <li class="about_usnews3">我不推广产品 我推广健康</li>
-      <li class="about_usnews4">进入食品行业，对曾杨来说并不是偶然。在生活中，曾杨虽然和其他二十多岁的小伙子一样，喜欢运动，爱玩爱闹，但曾杨也和其他的年轻男孩不一样——他更关注生活，关注食品。</li>
-    </ul></a>
-  <a href="#"><ul class="about_usnews1">
-      <li class="about_usnews2"><img src="<%=CssPath%>/pc/img/about3.jpg" title="策马奔腾" alt="策马奔腾"></li>
-      <li class="about_usnews3">有机会员的日常生活：策马奔腾！</li>
-      <li class="about_usnews4">策马奔腾，是一项极需要气场的运动，而且在城市中，想要参加这一运动，也不是一件像骑自行车那样随便的。至少对于小编来说，在草原，扬鞭、奔驰，是一件非常非常令人神往的事！但就是这样的好事，却是我们尚作有机会员的日常！</li>
-    </ul></a>
+  <%});%>
+  <%}%>
 </div>
+
 <%include common_buttom%>
