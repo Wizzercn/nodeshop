@@ -25,7 +25,7 @@
   </div>
   <div class="k_hotcf">
     <%hotGoodsList.forEach(function(hotgoods){%>
-    <ul class="k_hotcf1 fl ml20">
+    <ul class="k_hotcf1 fl ml20" data-goods-id="<%=hotgoods.id%>" data-goods-name="<%=hotgoods.name%>"  data-goods-price="<%=StringUtil.setPrice(hotgoods.price)%>" data-goods-imgurl="<%=hotgoods.imgurl||''%>?type=s">
       <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>" target="_blank"><img src="<%=hotgoods.imgurl||''%>?type=s" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
       <a href="/goods/<%=hotgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
       <li class="pro_discript"><%=hotgoods.info||''%></li>
@@ -48,11 +48,12 @@
   </div>
   <div class="k_hotcfg">
     <%clist1.goodslist.forEach(function(indexgoods){%>
-    <ul class="k_hotcf1 fl ml20">
+    <ul class="k_hotcf1 fl ml20" data-goods-id="<%=indexgoods.id%>" data-goods-name="<%=indexgoods.name%>"  data-goods-price="<%=StringUtil.setPrice(indexgoods.price)%>" data-goods-imgurl="<%=indexgoods.imgurl||''%>?type=s">
       <li class="k_hotcf1s"><a href="/goods/<%=indexgoods.id%>" target="_blank"><img src="<%=indexgoods.imgurl||''%>?type=s" title="<%=indexgoods.name%>" alt="<%=indexgoods.name%>"></a></li>
       <a href="/goods/<%=indexgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=indexgoods.name%></li></a>
       <li class="pro_discript"><%=indexgoods.info||''%></li>
-      <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(indexgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(indexgoods.priceMarket)%></del></span><input type="button" value="加入购物车"></li>
+      <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(indexgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(indexgoods.priceMarket)%></del></span>
+        <%if(!indexgoods.is_spec){%><input type="button" value="加入购物车"><%}%></li>
 
     </ul>
     <%});%>

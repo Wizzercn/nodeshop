@@ -15,13 +15,13 @@ module.exports = {
       },
       //获取cms栏目内容
       centerChannel: function (done) {
-        Cms_channel.getChannelByName('关于我们',1,function (list) {
+        Cms_channel.getChannelByName('关于我们', 1, function (list) {
           done(null, list);
         });
       },
       //获取cms栏目内容
       buttomChannel: function (done) {
-        Cms_channel.getChannelByName('公司动态',3,function (list) {
+        Cms_channel.getChannelByName('公司动态', 3, function (list) {
           done(null, list);
         });
       },
@@ -41,42 +41,44 @@ module.exports = {
       indexClassList: function (done) {
         Shop_goods_class.getIndexClass(function (list) {
           async.waterfall([function (cb) {
-            var l=[];
-            var j=0;
-            list.forEach(function(obj){
-              var ids=[];
+            var l = [];
+            var j = 0;
+            list.forEach(function (obj) {
+              var ids = [];
               ids.push(obj.id);
-              Shop_goods_class.getChildrenClass(obj.id, function (clist) {
-                obj.children = clist;
-                var k=0;
-                clist.forEach(function(cobj){
-                  ids.push(cobj.id);
+              if (obj.hasChildren) {
+                Shop_goods_class.getChildrenClass(obj.id, function (clist) {
+                  obj.children = clist;
+                  var k = 0;
+                  clist.forEach(function (cobj) {
+                    ids.push(cobj.id);
+                  });
+                  obj.goodsids = ids;
+                  l.push(obj);
+                  j++;
+                  if (j == list.length) {
+                    cb(null, l);
+                  }
                 });
-                obj.goodsids=ids;
-                l.push(obj);
-                j++;
-                if(j==list.length){
-                  cb(null,l);
-                }
-              });
+              }
             });
-          },function(list,cb){
-            var l=[];
-            var j=0;
-            list.forEach(function(obj){
-              var ids=obj.goodsids;
-              Shop_goods.getGoodsList(ids,8,function(clist){
-                sails.log.warn('clist::'+JSON.stringify(clist));
-                obj.goodslist=clist||[];
+          }, function (list, cb) {
+            var l = [];
+            var j = 0;
+            list.forEach(function (obj) {
+              var ids = obj.goodsids;
+              Shop_goods.getGoodsList(ids, 8, function (clist) {
+                sails.log.warn('clist::' + JSON.stringify(clist));
+                obj.goodslist = clist || [];
                 l.push(obj);
                 j++;
-                if(j==list.length){
-                  cb(null,l);
+                if (j == list.length) {
+                  cb(null, l);
                 }
               });
             });
           }], function (index_err, list) {
-            console.log('list::'+JSON.stringify(list));
+            console.log('list::' + JSON.stringify(list));
             done(null, list);
           });
         });
