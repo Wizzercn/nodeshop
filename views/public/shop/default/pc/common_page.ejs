@@ -63,7 +63,7 @@
       var top = parseInt(document.body.scrollTop | document.documentElement.scrollTop);
       console.log('top::'+top+" height::"+$(document).height()+" window::"+$(window).height());
       if(top >= $(document).height() - $(window).height() - 3){
-        setTimeout("ajaxpage()",200);
+        setTimeout("ajaxpage()",100);
       }
     });
   });
