@@ -23,8 +23,10 @@
   var page=<%=goodsData.page||1%>;
   var sort_name='<%=sort_name||'default'%>';
   var sort_type='<%=sort_type||'desc'%>';
+  var is_load=false;
   function ajaxpage(){
-    if(page<totalPage){
+    if(page<totalPage&&!is_load){
+      is_load=true;
       var pageSize=<%=goodsData.size||8%>;
       var start=page*pageSize;
       $.post(
@@ -33,6 +35,7 @@
           page=result.page;
           if(result.data.length>0){
             $.each(result.data,function(i,o){
+              is_load=false;
               var css='pro_discript';
               var btn='';
               if(o.info&& o.info.length>22){
@@ -57,7 +60,8 @@
   }
   $(function(){
     $(window).scroll(function(){
-      var top = document.body.scrollTop | document.documentElement.scrollTop;
+      var top = parseInt(document.body.scrollTop | document.documentElement.scrollTop);
+      console.log('top::'+top+" height::"+$(document).height()+" window::"+$(window).height());
       if(top >= $(document).height() - $(window).height() - 3){
         setTimeout("ajaxpage()",200);
       }
