@@ -1,0 +1,67 @@
+<%var list_load_type=ShopConfig.list_load_type||'page';%>
+<%if(list_load_type=='page'){
+%>
+<div class="s_page cf clear tcdPageCode"></div>
+<script language="JavaScript">
+  var sort_name='<%=sort_name||'default'%>';
+  var sort_type='<%=sort_type||'desc'%>';
+  $(function(){
+    $(".tcdPageCode").createPage({
+      pageCount:<%=goodsData.totalPage||1%>,
+      current:<%=goodsData.page||1%>,
+      backFn:function(p){
+        var pageSize=<%=goodsData.size||8%>;
+        var start=(p-1)*pageSize;
+        window.location.href="<%=page_url%>?start="+start+"&sort_name="+sort_name+"&sort_type="+sort_type;
+      }
+    });
+  });
+</script>
+<%}else{%>
+<script language="JavaScript">
+  var totalPage=<%=goodsData.totalPage||1%>;
+  var page=<%=goodsData.page||1%>;
+  var sort_name='<%=sort_name||'default'%>';
+  var sort_type='<%=sort_type||'desc'%>';
+  function ajaxpage(){
+    if(page<totalPage){
+      var pageSize=<%=goodsData.size||8%>;
+      var start=page*pageSize;
+      $.post(
+        "<%=page_url%>/ajax?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type,
+        function(result){
+          page=result.page;
+          if(result.data.length>0){
+            $.each(result.data,function(i,o){
+              var css='pro_discript';
+              var btn='';
+              if(o.info&& o.info.length>22){
+                css='pro_discript_min';
+              }
+              if(!o.is_spec){
+                btn='<input type="button" value="加入购物车">';
+              }
+              var s='<ul class="k_hotcf1 fl ml20" data-goods-id="'+o.id+'" data-goods-name="'+ o.name+'"  data-goods-price="'+setPrice(o.price)+'" data-goods-imgurl="'+o.imgurl+'?type=s">'+
+                '<li class="k_hotcf1s"><a href="/goods/'+o.id+'" target="_blank"><img src="'+o.imgurl+'?type=s" title="'+o.name+'" alt="'+o.name+'"></a></li>'+
+                '<a href="/goods/'+o.id+'" target="_blank"><li class="k_hotcf1a">'+o.name+'</li></a>'+
+                '<li class="'+css+'">'+ o.info+'</li>'+
+                '<li class="k_hotcf1d"><span><i>&yen;'+setPrice(o.price)+'</i><br><del>&yen;'+setPrice(o.priceMarket)+'</del></span>'+
+                btn+'</li>'+
+                '</ul>';
+              $(".k_hotcfg").append(s);
+            });
+          }
+        },'json'
+      );
+    }
+  }
+  $(function(){
+    $(window).scroll(function(){
+      var top = document.body.scrollTop | document.documentElement.scrollTop;
+      if(top >= $(document).height() - $(window).height() - 3){
+        setTimeout("ajaxpage()",200);
+      }
+    });
+  });
+</script>
+<%}%>

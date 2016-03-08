@@ -69,7 +69,7 @@
         {
           "render": function (data, type, row) {
             var s='<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>';
-            if(row.name=='首页Banner'){
+            if(row.name=='首页Banner'||row.name=='商品列表Banner'){
               s='';
             }
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +

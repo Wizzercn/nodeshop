@@ -1,0 +1,49 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/hot" class="color_y">新品热卖</a></div>
+  </div>
+</div>
+<%if(bannerLink&&bannerLink.links&&bannerLink.links.length>0){
+var link=bannerLink.links[0];
+%>
+
+<div class="p_classify cf clear">
+  <img src="<%= link.picurl||'' %>">
+</div>
+<%}%>
+
+<div class="wrap">
+  <ul class="mall_rf">
+    <li ><a href="/hot" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
+    <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="/hot?sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+    <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="/hot?sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+  </ul>
+
+  <div class="k_hotcfg">
+    <%goodsData.data.forEach(function(hotgoods){
+      var len=0;
+      if(hotgoods.info)len=hotgoods.info.length;
+    %>
+    <ul class="k_hotcf1 fl ml20" data-goods-id="<%=hotgoods.id%>" data-goods-name="<%=hotgoods.name%>"  data-goods-price="<%=StringUtil.setPrice(hotgoods.price)%>" data-goods-imgurl="<%=hotgoods.imgurl||''%>?type=s">
+      <li class="k_hotcf1s"><a href="/goods/<%=hotgoods.id%>" target="_blank"><img src="<%=hotgoods.imgurl||''%>?type=s" title="<%=hotgoods.name%>" alt="<%=hotgoods.name%>"></a></li>
+      <a href="/goods/<%=hotgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
+      <li class="<%=len>22?'pro_discript_min':'pro_discript'%>"><%=hotgoods.info||''%></li>
+      <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(hotgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(hotgoods.priceMarket)%></del></span>
+        <%if(!hotgoods.is_spec){%><input type="button" value="加入购物车"><%}%></li>
+
+    </ul>
+    <%});%>
+  </div>
+
+  <%var page_url='/hot';%>
+  <%include common_page.ejs%>
+
+</div>
+<%include common_buttom.ejs%>
+

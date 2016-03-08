@@ -18,7 +18,7 @@ module.exports = {
       size: 100,
       required: true,
       unique: true,
-      index:true
+      index: true
     },
     //商品名称
     name: {
@@ -27,64 +27,64 @@ module.exports = {
       required: true
     },
     //商品简介
-    info:{
+    info: {
       type: 'string'
     },
     //销售价格(单位:分)
-    price:{
-      type:'integer',
+    price: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //市场价(单位:分)
-    priceMarket:{
-      type:'integer',
+    priceMarket: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //成本价(单位:分)
-    priceCost:{
-      type:'integer',
+    priceCost: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //重量
-    weight:{
-      type:'string',
-      size:20
+    weight: {
+      type: 'string',
+      size: 20
     },
     //计量单位
-    unit:{
-      type:'string',
-      size:20
+    unit: {
+      type: 'string',
+      size: 20
     },
     //库存
-    stock:{
-      type:'integer',
+    stock: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //积分
-    score:{
-      type:'integer',
+    score: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //最小购买数量
-    buyMin:{
-      type:'integer',
+    buyMin: {
+      type: 'integer',
       defaultsTo: function () {
         return 1;
       }
     },
     //最大购买数量
-    buyMax:{
-      type:'integer',
+    buyMax: {
+      type: 'integer',
       defaultsTo: function () {
         return 0;
       }
@@ -105,7 +105,7 @@ module.exports = {
     //商品默认图片
     imgurl: {
       type: 'string',
-      size:255
+      size: 255
     },
     //商品图册
     images: {
@@ -120,24 +120,24 @@ module.exports = {
       }
     },
     //上架时间
-    upAt:{
-      type:'integer'
+    upAt: {
+      type: 'integer'
     },
     //下架时间
-    downAt:{
-      type:'integer'
+    downAt: {
+      type: 'integer'
     },
     //详细介绍
-    note:{
-      type:'text'
+    note: {
+      type: 'text'
     },
     //属性详情
-    prop:{
-      type:'json'
+    prop: {
+      type: 'json'
     },
     //规格详情
-    spec:{
-      type:'json'
+    spec: {
+      type: 'json'
     },
     is_spec: {
       type: 'boolean',
@@ -171,42 +171,82 @@ module.exports = {
       }
     },
     //修改人
-    updatedBy:{
+    updatedBy: {
       type: 'integer'
     },
     //修改时间
-    updatedAt:{
-      type:'integer',
-      defaultsTo:function(){
+    updatedAt: {
+      type: 'integer',
+      defaultsTo: function () {
         return moment().format('X');
       },
-      index:true
+      index: true
     },
-    products:{
+    products: {
       collection: 'Shop_goods_products',
       via: 'goodsid'
     }
 
   },
-  getHotGoods:function(num,cb){
+  getHotGoods: function (num, cb) {
     Shop_goods.find({
-        select:['id','gn','name','info','price','priceMarket','is_spec','weight','unit','stock','buyMin','buyMax','imgurl','location'],
-        where:{disabled:false},
-        limit:num||4})
+        select: ['id', 'gn', 'name', 'info', 'price', 'priceMarket', 'is_spec', 'weight', 'unit', 'stock', 'buyMin', 'buyMax', 'imgurl', 'location'],
+        where: {disabled: false},
+        limit: num || 4
+      })
       .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
       return cb(list);
     });
   },
-  getGoodsList:function(classid,num,cb){
+  getGoodsList: function (classid, num, cb) {
     Shop_goods.find({
-        select:['id','gn','name','info','price','priceMarket','is_spec','weight','unit','stock','buyMin','buyMax','imgurl','location'],
-        where:{disabled:false,classid:classid},
-        limit:num||4})
+        select: ['id', 'gn', 'name', 'info', 'price', 'priceMarket', 'is_spec', 'weight', 'unit', 'stock', 'buyMin', 'buyMax', 'imgurl', 'location'],
+        where: {disabled: false, classid: classid},
+        limit: num || 4
+      })
       .sort('location desc')
       .sort('updatedAt desc').exec(function (err, list) {
-      sails.log.warn('getGoodsList.err::'+JSON.stringify(err));
+      sails.log.warn('getGoodsList.err::' + JSON.stringify(err));
       return cb(list);
+    });
+  },
+  getPageList: function (pageSize, start, where, sort, cb) {
+    var page = Math.floor(start / pageSize) + 1;
+    Shop_goods.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        var next = 0;
+        if ((start + pageSize) < count)next = start + pageSize;
+        var totalPage = Math.floor(count / pageSize);
+        if (totalPage == 0 || count % pageSize != 0) {
+          totalPage++;
+        }
+        Shop_goods.find({
+            select: ['id', 'gn', 'name', 'info', 'price', 'priceMarket', 'is_spec', 'weight', 'unit', 'stock', 'buyMin', 'buyMax', 'imgurl', 'location'],
+            sort: sort,
+            where: where
+          })
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            cb({
+              "size": pageSize,
+              "total": count,
+              "next": next,
+              "page": page,
+              "totalPage": totalPage,
+              "data": list
+            });
+          });
+      } else {
+        cb({
+          "size": pageSize,
+          "total": 0,
+          "next": 0,
+          "page": 1,
+          "totalPage": 1,
+          "data": []
+        });
+      }
     });
   }
 };

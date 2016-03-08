@@ -1,3 +1,12 @@
+function setPrice(str){
+  if(typeof str=='string'&&str.length>2){
+    return str.substring(0,str.length-2)+'.'+str.substring(str.length-2);
+  }
+  if(typeof str=='number'){
+    var s=str.toString();
+    return s.substring(0,s.length-2)+'.'+s.substring(s.length-2);
+  }
+}
 $(function(){
   $.ajaxSetup({cache:false});
   $(".i_banner").slide({titCell:".hd ul",autoPage: true, autoPlay: true, effect:"fold", delayTime: 500, interTime: 6000})
@@ -10,13 +19,27 @@ $(function(){
         $("#h-m-content").addClass("fixed");
         $("#h-m-r-menu").fadeIn();
         $("#h-m-r-search").fadeOut();
+        $("#goTop").show();
       }else{
         $("#h-m-content").removeClass("fixed");
         $("#h-m-r-menu").fadeOut();
         $("#h-m-r-search").fadeIn();
+        $("#goTop").hide();
       }
     });
   }
+  $("#goTop").on("click",function(){
+    function GoTop() {
+      if (document.documentElement.scrollTop + document.body.scrollTop < 1) {
+        clearInterval(Timer);
+      } else {
+        document.documentElement.scrollTop /= 1.1;
+        document.body.scrollTop /= 1.1;
+      }
+    }
+    var Timer = setInterval(GoTop, 10);
+
+  });
   $(window).scroll();
   //分类导航
   $("#h-m-content .c_shop").mouseover(function(){

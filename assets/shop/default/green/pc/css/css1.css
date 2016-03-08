@@ -1563,3 +1563,18 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .icon_san{position:absolute !important;right:-7px !important;top:15px !important;z-index:2 !important;}
 
 .pro_discript{width:260px;margin:0 auto;border-top:1px solid #ddd;border-bottom:1px solid #ddd;line-height:20px;text-align:center;padding:5px 0;}
+.pro_discript_min{width:260px;margin:0 auto;border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align:center;padding:5px 0;}
+
+/*================GoTop============*/
+#goTop {position:fixed;right:20px;bottom:65px;width:40px;height:38px;padding:8px 0 0;background-color: #049b81;border-radius:6px;cursor:pointer;}
+#goTop:hover {background-color:#00aa3a;}
+#goTop:hover .gotop1 {border-left:12px solid #00aa3a;border-right:12px solid #00aa3a;}
+#goTop .gotop1 {width:0;margin:0 auto;border-bottom:12px solid #FFF;border-left:12px solid #049b81;border-right:12px solid #049b81;}
+#goTop .gotop2 {width:10px;height:10px;margin:0 auto;background-color:#FFF;}
+
+/*================Page============*/
+.tcdPageCode{padding: 15px 20px;text-align: left;color: #ccc;text-align:center;}
+.tcdPageCode a{display: inline-block;color: #00aa3a;display: inline-block;height: 32px;line-height: 32px;	padding: 0 10px;border: 1px solid #ddd;	margin: 0 2px;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode a:hover{text-decoration: none;border: 1px solid #00aa3a;}
+.tcdPageCode span.current{display: inline-block;height: 32px;line-height: 32px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #00aa3a;	border: 1px solid #00aa3a;border-radius: 4px;vertical-align: middle;}
+.tcdPageCode span.disabled{	display: inline-block;height: 32px;line-height: 32px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}

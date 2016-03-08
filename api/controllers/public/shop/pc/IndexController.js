@@ -4,8 +4,7 @@
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
-    console.log('req.data::' + JSON.stringify(req.data));
-    var i = 0;
+    //console.log('req.data::' + JSON.stringify(req.data));
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {

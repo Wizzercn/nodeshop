@@ -23,6 +23,12 @@ module.exports = {
       type:'string',
       size:20
     },
+    list_page_size:{
+      type:'integer',
+      defaultsTo: function () {
+        return 4;
+      }
+    },
     list_quick_buy: {
       type: 'boolean',
       defaultsTo: function () {

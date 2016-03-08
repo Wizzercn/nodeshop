@@ -50,7 +50,19 @@
                 <div class="col-sm-8" style="padding-top: 5px;">
                   <select class="form-control" name="list_load_type">
                     <option value="ajax" <%=obj.list_load_type=='ajax'?'selected':''%>>Ajax</option>
-                    <option value="list" <%=obj.list_load_type=='list'?'selected':''%>>分页</option>
+                    <option value="page" <%=obj.list_load_type=='page'?'selected':''%>>分页</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">商品每页显示条数</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <select class="form-control" name="list_page_size">
+                    <option value="4" <%=obj.list_page_size==4?'selected':''%>>4</option>
+                    <option value="8" <%=obj.list_page_size==8?'selected':''%>>8</option>
+                    <option value="12" <%=obj.list_page_size==12?'selected':''%>>12</option>
+                    <option value="20" <%=obj.list_page_size==20?'selected':''%>>20</option>
+                    <option value="24" <%=obj.list_page_size==24?'selected':''%>>24</option>
                   </select>
                 </div>
               </div>
