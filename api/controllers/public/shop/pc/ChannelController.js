@@ -50,7 +50,7 @@ module.exports = {
           });
         }, function (id, cb) {
           channelId=id;
-          Cms_article.getPageList(1, start, {channelId: id, disabled: false}, {createdAt: 'desc'}, function (list) {
+          Cms_article.getPageList(5, start, {channelId: id, disabled: false}, {createdAt: 'desc'}, function (list) {
             cb(null, list);
           });
         }], function (err, list) {
