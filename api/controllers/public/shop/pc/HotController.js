@@ -1,4 +1,5 @@
 /**
+ * 新品热卖
  * Created by root on 3/7/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

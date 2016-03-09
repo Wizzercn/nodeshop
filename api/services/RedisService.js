@@ -1,17 +1,19 @@
 /**
- * Created by root on 9/17/15.
+ * Created by root on 3/9/16.
  */
 var redis = require("redis");
-var client = redis.createClient(sails.config.redis.port, sails.config.redis.host);
+var client = redis.createClient(sails.config.redis);
 client.on("error", function (err) {
   sails.log("Redis error::" + err);
 });
 module.exports = {
-  set: function (key, val, time) {
+  set: function (key, val, time,cb) {
     client.set(key, val, redis.print);
     if (time && time > 0) {
       client.expire(key, time);//单位:秒
     }
+    console.log('aaaaa');
+    cb(val);
   },
   get: function (key) {
     client.get(key, function (err, reply) {

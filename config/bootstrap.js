@@ -37,6 +37,12 @@ module.exports.bootstrap = function(cb) {
       sails.config.system.ShopConfig=o;
     }
   });
+  Sms_config.findOne(1).exec(function(e,o){
+    if(e)sails.log.warn('bootstrap.sms_config.err::'+JSON.stringify(e));
+    if(o){
+      sails.config.system.SmsConfig=o;
+    }
+  });
   Cms_site.findOne(1).exec(function(e,o){
     if(e)sails.log.warn('bootstrap.site_config.err::'+JSON.stringify(e));
     if(o){

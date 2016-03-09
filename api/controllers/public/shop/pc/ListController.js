@@ -1,4 +1,5 @@
 /**
+ * 商品列表
  * Created by root on 3/7/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

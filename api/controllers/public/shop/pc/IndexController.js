@@ -1,4 +1,5 @@
 /**
+ * 商城首页
  * Created by root on 3/2/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

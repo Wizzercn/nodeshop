@@ -1,4 +1,5 @@
 /**
+ * 栏目列表 单条直接显示则多条分页
  * Created by root on 3/8/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

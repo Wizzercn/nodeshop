@@ -39,6 +39,8 @@ module.exports.routes = {
   '/list/:id/ajax': 'public/shop/pc/ListController.ajax',
   '/channel/:id': 'public/shop/pc/ChannelController.index',
   '/info/:id': 'public/shop/pc/InfoController.index',
+  '/join': 'public/shop/pc/AccountController.join',
+  '/login': 'public/shop/pc/AccountController.login',
   '/sysadmin': 'private/LoginController.login',
   '/sysadmin/home': 'private/HomeController.index',
   '/test':'/sysadmin'

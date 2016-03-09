@@ -1,4 +1,5 @@
 /**
+ * 文章详情页 公用栏目view文件
  * Created by root on 3/8/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

@@ -10,6 +10,7 @@ module.exports.system = {
   UploadPath:'/upload',
   MyConfig:{},
   ShopConfig:{},
-  SiteConfig:{}
+  SiteConfig:{},
+  SmsConfig:{}
 
 };
