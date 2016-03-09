@@ -11,7 +11,7 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
-
+var redisConfig = require("./custom/redis");
 module.exports.session = {
 
   /***************************************************************************
@@ -52,11 +52,11 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-   host: '127.0.0.1',
-   port: 6379,
+   host: redisConfig.redis.host,
+   port: redisConfig.redis.port,
    ttl: 3000,//<redis session TTL in seconds>
   // db: 0,
-   pass: '@#etpass',
+   pass: redisConfig.redis.auth_pass,
    prefix: 'ns_session:'
 
 

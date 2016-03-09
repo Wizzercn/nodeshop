@@ -3,6 +3,9 @@
  */
 var redis = require("redis");
 var client = redis.createClient(sails.config.redis);
+var i=0;
+i++;
+console.log('redis i:::'+i);
 client.on("error", function (err) {
   sails.log("Redis error::" + err);
 });
