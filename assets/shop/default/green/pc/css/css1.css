@@ -1288,6 +1288,7 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 
 /*---------信息发布单文档--------*/
 .mess_text{width:856px;margin:35px auto;font-size:14px;color:#666666;line-height:30px;}
+.mess_title{width:856px;margin:30px auto;font-size:16px;text-align:center;font-weight:bold;color:#666666;line-height:20px;}
 
 /*-----新闻列表-----*/
 .knews_li{width:870px;height:124px;margin-top:20px;border-bottom:1px solid #dddddd;margin-left:10px;}

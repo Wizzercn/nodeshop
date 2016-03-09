@@ -39,6 +39,11 @@ module.exports = {
           }
         });
       },
+      classChildren:function(done){
+        Shop_goods_class.find({parentId:id,disabled:false}).exec(function(e,o){
+          done(null, o);
+        });
+      },
       //获取热卖商品
       goodsData: function (done) {
         var sort={location:'desc',updatedAt:'desc'};
@@ -85,6 +90,7 @@ module.exports = {
       req.data.goodsData = result.goodsData || {};
       req.data.bannerLink = result.bannerLink || {};
       req.data.classObj = result.classObj || {};
+      req.data.classChildren = result.classChildren || [];
       req.data.sort_name = sort_name;
       req.data.sort_type = sort_type;
       req.data.StringUtil = StringUtil;

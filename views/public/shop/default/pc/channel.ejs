@@ -1,0 +1,62 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <span class="schedule_hs"><a href="/">首页</a> <%if(channel.parentId>0){%> /&nbsp;&nbsp;<%=channel.parentChannel.name||'没有此栏目'%>&nbsp;&nbsp;<%}%> / <a href="/channel/<%=channel.id||'news'%>" class="color_y"><%=channel.name||'没有此栏目'%></a></span>
+  </div>
+</div>
+<div class="member_cm_f clear cf ban">
+  <div class="service-menu">
+    <div class="menu_f"></div>
+    <input class="menu-code-index" type="hidden" value="c<%=channel.id%>" />
+    <%channelList.forEach(function(list1){
+    if(list1.parentId==0){
+    %>
+    <strong class="menu-p"><i class="menu-i">+</i><i class="menu-iadd">-</i><a href="javascript:;"><%=list1.name%></a></strong>
+    <div class="menu-c">
+      <ul>
+        <%channelList.forEach(function(list2){
+        if(list2.parentId==list1.id){
+        %>
+        <li><a data-service-index="c<%=list2.id%>" href="/channel/<%=list2.id%>"><%=list2.name%></a></li>
+        <%}});%>
+      </ul>
+    </div>
+    <%}});%>
+  </div>
+
+  <!--------会员中心右侧部分我的订单-------->
+  <div class="mess_main">
+    <div class="mess_mainf"><span><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" /><%=channel.name||'没有此栏目'%></span></div>
+
+    <%if(infoList.total>1){%>
+    <%infoList.data.forEach(function(o){%>
+      <ul class="knews_li"><li class="knews_li1"><a href="/info/<%=o.id%>" target="_blank"><img src="<%=o.picurl||CssPath+'/pc/img/about3.jpg'%>" /></a></li>
+        <a href="/info/<%=o.id%>" target="_blank"><li class="knews_li2">
+          <p><img src="<%=CssPath%>/pc/img/icon/news_icon.jpg" /><%=o.title||''%>  <span class="fr"><%=moment(o.createdAt*1000).format('YYYY-MM-DD')%></span></p>
+            <span class="knews_li3"><%if(o.info){if(o.info.length>90){%><%=o.info.substring(0,90)%>...<%}else {%><%=o.info%><%}}%> <i> 查看详细 >></i></span>
+        </li></a>
+    </ul>
+    <%});%>
+      <%include channel_page.ejs%>
+    <%}else if(infoList.total==1){
+      var obj=infoList.data[0];%>
+    <div class="mess_title">
+      <%=obj.title%>
+    </div>
+    <div class="mess_text">
+      <%if(obj.contentId){%><%-obj.contentId.content%><%}%>
+    </div>
+    <%}else {%>
+
+    <%}%>
+  </div>
+
+
+</div>
+
+<%include common_buttom.ejs%>

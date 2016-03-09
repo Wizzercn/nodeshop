@@ -23,6 +23,9 @@ var link=bannerLink.links[0];
     <li ><a href="/list/<%=id%>" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
     <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="/list/<%=id%>?sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
     <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="/list/<%=id%>?sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+    <%classChildren.forEach(function(l){%>
+    <li><a href="/list/<%=l.id%>"><%=l.name%></a></li>
+    <%});%>
   </ul>
 
   <div class="k_hotcfg">

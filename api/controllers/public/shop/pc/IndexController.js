@@ -20,7 +20,7 @@ module.exports = {
       },
       //获取cms栏目内容
       buttomChannel: function (done) {
-        Cms_channel.getChannelByName('公司动态', 3, function (list) {
+        Cms_channel.getChannelByName('活动资讯', 3, function (list) {
           done(null, list);
         });
       },
@@ -67,7 +67,6 @@ module.exports = {
             list.forEach(function (obj) {
               var ids = obj.goodsids;
               Shop_goods.getGoodsList(ids, 8, function (clist) {
-                sails.log.warn('clist::' + JSON.stringify(clist));
                 obj.goodslist = clist || [];
                 l.push(obj);
                 j++;

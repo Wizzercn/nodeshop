@@ -1,0 +1,14 @@
+<div class="s_page cf clear tcdPageCode"></div>
+<script language="JavaScript">
+  $(function(){
+    $(".tcdPageCode").createPage({
+      pageCount:<%=infoList.totalPage||1%>,
+      current:<%=infoList.page||1%>,
+      backFn:function(p){
+        var pageSize=<%=infoList.size||8%>;
+        var start=(p-1)*pageSize;
+        window.location.href="/channel/<%=channel.id%>?start="+start;
+      }
+    });
+  });
+</script>
