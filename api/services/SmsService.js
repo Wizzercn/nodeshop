@@ -5,7 +5,6 @@ TopClient = require('../common/top/topClient').TopClient;
 var client;
 module.exports = {
   sendVercode:function(mobile,param,template,cb){
-    console.log('sms client::'+JSON.stringify(client));
     if(!client){
       client = new TopClient({
         'appkey':sails.config.system.SmsConfig.app_key||'',
@@ -36,10 +35,12 @@ module.exports = {
       'sms_param':param
     },
     function (error,response) {
+      sails.log.warn('sms error::'+JSON.stringify(error));
+
       if(!error)
         cb(response.result.success==true);
       else
-        console.log(error);
+        cb(false);
     })
   }
 };

@@ -22,7 +22,7 @@
         <%channelList.forEach(function(list2){
         if(list2.parentId==list1.id){
         %>
-        <li><a data-service-index="c<%=list2.id%>" href="/channel/<%=list2.id%>"><%=list2.name%></a></li>
+        <li onclick="window.location.href='/channel/<%=list2.id%>'"><a data-service-index="c<%=list2.id%>" href="/channel/<%=list2.id%>"><%=list2.name%></a></li>
         <%}});%>
       </ul>
     </div>

@@ -2,7 +2,7 @@
 <%if(list_load_type=='page'){
 %>
 <div class="s_page cf clear tcdPageCode"></div>
-<script language="JavaScript">
+<script type="text/javascript">
   var sort_name='<%=sort_name||'default'%>';
   var sort_type='<%=sort_type||'desc'%>';
   $(function(){
@@ -18,7 +18,7 @@
   });
 </script>
 <%}else{%>
-<script language="JavaScript">
+<script type="text/javascript">
   var totalPage=<%=goodsData.totalPage||1%>;
   var page=<%=goodsData.page||1%>;
   var sort_name='<%=sort_name||'default'%>';
@@ -61,7 +61,6 @@
   $(function(){
     $(window).scroll(function(){
       var top = parseInt(document.body.scrollTop | document.documentElement.scrollTop);
-      console.log('top::'+top+" height::"+$(document).height()+" window::"+$(window).height());
       if(top >= $(document).height() - $(window).height() - 3){
         setTimeout("ajaxpage()",100);
       }

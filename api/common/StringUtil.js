@@ -65,6 +65,14 @@ module.exports = {
       return (max);
     }
   },
+  randomNum:function(num){
+    var Num="";
+    for(var i=0;i<num;i++)
+    {
+      Num+=Math.floor(Math.random()*10);
+    }
+    return Num;
+  },
   password: function (password, loginname, createAt) {
     var p = md5(md5(password) + loginname + createAt);
     return 'w' + p.substring(0, p.length - 1);

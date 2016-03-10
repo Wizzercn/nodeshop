@@ -3,24 +3,21 @@
  */
 var redis = require("redis");
 var client = redis.createClient(sails.config.redis);
-var i=0;
-i++;
-console.log('redis i:::'+i);
 client.on("error", function (err) {
   sails.log("Redis error::" + err);
 });
 module.exports = {
   set: function (key, val, time,cb) {
-    client.set(key, val, redis.print);
-    if (time && time > 0) {
-      client.expire(key, time);//单位:秒
-    }
-    console.log('aaaaa');
-    cb(val);
+    client.set(key, val, function (err, reply){
+      if (time && time > 0) {
+        client.expire(key, time);//单位:秒
+      }
+      cb(err,reply);
+    });
   },
-  get: function (key) {
+  get: function (cb) {
     client.get(key, function (err, reply) {
-      sails.log('Redis get::'+reply.toString());
+      cb(err,reply);
     });
   }
 };

@@ -44,12 +44,14 @@ module.exports = function (req, res, next) {
       return res.redirect('/private/login/login');
     }
   } else {
+    var r=req.query.r||'';
     var data = {
       layout: 'layouts/public',
       SiteConfig:sails.config.system.SiteConfig,
       ShopConfig:sails.config.system.ShopConfig,
-      CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css
-  };
+      CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css,
+      r:r
+    };
     req.data = data;
     return next();
   }

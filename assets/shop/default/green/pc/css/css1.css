@@ -563,7 +563,7 @@ a, a:hover {
 /*--------预定详情部分--------*/
 #schedule{width:100%;height:40px;background:#eeeeee;border-bottom:1px solid #dddddd;}
 .schedule_h{width:1200px;height:40px;margin:0 auto;line-height:40px;font-size:12px;}
-.schedule_hf{color:#000;display:block;width:67px;height:40px;float:left;background:url(../img/s_jiaotou.png) no-repeat center right;}
+.schedule_hf{color:#000;display:block;width:67px;height:40px;float:left;}
 .schedule_hs{width:300px;display:block;height:40px;}
 .schedule_hs a{margin-left:10px;margin-right:10px;}
 .color_y{color:#ce0020;}
@@ -735,7 +735,7 @@ a, a:hover {
 /*--------订单管理--------*/
 #schedule{width:100%;height:40px;background:#eeeeee;border-bottom:1px solid #dddddd;}
 .schedule_h{width:1200px;height:40px;margin:0 auto;line-height:40px;font-size:12px;}
-.schedule_hf{color:#000;display:block;width:67px;height:40px;float:left;background:url(../img/s_jiaotou.png) no-repeat center right;}
+.schedule_hf{color:#000;display:block;width:67px;height:40px;float:left;}
 .schedule_hs{width:300px;display:block;height:40px;}
 .schedule_hs a{margin-left:10px;margin-right:10px;}
 /*--------会员中心-我的订单----------*/
@@ -1265,16 +1265,16 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 .service-menu .menu-c{display:none;text-indent:75px;}
 .service-menu .menu-c-current{display:block;}
 .service-menu .menu-c ul{display:block;}
-.service-menu .menu-c ul li{width:240px;border-bottom:1px solid #dddddd;height:40px;display:block;margin-left:20px;line-height:40px;background:url(../img/menu_r.jpg) no-repeat 210px center;cursor:pointer;}
+.service-menu .menu-c ul li{width:240px;border-bottom:1px solid #dddddd;height:40px;display:block;margin-left:20px;line-height:40px;cursor:pointer;}
 .service-menu .menu-c a:link,.service-menu .menu-c a:visited{color:#666666;text-decoration:none;}
 .service-menu .menu-c .current:hover{color:#fff;}
 
 .menu-p a{margin-left:20px;}
 .menu-p-current a:hover{color:#fff !important;}
 .menu_f{margin-top:20px;}
-.service-menu .menu-c ul li:hover{background:url(../img/menu_l.jpg) no-repeat 210px center !important;cursor:pointer;}
-.menu_on{background:url(../img/menu_l.jpg) no-repeat 210px center !important;}
-.service-menu .menu-c ul li:hover a{color:#00aa3a !important;background:url(../img/menu_l.jpg) no-repeat 210px center;}
+.service-menu .menu-c ul li:hover{cursor:pointer;}
+.menu_on{}
+.service-menu .menu-c ul li:hover a{color:#00aa3a !important;}
 
 
 
@@ -1579,3 +1579,58 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .tcdPageCode a:hover{text-decoration: none;border: 1px solid #00aa3a;}
 .tcdPageCode span.current{display: inline-block;height: 32px;line-height: 32px;padding: 0 10px;margin: 0 2px;color: #fff;background-color: #00aa3a;	border: 1px solid #00aa3a;border-radius: 4px;vertical-align: middle;}
 .tcdPageCode span.disabled{	display: inline-block;height: 32px;line-height: 32px;padding: 0 10px;margin: 0 2px;	color: #bfbfbf;background: #f2f2f2;border: 1px solid #bfbfbf;border-radius: 4px;vertical-align: middle;}
+
+/*================Login============*/
+.login{width:100%;min-height:480px;padding:20px 0;}
+.login-main{margin:0 auto;border:1px solid #ddd;background:#fff;padding:20px;width:360px;}
+.login-main .error{height:20px;color:#9e1634;background:url(../img/error.png) no-repeat 0px -6px; text-indent:12px;}
+.login-main .errorn{padding-left: 10px;position: absolute;line-height:20px;}
+.login-title{width:320px;height:40px;border-bottom:1px solid #ddd;margin:0 auto;color:#666;line-height:30px;}
+.login-titlel{display:inline-block;float:left;width:80px;height:30px;font-size:16px;font-weight:bold;}
+.login-titler{display:inline-block;float:right;width:240px;height:30px;line-height:30px;text-align: right;}
+.login-titler a{color:#fe6000;}
+.login-list{height:30px;line-height:30px;margin-top:10px;font-size:14px;color:#666;}
+.login-list i{color:#9e1634;vertical-align: top;font-size:12px;}
+.login-ent{height:35px;}
+.login-phone{width:320px;height:35px;border:1px solid #ddd;background:#fff;text-indent:10px;font-size:14px;}
+.login-verl{display:inline-block;float:left;width:120px;height:35px;border:1px solid #ddd;background:#fff;text-indent:10px;}
+.login-verc{display:inline-block;float:left;height:35px;width:100px;margin-left:5px;margin-right:5px;}
+.login-verr{display:inline-block;float:left;width:60px;height:35px;line-height:35px;color:#fe6000;border:none;background:#fff;}
+.login-phone-l{float:left;display:inline-block;width:200px;height:35px;border:1px solid #ddd;background:#fff;text-indent:10px;font-size:14px;}
+.login-phone-r{width:100px;height:35px;background:#faf4ea;border:1px solid #ddd;margin-left:10px;font-size:14px;}
+.u-agreement{height:30px;line-height:30px;}
+.u-agreement a{color:#fe6000;font-size:14px;}
+.login-btn{width:320px;margin-top:10px;height:40px;}
+.login-btn input{display:inline-block;width:320px;height:35px;border:none;background:#00aa3a;color:#fff;text-align:center;font-size:14px;}
+.land-add{width:400px;padding:0 20px;margin:0 auto;height:40px;position:relative;top:10px;}
+.land-add a{display:inline-block;float:left;position:relative;top:4px;width:180px;height:40px;line-height:35px;font-size:16px;text-align:center;border:1px solid #ddd;background:#fff;border-radius:5px 5px 0 0;}
+.land-addon{background:#00aa3a !important;color:#fff;border:none !important; }
+.land-addon:hover{color:#fff;}
+.login-list-r{float:right;color:#fe6000;}
+
+/*================Tip============*/
+.oc_pro_m{ width:270px;background:#fff;border:1px solid #dddddd;text-align:center;position:fixed;top:50%;left:50%;margin-left:-135px;margin-top:-100px;border-radius:6px;}
+.oc_pro_a{width:180px;margin:0 auto;line-height:20px;color:#333333;display:block;padding-bottom:20px}
+.oc_pro_b{display:block;color:#FE6000;width:80%;margin:10px auto;height:40px;line-height:40px;font-size:18px;}
+.oc_pro{    width: 50%;
+  height: 40px;
+  background: transparent none repeat scroll 0% 0%;
+  border-top: 1px solid rgb(221, 221, 221);
+  border-left: medium none;
+  border-bottom: medium none;
+  border-right: 1px solid #ddd;
+  border-width: 1px 1px medium medium;
+  border-style: solid solid none none;
+  border-color: #DDD #DDD -moz-use-text-color -moz-use-text-color;
+}
+.oc_pro:hover{background:#00aa3a;color:#fff;border-radius:0px 0px 0px 3px;}
+.oc_pro1{    width: 50%;
+  width: 50%;
+  height: 40px;
+  background: transparent none repeat scroll 0% 0%;
+  border-width: 1px 1px medium medium;
+  border-style: solid solid none none;
+  border-color: #DDD #DDD -moz-use-text-color -moz-use-text-color;
+  border-right: none;
+}
+.oc_pro1:hover{background:#00aa3a;color:#fff;border-radius:0px 0px 3px 0px;}

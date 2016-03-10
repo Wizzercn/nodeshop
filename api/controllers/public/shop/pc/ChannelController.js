@@ -15,6 +15,8 @@ module.exports = {
       where = {name: '活动资讯', disabled: false};
     } else if (id == 'about') {
       where = {name: '关于我们', disabled: false};
+    } else if (id == 'user') {
+      where = {name: '用户协议', disabled: false};
     } else {
       where = {id: StringUtil.getInt(id), disabled: false};
     }
