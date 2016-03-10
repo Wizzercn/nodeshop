@@ -189,6 +189,8 @@
                       <input type="hidden" name="lvprice[]" value="<%=JSON.stringify(lv_p)%>">
                       <button class="btn btn-primary" style="float: left;margin-top: 2px;" type="button" data-toggle="modal"
                               data-target="#dialogLv">编辑会员价格</button>
+                      <%}else {%>
+                      <input type="hidden" name="lvprice[]" value="[]">
                       <%}%>
                     </div>
                   </div>

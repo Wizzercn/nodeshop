@@ -36,27 +36,99 @@ module.exports = {
         Cms_channel.getChannel(function (list) {
           done(null, list);
         });
+      },
+      bannerLink: function (done) {
+        Cms_linkClass.getLinkList('登录页背景', function (list) {
+          done(null, list);
+        });
       }
 
     }, function (err, result) {
-
       req.data.channelList = result.channelList || [];
+      req.data.bannerLink = result.bannerLink || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
+      req.data.saveLoginname=req.cookies.saveLoginname||'';
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/account_login', req.data);
+    });
+  },
+  doLogin:function(req,res){
+    var login_name=req.body.login_name||'';
+    var login_pass=req.body.login_pass||'';
+    var vercode=req.body.vercode||'';
+    var saveLoginname=req.body.saveLoginname=='true';
+    var publicCaptcha=req.session.publicCaptcha||'';
+    if(vercode==publicCaptcha){
+      Shop_member_account.findOne({login_name:login_name}).populate('memberId').exec(function(err,obj) {
+        if (obj&&obj.login_password==StringUtil.password(login_pass,login_name,obj.createdAt)){
+          req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name};
+          if(saveLoginname){
+            res.cookie('saveLoginname', login_name, {maxAge:1000*60*60*24*7, httpOnly:true, path:'/', secure:false});
+          }else {
+            res.cookie('saveLoginname','null',{maxAge:0});
+          }
+          return res.json({code:0,msg:'登录成功'});
+
+        }else {
+          return res.json({code:2,msg:'用户名或密码错误'});
+        }
+      });
+    }else {
+      return res.json({code:1,msg:'验证码不正确'});
+    }
+  },
+  doJoin:function(req,res){
+    var mobile=req.body.mobile||'';
+    var smscode=req.body.smscode||'';
+    var pass=req.body.pass||'';
+    if(mobile.length!=11)
+      return res.json({code:1,msg:'手机校验码不正确'});
+    RedisService.get('sms_vercode_'+mobile,function(e,o){
+      if(o&&smscode== o.toString()){
+        Shop_member_account.findOne({login_name:mobile}).exec(function(err,obj){
+          if(obj)return res.json({code:2,msg:'帐号已存在，请更换手机号注册'});
+          Shop_member.create({nickname:mobile.substring(0,3)+'****'+mobile.substring(7),mobile:mobile,reg_ip:req.ip,reg_source:'pc'}).exec(function(err,member){
+            if(member){
+              var now=moment().format('X');
+              var password=StringUtil.password(pass,mobile,now);
+              Shop_member_account.create({memberId:member.id,login_name:mobile,login_password:password,createdAt:now}).exec(function(e3,acc){
+                if(!e3){
+                  req.session.member={memberId:member.id,nickname:member.nickname,score:member.score,login_name:mobile};
+                  return res.json({code:0,msg:'注册成功'});
+                }else {
+                  return res.json({code:3,msg:'注册失败，请重试'});
+                }
+              });
+            }else {
+              return res.json({code:3,msg:'注册失败，请重试'});
+            }
+          });
+        });
+      }else {
+        return res.json({code:1,msg:'手机校验码不正确，请重新获取'});
+      }
     });
   },
   getSmscode:function(req, res){
     var mobile=req.body.mobile||'';
     var vercode=req.body.vercode||'';
+    var type=req.body.type||'';
+    var sms='';
+    var tmp=sails.config.system.SmsConfig.sms_reg_template;
+    if(type=='join'){
+      sms='注册验证';
+    }else if(type=='login'){
+      tmp=sails.config.system.SmsConfig.sms_login_template;
+      sms='登录验证';
+    }
     var publicCaptcha=req.session.publicCaptcha||'';
     var code = StringUtil.randomNum(6);
     if(vercode==publicCaptcha){
-      SmsService.sendVercode(mobile,{code:code,product:sails.config.system.SiteConfig.site_name||'SunShop'},sails.config.system.SmsConfig.sms_reg_template,function(result){
+      SmsService.sendVercode(mobile,{code:code,product:sails.config.system.SiteConfig.site_name||'SunShop'},tmp,function(result){
         if(result){
           RedisService.set('sms_vercode_'+mobile,code,60*5,function(e,o){
             if(!e){
-              Sms_log.create({mobile:mobile,code:code,sms:'注册验证'}).exec(function(e1,o1){});
+              Sms_log.create({mobile:mobile,code:code,sms:sms}).exec(function(e1,o1){});
               return res.json({code:0,msg:'短信发送成功，请在5分钟之内进行验证'});
             }else {
               return res.json({code:2,msg:'短信未发送成功，请重试'});
@@ -66,7 +138,6 @@ module.exports = {
           return res.json({code:2,msg:'短信未发送成功，请重试'});
         }
       });
-      //return res.json({code:0,msg:'短信发送成功，请在5分钟之内进行验证'});
     }else {
       return res.json({code:1,msg:'验证码不正确'});
     }

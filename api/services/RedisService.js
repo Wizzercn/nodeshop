@@ -15,7 +15,7 @@ module.exports = {
       cb(err,reply);
     });
   },
-  get: function (cb) {
+  get: function (key,cb) {
     client.get(key, function (err, reply) {
       cb(err,reply);
     });

@@ -74,7 +74,7 @@ function getSmscode(){
   if(checkMobile()&&checkVercode()){
     $.post(
       "/public/shop/pc/account/getSmscode",
-      {'mobile':$("#mobile").val(),'vercode':$("#vercode").val()},
+      {'mobile':$("#mobile").val(),'vercode':$("#vercode").val(),type:'join'},
       function(result){
         if(result.code==0){
           $("#tip .oc_pro_a").html("短信发送成功，请在5分钟内完成注册");
@@ -100,16 +100,26 @@ function getSmscode(){
 $(function(){
   $("#dojoin").on("click",function(){
     if(checkMobile()&&checkSmscode()&&checkPass()){
-
+      $.post(
+        "/public/shop/pc/account/doJoin",
+        {'mobile':$("#mobile").val(),'smscode':$("#smscode").val(),'pass':$("#pass1").val()},
+        function(result){
+          if(result.code==0){
+            window.location.href=$("#r").val()||'/member';
+          }else{
+            $("#tip .oc_pro_a").html(result.msg);
+            $("#tip").show();
+          }
+        },'json'
+      );
     }
   });
   $("#mobile").on("keyup",checkLoginname).on("blur",checkLoginname);
   $("#getSmscode").on("click",getSmscode);
   $("#vercode").on("keyup",function(){$("#vercode_tip").hide()});
+  $("#smscode").on("keyup",function(){$("#smscode_tip").hide()});
   $("#pass1").on("keyup",function(){$("#pass1_tip").hide()});
   $("#pass2").on("keyup",function(){$("#pass2_tip").hide()});
-  $("#tip input[type=button]").on("click",function(){
-    $("#tip").hide();
-  });
-  setTimeout(function(){$("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime())},200);
+  $("#tip input[type=button]").on("click",function(){$("#tip").hide();});
+  setTimeout(function(){$("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());},200);
 });

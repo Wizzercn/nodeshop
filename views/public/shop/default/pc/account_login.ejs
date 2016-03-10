@@ -1,5 +1,56 @@
-<div class="slidmenu">
-  <% include common_top.ejs %>
+<% include account_top.ejs %>
+<%var imgurl=CssPath+'/pc/img/logins-bg.jpg';
+if(bannerLink&&bannerLink.links>0){
+  imgurl=bannerLink.links[0].imgurl;
+}
+%>
+<div class="login" style="background:url('<%=imgurl%>') no-repeat center center;">
+  <div class="land-add"><a id="t1" href="javascript:;" class="land-addr">普通登录</a><a id="t2" href="javascript:;" class="land-addl land-addon">动态短信登录</a></div>
+
+  <ul class="login-main  login-mains">
+    <li class="login-list">用户名<i>*</i></li>
+    <li class="login-ent"><input id="login_name" tabindex="1" value="<%=saveLoginname||''%>"  maxlength="100" type="text" placeholder="请输入手机号码" class="login-phone"></li>
+    <li class="error" style="display: none" id="login_name_tip"></li>
+    <li class="login-list">密码<i>*</i><a href="javascript:$('#t2').trigger('click')" class="login-list-r" style="font-size: 12px;">忘记密码？</a></li>
+    <li class="login-ent"><input id="login_pass" tabindex="2"  maxlength="20" type="password" placeholder="请输入密码" class="login-phone"></li>
+    <li class="error" style="display: none" id="login_pass_tip"></li>
+    <li class="login-list">验证码<i>*</i></li>
+    <li class="login-ent"><input id="vercode" tabindex="3" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl"><img id="vercode_img" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
+      <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
+    <li class="error" style="display: none" id="vercode_tip"></li>
+    <li class="login-ent" style="line-height:35px;"><input id="saveLoginname" <%if(saveLoginname){%>checked<%}%> tabindex="4" type="checkbox"><span>记住用户名</span></li>
+    <li class="login-btn">
+      <input id="doLogin" type="button" value="登录">
+    </li>
+    <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
+
+  </ul>
+  <ul class="login-main c_hide login-mainf">
+
+   <li class="login-list">手机号码<i>*</i></li>
+    <li class="login-ent"><input id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
+    <li class="login-list">验证码<i>*</i></li>
+    <li class="login-ent"><input id="vercode_mobile" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl"><img id="vercode_img_mobile" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
+      <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
+    <li class="login-list">手机号码<i>*</i></li>
+    <li class="login-ent"><input id="smscode" type="text" maxlength="6" placeholder="请输入手机动态密码" class="login-phone-l"><input type="button" value="获取校验码" class="login-phone-r"></li>
+
+    <li class="login-btn">
+      <input type="button" value="登录">
+    </li>
+    <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
+
+  </ul>
 </div>
+<input id="r" type="hidden" value="<%=r%>">
+<div id="tip" style="display: none">
+  <div style="position:fixed;top:0px ;width:100%;height:100%;background-color: #000\9; filter:alpha(opacity= 20)\9;background:rgba(0,0,0,0.2)"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确认" type="button" class="oc_pro" /><input type="button" value="取消" class="oc_pro1" /></span>
+  </div>
+</div>
+<script src="<%=CssPath%>/pc/js/login.js"></script>
 
 <%include common_buttom.ejs%>

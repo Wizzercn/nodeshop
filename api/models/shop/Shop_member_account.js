@@ -13,7 +13,8 @@ module.exports = {
       primaryKey: true
     },
     memberId: {
-      model: 'Shop_member'
+      model: 'Shop_member',
+      index:true
     },
     login_name:{
       type:'string',
