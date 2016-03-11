@@ -52,7 +52,7 @@ module.exports = {
       }
     }
   },
-  //登录时将Cookies购物车数据同步的数据库
+  //登录时将Cookies购物车数据同步到数据库
   updateCookieCartDataToDb:function(req,res,memberId,cb){
     var cookies=req.cookies;
     if(cookies){
