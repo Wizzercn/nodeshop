@@ -29,14 +29,19 @@ if(bannerLink&&bannerLink.links>0){
 
    <li class="login-list">手机号码<i>*</i></li>
     <li class="login-ent"><input id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
+    <li class="error" style="display: none" id="mobile_tip"></li>
+
     <li class="login-list">验证码<i>*</i></li>
     <li class="login-ent"><input id="vercode_mobile" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl"><img id="vercode_img_mobile" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
       <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
+    <li class="error" style="display: none" id="vercode_mobile_tip"></li>
+
     <li class="login-list">手机号码<i>*</i></li>
-    <li class="login-ent"><input id="smscode" type="text" maxlength="6" placeholder="请输入手机动态密码" class="login-phone-l"><input type="button" value="获取校验码" class="login-phone-r"></li>
+    <li class="login-ent"><input id="smscode" type="text" maxlength="6" placeholder="请输入手机动态密码" class="login-phone-l"><input id="getSmscode" type="button" value="获取动态密码" class="login-phone-r"></li>
+    <li class="error" style="display: none" id="smscode_tip"></li>
 
     <li class="login-btn">
-      <input type="button" value="登录">
+      <input id="doLoginMobile" type="button" value="登录">
     </li>
     <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
 

@@ -77,6 +77,27 @@ module.exports = {
       return res.json({code:1,msg:'验证码不正确'});
     }
   },
+  doLoginMobile:function(req,res){
+    var mobile=req.body.mobile||'';
+    var smscode=req.body.smscode||'';
+    if(mobile.length!=11)
+      return res.json({code:1,msg:'手机动态密码不正确'});
+    RedisService.get('sms_vercode_'+mobile,function(e,o){
+      if(o&&smscode== o.toString()){
+        Shop_member_account.findOne({login_name:mobile}).populate('memberId').exec(function(err,obj) {
+          if (obj){
+            req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:mobile};
+            return res.json({code:0,msg:'登录成功'});
+
+          }else {
+            return res.json({code:2,msg:'用户名或密码错误'});
+          }
+        });
+      }else {
+        return res.json({code:1,msg:'手机动态密码不正确，请重新获取'});
+      }
+    });
+  },
   doJoin:function(req,res){
     var mobile=req.body.mobile||'';
     var smscode=req.body.smscode||'';

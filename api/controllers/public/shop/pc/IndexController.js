@@ -77,7 +77,7 @@ module.exports = {
               });
             });
           }], function (index_err, list) {
-            console.log('list::' + JSON.stringify(list));
+            //console.log('list::' + JSON.stringify(list));
             done(null, list);
           });
         });
