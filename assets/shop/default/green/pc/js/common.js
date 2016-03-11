@@ -49,7 +49,7 @@ function flyImg(obj,goodsId,productId, num){
 function addToCarData(goodsId,productId,num){
   $.ajax({
     type : "POST",
-    url : "/shopcart/addToShopping",
+    url : "/public/shop/pc/shopcart/addGoods",
     data : {
       goodsId : goodsId,
       productId : productId,
@@ -57,20 +57,29 @@ function addToCarData(goodsId,productId,num){
     },
     dataType : "json",
     success : function(data) {
-      //if ($("#cart-num1").length>0) {
-      //  if(isSlide){
-      //    showCart();
-      //  }else{
-      //    $('#cart-num1').html(data.count);
-      //    $('.che1').children('.che1-box3').html(data.count);
-      //  }
-      //}
+      if(data.code==0){
+        $("#cartNum").html(parseInt($("#cartNum").text())+1);
+      }
     }
   });
-  hasChange = true;
+}
+function showCartNum(){
+  $.ajax({
+    type : "POST",
+    url : "/public/shop/pc/shopcart/cartNum",
+    data : {
+    },
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $("#cartNum").html(data.num||0);
+      }
+    }
+  });
 }
 $(function(){
   $.ajaxSetup({cache:false});
+  showCartNum();
   $(".i_banner").slide({titCell:".hd ul",autoPage: true, autoPlay: true, effect:"fold", delayTime: 500, interTime: 6000})
   $(".head-menu-placeholder").addClass("notindex-bg");
   //$(".h-m-i-subitem .hover-panel").addClass("column"+$(".h-m-i-subitem .hover-panel .h-m-i-s-column").length);

@@ -59,16 +59,17 @@ module.exports = {
     var saveLoginname=req.body.saveLoginname=='true';
     var publicCaptcha=req.session.publicCaptcha||'';
     if(vercode==publicCaptcha){
-      Shop_member_account.findOne({login_name:login_name}).populate('memberId').exec(function(err,obj) {
+      Shop_member_account.findOne({login_name:login_name,disabled:false}).populate('memberId').exec(function(err,obj) {
         if (obj&&obj.login_password==StringUtil.password(login_pass,login_name,obj.createdAt)){
           req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name};
           if(saveLoginname){
-            res.cookie('saveLoginname', login_name, {maxAge:1000*60*60*24*7, httpOnly:true, path:'/', secure:false});
+            res.cookie('saveLoginname', login_name, {maxAge:1000*60*60*24*30, httpOnly:true, path:'/', secure:false});
           }else {
             res.cookie('saveLoginname','null',{maxAge:0});
           }
-          return res.json({code:0,msg:'登录成功'});
-
+          Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
+            return res.json({code: 0, msg: '登录成功'});
+          });
         }else {
           return res.json({code:2,msg:'用户名或密码错误'});
         }
@@ -84,11 +85,12 @@ module.exports = {
       return res.json({code:1,msg:'手机动态密码不正确'});
     RedisService.get('sms_vercode_'+mobile,function(e,o){
       if(o&&smscode== o.toString()){
-        Shop_member_account.findOne({login_name:mobile}).populate('memberId').exec(function(err,obj) {
+        Shop_member_account.findOne({login_name:mobile,disabled:false}).populate('memberId').exec(function(err,obj) {
           if (obj){
             req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:mobile};
-            return res.json({code:0,msg:'登录成功'});
-
+            Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
+              return res.json({code: 0, msg: '登录成功'});
+            });
           }else {
             return res.json({code:2,msg:'帐号不存在'});
           }
