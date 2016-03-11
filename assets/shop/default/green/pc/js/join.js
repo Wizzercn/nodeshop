@@ -109,6 +109,10 @@ $(function(){
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();
+            $("#vercode").val("");
+            $("#vercode").focus();
+            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
+
           }
         },'json'
       );

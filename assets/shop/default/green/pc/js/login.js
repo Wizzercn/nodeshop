@@ -79,6 +79,9 @@ $(function(){
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();
+            $("#vercode_mobile").val("");
+            $("#vercode_mobile").focus();
+            $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
           }
         },'json'
       );
@@ -99,7 +102,7 @@ $(function(){
             $("#vercode_mobile_tip").show();
             $("#vercode_mobile").val("");
             $("#vercode_mobile").focus();
-            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
+            $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
           }if(result.code==2){
             $("#smscode_tip").html('<span class="errorn">短信未发送成功，请重试</span>');
             $("#smscode_tip").show();
@@ -122,8 +125,9 @@ $(function(){
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();
-            $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
-            $("#vercode_mobile").val("");
+            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
+            $("#vercode").val("");
+            $("#vercode").focus();
           }
         },'json'
       );
