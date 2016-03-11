@@ -48,8 +48,9 @@
           <a href="/login" class="z_shopa">登录</a>
           <a href="/join" class="z_shopa">注册</a>
           <%}%>
-            <span class="z_shopm"><a href="#" class="z_shops"><img src="<%=CssPath%>/pc/img/public/z_shop.png">购物车<span>0</span>件</a>
-            <dl class="z_gous z_gousa">
+            <span id="cartDiv" class="z_shopm">
+              <a href="#" class="z_shops"><img src="<%=CssPath%>/pc/img/public/z_shop.png">购物车<span id="cartNum">0</span>件</a>
+            <dl id="cartList" class="z_gous z_gousa">
               <dt class="z_gous1">最近加入商品</dt>
               <dt class="z_gous2"><a href="#"><img src="<%=CssPath%>/pc/img/chan4.jpg"></a><span class="z_gous2a">黑米<p>2kg</p></span>
                 <span class="z_gous2s"><p>￥29.00</p><input type="button" value="删除"></span></dt>
