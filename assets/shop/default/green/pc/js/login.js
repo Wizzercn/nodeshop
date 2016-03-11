@@ -76,6 +76,11 @@ $(function(){
         function(result){
           if(result.code==0){
             window.location.href=$("#r").val()||'/member';
+          }else if(result.code==1) {
+            $("#smscode_tip").html('<span class="errorn">手机动态密码不正确，请重新输入或重新获取</span>');
+            $("#smscode_tip").show();
+            $("#smscode").val("");
+            $("#smscode").focus();
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();
@@ -122,12 +127,19 @@ $(function(){
         function(result){
           if(result.code==0){
             window.location.href=$("#r").val()||'/member';
+          }else if(result.code==1){
+            $("#vercode_tip").html('<span class="errorn">验证码不正确，请重新输入</span>');
+            $("#vercode_tip").show();
+            $("#vercode").val("");
+            $("#vercode").focus();
+            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();
-            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
             $("#vercode").val("");
             $("#vercode").focus();
+            $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
+
           }
         },'json'
       );

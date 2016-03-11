@@ -59,13 +59,13 @@ function checkPass(){
   if($("#pass1").val().length<6){
     $("#pass1_tip").html('<span class="errorn">请设置六位数以上的密码</span>');
     $("#pass1_tip").show();
-    $("#pass1_tip").focus();
+    $("#pass1").focus();
     return false;
   }
   if($("#pass2").val()!=$("#pass1").val()){
     $("#pass2_tip").html('<span class="errorn">两次输入的密码不一致</span>');
     $("#pass2_tip").show();
-    $("#pass2_tip").focus();
+    $("#pass2").focus();
     return false;
   }
   return true;
@@ -106,6 +106,11 @@ $(function(){
         function(result){
           if(result.code==0){
             window.location.href=$("#r").val()||'/member';
+          }else if(result.code==1){
+            $("#smscode_tip").html('<span class="errorn">手机校验码不正确，请重新输入或重新获取</span>');
+            $("#smscode_tip").show();
+            $("#smscode").val("");
+            $("#smscode").focus();
           }else{
             $("#tip .oc_pro_a").html(result.msg);
             $("#tip").show();

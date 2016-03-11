@@ -90,7 +90,7 @@ module.exports = {
             return res.json({code:0,msg:'登录成功'});
 
           }else {
-            return res.json({code:2,msg:'用户名或密码错误'});
+            return res.json({code:2,msg:'帐号不存在'});
           }
         });
       }else {
