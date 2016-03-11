@@ -11,15 +11,20 @@ module.exports = {
         Cms_channel.getChannel(function (list) {
           done(null, list);
         });
+      },
+      //获取所有商品分类
+      allClassList: function (done) {
+        Shop_goods_class.getAllClass(function (list) {
+          done(null, list);
+        });
       }
-
     }, function (err, result) {
-      var member=req.session.member||{};
       req.data.channelList = result.channelList || [];
+      req.data.allClassList = result.allClassList || [];
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.member=member;
-      if(member&&member.memberId>0){
+      req.data.siteTitle='会员中心_'+req.data.siteTitle;
+      if(req.data.member&&req.data.member.memberId>0){
         return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_index', req.data);
       }else {
         return res.redirect('/login');

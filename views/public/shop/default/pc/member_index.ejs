@@ -1,4 +1,13 @@
-<% include account_top.ejs %>
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
 
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
+  </div>
+</div>
 <%=JSON.stringify(member)%>
 <% include common_buttom.ejs %>

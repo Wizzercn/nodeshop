@@ -184,5 +184,14 @@ module.exports = {
       'Content-Type': 'image/png'
     });
     res.end(imgbase64);
+  },
+  logout:function(req, res){
+    var member=req.session.member;
+    if (member) {
+      req.session.destroy();
+      res.redirect('/');
+    } else {
+      res.redirect('/');
+    }
   }
 };

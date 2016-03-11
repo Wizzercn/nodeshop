@@ -96,6 +96,8 @@ module.exports = {
       req.data.sort_type = sort_type;
       req.data.StringUtil = StringUtil;
       req.data.id = id;
+      req.data.siteTitle='商品列表_'+req.data.siteTitle;
+
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/list', req.data);
     });
   },

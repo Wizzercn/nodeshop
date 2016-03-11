@@ -68,6 +68,8 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.action = 'info';
+      req.data.siteTitle=channel.name+'_'+req.data.siteTitle;
+
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/channel', req.data);
     });
   }

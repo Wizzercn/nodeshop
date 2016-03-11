@@ -49,6 +49,7 @@ module.exports = {
       req.data.sort_name = sort_name;
       req.data.sort_type = sort_type;
       req.data.StringUtil = StringUtil;
+      req.data.siteTitle='新品热卖_'+req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/hot', req.data);
     });
   },

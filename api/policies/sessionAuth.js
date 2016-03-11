@@ -45,12 +45,15 @@ module.exports = function (req, res, next) {
     }
   } else {
     var r=req.query.r||'';
+    var siteTitle=sails.config.system.SiteConfig.site_name||'';
     var data = {
       layout: 'layouts/public',
       SiteConfig:sails.config.system.SiteConfig,
       ShopConfig:sails.config.system.ShopConfig,
       CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css,
-      r:r
+      r:r,
+      member:req.session.member||{},
+      siteTitle:siteTitle
     };
     req.data = data;
     return next();
