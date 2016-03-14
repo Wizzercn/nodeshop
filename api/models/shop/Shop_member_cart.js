@@ -58,6 +58,32 @@ module.exports = {
       }
     }
   },
+  saveDb:function(memberId,cartObj){
+    async.waterfall([function (cb) {
+      Shop_member_cart.findOne({memberId:memberId,productId:cartObj.productId,goodsId:cartObj.goodsId}).exec(function(e,o) {
+        cb(e,o);
+      });
+    },function(obj,cb){
+      if(obj){
+        Shop_member_cart.update(obj.id,{num:cartObj.num+obj.num}).exec(function(e1,o1){
+          cb(null,obj);
+        });
+      }else {
+        cb(null,obj);
+      }
+    },function(obj,cb){
+      if(!obj){
+        cartObj.memberId=memberId;
+        Shop_member_cart.create(cartObj).exec(function(e2,o2){
+          cb(null,obj);
+        });
+      }else {
+        cb(null,obj);
+      }
+    }],function(err,r){
+
+    });
+  },
   //登录时将Cookies购物车数据同步到数据库
   updateCookieCartDataToDb:function(req,res,memberId,cb){
     var cookies=req.cookies;
@@ -67,30 +93,7 @@ module.exports = {
           res.cookie(key,'null',{maxAge:0});
           var cartObj=JSON.parse(cookies[key]);
           //因为使用for循环，所以需要进行同步控制，否则会造成数据不一致
-          async.waterfall([function (cb) {
-            Shop_member_cart.findOne({memberId:memberId,productId:cartObj.productId,goodsId:cartObj.goodsId}).exec(function(e,o) {
-              cb(e,o);
-            });
-          },function(obj,cb){
-            if(obj){
-              Shop_member_cart.update(obj.id,{num:cartObj.num+obj.num}).exec(function(e1,o1){
-                cb(null,obj);
-              });
-            }else {
-              cb(null,obj);
-            }
-          },function(obj,cb){
-            if(!obj){
-              cartObj.memberId=memberId;
-              Shop_member_cart.create(cartObj).exec(function(e2,o2){
-                cb(null,obj);
-              });
-            }else {
-              cb(null,obj);
-            }
-          }],function(err,r){
-
-          });
+          Shop_member_cart.saveDb(memberId,cartObj);
         }
       }
     }

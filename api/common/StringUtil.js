@@ -73,10 +73,23 @@ module.exports = {
     }
     return Num;
   },
+  /**
+   * 密码加密
+   * @param password
+   * @param loginname
+   * @param createAt
+   * @returns {string}
+     */
   password: function (password, loginname, createAt) {
     var p = md5(md5(password) + loginname + createAt);
     return 'w' + p.substring(0, p.length - 1);
   },
+  /**
+   * 补0
+   * @param num
+   * @param n
+   * @returns {*}
+     */
   getSn: function (num, n) {
     var len = num.toString().length;
     while (len < n) {
@@ -85,6 +98,11 @@ module.exports = {
     }
     return num;
   },
+  /**
+   * 字符串转int价格
+   * @param str
+   * @returns {*}
+     */
   getPrice:function(str){
     if(typeof str=='undefined'||str==''||str==null||str=='null'){
       return 0;
@@ -103,6 +121,11 @@ module.exports = {
       return parseInt(str+'00');
     }
   },
+  /**
+   * int转字符串价格
+   * @param str
+   * @returns {string}
+     */
   setPrice:function(str){
     if(typeof str=='string'&&str.length>2){
       return str.substring(0,str.length-2)+'.'+str.substring(str.length-2);
@@ -118,6 +141,12 @@ module.exports = {
     }
     return parseInt(str);
   },
+  /**
+   * 对数组进行排序
+   * @param key
+   * @param desc
+   * @returns {Function}
+     */
   arrSort:function(key,desc){
     return function(a,b){
       return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
