@@ -45,6 +45,12 @@ module.exports = {
         return 0;
       }
     },
+    weight:{
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
     createdAt: {
       type: 'integer',
       defaultsTo: function () {

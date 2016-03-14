@@ -53,8 +53,10 @@ module.exports = {
     },
     //重量
     weight: {
-      type: 'string',
-      size: 20
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     //计量单位
     unit: {

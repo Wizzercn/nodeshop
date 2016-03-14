@@ -117,5 +117,10 @@ module.exports = {
       return 0;
     }
     return parseInt(str);
+  },
+  arrSort:function(key,desc){
+    return function(a,b){
+      return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
+    }
   }
 };

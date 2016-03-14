@@ -37,6 +37,7 @@ module.exports.routes = {
   '/hot/ajax': 'public/shop/pc/HotController.ajax',
   '/list/:id': 'public/shop/pc/ListController.index',
   '/list/:id/ajax': 'public/shop/pc/ListController.ajax',
+  '/goods/:id': 'public/shop/pc/GoodsController.one',
   '/channel/:id': 'public/shop/pc/ChannelController.index',
   '/info/:id': 'public/shop/pc/InfoController.index',
   '/join': 'public/shop/pc/AccountController.join',
