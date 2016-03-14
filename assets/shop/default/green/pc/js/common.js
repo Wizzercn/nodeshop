@@ -67,6 +67,7 @@ function addToCarData(goodsId,productId,num){
   cart_is_change=true;
 }
 function showCartNum(){
+  if($("#cartNum").length<1)return false;
   $.ajax({
     type : "POST",
     url : "/public/shop/pc/shopcart/cartNum",
