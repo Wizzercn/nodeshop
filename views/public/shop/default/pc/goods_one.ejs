@@ -49,17 +49,19 @@
   <div style="display: none;" class="top-float-menu-placeholder">
     <div class="top-float-menu-panel">
       <div class="top-float-menu">
-        <span class="title"><img src="<%=goods.imgurl||''%>?type=s" width="70" height="70">
+        <ul>
+        <span class="title"><img id="thumblist" src="<%=goods.imgurl||''%>?type=s" width="70" height="70" style="margin-top: 5px;">
           <%=goods.name||''%></span>
         <div class="top-float-menu-right">
           <span class="price">￥<%=StringUtil.setPrice(goods.price)||''%></span>
-          <span class="jiarua"><input onclick="addToCarShop(this,'<%=goods.id%>','')" type="button" value="加入购物车"></span>
+          <span class="jiarua"><input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','')"  type="button" value="加入购物车"></span>
 
-          <center><a class="btn-normal-yellowa">
+           <a class="btn-normal-yellowa">
               <span class="btn-text">√ 已成功加入购物车</span>
               <span class="btn-right"></span>
-            </a></center>
+            </a>
         </div>
+        </ul>
       </div>
     </div>
   </div>
@@ -70,26 +72,21 @@
 
   <!-------立即抢购左侧部分---------->
   <ul class="schedule_hdm">
-    <a href="#">
       <li class="schedule_hd1m">
-        <span class="schedule_hd1am">超值果蔬礼盒包</span>
-        <span class="schedule_hd1sm">种类齐全，值得选购种类齐全，值得选购种类齐全，值得选购种类齐全，值得选购种类齐全，值得选购种类齐全，值得选购</span>
+        <span class="schedule_hd1am"><%=goods.name||''%></span>
+        <span class="schedule_hd1sm"><%=goods.info||''%></span>
       </li>
-    </a>
-    <li class="schedule_hd2m cf clear">
-      <div class="guige_add"><span class="jia_ge">零售价：</span><i class="jia_gea">¥18.00</i></div>
-      <p>商城价：<span>￥18.00</span>
-    </li>
-    <li class="schedule_hd2mfr cf2"><span class="schedule_hd2mfr_f">选择规格:</span>
-      <div class="cf2 schedule_hd2mfr_fds"><span class="duion chicun_pub">约1.75kg</span><span
-          class="chicun">约1.75kg</span><span class="chicun_pub">约1.75kg</span><span
-          class="chicun_pub">约1.75kg</span><span class="chicun">约1.75kg</span><span
-          class="chicun_pub">约1.75kg</span><span class="chicun_pub">约1.75kg</span><span
-          class="chicun">约1.75kg</span><span class="chicun_pub">约1.75kg</span><span class="chicun_pub">约1.75kg</span>
-      </div>
-    </li>
+     <li class="schedule_hd2m cf clear">
+       <div class="guige_add">
+         <span class="jia_ge">促销价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(goods.price)%></i><span class="jia_scj"><s>￥<%=StringUtil.setPrice(goods.priceMarket)%></s></span></div>
 
-
+    </li>
+    <li class="schedule_hd4m cf clear">
+      <div class="guige_add"><span class="jia_ge">重&nbsp;&nbsp;&nbsp;量：</span><%=goods.weight||'0'%>克</div>
+    </li>
+    <li class="schedule_hd5m cf clear">
+      <div class="guige_add"><span class="jia_ge">计量单位：</span><%=goods.unit||''%></div>
+    </li>
     <li class="schedulehd4">
       <div class="schedulehd4_h">选择数量:</div>
       <div class="schedulehd4z"><a href="#" class="schedulehd4_a">—</a>
@@ -101,9 +98,9 @@
     </li>
 
     <li class="schedule_hd6m">
-      <div class="schedule_hd6n"><a href="04-购物车-a第一步.html" id="cart-btn"><input type="button" value="立即购买"
-                                                                                 class="schedulehd4_f"></a>
-        <input type="button" value="加入购物车" class="schedulehd4_g"></div>
+      <div class="schedule_hd6n">
+        <input id="cart-btn" type="button" value="立即购买" class="schedulehd4_g">
+        <input type="button" value="加入购物车" class="schedulehd4_f"></div>
 
     </li>
   </ul>
@@ -286,21 +283,9 @@
 <script>
   $(function(){
     picLunbo();
-    var cart_btn = $("#cart-btn");
-    var scrollTop = $(this).scrollTop();
-    var scrolled = false;
-    $(window).scroll(function(){
-      scrolled = Math.abs($(this).scrollTop()-scrollTop)>0;
-      if($(this).scrollTop()>cart_btn.offset().top+cart_btn.height()){
-        $(".top-float-menu-placeholder").fadeIn();
-      }else{
-        if(scrolled)
-          $(".top-float-menu-placeholder").fadeOut();
-        else
-          $(".top-float-menu-placeholder").css("display","none");
-      }
-    });
-    $(window).scroll();
+    <%if(goods&&!goods.is_spec){%>
+    quickBuy();
+    <%}%>
   });
 </script>
 <% include common_buttom.ejs %>
