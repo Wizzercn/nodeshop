@@ -35,6 +35,8 @@ module.exports.routes = {
   '/': 'public/shop/pc/IndexController.index',
   '/hot': 'public/shop/pc/HotController.index',
   '/hot/ajax': 'public/shop/pc/HotController.ajax',
+  '/search': 'public/shop/pc/HotController.index',
+  '/search/ajax': 'public/shop/pc/HotController.ajax',
   '/list/:id': 'public/shop/pc/ListController.index',
   '/list/:id/ajax': 'public/shop/pc/ListController.ajax',
   '/goods/:id': 'public/shop/pc/GoodsController.one',

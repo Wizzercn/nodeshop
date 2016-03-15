@@ -23,6 +23,8 @@
   var page=<%=goodsData.page||1%>;
   var sort_name='<%=sort_name||'default'%>';
   var sort_type='<%=sort_type||'desc'%>';
+  var search_name='<%=search_name||''%>';
+
   var is_load=false;
   function ajaxpage(){
     if(page<totalPage&&!is_load){

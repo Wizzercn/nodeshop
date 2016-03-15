@@ -3,10 +3,16 @@
   <% include common_banner.ejs %>
 
 </div>
+<%var page_url='/hot';
+var page_name='新品热卖';
+if(search_name){
+  page_url='/search';
+  page_name='商品搜索';
+}%>
 <div id="schedule">
   <div class="schedule_h">
     <span class="schedule_hf">当前位置:</span>
-    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/hot" class="color_y">新品热卖</a></div>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="<%=page_url%>" class="color_y"><%=page_name%></a></div>
   </div>
 </div>
 <%if(bannerLink&&bannerLink.links&&bannerLink.links.length>0){
@@ -20,9 +26,9 @@ var link=bannerLink.links[0];
 
 <div class="wrap">
   <ul class="mall_rf">
-    <li ><a href="/hot" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
-    <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="/hot?sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
-    <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="/hot?sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+    <li ><a href="<%=page_url%>?search_name=<%=search_name||''%>" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
+    <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+    <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
   </ul>
 
   <div class="k_hotcfg">
@@ -41,7 +47,7 @@ var link=bannerLink.links[0];
     <%});%>
   </div>
 
-  <%var page_url='/hot';%>
+
   <%include common_page.ejs%>
 
 </div>

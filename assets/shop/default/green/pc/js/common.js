@@ -168,6 +168,19 @@ $(function(){
       $("#cartList").hide();
     });
   });
+  $("#search").on("click",function(){
+    if($("#search_name").val()==''){
+      $("#search_name").focus();
+    }else {
+      window.location.href='/search?search_name='+$("#search_name").val();
+    }
+  });
+  $('#search_name').bind('keypress',function(event){
+    if(event.keyCode == "13")
+    {
+      $("#search").trigger("click");
+    }
+  });
   $(".i_banner").slide({titCell:".hd ul",autoPage: true, autoPlay: true, effect:"fold", delayTime: 500, interTime: 6000})
   $(".head-menu-placeholder").addClass("notindex-bg");
   //$(".h-m-i-subitem .hover-panel").addClass("column"+$(".h-m-i-subitem .hover-panel .h-m-i-s-column").length);

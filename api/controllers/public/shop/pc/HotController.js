@@ -8,6 +8,7 @@ module.exports = {
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
     var sort_type=req.query.sort_type||'desc';
+    var search_name=req.query.search_name;
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {
@@ -36,7 +37,11 @@ module.exports = {
         if(sort_name=='price'){
           sort={price:sort_type};
         }
-        Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size||8,start,{disabled:false},sort, function (obj) {
+        var where={disabled:false};
+        if(search_name){
+          where.name={like:'%'+search_name+'%'};
+        }
+        Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size||8,start,where,sort, function (obj) {
           done(null, obj);
         });
       }
@@ -48,6 +53,7 @@ module.exports = {
       req.data.bannerLink = result.bannerLink || {};
       req.data.sort_name = sort_name;
       req.data.sort_type = sort_type;
+      req.data.search_name=search_name;
       req.data.StringUtil = StringUtil;
       req.data.siteTitle='新品热卖_'+req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/hot', req.data);
@@ -57,6 +63,7 @@ module.exports = {
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
     var sort_type=req.query.sort_type||'desc';
+    var search_name=req.query.search_name;
     var sort={location:'desc',updatedAt:'desc'};
     if(sort_name=='buy'){
       sort={buy_count:sort_type};
@@ -64,7 +71,11 @@ module.exports = {
     if(sort_name=='price'){
       sort={price:sort_type};
     }
-    Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size||8,start,{disabled:false},sort, function (obj) {
+    var where={disabled:false};
+    if(search_name){
+      where.name={like:'%'+search_name+'%'};
+    }
+    Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size||8,start,where,sort, function (obj) {
       return res.json(obj);
     });
   }
