@@ -5,6 +5,7 @@
 <script type="text/javascript">
   var sort_name='<%=sort_name||'default'%>';
   var sort_type='<%=sort_type||'desc'%>';
+  var search_name='<%=typeof search_name!='undefined'?search_name||'':''%>';
   $(function(){
     $(".tcdPageCode").createPage({
       pageCount:<%=goodsData.totalPage||1%>,
@@ -12,7 +13,7 @@
       backFn:function(p){
         var pageSize=<%=goodsData.size||8%>;
         var start=(p-1)*pageSize;
-        window.location.href="<%=page_url%>?start="+start+"&sort_name="+sort_name+"&sort_type="+sort_type;
+        window.location.href="<%=page_url%>?start="+start+"&sort_name="+sort_name+"&sort_type="+sort_type+"&search_name="+search_name;
       }
     });
   });
@@ -23,7 +24,7 @@
   var page=<%=goodsData.page||1%>;
   var sort_name='<%=sort_name||'default'%>';
   var sort_type='<%=sort_type||'desc'%>';
-  var search_name='<%=search_name||''%>';
+  var search_name='<%=typeof search_name!='undefined'?search_name||'':''%>';
 
   var is_load=false;
   function ajaxpage(){
@@ -32,7 +33,7 @@
       var pageSize=<%=goodsData.size||8%>;
       var start=page*pageSize;
       $.post(
-        "<%=page_url%>/ajax?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type,
+        "<%=page_url%>/ajax?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type+"&search_name="+search_name,
         function(result){
           page=result.page;
           if(result.data.length>0){
