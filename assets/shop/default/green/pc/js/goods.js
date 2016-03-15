@@ -172,7 +172,7 @@ function commentLoad(goodsId,start){
 }
 $(function(){
   $("#cart-btn").on("click",function(){
-    window.location.href="/shopcart/payment?goodsId=<%=goods.id%>&productId=&num="+$("#buy_num").val();
+    window.location.href="/shopcart/payment?goodsId="+goodsid+"&productId=&num="+$("#buy_num").val();
   });
   $("#tab1").on("click",function(){
     $("#tab2").removeClass("s_detaila");
