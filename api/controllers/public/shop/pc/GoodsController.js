@@ -60,7 +60,7 @@ module.exports = {
     }, function (err, result) {
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
-      req.data.hotGoodsList = result.hotGoodsList || [];
+      req.data.hotGoodsList = result.hotGoodsList || {};
       req.data.goods = result.goods || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
@@ -68,6 +68,43 @@ module.exports = {
       req.data.siteTitle = req.data.goods.name+'_' + req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
 
+    });
+  },
+  view:function(req,res){
+    var id=req.params.id||0;
+    Shop_goods.query('update Shop_goods set view_count=view_count+1 WHERE id = ?', [id], function(err, results) {
+      return res.json({code:0,msg:''});
+    });
+  },
+  commentCount:function(req,res){
+    var id=req.params.id||0;
+    var obj={};
+    Shop_member_comment.count({goodsId:id,score:3}).exec(function(e3,c3){
+      Shop_member_comment.count({goodsId:id,score:2}).exec(function(e3,c2){
+        Shop_member_comment.count({goodsId:id,score:1}).exec(function(e3,c1){
+          var allCount=c3+c2+c1;
+          var goodRate=Math.round((c3+c2)/allCount*100);
+          obj.c3=c3;
+          obj.c2=c2;
+          obj.c1=c1;
+          obj.allCount=allCount;
+          obj.goodRate=goodRate||100;
+          return res.json({code:0,msg:'',data:obj});
+        });
+      });
+    });
+  },
+  commentAjax:function(req,res){
+    var id=StringUtil.getInt(req.params.id);
+    var start=StringUtil.getInt(req.query.start);
+    var score=StringUtil.getInt(req.query.score);
+    var sort={score:'desc',createdAt:'desc'};
+    var where={disabled:false,type:1,goodsId:id};
+    if(score>0){
+      where.score=score;
+    }
+    Shop_member_comment.getPageList(10,start,where,sort,function(l){
+      return res.json({code:0,msg:'',data:l});
     });
   }
 };

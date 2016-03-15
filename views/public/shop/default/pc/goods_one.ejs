@@ -12,7 +12,6 @@
 
 
 <div class="schedule_im">
-  <!------立即抢购右侧部分------>
   <div class="scrolltabm">
     <div class="ban-barmlm">
       <ul class="ulBigPicm">
@@ -22,7 +21,7 @@
         </li>
         <%});}%>
       </ul>
-    </div><!--ulBigPic end-->
+    </div>
     <div class="dSmallPicBoxm">
       <div class="dSmallPicm">
         <ul class="ulSmallPicm" style="width:2646px;left:0px" rel="stop">
@@ -41,12 +40,12 @@
       </div>
       <span id="sLeftBtnBm" class="sLeftBtnBm"></span>
       <span id="sRightBtnBm" class="sRightBtnBm"></span>
-    </div><!--dSmallPicBox end-->
+    </div>
 
   </div>
 
-  <!-----购物车----->
-  <div style="display: none;" class="top-float-menu-placeholder">
+
+  <div style="display: none;" <%if(goods&&!goods.is_spec){%>class="top-float-menu-placeholder"<%}%>>
     <div class="top-float-menu-panel">
       <div class="top-float-menu">
         <ul>
@@ -60,7 +59,6 @@
       </div>
     </div>
   </div>
-
   <ul class="schedule_hdm">
       <li class="schedule_hd1m">
         <span class="schedule_hd1am"><%=goods.name||''%></span>
@@ -95,188 +93,67 @@
     </li>
   </ul>
 </div>
-<!--end婚品商城APP-->
-<!-----产品详情---->
 <div class="s_pinjia cf">
   <div class="hot_sell">
     <div class="hot_sella"><span>热销产品</span></div>
+    <%hotGoodsList.data.forEach(function(ho){%>
     <dl class="hot_sells">
-      <a href="#">
-        <dt><img src="img/chan7.jpg"></dt>
-        <dd>热销蔬菜<p>￥23.00</p></dd>
+      <a href="/goods/<%=ho.id%>" target="_blank">
+        <dt><img src="<%=ho.imgurl%>"></dt>
+        <dd><%=ho.name%><p style="font-size: 14px;">￥<%=StringUtil.setPrice(ho.price)%> <s style="color: #ccc;font-size: 9px;">￥<%=StringUtil.setPrice(ho.priceMarket)%></s></p>
+        </dd>
       </a>
     </dl>
-    <dl class="hot_sells">
-      <a href="#">
-        <dt><img src="img/chan7.jpg"></dt>
-        <dd>热销蔬菜<p>￥23.00</p></dd>
-      </a>
-    </dl>
-    <dl class="hot_sells">
-      <a href="#">
-        <dt><img src="img/chan7.jpg"></dt>
-        <dd>热销蔬菜<p>￥23.00</p></dd>
-      </a>
-    </dl>
-    <dl class="hot_sells">
-      <a href="#">
-        <dt><img src="img/chan7.jpg"></dt>
-        <dd>热销蔬菜<p>￥23.00</p></dd>
-      </a>
-    </dl>
-    <dl class="hot_sells">
-      <a href="#">
-        <dt><img src="img/chan7.jpg"></dt>
-        <dd>热销蔬菜<p>￥23.00</p></dd>
-      </a>
-    </dl>
+    <%});%>
   </div>
   <div class="fr">
     <div id="s_detail">
-      <ul class="s_detail" id="tab3">
-        <a href="#s_pinglunsl1" class="s_details s_detaila">
-          <li>详情</li>
+      <ul class="s_detail">
+        <a id="tab1" href="javascript:void(0);" class="s_details s_detaila">
+          <li>产品详情</li>
         </a>
-        <a href="#s_pinglunsl" class="s_details">
-          <li>评价</li>
-        </a>
-        <a href="#s_pinglunsl2" class="s_details">
-          <li>咨询</li>
+        <a id="tab2" href="javascript:void(0);" class="s_details">
+          <li>用户评价</li>
         </a>
       </ul>
     </div>
-    <!-------基本参数------->
 
     <div class="s_detaild cf clear">
-      <a href="#" id="s_pinglunsl1" style="position:relative;top:-115px;display:block;"></a>
-      <div class="ml20 mt10 s_detaildf"><span><img src="img/k1.jpg"></span>
-        <p id="s_pinglunsl" style="margin:0px;"></p></div>
-      <!------评价------>
-      <!-----我要评论----->
-      <!-----我要评论结束----->
-      <div class="cf clear">
+      <div id="xq" class="ml20 mt10 s_detaildf">
+        <%if(goods.prop&&goods.prop.length>0){%>
+        <div class="s_detaildf_sx">
+        <%goods.prop.forEach(function(p){%>
+        <li><%=p.name%>: <%=p.value%></li>
+        <%});%>
+
+        </div>
+        <%}%>
+        <div style="height: 20px;"></div>
+        <div>
+        <%-goods.note||''%>
+        </div>
+      </div>
+      <div id="pj" class="cf clear" style="display: none">
         <div class="tab3">
           <span style="width:160px;line-height:58px;display:inline-block;text-align:center;"><span
-              style="font-size:14px;color:#333;">好评率:</span><i style="font-size:24px;color:#e4003c;">90%</i></span>
-          <a href="#" class="on3">评价</a>
-          <a href="#">全部（0）</a>
-          <a href="#">很好（0）</a>
-          <a href="#">较好（0）</a>
-          <a href="#">一般（0）</a>
+              style="font-size:14px;color:#333;">好评率:</span><i id="goodRate" style="font-size:24px;color:#e4003c;">100%</i></span>
+          <a href="javascript:;" data-id="0" class="on3">全部(<span id="c0">1</span>)</a>
+          <a href="javascript:;" data-id="3">很好(<span id="c3">1</span>)</a>
+          <a href="javascript:;" data-id="2">较好(<span id="c2">1</span>)</a>
+          <a href="javascript:;" data-id="1">一般(<span id="c1">1</span>)</a>
         </div>
-        <div class="s_pinglunsl cf2">
-          <div class="s_pinglunl">
-            <div class="s_pinglunla"><img src="img/icon/s_people.png"/></div>
-            <div class="s_pinglunls">jd_site</div>
-          </div>
-          <ul class="s_pinglunld">
-            <li class="s_pinglunlf">
-              <i class="zc_pin">好评</i>
-              <span>评论时间：2015-07-23 11：40</span>
-            </li>
-            <li class="s_pinglung">菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的。</li>
-            <li class="s_pinglunh"><a href="#">[回复]</a> 购买日期：2015-07-10</li>
-          </ul>
-        </div>
+        <div id="pj_list" style="text-align: center">
 
-        <div class="s_pinglunsl cf2">
-          <div class="s_pinglunl">
-            <div class="s_pinglunla"><img src="img/icon/s_people.png"/></div>
-            <div class="s_pinglunls">jd_site</div>
-          </div>
-          <ul class="s_pinglunld">
-            <li class="s_pinglunlf">
-              <i class="zc_pin">中评</i>
-              <span>评论时间：2015-07-23 11：40</span>
-            </li>
-            <li class="s_pinglung">
-              菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的。
-            </li>
-            <li class="s_pinglunh"><a href="#">[回复]</a> 购买日期：2015-07-10</li>
-          </ul>
-        </div>
 
-        <div class="s_pinglunsl cf2">
-          <div class="s_pinglunl">
-            <div class="s_pinglunla"><img src="img/icon/s_people.png"/></div>
-            <div class="s_pinglunls">jd_site</div>
-          </div>
-          <ul class="s_pinglunld">
-            <li class="s_pinglunlf">
-              <i class="zc_pin">好评</i>
-              <span>评论时间：2015-07-23 11：40</span>
-            </li>
-            <li class="s_pinglung">菜很好吃，很新鲜，对于这次购物很满意，以后还会再次光顾的。</li>
-            <li class="s_pinglunh"><a href="#">[回复]</a> 购买日期：2015-07-10</li>
-          </ul>
         </div>
-        <!---------分页部分---------->
-        <dl class="s_page cf clear">
-          <a href="#" class="s_pagel">上一页</a>
-          <a href="#" class="s_pagel1 s_pageron">1</a>
-          <a href="#" class="s_pagel1">2</a>
-          <a href="#" class="s_pagel1">3</a>
-          <a href="#" class="s_pagel1">4</a>
-          <a href="#" class="s_pagel1">5</a>
-          <a href="#" class="s_pagel2">....</a>
-          <a href="#" class="s_pagel1">18</a>
-          <a href="#" class="s_pager">下一页</a>
-        </dl>
-        <p id="s_pinglunsl2"></p>
-        <ul class="zixun">
-          <li class="zixunp"><span>商品咨询</span></li>
-          <li class="z_zixun"><span class="z_zixuna"><input type="button" value="我要咨询"><i>请登陆后再咨询，如果你不是会员请注册！</i></span>
-            <span class="z_zixuns"><a href="#" class="z_zixunson">全部咨询</a><a href="#">商品资讯</a><a href="#">配送咨询</a><a
-                href="#">售后咨询</a></span>
-            <p class="z_zixund">如果您对本商品有什么疑问，请提问咨询</p>
-          </li>
-          <li class="z_zixunf">
-            <span class="z_zixunf1">发表评论</span>
-            <span class="z_zixunf2">咨询类型:<input type="radio" value="m" name="sex">商品咨询<input type="radio" value="w"
-                                                                                             name="sex">配送咨询<input
-                type="radio" name="sex">售后咨询 </span>
-            <span class="z_zixunf3"><textarea placeholder="欢迎发表咨询，最多1000字"></textarea></span>
-            <span class="z_zixunf4">联系方式：<input type="text"><i>可以是电话、email、qq、等</i></span>
-            <span class="z_zixunf5"><a href="#">提交咨询</a></span>
-          </li>
-          <li class="zixun1 cf clear">
-            <div class="zixun1a"><img src="img/icon/detail2.jpg"><i>咨询内容</i><span>这个猪是怎么选择的呢？</span><input type="button"
-                                                                                                           value="【回复】"
-                                                                                                           class="huahao_s1">
-            </div>
-            <div class="divContainer1">
-              <ul>
-
-                <textarea></textarea></ul>
-            </div>
-          </li>
-          <li class="zixun1 cf clear">
-            <div class="zixun1a"><img src="img/icon/detail2.jpg"><i>咨询内容</i><span>这个猪的品种是怎么选择的呢？</span></div>
-            <div class="zixun1s"><img src="img/icon/detail3.jpg"><i>回复内容</i><span>猪的品种影响着它的肥瘦肉配比。尚作自养猪严选外三元品种，与市场上的普通猪相较，此品种的猪瘦肉比大。猪皆以玉米和大豆为食，生长期超过十个月。饲养过程中加入了经过专家团队精心配制的56味具保健功效的中草药，能提高猪的免疫能力，并可增加猪肉的口感，提升猪肉鲜味，肥肉肥而不腻。</span>
-            </div>
-          </li>
-          <li class="zixun1 cf clear">
-            <div class="zixun1a"><img src="img/icon/detail2.jpg"><i>咨询内容</i><span>这个猪的品种是怎么选择的呢？</span></div>
-            <div class="zixun1s"><img src="img/icon/detail3.jpg"><i>回复内容</i><span>猪的品种影响着它的肥瘦肉配比。尚作自养猪严选外三元品种，与市场上的普通猪相较，此品种的猪瘦肉比大。猪皆以玉米和大豆为食，生长期超过十个月。饲养过程中加入了经过专家团队精心配制的56味具保健功效的中草药，能提高猪的免疫能力，并可增加猪肉的口感，提升猪肉鲜味，肥肉肥而不腻。</span>
-            </div>
-          </li>
-          <li class="zixun1 cf clear">
-            <div class="zixun1a"><img src="img/icon/detail2.jpg"><i>咨询内容</i><span>这个猪的品种是怎么选择的呢？</span></div>
-            <div class="zixun1s"><img src="img/icon/detail3.jpg"><i>回复内容</i><span>猪的品种影响着它的肥瘦肉配比。尚作自养猪严选外三元品种，与市场上的普通猪相较，此品种的猪瘦肉比大。猪皆以玉米和大豆为食，生长期超过十个月。饲养过程中加入了经过专家团队精心配制的56味具保健功效的中草药，能提高猪的免疫能力，并可增加猪肉的口感，提升猪肉鲜味，肥肉肥而不腻。</span>
-            </div>
-          </li>
-        </ul>
+        <div class="s_page cf clear tcdPageCode"></div>
       </div>
     </div>
   </div>
 </div>
 <script>
-  $(function(){
-    picLunbo();
-    buyNum();
-    <%if(goods&&!goods.is_spec){%>
-    quickBuy();
-    <%}%>
-  });
+  var goodsid=<%=goods.id%>;
 </script>
+<script src="<%=CssPath%>/pc/js/goods.js"></script>
+
 <% include common_buttom.ejs %>
