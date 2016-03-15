@@ -161,7 +161,6 @@ function commentData(goodsId,start){
             commentLoad(goodsId,(p-1)*10);
           }
         });
-        console.log(obj);
       }
     }
   });
