@@ -53,24 +53,14 @@
         <span class="title"><img id="thumblist" src="<%=goods.imgurl||''%>?type=s" width="70" height="70" style="margin-top: 5px;">
           <%=goods.name||''%></span>
         <div class="top-float-menu-right">
-          <span class="price">￥<%=StringUtil.setPrice(goods.price)||''%></span>
+          <span class="jia_gea" style="padding-right: 30px;">￥<%=StringUtil.setPrice(goods.price)||''%></span>
           <span class="jiarua"><input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','')"  type="button" value="加入购物车"></span>
-
-           <a class="btn-normal-yellowa">
-              <span class="btn-text">√ 已成功加入购物车</span>
-              <span class="btn-right"></span>
-            </a>
         </div>
         </ul>
       </div>
     </div>
   </div>
-  <div class="window" id="certificate-window">
-    <div class="window-content">
-    </div>
-  </div>
 
-  <!-------立即抢购左侧部分---------->
   <ul class="schedule_hdm">
       <li class="schedule_hd1m">
         <span class="schedule_hd1am"><%=goods.name||''%></span>
@@ -89,10 +79,10 @@
     </li>
     <li class="schedulehd4">
       <div class="schedulehd4_h">选择数量:</div>
-      <div class="schedulehd4z"><a href="#" class="schedulehd4_a">—</a>
-        <span class="schedulehd4_s">1</span>
-        <a href="#" class="schedulehd4_a">+</a>
-        <span class="schedulehd4_d">库存100</span>
+      <div class="schedulehd4z"><a id="buy_sub" href="javascript:void(0);" title="减1" class="schedulehd4_a">—</a>
+        <input id="buy_num" type="text" class="schedulehd4_s" value="1" maxlength="4" title="请输入购买量">
+        <a id="buy_add" href="javascript:void(0);" title="加1" class="schedulehd4_a">+</a>
+        <span class="schedulehd4_d">(库存<%=goods.stock||0%>件)</span>
 
       </div>
     </li>
@@ -100,7 +90,7 @@
     <li class="schedule_hd6m">
       <div class="schedule_hd6n">
         <input id="cart-btn" type="button" value="立即购买" class="schedulehd4_g">
-        <input type="button" value="加入购物车" class="schedulehd4_f"></div>
+        <input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','0',$('#buy_num').val())" type="button" value="加入购物车" class="schedulehd4_f"></div>
 
     </li>
   </ul>
@@ -283,6 +273,7 @@
 <script>
   $(function(){
     picLunbo();
+    buyNum();
     <%if(goods&&!goods.is_spec){%>
     quickBuy();
     <%}%>

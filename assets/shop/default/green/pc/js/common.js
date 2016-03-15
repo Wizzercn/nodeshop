@@ -49,6 +49,9 @@ function flyImg(obj,goodsId,productId, num){
   });
 }
 function addToCarData(goodsId,productId,num){
+  if(!num){
+    num=1;
+  }
   $.ajax({
     type : "POST",
     url : "/public/shop/pc/shopcart/addGoods",
@@ -60,7 +63,7 @@ function addToCarData(goodsId,productId,num){
     dataType : "json",
     success : function(data) {
       if(data.code==0){
-        $("#cartNum").html(parseInt($("#cartNum").text())+1);
+        $("#cartNum").html(parseInt($("#cartNum").text())+parseInt(num));
       }
     }
   });
@@ -220,6 +223,27 @@ function quickBuy(){
     }
   });
   $(window).scroll();
+}
+function buyNum(){
+  $("#buy_num").on("keyup",function(){
+    var buy_num=parseInt($(this).val());
+    if(buy_num==1){
+    }else if(buy_num>0){
+      $(this).val(buy_num);
+    }else {
+      $(this).val(1);
+    }
+  });
+  $("#buy_sub").on("click",function(){
+    var buy_num=parseInt($("#buy_num").val());
+    var s=buy_num-1;
+    if(s>0)$("#buy_num").val(s);
+  });
+  $("#buy_add").on("click",function(){
+    var buy_num=parseInt($("#buy_num").val());
+    var s=buy_num+1;
+    if(s<10000)$("#buy_num").val(s);
+  });
 }
 $(function(){
   $.ajaxSetup({cache:false});
