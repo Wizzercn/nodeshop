@@ -147,7 +147,7 @@ function commentData(goodsId,start){
             '<ul class="s_pinglunld">' +
             '<li class="s_pinglunlf">' +
             '<i class="zc_pin">'+s+'</i>' +
-            '<span>'+ o.memberNickname+', 评论时间：'+ formatDate(o.createdAt)+'</span>' +
+            '<span>'+ o.memberNickname+', 评论时间：'+ new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span>' +
             '</li>' +
             '<li class="s_pinglung">'+ o.comment+'</li>' +
             '</ul>' +
