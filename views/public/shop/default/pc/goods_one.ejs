@@ -42,7 +42,22 @@
     </div>
 
   </div>
-
+  <%
+  //计算会员价
+  var lv=goods.lvprice;
+  var hyprice=0;
+  var is_lv=false;//是否启用会员价
+  var hyname='';
+  if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
+    is_lv=true;
+    hyname=lv.member_lv.name;
+    if(lv.product_lv&&lv.product_lv.price>0){
+      hyprice=lv.product_lv.price;
+    }else {
+      hyprice=goods.price*lv.member_lv.dis_count/100;
+    }
+  }
+  %>
 
   <div style="display: none;" <%if(goods&&!goods.is_spec){%>class="top-float-menu-placeholder"<%}%>>
     <div class="top-float-menu-panel">
@@ -51,29 +66,14 @@
         <span class="title"><img id="thumblist" src="<%=goods.imgurl||''%>?type=s" width="70" height="70" style="margin-top: 5px;">
           <%=goods.name||''%></span>
         <div class="top-float-menu-right">
-          <span class="jia_gea" style="padding-right: 30px;">￥<%=StringUtil.setPrice(goods.price)||''%></span>
+          <span class="jia_gea" style="padding-right: 30px;">￥<%=hyprice>0?StringUtil.setPrice(hyprice):StringUtil.setPrice(goods.price)%></span>
           <span class="jiarua"><input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','')"  type="button" value="加入购物车"></span>
         </div>
         </ul>
       </div>
     </div>
   </div>
-  <%
-  //计算会员价
-  var lv=goods.lvprice;
-  var hyprice=0;
-  var is_lv=false;//是否启用会员价
-  var hyname='';
-    if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
-      is_lv=true;
-      hyname=lv.member_lv.name;
-      if(lv.product_lv&&lv.product_lv.price>0){
-        hyprice=lv.product_lv.price;
-      }else {
-        hyprice=goods.price*lv.member_lv.dis_count/100;
-      }
-    }
-  %>
+
   <ul class="schedule_hdm">
       <li class="schedule_hd1m">
         <span class="schedule_hd1am"><%=goods.name||''%></span>
