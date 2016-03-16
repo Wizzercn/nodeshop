@@ -335,7 +335,7 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/shopcart/list';
-      req.data.siteTitle = '会员中心_' + req.data.siteTitle;
+      req.data.siteTitle = '我的购物车_' + req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_list', req.data);
 
     });

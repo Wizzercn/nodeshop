@@ -3,12 +3,96 @@
   <% include common_banner.ejs %>
 
 </div>
-<div id="schedule">
-  <div class="schedule_h">
-    <span class="schedule_hf">当前位置:</span>
-    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
-  </div>
+<div class="w1200 shop_f1">
+  <div class="shop_f2">我的购物车</div>
+  <ul class="shop_f">
+    <li class="tian1">1、我的购物车</li>
+    <li class="tian2">2、确认订单信息</li>
+    <li class="tian3">3、成功提交订单</li>
+  </ul>
 </div>
-<%=JSON.stringify(member)%>
-<%=JSON.stringify(cartGoods)%>
+
+<div>
+  <ul  class="w1200 shop_f1a mt40">
+  <li class="s_quan"></li>
+  <li class="shop_f1af">商品名称</li>
+  <li class="z_guigek"></li>
+    <li class="shop_f1as">重量</li>
+    <li class="shop_f1as">价格</li>
+  <li class="shop_f1at">数量</li>
+  <li class="shop_f1afo">合计</li>
+  <li class="shop_f1afi">操作</li>
+  </ul>
+</div>
+
+<div id="cart_list">
+  <%cartGoods.list.forEach(function(o){%>
+  <ul class="w1200 shop_f1s">
+    <li class="shop_f1so">
+      <span><input type="checkbox" name="vehicle" value="Car" check="check"/></span>
+      <span><img src="<%=o.imgurl||''%>?type=s" width="70" height="70"/></span>
+      <span><%=o.name||''%></span>
+    </li>
+    <li class="z_guige">
+      <%=o.spec||''%>
+    </li>
+    <li class="shop_f1st"><%=o.weight*o.num/1000%>kg</li>
+    <li class="shop_f1st">￥<%=StringUtil.setPrice(o.price)%></li>
+    <li class="shop_f1ss">
+      <input type="button" class="num_btn" value="-">
+      <input type="text" class="num_text" value="<%=o.num%>"></b>
+      <input type="button" class="num_btn" value="+"></li>
+    <li class="shop_f1sf">￥<%=StringUtil.setPrice(o.price*o.num)%></li>
+    <li class="shop_f1sfi"><a href="#">删除</a></li>
+
+  </ul>
+  <%});%>
+</div>
+<%
+ //计算运费
+ var yunMoney=0;
+ if(ShopConfig.freight_disabled==false&&cartGoods.allPrice>0){
+   if(ShopConfig.freight_type=='price'){
+     if(cartGoods.allPrice<ShopConfig.freight_num*100){
+       yunMoney=ShopConfig.freight_price*100;
+     }
+   }else if(ShopConfig.freight_type=='weight'){
+     if(cartGoods.weight>=ShopConfig.freight_num){
+       yunMoney=ShopConfig.freight_price*100;
+     }
+   }
+ }
+  %>
+
+<div class="w1200 zongji">
+  <ul  class="">
+    <li class="s_quan"></li>
+    <li class="shop_f1af"></li>
+    <li class="z_guigek"></li>
+    <li class="f">重量合计<br><%=cartGoods.weight/1000%>kg</li>
+    <li class="g">运费<br>￥<%=StringUtil.setPrice(yunMoney)%></li>
+    <li class="k"></li>
+    <li class="h">商品总额<br>￥<%=cartGoods.showAllprice||'0.00'%></li>
+    <li class="k"></li>
+  </ul>
+</div>
+<div>
+<ul class="shop_s_o w1200">
+  <li class="cart-box2">
+    <span class="em1"><input type="checkbox" name="vehicle" value="Car" check="check" /> 全选</span>
+    <span class="em2"><a href="javascript:;" style="color:#06c;">批量删除</a></span>
+    <span class="em2"><a href="javascript:;" style="color:#06c;">清空购物车</a></span>
+  </li>
+  <li class="shop_s2_o">总计金额（含运费）	：</li>
+  <li class="shop_s3"><span>￥<%=StringUtil.setPrice((yunMoney+cartGoods.allPrice))%></span> </li>
+
+</ul>
+</div>
+<div class="shop_t w1200">
+  <span>
+  <input type="button" value="去结算" />
+  </span>
+</div>
+
+<script src="<%=CssPath%>/pc/js/cart.js"></script>
 <% include common_buttom.ejs %>

@@ -35,6 +35,12 @@ module.exports = {
         return false;
       }
     },
+    freight_disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     freight_type:{
       type:'string',
       size:20

@@ -82,22 +82,30 @@
           <div class="tab-pane fade" id="shop_yf">
             <div class="col-lg-12">
               <div class="form-group">
+                <label class="col-sm-2 control-label">是否开启运费</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="freight_disabled" value="0" <%if(!obj.tax_disabled){%>checked<%}%>>启用
+                  <input type="radio" name="freight_disabled" value="1" <%if(obj.tax_disabled){%>checked<%}%>>禁用
+
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-2 control-label">运费计算方式</label>
                 <div class="col-sm-8" style="padding-top: 5px;">
                   <select class="form-control" name="freight_type">
-                    <option value="price" <%=obj.freight_type=='price'?'selected':''%>>订单总额</option>
-                    <option value="weight" <%=obj.freight_type=='weight'?'selected':''%>>订单总重</option>
+                    <option value="price" <%=obj.freight_type=='price'?'selected':''%>>按订单总金额</option>
+                    <option value="weight" <%=obj.freight_type=='weight'?'selected':''%>>按商品总重量</option>
                   </select>
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">运费金额</label>
+                <label class="col-sm-2 control-label">运费金额(单位：元)</label>
                 <div class="col-sm-8" style="padding-top: 5px;">
                   <input class="form-control" name="freight_price" value="<%=obj.freight_price||0%>">
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">满多少减免</label>
+                <label class="col-sm-2 control-label">计算基数<br>(单位：< 元或 >= g)</label>
                 <div class="col-sm-8" style="padding-top: 5px;">
                   <input class="form-control" name="freight_num" value="<%=obj.freight_num||0%>">
                 </div>
@@ -109,10 +117,9 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">是否启用发票</label>
                 <div class="col-sm-8" style="padding-top: 5px;">
-                  <select class="form-control" name="freight_type">
-                    <option value="0" <%=obj.tax_disabled==false?'selected':''%>>启用</option>
-                    <option value="1" <%=obj.tax_disabled==true?'selected':''%>>禁用</option>
-                  </select>
+                  <input type="radio" name="tax_disabled" value="0" <%if(!obj.tax_disabled){%>checked<%}%>>启用
+                  <input type="radio" name="tax_disabled" value="1" <%if(obj.tax_disabled){%>checked<%}%>>禁用
+
                 </div>
               </div>
               <div class="form-group">
