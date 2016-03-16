@@ -227,6 +227,7 @@ module.exports = {
             sort: sort,
             where: where
           })
+          //.populate('products', {where:{is_default:true},sort: {location: 'asc'}})
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             cb({

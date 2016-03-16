@@ -61,7 +61,7 @@ module.exports = {
     if(vercode==publicCaptcha){
       Shop_member_account.findOne({login_name:login_name,disabled:false}).populate('memberId').exec(function(err,obj) {
         if (obj&&obj.login_password==StringUtil.password(login_pass,login_name,obj.createdAt)){
-          req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
+          req.session.member={lvId:obj.memberId.lv_id,memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
           //记录登录IP和时间
           Shop_member_account.update(obj.id,{loginIp:req.ip,loginAt:moment().format('X')}).exec(function(ep,op){});
           if(saveLoginname){
@@ -70,7 +70,7 @@ module.exports = {
             res.cookie('saveLoginname','null',{maxAge:0});
           }
           //将cookies购物车数据同步到数据库
-          Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
+          Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId,function() {
             return res.json({code: 0, msg: '登录成功'});
           });
         }else {
@@ -90,11 +90,11 @@ module.exports = {
       if(o&&smscode== o.toString()){
         Shop_member_account.findOne({login_name:mobile,disabled:false}).populate('memberId').exec(function(err,obj) {
           if (obj){
-            req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
+            req.session.member={lvId:obj.memberId.lv_id,memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
             //记录登录IP和时间
             Shop_member_account.update(obj.id,{loginIp:req.ip,loginAt:moment().format('X')}).exec(function(ep,op){});
             //将cookies购物车数据同步到数据库
-            Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
+            Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId,function() {
               return res.json({code: 0, msg: '登录成功'});
             });
           }else {
@@ -120,7 +120,7 @@ module.exports = {
             if(member){
               var now=moment().format('X');
               var password=StringUtil.password(pass,mobile,now);
-              Shop_member_account.create({memberId:member.id,login_name:mobile,login_password:password,createdAt:now}).exec(function(e3,acc){
+              Shop_member_account.create({lvId:0,memberId:member.id,login_name:mobile,login_password:password,createdAt:now}).exec(function(e3,acc){
                 if(!e3){
                   req.session.member={memberId:member.id,nickname:member.nickname,score:member.score,login_name:mobile};
                   return res.json({code:0,msg:'注册成功'});

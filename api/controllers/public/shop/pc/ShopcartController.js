@@ -201,24 +201,41 @@ module.exports = {
     }], function (err, cartObj) {
       //根据用户是否登录存储到不同位置
       if (member && member.memberId > 0) {
-        //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
-        Shop_member_cart.findOne({
-          memberId: member.memberId,
-          productId: cartObj.productId,
-          goodsId: cartObj.goodsId
-        }).exec(function (e, o) {
-          if (o) {
-            cartObj.num = o.num + num;
-            Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
+        Shop_goods_lv_price.findOne({lvid:member.lvId,productId:cartObj.productId,goodsid:cartObj.goodsId}).exec(function(es,os){
+          Shop_member_lv.findOne(member.lvId).exec(function(elv,olv){
+            //计算会员价
+            var lv={member_lv:olv||{},product_lv:os||{}};
+            var hyprice=0;
+            if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
+              if(lv.product_lv&&lv.product_lv.price>0){
+                hyprice=lv.product_lv.price;
+              }else {
+                hyprice=cartObj.price*lv.member_lv.dis_count/100;
+              }
+            }
+            //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
+            Shop_member_cart.findOne({
+              memberId: member.memberId,
+              productId: cartObj.productId,
+              goodsId: cartObj.goodsId
+            }).exec(function (e, o) {
+              if (o) {
+                cartObj.num = o.num + num;
+                cartObj.price=hyprice;
+                Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
+                });
+              } else {
+                cartObj.num = num;
+                cartObj.memberId = member.memberId;
+                cartObj.price=hyprice;
+                Shop_member_cart.create(cartObj).exec(function (e2, o2) {
+                });
+              }
+              return res.json({code: 0, msg: ''});
             });
-          } else {
-            cartObj.num = num;
-            cartObj.memberId = member.memberId;
-            Shop_member_cart.create(cartObj).exec(function (e2, o2) {
-            });
-          }
-          return res.json({code: 0, msg: ''});
+          });
         });
+
       } else {
         var cookieGoods = req.cookies['shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId];
         if (cookieGoods) {

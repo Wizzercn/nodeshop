@@ -26,7 +26,7 @@ module.exports = {
         });
       },
       goods:function(done){
-        Shop_goods.findOne(id).populate('classid').populate('products', {sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
+        Shop_goods.findOne(id).populate('classid').populate('products', {where:{is_default:true},sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
           if (obj) {
             Shop_goods_type_props.find({typeid: obj.typeid}).sort({location: 'asc'}).populate('values', {sort: {location: 'asc'}}).exec(function (propse, propslist) {
               async.waterfall([function (cb) {
@@ -43,6 +43,20 @@ module.exports = {
                 Shop_goods_spec.find({id: ids}).sort({location: 'asc'}).populate('values', {sort: {location: 'asc'}}).exec(function (e, o) {
                   cb(e, o);
                 });
+              },function(speclist,cb){
+                //查会员价
+                var member=req.session.member;
+                var productId=obj.products[0].id;
+                if(member&&member.lvId>0){
+                  Shop_goods_lv_price.findOne({lvid:member.lvId,productId:productId,goodsid:id}).exec(function(es,os){
+                    Shop_member_lv.findOne(member.lvId).exec(function(elv,olv){
+                      obj.lvprice={member_lv:olv||{},product_lv:os||{}};
+                      cb(null, speclist);
+                    });
+                  });
+                }else {
+                  cb(null, speclist);
+                }
               }], function (err, o) {
                 obj.propslist = propslist || [];
                 obj.speclist = o || [];
