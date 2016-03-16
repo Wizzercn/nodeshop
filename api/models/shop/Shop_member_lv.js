@@ -12,6 +12,7 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
+    //等级名称
     name: {
       type: 'string',
       size: 100
@@ -19,19 +20,23 @@ module.exports = {
     //等级类型
     lv_type:{
       type: 'string',
-      enum: ['retail', 'wholesale','dealer'],
+      enum: ['member', 'wholesale','dealer'],
       size: 20
     },
+    //等级logo
     lv_logo: {
       type: 'string',
       size: 255
     },
+    //会员折扣率
     dis_count: {
       type: 'integer'
     },
-    experience:{
+    //所需积分
+    point:{
       type: 'integer'
     },
+    //积分过期时间
     expiretime:{
       type: 'integer'
     },

@@ -9,6 +9,7 @@ module.exports = {
   attributes: {
     id: {
       type: 'integer',
+      size:20,
       autoIncrement: true,
       primaryKey: true
     },
@@ -97,6 +98,11 @@ module.exports = {
     },
     //配送方式
     shiptypeName:{
+      type: 'string',
+      size:100
+    },
+    //物流单号
+    shiptypeNo:{
       type: 'string',
       size:100
     },
@@ -212,8 +218,13 @@ module.exports = {
       index:true
     },
     //收款单
-    pmts: {
-      collection: 'Shop_order_pmt',
+    payments: {
+      collection: 'Shop_history_payments',
+      via: 'orderId'
+    },
+    //收款单
+    refunds: {
+      collection: 'Shop_history_refunds',
       via: 'orderId'
     }
   }

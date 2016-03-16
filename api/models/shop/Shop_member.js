@@ -77,6 +77,14 @@ module.exports = {
         return 0;
       }
     },
+    //当订单使用余额支付，并且订单未全部支付时冻结的金额
+    money_freeze:{
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    //支付密码：充值时必须设置密码、重置支付密码功能
     money_password:{
       type: 'string',
       size:20
