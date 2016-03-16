@@ -64,7 +64,7 @@ module.exports = {
       req.data.goods = result.goods || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.r = '/shopcart/list';
+      req.data.r = '/goods/'+id;
       req.data.siteTitle = req.data.goods.name+'_' + req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
 
