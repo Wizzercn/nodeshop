@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/8/16.
+ * Created by root on 16/3/16.
  */
 var moment = require('moment');
 module.exports = {
@@ -12,24 +12,23 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    memberId: {
-      model: 'Shop_member',
-      index:true
-    },
-    login_name:{
-      type:'string',
-      size:100,
-      index:true
-    },
-    login_password:{
+    name: {
       type:'string',
       size:100
     },
-    disabled: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
+    price:{
+      type:'integer'
+    },
+    //最大数量
+    maxNum:{
+      type:'integer'
+    },
+    //已发放数量
+    hasNum:{
+      type:'integer'
+    },
+    createBy:{
+      type: 'integer'
     },
     createdAt: {
       type: 'integer',
@@ -37,16 +36,11 @@ module.exports = {
         return moment().format('X');
       }
     },
-    loginIp:{
-      type:'string',
-      size:100
-    },
-    loginAt: {
-      type: 'integer',
+    disabled: {
+      type: 'boolean',
       defaultsTo: function () {
-        return 0;
+        return false;
       }
     }
-
   }
 };

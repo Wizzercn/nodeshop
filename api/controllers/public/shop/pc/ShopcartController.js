@@ -54,8 +54,8 @@ module.exports = {
         productId: productId,
         goodsId: goodsId
       }).exec(function (err, obj) {
-        var n_num=obj.num+num;
-        if(n_num==0){
+        var n_num = obj.num + num;
+        if (n_num == 0) {
           Shop_member_cart.destroy({
             memberId: member.memberId,
             productId: productId,
@@ -63,26 +63,26 @@ module.exports = {
           }).exec(function (e1) {
             return res.json({code: 0, msg: ''});
           });
-        }else {
+        } else {
           Shop_member_cart.update({
             memberId: member.memberId,
             productId: productId,
             goodsId: goodsId
-          },{num:n_num}).exec(function (e2,o2) {
+          }, {num: n_num}).exec(function (e2, o2) {
             return res.json({code: 0, msg: ''});
           });
         }
       });
-    }else {
+    } else {
       var key = 'shop_cart_goods_' + goodsId + '_' + productId;
       var cookieGoods = req.cookies[key];
       if (cookieGoods) {
         var obj = JSON.parse(cookieGoods);
-        var n_num=obj.num + num;
-        obj.num=n_num;
-        if(n_num==0){
+        var n_num = obj.num + num;
+        obj.num = n_num;
+        if (n_num == 0) {
           res.cookie(key, 'null', {maxAge: 0});
-        }else {
+        } else {
           res.cookie('shop_cart_goods_' + goodsId + '_' + productId, JSON.stringify(obj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
@@ -101,7 +101,7 @@ module.exports = {
       Shop_member_cart.find({memberId: member.memberId}).exec(function (err, list) {
         var allPrice = 0;
         var count = 0;
-        var weight=0;
+        var weight = 0;
         var list_new = [];
         if (list.length > 0) {
           list.forEach(function (obj) {
@@ -123,7 +123,7 @@ module.exports = {
     } else {
       var allPrice = 0;
       var count = 0;
-      var weight=0;
+      var weight = 0;
       var list = [];
       if (cookies) {
         for (var key in cookies) {
@@ -137,7 +137,7 @@ module.exports = {
             list.push(cartObj);
           }
         }
-        list.sort(StringUtil.arrSort('goodsId',false));
+        list.sort(StringUtil.arrSort('goodsId', false));
       }
       return res.json({
         allPrice: allPrice,
@@ -156,38 +156,47 @@ module.exports = {
     var member = req.session.member;
 
     async.waterfall([function (cb) {
-      Shop_goods.find({
-        select: ['id', 'name', 'price', 'imgurl','weight'],
-        where: {disabled: false, id: goodsId}
-      }).exec(function (e, o) {
-        var obj = {};
-        obj.goodsId = goodsId;
-        obj.spec = '';
-        obj.productId = 0;
-        if (o && o.length > 0) {
-          obj.name = o[0].name || '';
-          obj.price = o[0].price || 0;
-          obj.weight = o[0].weight || 0;
-          obj.imgurl = o[0].imgurl || '';
-        }
-        cb(e, obj);
-      });
-    }, function (obj, cb) {
       if (productId > 0) {
         Shop_goods_products.find({
-          select: ['id', 'spec', 'price','weight'],
+          select: ['id', 'spec', 'price', 'weight','goodsid'],
           where: {disabled: false, id: productId}
+        }).populate('goodsid', {
+          select: ['id', 'imgurl']
         }).exec(function (e, o) {
           if (o && o.length > 0) {
             obj.price = o[0].price || 0;
             obj.weight = o[0].weight || 0;
             obj.spec = o[0].spec || '';
             obj.productId = productId;
+            obj.goodsid = o[0].goodsid.id;
+            obj.imgurl = o[0].goodsid.imgurl;
           }
           cb(e, obj);
         });
       } else {
-        cb(null, obj);
+        Shop_goods.find({
+          select: ['id', 'name', 'price', 'imgurl', 'weight'],
+          where: {disabled: false, id: goodsId}
+        }).populate('products', {
+          select: ['id', 'name', 'spec', 'price', 'weight'],
+          sort: {location: 'asc'}
+        }).exec(function (e, o) {
+          var obj = {};
+          obj.goodsId = goodsId;
+          obj.spec = '';
+          obj.productId = 0;
+          if (o && o.length > 0) {
+            obj.name = o[0].name || '';
+            obj.price = o[0].price || 0;
+            obj.weight = o[0].weight || 0;
+            obj.imgurl = o[0].imgurl || '';
+            var p = o[0].products;
+            if (p.length == 1) {
+              obj.productId = p[0].id;
+            }
+          }
+          cb(e, obj);
+        });
       }
     }], function (err, cartObj) {
       //根据用户是否登录存储到不同位置
@@ -195,8 +204,8 @@ module.exports = {
         //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
         Shop_member_cart.findOne({
           memberId: member.memberId,
-          productId: productId,
-          goodsId: goodsId
+          productId: cartObj.productId,
+          goodsId: cartObj.goodsId
         }).exec(function (e, o) {
           if (o) {
             cartObj.num = o.num + num;
@@ -211,12 +220,11 @@ module.exports = {
           return res.json({code: 0, msg: ''});
         });
       } else {
-        var cookieGoods = req.cookies['shop_cart_goods_' + goodsId + '_' + productId];
-        //console.log('cookieGoods:::' + cookieGoods);
+        var cookieGoods = req.cookies['shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId];
         if (cookieGoods) {
           var obj = JSON.parse(cookieGoods);
           cartObj.num = obj.num + num;
-          res.cookie('shop_cart_goods_' + goodsId + '_' + productId, JSON.stringify(cartObj), {
+          res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             path: '/',
@@ -224,7 +232,7 @@ module.exports = {
           });
         } else {
           cartObj.num = num;
-          res.cookie('shop_cart_goods_' + goodsId + '_' + productId, JSON.stringify(cartObj), {
+          res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             path: '/',
@@ -258,7 +266,7 @@ module.exports = {
           Shop_member_cart.find({memberId: member.memberId}).exec(function (err, list) {
             var allPrice = 0;
             var count = 0;
-            var weight=0;
+            var weight = 0;
             var list_new = [];
             if (list.length > 0) {
               list.forEach(function (obj) {
@@ -280,7 +288,7 @@ module.exports = {
         } else {
           var allPrice = 0;
           var count = 0;
-          var weight=0;
+          var weight = 0;
           var list = [];
           if (cookies) {
             for (var key in cookies) {

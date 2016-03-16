@@ -34,6 +34,34 @@ module.exports = {
       defaultsTo: function () {
         return false;
       }
+    },
+    freight_type:{
+      type:'string',
+      size:20
+    },
+    freight_price:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    freight_num:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    tax_disabled: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return true;
+      }
+    },
+    tax_price:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     }
   }
 };

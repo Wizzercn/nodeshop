@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/8/16.
+ * Created by root on 16/3/16.
  */
 var moment = require('moment');
 module.exports = {
@@ -16,19 +16,37 @@ module.exports = {
       model: 'Shop_member',
       index:true
     },
-    login_name:{
-      type:'string',
-      size:100,
+    couponId:{
+      model:'Shop_sales_coupon',
       index:true
     },
-    login_password:{
+    couponName:{
       type:'string',
       size:100
     },
-    disabled: {
-      type: 'boolean',
+    couponPrice: {
+      type: 'integer',
       defaultsTo: function () {
-        return false;
+        return 0;
+      }
+    },
+    orderId: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    orderAt: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    //0未使用  1已使用  2已失效
+    status: {
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
       }
     },
     createdAt: {
@@ -36,17 +54,6 @@ module.exports = {
       defaultsTo: function () {
         return moment().format('X');
       }
-    },
-    loginIp:{
-      type:'string',
-      size:100
-    },
-    loginAt: {
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
     }
-
   }
 };

@@ -61,12 +61,15 @@ module.exports = {
     if(vercode==publicCaptcha){
       Shop_member_account.findOne({login_name:login_name,disabled:false}).populate('memberId').exec(function(err,obj) {
         if (obj&&obj.login_password==StringUtil.password(login_pass,login_name,obj.createdAt)){
-          req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name};
+          req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
+          //记录登录IP和时间
+          Shop_member_account.update(obj.id,{loginIp:req.ip,loginAt:moment().format('X')}).exec(function(ep,op){});
           if(saveLoginname){
             res.cookie('saveLoginname', login_name, {maxAge:1000*60*60*24*30, httpOnly:true, path:'/', secure:false});
           }else {
             res.cookie('saveLoginname','null',{maxAge:0});
           }
+          //将cookies购物车数据同步到数据库
           Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
             return res.json({code: 0, msg: '登录成功'});
           });
@@ -87,7 +90,10 @@ module.exports = {
       if(o&&smscode== o.toString()){
         Shop_member_account.findOne({login_name:mobile,disabled:false}).populate('memberId').exec(function(err,obj) {
           if (obj){
-            req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:mobile};
+            req.session.member={memberId:obj.memberId.id,nickname:obj.memberId.nickname,score:obj.memberId.score,login_name:login_name,loginIp:obj.loginIp,loginAt:obj.loginAt};
+            //记录登录IP和时间
+            Shop_member_account.update(obj.id,{loginIp:req.ip,loginAt:moment().format('X')}).exec(function(ep,op){});
+            //将cookies购物车数据同步到数据库
             Shop_member_cart.updateCookieCartDataToDb(req,res,obj.memberId.id,function() {
               return res.json({code: 0, msg: '登录成功'});
             });

@@ -94,11 +94,13 @@ module.exports = {
     },
     //分类
     goodsid: {
-      model: 'Shop_goods'
+      model: 'Shop_goods',
+      index:true
     },
     //分类
     classid: {
-      model: 'Shop_goods_class'
+      model: 'Shop_goods_class',
+      index:true
     },
     //类型
     typeid: {

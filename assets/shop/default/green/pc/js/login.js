@@ -150,7 +150,7 @@ $(function(){
   $("#smscode").on("keyup",function(){$("#smscode_tip").hide()});
   $("#login_name").on("keyup",function(){$("#login_name_tip").hide()});
   $("#login_pass").on("keyup",function(){$("#login_pass_tip").hide()});
-  $("#vercode").on("keyup",function(){$("#vercode_tip").hide()});
+  $("#vercode").on("keyup",function(){$("#vercode_tip").hide()}).on("keypress",function(e){if(e.keyCode=='13'){$("#doLogin").trigger("click");}});
   $("#tip input[type=button]").on("click",function(){$("#tip").hide();});
   $(".land-add a").click(
     function () {

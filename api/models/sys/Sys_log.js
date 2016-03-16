@@ -43,5 +43,19 @@ module.exports = {
         return moment().format('X');
       }
     }
+  },
+  /**
+   * 记录日志
+   * @param type
+   * @param user
+   * @param note
+   * @param req
+     */
+  log:function(type,user,note,req){
+    Sys_log.create({
+      type: type, url: req.url, note: note,
+      createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
+    }).exec(function (err) {
+    });
   }
 };
