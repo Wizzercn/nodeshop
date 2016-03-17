@@ -504,24 +504,89 @@ module.exports = {
   },
   //我的购物车-保存购物车
   save: function (req, res) {
-    var list = req.body.list || [];
+    var goodsId = req.query.goodsId;
+    var productId = req.query.productId;
+    var num = StringUtil.getInt(req.query.num) || 1;
     var member = req.session.member;
     if (member && member.memberId > 0) {
-      Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
-        var i = 0;
-        list.forEach(function (o) {
-          Shop_member_cart.update({
-            memberId: member.memberId,
-            goodsId: o.goodsId,
-            productId: o.productId
-          }, {is_buy: true}).exec(function (e2, o2) {
-            i++;
-            if (i == list.length) {
-              return res.json({code: 0, msg: ''});
-            }
+      if (goodsId && productId) {
+        Shop_goods_products.findOne({
+          select: ['id', 'spec', 'price', 'weight', 'goodsid'],
+          where: {disabled: false, id: productId, goodsid: goodsId}
+        }).populate('goodsid', {
+          select: ['id', 'imgurl']
+        }).exec(function (e, o) {
+          if (o) {
+            var obj = {};
+            obj.price = o.price || 0;
+            obj.weight = o.weight || 0;
+            obj.name = o.name || '';
+            obj.spec = o.spec || '';
+            obj.productId = productId;
+            obj.goodsId = goodsId;
+            obj.imgurl = o.goodsid.imgurl;
+            obj.is_buy = true;
+            obj.num = num;
+            Shop_goods_lv_price.findOne({
+              lvid: member.lvId,
+              productId: productId,
+              goodsid: goodsId
+            }).exec(function (es, os) {
+              Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
+                //计算会员价
+                var lv = {member_lv: olv || {}, product_lv: os || {}};
+                var hyprice = 0;
+                if (lv && lv.member_lv && lv.member_lv.disabled == false) {
+                  if (lv.product_lv && lv.product_lv.price > 0) {
+                    hyprice = lv.product_lv.price;
+                  } else {
+                    hyprice = obj.price * lv.member_lv.dis_count / 100;
+                  }
+                }
+                //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
+                Shop_member_cart.findOne({
+                  memberId: member.memberId,
+                  productId: productId,
+                  goodsId: goodsId
+                }).exec(function (e, o) {
+                  if (o) {
+                    obj.price = hyprice;
+                    Shop_member_cart.update(o.id, obj).exec(function (e1, o1) {
+                      return res.json({code: 0, msg: ''});
+                    });
+                  } else {
+                    obj.memberId = member.memberId;
+                    obj.price = hyprice;
+                    Shop_member_cart.create(obj).exec(function (e2, o2) {
+                      return res.json({code: 0, msg: ''});
+
+                    });
+                  }
+                });
+              });
+            });
+          } else {
+            return res.json({code: 2, msg: ''});
+          }
+        });
+      } else {
+        var list = req.body.list || [];
+        Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
+          var i = 0;
+          list.forEach(function (o) {
+            Shop_member_cart.update({
+              memberId: member.memberId,
+              goodsId: o.goodsId,
+              productId: o.productId
+            }, {is_buy: true}).exec(function (e2, o2) {
+              i++;
+              if (i == list.length) {
+                return res.json({code: 0, msg: ''});
+              }
+            });
           });
         });
-      });
+      }
     } else {
       return res.json({code: 1, msg: ''});
     }
