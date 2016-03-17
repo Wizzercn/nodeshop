@@ -4,6 +4,7 @@
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
+  //购物车商品数量
   cartNum: function (req, res) {
     var member = req.session.member;
     if (member && member.memberId > 0) {
@@ -25,6 +26,60 @@ module.exports = {
       return res.json({code: 0, msg: '', num: num});
     }
   },
+  //我的购物车-批量删除
+  delCart: function (req, res) {
+    var list = req.body.list || [];
+    if (list && list.length > 0) {
+      var member = req.session.member;
+      if (member && member.memberId > 0) {
+        var i = 0;
+        list.forEach(function (o) {
+          Shop_member_cart.destroy({
+            memberId: member.memberId,
+            productId: o.productId,
+            goodsId: o.goodsId
+          }).exec(function (err) {
+            i++;
+            if (i == list.length) {
+              return res.json({code: 0, msg: ''});
+            }
+          });
+        });
+      } else {
+        var j = 0;
+        list.forEach(function (o) {
+          var key = 'shop_cart_goods_' + o.goodsId + '_' + o.productId;
+          res.cookie(key, 'null', {maxAge: 0});
+          j++;
+          if (j == list.length) {
+            return res.json({code: 0, msg: ''});
+          }
+        });
+      }
+    }
+  },
+  //我的购物车-清空购物车
+  clearCart: function (req, res) {
+    var member = req.session.member;
+    if (member && member.memberId > 0) {
+      Shop_member_cart.destroy({
+        memberId: member.memberId
+      }).exec(function (err) {
+        return res.json({code: 0, msg: ''});
+      });
+    } else {
+      var cookies = req.cookies;
+      if (cookies) {
+        for (var key in cookies) {
+          if (key.indexOf('shop_cart_goods_') == 0) {
+            res.cookie(key, 'null', {maxAge: 0});
+          }
+        }
+      }
+      return res.json({code: 0, msg: ''});
+    }
+  },
+  //浮动购物车-删除商品
   delGoods: function (req, res) {
     var goodsId = StringUtil.getInt(req.body.goodsId);
     var productId = StringUtil.getInt(req.body.productId);
@@ -43,6 +98,7 @@ module.exports = {
       return res.json({code: 0, msg: ''});
     }
   },
+  //增加或减少商品数量
   changeGoodsNum: function (req, res) {
     var goodsId = StringUtil.getInt(req.body.goodsId);
     var productId = StringUtil.getInt(req.body.productId);
@@ -94,9 +150,11 @@ module.exports = {
       return res.json({code: 0, msg: ''});
     }
   },
+  //获取购物车商品
   showGoods: function (req, res) {
     var member = req.session.member;
     var cookies = req.cookies;
+    var ShopConfig = sails.config.system.ShopConfig;
     if (member && member.memberId > 0) {
       Shop_member_cart.find({memberId: member.memberId}).exec(function (err, list) {
         var allPrice = 0;
@@ -109,14 +167,32 @@ module.exports = {
             allPrice += obj.num * obj.price;
             weight += obj.num * obj.weight;
             obj.showPrice = StringUtil.setPrice(obj.price.toString());
+            obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
             list_new.push(obj);
           });
         }
+        //计算运费
+        var yunMoney = 0;
+        if (ShopConfig.freight_disabled == false && allPrice > 0) {
+          if (ShopConfig.freight_type == 'price') {
+            if (allPrice < ShopConfig.freight_num * 100) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          } else if (ShopConfig.freight_type == 'weight') {
+            if (weight >= ShopConfig.freight_num) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          }
+        }
         return res.json({
           allPrice: allPrice,
-          showAllprice: StringUtil.setPrice(allPrice.toString()),
+          showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
           count: count,
           weight: weight,
+          yunMoney: yunMoney,
+          showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+          totalMoney: yunMoney + allPrice,
+          showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
           list: list_new
         });
       });
@@ -134,20 +210,154 @@ module.exports = {
             allPrice += cartObj.num * cartObj.price;
             weight += cartObj.num * cartObj.weight;
             cartObj.showPrice = StringUtil.setPrice(cartObj.price.toString());
+            cartObj.showSumPrice = StringUtil.setPrice((cartObj.price * cartObj.num).toString());
             list.push(cartObj);
           }
         }
         list.sort(StringUtil.arrSort('goodsId', false));
       }
+      //计算运费
+      var yunMoney = 0;
+      if (ShopConfig.freight_disabled == false && allPrice > 0) {
+        if (ShopConfig.freight_type == 'price') {
+          if (allPrice < ShopConfig.freight_num * 100) {
+            yunMoney = ShopConfig.freight_price * 100;
+          }
+        } else if (ShopConfig.freight_type == 'weight') {
+          if (weight >= ShopConfig.freight_num) {
+            yunMoney = ShopConfig.freight_price * 100;
+          }
+        }
+      }
       return res.json({
         allPrice: allPrice,
-        showAllprice: StringUtil.setPrice(allPrice.toString()),
+        showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
         count: count,
         weight: weight,
+        yunMoney: yunMoney,
+        showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+        totalMoney: yunMoney + allPrice,
+        showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
         list: list
       });
     }
   },
+  //获取购物车商品(获取部分数据)
+  readGoods: function (req, res) {
+    var read_list = req.body.list || [];
+    var member = req.session.member;
+    var cookies = req.cookies;
+    var ShopConfig = sails.config.system.ShopConfig;
+    if (member && member.memberId > 0) {
+      async.waterfall([function (cb) {
+        var list = [];
+        var i = 0;
+        if (read_list.length > 0) {
+          read_list.forEach(function (o) {
+            Shop_member_cart.findOne({
+              memberId: member.memberId,
+              goodsId: o.goodsId,
+              productId: o.productId
+            }).exec(function (err, obj) {
+              if (obj) {
+                list.push(obj);
+              }
+              i++;
+              if (i == read_list.length) {
+                cb(null, list);
+              }
+            });
+          });
+        } else {
+          cb(null, list);
+        }
+      }], function (err, list) {
+        var allPrice = 0;
+        var count = 0;
+        var weight = 0;
+        var list_new = [];
+        if (list.length > 0) {
+          list.forEach(function (obj) {
+            count += obj.num;
+            allPrice += obj.num * obj.price;
+            weight += obj.num * obj.weight;
+            obj.showPrice = StringUtil.setPrice(obj.price.toString());
+            obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
+            list_new.push(obj);
+          });
+        }
+        //计算运费
+        var yunMoney = 0;
+        if (ShopConfig.freight_disabled == false && allPrice > 0) {
+          if (ShopConfig.freight_type == 'price') {
+            if (allPrice < ShopConfig.freight_num * 100) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          } else if (ShopConfig.freight_type == 'weight') {
+            if (weight >= ShopConfig.freight_num) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          }
+        }
+        return res.json({
+          allPrice: allPrice,
+          showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
+          count: count,
+          weight: weight,
+          yunMoney: yunMoney,
+          showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+          totalMoney: yunMoney + allPrice,
+          showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
+          list: list_new
+        });
+      });
+    } else {
+      var allPrice = 0;
+      var count = 0;
+      var weight = 0;
+      var list = [];
+      if (cookies) {
+        read_list.forEach(function (o) {
+          var cookieGoods = req.cookies['shop_cart_goods_' + o.goodsId + '_' + o.productId];
+          if (cookieGoods) {
+            var cartObj = JSON.parse(cookieGoods);
+            count += cartObj.num;
+            allPrice += cartObj.num * cartObj.price;
+            weight += cartObj.num * cartObj.weight;
+            cartObj.showPrice = StringUtil.setPrice(cartObj.price.toString());
+            cartObj.showSumPrice = StringUtil.setPrice((cartObj.price * cartObj.num).toString());
+            list.push(cartObj);
+          }
+        });
+        list.sort(StringUtil.arrSort('goodsId', false));
+      }
+      //计算运费
+      var yunMoney = 0;
+      if (ShopConfig.freight_disabled == false && allPrice > 0) {
+        if (ShopConfig.freight_type == 'price') {
+          if (allPrice < ShopConfig.freight_num * 100) {
+            yunMoney = ShopConfig.freight_price * 100;
+          }
+        } else if (ShopConfig.freight_type == 'weight') {
+          if (weight >= ShopConfig.freight_num) {
+            yunMoney = ShopConfig.freight_price * 100;
+          }
+        }
+      }
+      return res.json({
+        allPrice: allPrice,
+        showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
+        count: count,
+        weight: weight,
+        yunMoney: yunMoney,
+        showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+        totalMoney: yunMoney + allPrice,
+        showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
+        list: list
+      });
+    }
+  },
+  //向购物车添加商品
   addGoods: function (req, res) {
     var goodsId = StringUtil.getInt(req.body.goodsId);
     var productId = StringUtil.getInt(req.body.productId);
@@ -158,7 +368,7 @@ module.exports = {
     async.waterfall([function (cb) {
       if (productId > 0) {
         Shop_goods_products.find({
-          select: ['id', 'spec', 'price', 'weight','goodsid'],
+          select: ['id', 'spec', 'price', 'weight', 'goodsid'],
           where: {disabled: false, id: productId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -201,16 +411,20 @@ module.exports = {
     }], function (err, cartObj) {
       //根据用户是否登录存储到不同位置
       if (member && member.memberId > 0) {
-        Shop_goods_lv_price.findOne({lvid:member.lvId,productId:cartObj.productId,goodsid:cartObj.goodsId}).exec(function(es,os){
-          Shop_member_lv.findOne(member.lvId).exec(function(elv,olv){
+        Shop_goods_lv_price.findOne({
+          lvid: member.lvId,
+          productId: cartObj.productId,
+          goodsid: cartObj.goodsId
+        }).exec(function (es, os) {
+          Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
             //计算会员价
-            var lv={member_lv:olv||{},product_lv:os||{}};
-            var hyprice=0;
-            if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
-              if(lv.product_lv&&lv.product_lv.price>0){
-                hyprice=lv.product_lv.price;
-              }else {
-                hyprice=cartObj.price*lv.member_lv.dis_count/100;
+            var lv = {member_lv: olv || {}, product_lv: os || {}};
+            var hyprice = 0;
+            if (lv && lv.member_lv && lv.member_lv.disabled == false) {
+              if (lv.product_lv && lv.product_lv.price > 0) {
+                hyprice = lv.product_lv.price;
+              } else {
+                hyprice = cartObj.price * lv.member_lv.dis_count / 100;
               }
             }
             //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
@@ -221,13 +435,13 @@ module.exports = {
             }).exec(function (e, o) {
               if (o) {
                 cartObj.num = o.num + num;
-                cartObj.price=hyprice;
+                cartObj.price = hyprice;
                 Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
                 });
               } else {
                 cartObj.num = num;
                 cartObj.memberId = member.memberId;
-                cartObj.price=hyprice;
+                cartObj.price = hyprice;
                 Shop_member_cart.create(cartObj).exec(function (e2, o2) {
                 });
               }
@@ -262,7 +476,9 @@ module.exports = {
     });
 
   },
+  //我的购物车-列表
   list: function (req, res) {
+    var ShopConfig = sails.config.system.ShopConfig;
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {
@@ -291,14 +507,32 @@ module.exports = {
                 allPrice += obj.num * obj.price;
                 weight += obj.num * obj.weight;
                 obj.showPrice = StringUtil.setPrice(obj.price.toString());
+                obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
                 list_new.push(obj);
               });
             }
+            //计算运费
+            var yunMoney = 0;
+            if (ShopConfig.freight_disabled == false && allPrice > 0) {
+              if (ShopConfig.freight_type == 'price') {
+                if (allPrice < ShopConfig.freight_num * 100) {
+                  yunMoney = ShopConfig.freight_price * 100;
+                }
+              } else if (ShopConfig.freight_type == 'weight') {
+                if (weight >= ShopConfig.freight_num) {
+                  yunMoney = ShopConfig.freight_price * 100;
+                }
+              }
+            }
             done(null, {
               allPrice: allPrice,
-              showAllprice: StringUtil.setPrice(allPrice.toString()),
+              showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
               count: count,
               weight: weight,
+              yunMoney: yunMoney,
+              showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+              totalMoney: yunMoney + allPrice,
+              showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
               list: list_new
             });
           });
@@ -315,15 +549,34 @@ module.exports = {
                 allPrice += cartObj.num * cartObj.price;
                 weight += cartObj.num * cartObj.weight;
                 cartObj.showPrice = StringUtil.setPrice(cartObj.price.toString());
+                cartObj.showSumPrice = StringUtil.setPrice((cartObj.price * cartObj.num).toString());
                 list.push(cartObj);
+              }
+            }
+            list.sort(StringUtil.arrSort('goodsId', false));
+          }
+          //计算运费
+          var yunMoney = 0;
+          if (ShopConfig.freight_disabled == false && allPrice > 0) {
+            if (ShopConfig.freight_type == 'price') {
+              if (allPrice < ShopConfig.freight_num * 100) {
+                yunMoney = ShopConfig.freight_price * 100;
+              }
+            } else if (ShopConfig.freight_type == 'weight') {
+              if (weight >= ShopConfig.freight_num) {
+                yunMoney = ShopConfig.freight_price * 100;
               }
             }
           }
           done(null, {
             allPrice: allPrice,
-            showAllprice: StringUtil.setPrice(allPrice.toString()),
+            showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
             count: count,
             weight: weight,
+            yunMoney: yunMoney,
+            showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+            totalMoney: yunMoney + allPrice,
+            showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
             list: list
           });
         }
