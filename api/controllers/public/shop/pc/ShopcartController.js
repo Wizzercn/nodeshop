@@ -502,7 +502,105 @@ module.exports = {
 
     });
   },
+  //我的购物车-保存购物车
   save: function (req, res) {
-    return res.end();
+    var list = req.body.list || [];
+    var member = req.session.member;
+    if (member && member.memberId > 0) {
+      Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
+        var i = 0;
+        list.forEach(function (o) {
+          Shop_member_cart.update({
+            memberId: member.memberId,
+            goodsId: o.goodsId,
+            productId: o.productId
+          }, {is_buy: true}).exec(function (e2, o2) {
+            i++;
+            if (i == list.length) {
+              return res.json({code: 0, msg: ''});
+            }
+          });
+        });
+      });
+    } else {
+      return res.json({code: 1, msg: ''});
+    }
+  },
+  //我的购物车-确认订单信息
+  buy: function (req, res) {
+    var ShopConfig = sails.config.system.ShopConfig;
+    var member = req.session.member;
+    if (member && member.memberId > 0) {
+      async.parallel({
+        //获取cms栏目分类
+        channelList: function (done) {
+          Cms_channel.getChannel(function (list) {
+            done(null, list);
+          });
+        },
+        //获取所有商品分类
+        allClassList: function (done) {
+          Shop_goods_class.getAllClass(function (list) {
+            done(null, list);
+          });
+        },
+        cartGoods: function (done) {
+          if (member && member.memberId > 0) {
+            Shop_member_cart.find({memberId: member.memberId, is_buy: true}).exec(function (err, list) {
+              var allPrice = 0;
+              var count = 0;
+              var weight = 0;
+              var list_new = [];
+              if (list.length > 0) {
+                list.forEach(function (obj) {
+                  count += obj.num;
+                  allPrice += obj.num * obj.price;
+                  weight += obj.num * obj.weight;
+                  obj.showPrice = StringUtil.setPrice(obj.price.toString());
+                  obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
+                  list_new.push(obj);
+                });
+              }
+              //计算运费
+              var yunMoney = 0;
+              if (ShopConfig.freight_disabled == false && allPrice > 0) {
+                if (ShopConfig.freight_type == 'price') {
+                  if (allPrice < ShopConfig.freight_num * 100) {
+                    yunMoney = ShopConfig.freight_price * 100;
+                  }
+                } else if (ShopConfig.freight_type == 'weight') {
+                  if (weight >= ShopConfig.freight_num) {
+                    yunMoney = ShopConfig.freight_price * 100;
+                  }
+                }
+              }
+              return done(null, {
+                allPrice: allPrice,
+                showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
+                count: count,
+                weight: weight,
+                yunMoney: yunMoney,
+                showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+                totalMoney: yunMoney + allPrice,
+                showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
+                list: list_new
+              });
+            });
+          }
+        }
+      }, function (err, result) {
+        req.data.channelList = result.channelList || [];
+        req.data.allClassList = result.allClassList || [];
+        req.data.cartGoods = result.cartGoods || {};
+        req.data.StringUtil = StringUtil;
+        req.data.moment = moment;
+        req.data.r = '/shopcart/buy';
+        req.data.siteTitle = '确认订单信息_' + req.data.siteTitle;
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_buy', req.data);
+
+      });
+    } else {
+      return res.redirect('/login');
+    }
   }
 };

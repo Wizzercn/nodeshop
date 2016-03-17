@@ -1,6 +1,7 @@
 /**
  * Created by root on 3/16/16.
  */
+var is_save=false;
 function removeGoodsList(goodsId,productId){
   cart_is_change=true;
   $.ajax({
@@ -168,7 +169,22 @@ function save(){
     }
   });
   if(list.length>0){
-
+    is_save=true;
+    $.ajax({
+      type : "POST",
+      url : "/public/shop/pc/shopcart/save",
+      data : {
+        list:list
+      },
+      dataType : "json",
+      success : function(data) {
+        if(data.code==0){
+          window.location.href='/shopcart/buy';
+        }else if(data.code==1){
+          window.location.href='/login?r=/shopcart/list';
+        }
+      }
+    });
   }else {
     $("#tip .oc_pro_a").html('购物车中无商品，请先挑选商品加入购物车！');
     $("#tip").show();
