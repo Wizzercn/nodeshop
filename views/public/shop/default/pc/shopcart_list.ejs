@@ -46,7 +46,19 @@
     <span class="em2"><a href="javascript:delCart();" style="color:#06c;">批量删除</a></span>
     <span class="em2"><a href="javascript:clearCart();" style="color:#06c;">清空购物车</a></span>
   </li>
-  <li class="shop_s2_o">总计金额（含运费）	：</li>
+  <%
+   var s='';
+   if (ShopConfig.freight_disabled == false) {
+     if (ShopConfig.freight_type == 'price') {
+         s='运费：'+ShopConfig.freight_price+'元，按订单总金额计算，订单满'+ShopConfig.freight_num+'元减免。';
+
+     } else if (ShopConfig.freight_type == 'weight') {
+       s='运费：按商品总重量计算，重量超过'+(ShopConfig.freight_num/1000)+'kg，收费'+ShopConfig.freight_price+'元。';
+
+     }
+   }
+    %>
+  <li class="shop_s2_o"><%=s%>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总计金额（含运费）	：</li>
   <li class="shop_s3">￥<span id="tag4">0.00</span> </li>
 
 </ul>
