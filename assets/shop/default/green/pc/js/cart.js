@@ -116,7 +116,11 @@ function showCartList(){
         });
         $("#ck").prop("checked",true);
       }else {
-        var s='购物车中还没有商品，赶紧选购吧';
+        var s='<span style="font-size: 26px;float: left;padding-left: 100px;padding-top: 20px;height: 70px;width: 100%;">购物车中还没有商品，赶紧选购吧</span>';
+        $("#tag1").html('0');
+        $("#tag2").html('0.00');
+        $("#tag3").html('0.00');
+        $("#tag4").html('0.00');
         $("#cart_list").html(s);
       }
     }
@@ -152,6 +156,7 @@ function readGoods(){
 }
 $(function(){
   $("#cartDiv").unbind("mouseover");
+  showCartList();
   $("#cart_list input[type=checkbox]").on("click",function(){
     var ck=$(this);
     if(!ck.prop("checked")){

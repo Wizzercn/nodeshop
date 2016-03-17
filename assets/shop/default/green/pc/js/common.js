@@ -78,7 +78,7 @@ function addToCarData(goodsId,productId,num){
     dataType : "json",
     success : function(data) {
       if(data.code==0){
-        $("#cartNum").html(parseInt($("#cartNum").text())+parseInt(num));
+        showCartNum();
       }
     }
   });

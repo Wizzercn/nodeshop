@@ -26,37 +26,16 @@
 </div>
 
 <div id="cart_list">
-  <%cartGoods.list.forEach(function(o){%>
-  <ul class="w1200 shop_f1s cf2" data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
-    <li class="shop_f1so">
-      <table><tr><td><span class="set-btn"><input name="ids" type="checkbox" checked></span></td>
-          <td><span class="shop_img"><a href="/goods/<%=o.goodsId%>" target="_blank"><img src="<%=o.imgurl||''%>?type=s" height="70" width="70"></a></span></td>
-          <td><span class="shop-title"><a href="/goods/<%=o.goodsId%>" target="_blank"><%=o.name||''%></a></span></td></tr></table>
-    </li>
-    <li class="z_guige">
-      <%=o.spec||''%>
-    </li>
-    <li class="shop_f1st"><%=o.weight*o.num/1000%>kg</li>
-    <li class="shop_f1st">￥<%=o.showPrice%></li>
-    <li class="shop_f1ss">
-      <input type="button" class="num_btn" value="-" onclick="changeNumList(<%=o.goodsId%>,<%=o.productId%>,-1)">
-      <input type="text" class="num_text" value="<%=o.num%>" readonly>
-      <input type="button" class="num_btn" value="+"  onclick="changeNumList(<%=o.goodsId%>,<%=o.productId%>,1)"></li>
-    <li class="shop_f1sf">￥<%=o.showSumPrice%></li>
-    <li class="shop_f1sfi"><a href="javascript:removeGoodsList(<%=o.goodsId%>,<%=o.productId%>)">删除</a></li>
-
-  </ul>
-  <%});%>
 </div>
 <div class="w1200 zongji">
   <ul  class="">
     <li class="s_quan"></li>
     <li class="shop_f1af"></li>
     <li class="z_guigek"></li>
-    <li class="f">重量合计<br><span id="tag1"><%=cartGoods.weight/1000%></span>kg</li>
-    <li class="g">运费<br>￥<span id="tag2"><%=cartGoods.showYunMoney%></span></li>
+    <li class="f">重量合计<br><span id="tag1">0</span>kg</li>
+    <li class="g">运费<br>￥<span id="tag2">0.00</span></li>
     <li class="k"></li>
-    <li class="h">商品总额<br>￥<span id="tag3"><%=cartGoods.showAllprice||'0.00'%></span></li>
+    <li class="h">商品总额<br>￥<span id="tag3">0.00</span></li>
     <li class="k"></li>
   </ul>
 </div>
@@ -68,7 +47,7 @@
     <span class="em2"><a href="javascript:clearCart();" style="color:#06c;">清空购物车</a></span>
   </li>
   <li class="shop_s2_o">总计金额（含运费）	：</li>
-  <li class="shop_s3">￥<span id="tag4"><%=cartGoods.showTotalMoney%></span> </li>
+  <li class="shop_s3">￥<span id="tag4">0.00</span> </li>
 
 </ul>
 </div>

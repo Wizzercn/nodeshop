@@ -478,7 +478,6 @@ module.exports = {
   },
   //我的购物车-列表
   list: function (req, res) {
-    var ShopConfig = sails.config.system.ShopConfig;
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {
@@ -491,100 +490,10 @@ module.exports = {
         Shop_goods_class.getAllClass(function (list) {
           done(null, list);
         });
-      },
-      cartGoods: function (done) {
-        var member = req.session.member;
-        var cookies = req.cookies;
-        if (member && member.memberId > 0) {
-          Shop_member_cart.find({memberId: member.memberId}).exec(function (err, list) {
-            var allPrice = 0;
-            var count = 0;
-            var weight = 0;
-            var list_new = [];
-            if (list.length > 0) {
-              list.forEach(function (obj) {
-                count += obj.num;
-                allPrice += obj.num * obj.price;
-                weight += obj.num * obj.weight;
-                obj.showPrice = StringUtil.setPrice(obj.price.toString());
-                obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
-                list_new.push(obj);
-              });
-            }
-            //计算运费
-            var yunMoney = 0;
-            if (ShopConfig.freight_disabled == false && allPrice > 0) {
-              if (ShopConfig.freight_type == 'price') {
-                if (allPrice < ShopConfig.freight_num * 100) {
-                  yunMoney = ShopConfig.freight_price * 100;
-                }
-              } else if (ShopConfig.freight_type == 'weight') {
-                if (weight >= ShopConfig.freight_num) {
-                  yunMoney = ShopConfig.freight_price * 100;
-                }
-              }
-            }
-            done(null, {
-              allPrice: allPrice,
-              showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
-              count: count,
-              weight: weight,
-              yunMoney: yunMoney,
-              showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
-              totalMoney: yunMoney + allPrice,
-              showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
-              list: list_new
-            });
-          });
-        } else {
-          var allPrice = 0;
-          var count = 0;
-          var weight = 0;
-          var list = [];
-          if (cookies) {
-            for (var key in cookies) {
-              if (key.indexOf('shop_cart_goods_') == 0) {
-                var cartObj = JSON.parse(cookies[key]);
-                count += cartObj.num;
-                allPrice += cartObj.num * cartObj.price;
-                weight += cartObj.num * cartObj.weight;
-                cartObj.showPrice = StringUtil.setPrice(cartObj.price.toString());
-                cartObj.showSumPrice = StringUtil.setPrice((cartObj.price * cartObj.num).toString());
-                list.push(cartObj);
-              }
-            }
-            list.sort(StringUtil.arrSort('goodsId', false));
-          }
-          //计算运费
-          var yunMoney = 0;
-          if (ShopConfig.freight_disabled == false && allPrice > 0) {
-            if (ShopConfig.freight_type == 'price') {
-              if (allPrice < ShopConfig.freight_num * 100) {
-                yunMoney = ShopConfig.freight_price * 100;
-              }
-            } else if (ShopConfig.freight_type == 'weight') {
-              if (weight >= ShopConfig.freight_num) {
-                yunMoney = ShopConfig.freight_price * 100;
-              }
-            }
-          }
-          done(null, {
-            allPrice: allPrice,
-            showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
-            count: count,
-            weight: weight,
-            yunMoney: yunMoney,
-            showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
-            totalMoney: yunMoney + allPrice,
-            showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
-            list: list
-          });
-        }
       }
     }, function (err, result) {
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
-      req.data.cartGoods = result.cartGoods || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/shopcart/list';
