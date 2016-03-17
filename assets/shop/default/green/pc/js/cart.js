@@ -154,8 +154,37 @@ function readGoods(){
     }
   });
 }
+function save(){
+  var list=[];
+  $("#cart_list input[type=checkbox]").each(function(){
+    var self=$(this);
+    if(self.prop("checked")){
+      var u=self.closest('ul');
+      var obj={};
+      obj.goodsId= u.attr("data-goodsid");
+      obj.productId= u.attr("data-productid");
+      obj.num= u.attr("data-num");
+      list.push(obj);
+    }
+  });
+  if(list.length>0){
+
+  }else {
+    $("#tip .oc_pro_a").html('购物车中无商品，请先挑选商品加入购物车！');
+    $("#tip").show();
+  }
+}
 $(function(){
   $("#cartDiv").unbind("mouseover");
+  $("#save").on("click",function(){
+    save();
+  });
+  $("#tip .oc_pro").on("click",function(){
+    window.location.href='/';
+  });
+  $("#tip .oc_pro1").on("click",function(){
+    $("#tip").hide();
+  });
   showCartList();
   $("#cart_list input[type=checkbox]").on("click",function(){
     var ck=$(this);

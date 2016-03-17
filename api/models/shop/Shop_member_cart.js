@@ -51,6 +51,12 @@ module.exports = {
         return 0;
       }
     },
+    is_buy:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     createdAt: {
       type: 'integer',
       defaultsTo: function () {
