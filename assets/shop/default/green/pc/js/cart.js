@@ -86,7 +86,7 @@ function showCartList(){
         $.each(data.list,function(i,o){
           html+='<ul class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
             '<li class="shop_f1so">'+
-            '<table><tr><td><span class="set-btn"><input name="ids" type="checkbox" checked></span></td>'+
+            '<table><tr><td width="30"><span class="set-btn"><input name="ids" type="checkbox" checked></span></td>'+
             '<td><span class="shop_img"><a href="/goods/'+o.goodsId+'" target="_blank"><img src="'+o.imgurl+'?type=s" height="70" width="70"></a></span></td>'+
           '<td><span class="shop-title"><a href="/goods/'+o.goodsId+'" target="_blank">'+o.name+'</a></span></td></tr></table>'+
           '</li>'+
@@ -116,7 +116,7 @@ function showCartList(){
         });
         $("#ck").prop("checked",true);
       }else {
-        var s='<span style="font-size: 26px;float: left;padding-left: 100px;padding-top: 20px;height: 70px;width: 100%;">购物车中还没有商品，赶紧选购吧</span>';
+        var s='<div style="padding-left: 500px;padding-top: 5px;height: 300px;width: 100%;"><img src="'+csspath+'/pc/img/gouwu.jpg"></div>';
         $("#tag1").html('0');
         $("#tag2").html('0.00');
         $("#tag3").html('0.00');

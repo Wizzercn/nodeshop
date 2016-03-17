@@ -1683,7 +1683,7 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   float: left;
 }
 .zongji{height:65px;margin-top:1px;border-bottom:1px solid #dddddd;border-top:1px solid #dddddd;}
-.zongji .f{padding-left:20px;width:120px;height:38px;line-height:28px;font-size:14px;color:#24211d;display:block;float:left;}
+.zongji .f{padding-left:25px;width:120px;height:38px;line-height:28px;font-size:14px;color:#24211d;display:block;float:left;}
 .zongji .g{padding-left:20px;width:180px;height:38px;line-height:28px;font-size:14px;display:block;color:#24211d;float:left;}
 .zongji .h{padding-left:30px;width:100px;height:38px;line-height:28px;font-size:14px;display:block;color:#24211d;float:left;}
 .zongji .k{width:120px;height:38px;line-height:28px;font-size:14px;display:block;color:#24211d;float:left;}
