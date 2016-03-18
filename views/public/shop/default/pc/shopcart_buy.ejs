@@ -59,7 +59,7 @@
 
 
 <div class="shops_f"><img src="<%=CssPath%>/pc/img/icon/shop_s.png"/>商品清单</div>
-<table class="tab-b">
+<table id="buyGoods" class="tab-b">
   <tr bordercolor="#ddd" height="40px" bgcolor="#eee">
     <td width="30"></td>
     <td align="center">商品名称</td>
@@ -70,7 +70,7 @@
     <td align="center">小计</td>
   </tr>
   <%cartGoods.list.forEach(function(o){%>
-  <tr data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
+  <tr class="data" data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
     <td></td>
     <td><img src="<%=o.imgurl||''%>?type=s" height="70" width="70" class="second-img">
     </td>
@@ -89,25 +89,25 @@
     <%if(ShopConfig.pay_alipay){%>
         <span>
             <!-- 支付宝支付 -->
-            <input value="pay_alipay" name="payType" checked="checked" type="radio"><img src="<%=CssPath%>/pc/img/public/alipay.jpg">
+            <input value="pay_alipay" name="payType" checked="checked" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_wxpay){%>
         <span>
             <!-- 微信支付 -->
-            <input value="pay_wxpay" name="payType" type="radio"><img src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+            <input value="pay_wxpay" name="payType" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_cash){%>
         <span>
             <!-- 货到付款 -->
-            <input value="pay_cash" name="payType" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/cash.jpg">
+            <input value="pay_cash" name="payType" class="ml20" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_cash]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/cash.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_money){%>
             <span>
             <!-- 余额支付 -->
-            <input value="pay_money" name="payType" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/money.jpg">
+            <input value="pay_money" name="payType" class="ml20" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_money]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/money.jpg">
         </span>
     <%}%>
   </li>
@@ -157,7 +157,7 @@
   <div class="oc_pro_m">
     <span class="oc_pro_b">提示</span>
     <span class="oc_pro_a"></span>
-    <span><input value="继续购物" type="button" class="oc_pro" /><input type="button" value="取消" class="oc_pro1" /></span>
+    <span><input value="确定" type="button" class="oc_pro" /><input type="button" value="取消" class="oc_pro1" /></span>
   </div>
 </div>
 <script>

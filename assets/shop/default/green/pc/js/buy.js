@@ -80,7 +80,7 @@ function listAddr(){
             df= o.id;
           if(o.is_default)
             df= o.id;
-          str+='<li id="add_l_'+o.id+'"><span><em>'+ o.name+'</em><i>'+ o.mobile+'</i></span><p>'+ o.province+ o.city+ o.area+ o.addr+'</p></li>';
+          str+='<li data-id="'+o.id+'" id="add_l_'+o.id+'"><span><em>'+ o.name+'</em><i>'+ o.mobile+'</i></span><p>'+ o.province+ o.city+ o.area+ o.addr+'</p></li>';
         });
         $("#addrList").html(str);
         $("#add_l_"+df).addClass("z_dizhi_firston");
@@ -175,6 +175,33 @@ function doCoupon(){
     $("#discountAmount").html("-&yen;0.00");
     $("#finishAmount").html("&yen;"+setPrice(totalMoney));
   }
+}
+var is_submit=false;
+function doOrder(){
+  if(is_submit){
+    $("#order_tip").show();
+    return false;
+  }
+  var addId=$("#addrList .z_dizhi_firston").attr("data-id");
+  if(addId==''||addId==undefined){
+    $("#tip .oc_pro_a").html("请设置收货地址");
+    $("#tip").show();
+    $("#tip .oc_pro").on("click",function(){
+      $("#tip").hide();
+    });
+    $("#tip .oc_pro1").on("click",function(){
+      $("#tip").hide();
+    });
+    return false;
+  }
+  var list=[];
+  $("#buyGoods tr[class=data]").each(function(){
+      var obj={};
+      obj.goodsId= $(this).attr("data-goodsid");
+      obj.productId= $(this).attr("data-productid");
+      obj.num= $(this).attr("data-num");
+      list.push(obj);
+  });
 }
 $(function(){
   $("#cartDiv").unbind("mouseover");
