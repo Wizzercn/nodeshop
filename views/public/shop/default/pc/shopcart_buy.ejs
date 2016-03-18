@@ -89,7 +89,7 @@
     <%if(ShopConfig.pay_alipay){%>
         <span>
             <!-- 支付宝支付 -->
-            <input value="pay_alipay" name="payType" checked="checked" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+            <input value="pay_alipay" name="payType" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_wxpay){%>
@@ -126,7 +126,7 @@
 
 <ul class="shop_s w1200">
   <li class="shop_s1">
-    <span class="z_guige_five">订单留言<input maxlength="100" type="text" placeholder="可告诉我们您的特殊要求，如配送时间等，限100字以内"></span>
+    <span class="z_guige_five">订单留言<input id="memo" maxlength="100" type="text" placeholder="可告诉我们您的特殊要求，如配送时间等，限100字以内"></span>
     <%if(ShopConfig.tax_disabled==false){%>
     <input id="chkFapiao" type="checkbox" style="<%=cartGoods.allPrice>=ShopConfig.tax_price*100?'':'display:none'%>">开具发票：商品总价（不含运费）满<%=ShopConfig.tax_price%>元可开具发票，企业请务必填写税号
     <div class="fapiao" style="display: none">

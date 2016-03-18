@@ -1,6 +1,7 @@
 /**
  * Created by root on 3/15/16.
  */
+var StringUtil = require('../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   schema: true,
@@ -8,9 +9,8 @@ module.exports = {
   autoUpdatedAt: false,
   attributes: {
     id: {
-      type: 'integer',
+      type: 'string',
       size:20,
-      autoIncrement: true,
       primaryKey: true
     },
     cityId: {
@@ -28,6 +28,12 @@ module.exports = {
     },
     //订单重量
     weight:{
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    score:{
       type: 'integer',
       defaultsTo: function () {
         return 0;
@@ -235,5 +241,19 @@ module.exports = {
       collection: 'Shop_history_refunds',
       via: 'orderId'
     }
+  },
+  getOrderId:function(cb){
+    var s=moment().format('YYMMDDHHmm');
+    var n=StringUtil.getUuid(5,10);
+    var sn=s+n;
+    Shop_order.findOne(sn).exec(function(e,o){
+      if(o){
+        Shop_order.getOrderId(function(ss){
+          return cb(ss);
+        });
+      }else{
+        return cb(sn);
+      }
+    });
   }
 };

@@ -679,16 +679,156 @@ module.exports = {
   orderSave: function (req, res) {
     var ShopConfig = sails.config.system.ShopConfig;
     var member = req.session.member;
+    var list = req.body.list || [];
+    var addrId = req.body.addrId || '0';
+    var payType = req.body.payType || '';
+    var couponId = req.body.couponId || '0';
+    var memo = req.body.memo || '';
+    var fapiao = req.body.fapiao || {};
     if (member && member.memberId > 0) {
-      async.waterfall([function (list,cb) {
-        var y = moment().format('YYMMDD');
-      },function(sn,cb){
+      async.waterfall([
+        //1.生成订单号
+        function (cb) {
+          Shop_order.getOrderId(function (orderId) {
+            cb(null, orderId);
+          });
+        },
+        //2.获取商品信息、计算会员价、插入订单商品表
+        function (orderId, cb) {
+          var allPrice = 0;
+          var count = 0;
+          var weight = 0;
+          var i = 0;
+          var score=0;
+          Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
+            //计算会员价
+            var lv = {member_lv: olv || {}};
+            list.forEach(function (obj) {
+              Shop_goods_products.findOne({
+                select: ['id', 'name', 'gn', 'spec', 'price', 'weight', 'goodsid'],
+                where: {disabled: false, id: obj.productId, goodsid: obj.goodsId}
+              }).exec(function (e, o) {
+                if (o) {
+                  var goods = {};
+                  goods.orderId = orderId;
+                  goods.goodsId = obj.goodsId;
+                  goods.productId = obj.productId;
+                  goods.num = StringUtil.getInt(obj.num);
+                  goods.name = o.name;
+                  goods.gn = o.gn;
+                  goods.name = o.name;
+                  goods.spec = o.spec;
+                  goods.gprice = o.price;
+                  goods.weight = o.weight;
+                  Shop_goods_lv_price.findOne({
+                    lvid: member.lvId,
+                    productId: obj.productId,
+                    goodsid: obj.goodsId
+                  }).exec(function (es, os) {
+                    lv.product_lv = os || {};
+                    var hyprice = 0;
+                    if (lv && lv.member_lv && lv.member_lv.disabled == false) {
+                      if (lv.product_lv && lv.product_lv.price > 0) {
+                        hyprice = lv.product_lv.price;
+                      } else {
+                        hyprice = o.price * lv.member_lv.dis_count / 100;
+                      }
+                      goods.price = hyprice;
+                    }
+                    //...
+                    count += goods.num;
+                    allPrice += goods.num * goods.price;
+                    weight += goods.num * goods.weight;
+                    goods.amount = goods.num * goods.price;
+                    goods.score = Math.floor(goods.amount / 100);
+                    score+=goods.score;
+                    Shop_order_goods.create(goods).exec(function (err1, obj1) {
 
-      }],function(err,obj){
-
+                    });
+                    i++;
+                    if (i == list.length) {
+                      cb(null, {id: orderId, score:score,memberId: member.memberId, goodsAmount: allPrice, weight: weight});
+                    }
+                  });
+                }
+              });
+            });
+          });
+        },
+        //3.计算运费
+        function (order, cb) {
+          console.log('order::'+JSON.stringify(order));
+          var yunMoney = 0;
+          if (ShopConfig.freight_disabled == false && order.goodsAmount > 0) {
+            if (ShopConfig.freight_type == 'price') {
+              if (order.goodsAmount < ShopConfig.freight_num * 100) {
+                yunMoney = ShopConfig.freight_price * 100;
+              }
+            } else if (ShopConfig.freight_type == 'weight') {
+              if (order.weight >= ShopConfig.freight_num) {
+                yunMoney = ShopConfig.freight_price * 100;
+              }
+            }
+          }
+          order.freightAmount = yunMoney;
+          cb(null, order);
+        },
+        //4.计算优惠券
+        function (order, cb) {
+          Shop_member_coupon.findOne({memberId: member.memberId, id: couponId, status: 0}).exec(function (e, o) {
+            var discountAmount = 0;
+            if (o) {
+              discountAmount = o.couponPrice;
+            }
+            order.discountAmount = discountAmount;
+            order.finishAmount = order.goodsAmount + order.freightAmount - discountAmount;
+            cb(null, order);
+          });
+        },
+        //5.获取收货地址
+        function (order, cb) {
+          Shop_member_addr.findOne(addrId).exec(function (e, o) {
+            order.addrId = addrId || 0;
+            order.addrProvince = o.province || '';
+            order.addrCity = o.city || '';
+            order.addrArea = o.area || '';
+            order.addrName = o.name || '';
+            order.addrMobile = o.mobile || '';
+            order.addrAddr = o.addr || '';
+            order.taxType = StringUtil.getInt(fapiao.taxType) || 0;
+            order.taxNo = fapiao.taxNo || '';
+            order.taxTitle = fapiao.taxTitle || '';
+            order.taxCentent = fapiao.taxCentent || '';
+            cb(null, order);
+          });
+        }, function (order, cb) {
+          order.memo = memo;
+          order.source = 'pc';
+          order.createdIp = req.ip;
+          order.status = 'active';//['active','dead','finish']
+          order.payStatus = 0;
+          order.payType = payType;
+          Shop_order.create(order).exec(function (e, o) {
+            cb(e, order);
+          });
+        }], function (err, order) {
+        if (err){
+          return res.json({code: 2, msg: ''});
+        }else {
+          //订单提交成功则删除购物车数据
+          list.forEach(function (o) {
+            Shop_member_cart.destroy({
+              memberId: member.memberId,
+              productId: o.productId,
+              goodsId: o.goodsId
+            }).exec(function (err) {
+            });
+          });
+          return res.json({code: 0, msg: '订单生成成功'});
+        }
       });
     } else {
-      return res.json({code:1,msg:'会员未登录'});
+      return res.json({code: 1, msg: '会员未登录'});
     }
   }
 };

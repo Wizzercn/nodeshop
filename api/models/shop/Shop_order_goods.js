@@ -67,7 +67,7 @@ module.exports = {
       }
     },
     //=num*price
-    totalAmount:{
+    amount:{
       type: 'integer',
       defaultsTo: function () {
         return 0;
@@ -84,6 +84,13 @@ module.exports = {
       defaultsTo: function () {
         return 0;
       }
+    },
+    createAt:{
+      type:'integer',
+      defaultsTo:function(){
+        return moment().format('X');
+      }
     }
+
   }
 };

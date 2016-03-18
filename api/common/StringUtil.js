@@ -34,6 +34,32 @@ module.exports = {
     }
     return pwd;
   },
+  getUuid: function (len, radix) {
+    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    var uuid = [], i;
+    radix = radix || chars.length;
+    if (len) {
+      // Compact form
+      for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+    } else {
+      // rfc4122, version 4 form
+      var r;
+      // rfc4122 requires these characters
+      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+      uuid[14] = '4';
+
+      // Fill in random data.  At i==19 set the high bits of clock sequence as
+      // per rfc4122, sec. 4.1.5
+      for (i = 0; i < 36; i++) {
+        if (!uuid[i]) {
+          r = 0 | Math.random() * 16;
+          uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+        }
+      }
+    }
+
+    return uuid.join('');
+  },
   /**
    * 取随机数
    * @param min
@@ -65,11 +91,10 @@ module.exports = {
       return (max);
     }
   },
-  randomNum:function(num){
-    var Num="";
-    for(var i=0;i<num;i++)
-    {
-      Num+=Math.floor(Math.random()*10);
+  randomNum: function (num) {
+    var Num = "";
+    for (var i = 0; i < num; i++) {
+      Num += Math.floor(Math.random() * 10);
     }
     return Num;
   },
@@ -79,7 +104,7 @@ module.exports = {
    * @param loginname
    * @param createAt
    * @returns {string}
-     */
+   */
   password: function (password, loginname, createAt) {
     var p = md5(md5(password) + loginname + createAt);
     return 'w' + p.substring(0, p.length - 1);
@@ -89,7 +114,7 @@ module.exports = {
    * @param num
    * @param n
    * @returns {*}
-     */
+   */
   getSn: function (num, n) {
     var len = num.toString().length;
     while (len < n) {
@@ -102,41 +127,41 @@ module.exports = {
    * 字符串转int价格
    * @param str
    * @returns {*}
-     */
-  getPrice:function(str){
-    if(typeof str=='undefined'||str==''||str==null||str=='null'){
+   */
+  getPrice: function (str) {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
       return 0;
     }
-    if(str.indexOf('.')>0){
-      var s=str.substring(0,str.indexOf('.'));
-      var p=str.substring(str.indexOf('.')+1);
-      if(p.length>1){
-        return parseInt(s+p.substring(0,2));
-      }else if(p.length==1){
-        return parseInt(s+p+'0');
-      }else{
-        return parseInt(s+'00');
+    if (str.indexOf('.') > 0) {
+      var s = str.substring(0, str.indexOf('.'));
+      var p = str.substring(str.indexOf('.') + 1);
+      if (p.length > 1) {
+        return parseInt(s + p.substring(0, 2));
+      } else if (p.length == 1) {
+        return parseInt(s + p + '0');
+      } else {
+        return parseInt(s + '00');
       }
-    }else{
-      return parseInt(str+'00');
+    } else {
+      return parseInt(str + '00');
     }
   },
   /**
    * int转字符串价格
    * @param str
    * @returns {string}
-     */
-  setPrice:function(str){
-    if(typeof str=='string'&&str.length>2){
-      return str.substring(0,str.length-2)+'.'+str.substring(str.length-2);
+   */
+  setPrice: function (str) {
+    if (typeof str == 'string' && str.length > 2) {
+      return str.substring(0, str.length - 2) + '.' + str.substring(str.length - 2);
     }
-    if(typeof str=='number'){
-      var s=str.toString();
-      return s.substring(0,s.length-2)+'.'+s.substring(s.length-2);
+    if (typeof str == 'number') {
+      var s = str.toString();
+      return s.substring(0, s.length - 2) + '.' + s.substring(s.length - 2);
     }
   },
-  getInt:function(str){
-    if(typeof str=='undefined'||str==''||str==null||str=='null'){
+  getInt: function (str) {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
       return 0;
     }
     return parseInt(str);
@@ -146,9 +171,9 @@ module.exports = {
    * @param key
    * @param desc
    * @returns {Function}
-     */
-  arrSort:function(key,desc){
-    return function(a,b){
+   */
+  arrSort: function (key, desc) {
+    return function (a, b) {
       return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
     }
   }
