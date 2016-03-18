@@ -169,11 +169,11 @@ function doCoupon(){
         p= o.couponPrice;
       }
     });
-    $("#discountAmount").html("-&yen;"+setPrice(p.toString()));
-    $("#finishAmount").html("&yen;"+setPrice((totalMoney-p).toString()));
+    $("#discountAmount").html("-&yen;"+setPrice(p));
+    $("#finishAmount").html("&yen;"+setPrice((totalMoney-p)));
   }else {
     $("#discountAmount").html("-&yen;0.00");
-    $("#finishAmount").html("&yen;"+setPrice((totalMoney).toString()));
+    $("#finishAmount").html("&yen;"+setPrice(totalMoney));
   }
 }
 $(function(){

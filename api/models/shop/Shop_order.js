@@ -106,38 +106,41 @@ module.exports = {
       type: 'string',
       size:100
     },
+    addrId:{
+      model: 'Shop_member_addr'
+    },
     //收货地区
-    shipProvince:{
+    addrProvince:{
       type: 'string',
       size:30
     },
     //收货地区
-    shipCity:{
+    addrCity:{
       type: 'string',
       size:30
     },
     //收货地区
-    shipArea:{
+    addrArea:{
       type: 'string',
       size:30
     },
     //收货地址
-    shipAddr:{
+    addrAddr:{
       type: 'string',
       size:255
     },
     //收货人
-    shipName:{
+    addrName:{
       type: 'string',
       size:100
     },
     //收货人电话
-    shipMobile:{
+    addrMobile:{
       type: 'string',
       size:20
     },
     //配送时间
-    shipTime:{
+    addrTime:{
       type: 'string',
       size:100
     },
@@ -216,6 +219,11 @@ module.exports = {
         return false;
       },
       index:true
+    },
+    //收款单
+    goods: {
+      collection: 'Shop_order_goods',
+      via: 'orderId'
     },
     //收款单
     payments: {
