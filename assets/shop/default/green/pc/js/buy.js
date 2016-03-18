@@ -151,14 +151,29 @@ function loadProvince(){
     });
   });
 }
+function setPrice(str){
+  if(typeof str=='string'&&str.length>2){
+    return str.substring(0,str.length-2)+'.'+str.substring(str.length-2);
+  }
+  if(typeof str=='number'){
+    var s=str.toString();
+    return s.substring(0,s.length-2)+'.'+s.substring(s.length-2);
+  }
+}
 function doCoupon(){
-  if($("#youhuiquan").val()==''){
-    $("#youhuiquan_tip").html("请选择一张优惠券");
-    $("#youhuiquan_tip").show();
-    return false;
+  var id=$("#youhuiquan").val();
+  if(id!=''){
+    var p=0;
+    $.each(couponList,function(i,o){
+      if(o.id==parseInt(id)){
+        p= o.couponPrice;
+      }
+    });
+    $("#discountAmount").html("-&yen;"+setPrice(p.toString()));
+    $("#finishAmount").html("&yen;"+setPrice((totalMoney-p).toString()));
   }else {
-    $("#youhuiquan_tip").hide();
-
+    $("#discountAmount").html("-&yen;0.00");
+    $("#finishAmount").html("&yen;"+setPrice((totalMoney).toString()));
   }
 }
 $(function(){

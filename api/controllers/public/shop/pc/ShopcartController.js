@@ -652,7 +652,7 @@ module.exports = {
             });
         },
         couponList:function(done){
-          Shop_member_coupon.find({memberId:member.memberId,status:0}).exec(function(e,l){
+          Shop_member_coupon.find({select:['id','couponName','couponPrice'],where:{memberId:member.memberId,status:0}}).exec(function(e,l){
             done(null,l);
           });
         }
