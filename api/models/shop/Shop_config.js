@@ -68,6 +68,36 @@ module.exports = {
       defaultsTo: function () {
         return 0;
       }
+    },
+    pay_cash: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return true;
+      }
+    },
+    pay_money: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return true;
+      }
+    },
+    pay_alipay: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    pay_alipay_info:{
+      type:'json'
+    },
+    pay_wxpay: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    pay_wxpay_info:{
+      type:'json'
     }
   }
 };

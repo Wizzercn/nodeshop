@@ -70,7 +70,7 @@
     <td align="center">小计</td>
   </tr>
   <%cartGoods.list.forEach(function(o){%>
-  <tr>
+  <tr data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
     <td></td>
     <td><img src="<%=o.imgurl||''%>?type=s" height="70" width="70" class="second-img">
     </td>
@@ -96,11 +96,11 @@
         </span>
         <span>
             <!-- 货到付款 -->
-            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/huodf.jpg">
+            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/cash.jpg">
         </span>
             <span>
             <!-- 货到付款 -->
-            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/mypay.jpg">
+            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/money.jpg">
         </span>
   </li>
   <li class="shops_s2">
@@ -120,6 +120,7 @@
 <ul class="shop_s w1200">
   <li class="shop_s1">
     <span class="z_guige_five">订单留言<input maxlength="100" type="text" placeholder="可告诉我们您的特殊要求，如配送时间等，限100字以内"></span>
+    <%if(ShopConfig.tax_disabled==false){%>
     <input id="chkFapiao" type="checkbox" style="<%=cartGoods.allPrice>=ShopConfig.tax_price*100?'':'display:none'%>">开具发票：商品总价（不含运费）满<%=ShopConfig.tax_price%>元可开具发票，企业请务必填写税号
     <div class="fapiao" style="display: none">
       <%if(cartGoods.allPrice>=ShopConfig.tax_price*100){%>
@@ -129,6 +130,7 @@
       发票税号：<input id="taxNo" name="taxTitle" type="text" maxlength="50"><br>
       <%}%>
     </div>
+    <%}%>
   </li>
   <li class="shop_s2">
     <span class="shop_numk">商品总价：<br>运费：<br>优惠券：</span>
@@ -140,7 +142,9 @@
     <br><span class="i4">&yen;<%=cartGoods.showTotalMoney||'0.00'%></span> </li>
 
 </ul>
-<div class="shops_s6"><input onclick="doOrder()" class="" type="botton" value="提交订单" /></div>
+<div class="shops_s6">
+  <span class="error" style="display: none" id="order_tip">正在提交中，请勿重复提交。</span>
+  <input onclick="doOrder()" class="" type="button" value="提交订单" /></div>
 <div id="tip" style="display: none">
   <div class="oc_pro_bg"></div>
   <div class="oc_pro_m">
