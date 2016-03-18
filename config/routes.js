@@ -44,7 +44,7 @@ module.exports.routes = {
   '/info/:id': 'public/shop/pc/InfoController.index',
   '/join': 'public/shop/pc/AccountController.join',
   '/login': 'public/shop/pc/AccountController.login',
-  '/member': 'public/shop/pc/MemberController.index',
+  '/member': 'public/shop/pc/member/MemberController.index',
   '/shopcart/list': 'public/shop/pc/ShopcartController.list',
   '/shopcart/buy': 'public/shop/pc/ShopcartController.buy',
   '/sysadmin': 'private/LoginController.login',

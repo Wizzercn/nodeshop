@@ -11,177 +11,136 @@
     <li class="tian3">3、成功提交订单</li>
   </ul>
 </div>
-<div id="pageOverlay" style=""></div>
-<div class="address-box" id="dingdan" style="display: block;">
+<div id="pageOverlay" style="display: none;"></div>
+<div id="addr" class="address-box" style="display: none;">
   <form class="checkout_or" id="checkout_or">
     <input type="hidden" name="distAddInfo.id" value="" id="distAddInfo_id">
-    <p>使用新地址：</p><div class="bianji-close"><a href="#this" onclick="showAddView()">×</a></div>
+    <p>使用新地址：</p><div class="bianji-close"><a href="javascript:closeAddr()">×</a></div>
     <ul class="radio">
-      <li>收&nbsp;&nbsp;货&nbsp;&nbsp;人:<sup class="surely">*</sup>
-        <input type="text" name="distAddInfo.consignee" maxlength="50" value="">
+      <li>收&nbsp;货&nbsp;人:<sup class="surely">*</sup>
+        <input id="_name" type="text" maxlength="50" value="">
       </li>
-      <li class="tishi_ok_line" style="display: none;"></li>
+      <li class="error" style="display: none" id="_name_tip"></li>
       <li>选择地区:<sup class="surely">*</sup>
-        <select name="distAddInfo.province" class="province">
-          <option value="" class="opt_tongyong">请选择省</option>
-
-          <option class="opt_tongyong" value="11">北京市</option>
-
-          <option class="opt_tongyong" value="12">天津市</option>
-
-          <option class="opt_tongyong" value="13">河北省</option>
-
-          <option class="opt_tongyong" value="14">山西省</option>
-
-          <option class="opt_tongyong" value="15">内蒙古自治区</option>
-
-          <option class="opt_tongyong" value="21">辽宁省</option>
-
-          <option class="opt_tongyong" value="22">吉林省</option>
-
-          <option class="opt_tongyong" value="23">黑龙江省</option>
-
-          <option class="opt_tongyong" value="31">上海市</option>
-
-          <option class="opt_tongyong" value="32">江苏省</option>
-
-          <option class="opt_tongyong" value="33">浙江省</option>
-
-          <option class="opt_tongyong" value="34">安徽省</option>
-
-          <option class="opt_tongyong" value="35">福建省</option>
-
-          <option class="opt_tongyong" value="36">江西省</option>
-
-          <option class="opt_tongyong" value="37">山东省</option>
-
-          <option class="opt_tongyong" value="41">河南省</option>
-
-          <option class="opt_tongyong" value="42">湖北省</option>
-
-          <option class="opt_tongyong" value="43">湖南省</option>
-
-          <option class="opt_tongyong" value="44">广东省</option>
-
-          <option class="opt_tongyong" value="45">广西壮族自治区</option>
-
-          <option class="opt_tongyong" value="46">海南省</option>
-
-          <option class="opt_tongyong" value="50">重庆市</option>
-
-          <option class="opt_tongyong" value="51">四川省</option>
-
-          <option class="opt_tongyong" value="52">贵州省</option>
-
-          <option class="opt_tongyong" value="53">云南省</option>
-
-          <option class="opt_tongyong" value="54">西藏自治区</option>
-
-          <option class="opt_tongyong" value="61">陕西省</option>
-
-          <option class="opt_tongyong" value="62">甘肃省</option>
-
-          <option class="opt_tongyong" value="63">青海省</option>
-
-          <option class="opt_tongyong" value="64">宁夏回族自治区</option>
-
-          <option class="opt_tongyong" value="65">新疆维吾尔自治区</option>
-
+        <select id="_province" class="province">
+          <option value="" >请选择省</option>
         </select>
-        <select class="city" name="distAddInfo.city"><option value="">请选择市</option><option value="4101">郑州市</option><option value="4102">开封市</option><option value="4103">洛阳市</option><option value="4104">平顶山市</option><option value="4105">安阳市</option><option value="4106">鹤壁市</option><option value="4107">新乡市</option><option value="4108">焦作市</option><option value="4109">濮阳市</option><option value="4110">许昌市</option><option value="4111">漯河市</option><option value="4112">三门峡市</option><option value="4113">南阳市</option><option value="4114">商丘市</option><option value="4115">信阳市</option><option value="4116">周口市</option><option value="4117">驻马店市</option></select>
-        <select name="distAddInfo.county" class="county"><option value="">请选择县</option><option value="410201">市辖区</option><option value="410202">龙亭区</option><option value="410203">顺河回族区</option><option value="410204">鼓楼区</option><option value="410205">禹王台区</option><option value="410211">金明区</option><option value="410221">杞县</option><option value="410222">通许县</option><option value="410223">尉氏县</option><option value="410224">开封县</option><option value="410225">兰考县</option></select>
+        <select class="city" id="_city">
+          <option value="">请选择市</option>
+        </select>
+        <select id="_area" class="county">
+          <option value="">请选择区县</option>
+        </select>
       </li>
-      <li class="tishi_ok_line" style="display: none;"></li>
+      <li class="error" style="display: none" id="_area_tip"></li>
       <li>街道地址:<sup class="surely">*</sup>
-        <input type="text" name="distAddInfo.street" style="width: 300px;" maxlength="120" value="">
+        <input type="text" id="_addr" style="width: 300px;" maxlength="120" value="">
       </li>
-      <li class="tishi_ok_line" style="display: none;"></li>
+      <li class="error" style="display: none" id="_addr_tip"></li>
       <li>手机号码:<sup class="surely">*</sup>
-        <input type="text" name="distAddInfo.mobile" class="" value="" size="11" maxlength="11">
+        <input type="text" id="_mobile" class="" value="" size="11" maxlength="11">
         </li>
-      <li class="tishi_ok_line" style="display: none;"></li>
-      <li>设置默认<input type="checkbox" name="distAddInfo.isDefault" style="margin-left:15px;vertical-align: middle;width: 16px;" value="1"></li>
-      <li><input type="button" class="btn_baocun" id="" style="margin-bottom:30px" value="保 存" onclick="addOneAdd(this,'')"><input type="button" class="btn_quxiao" id="" value="取 消" onclick="clearData(this)"></li>
+      <li class="error" style="display: none" id="_mobile_tip"></li>
+      <li>设置默认<input type="checkbox" id="_is_default" style="margin-left:15px;vertical-align: middle;width: 16px;" value="1"></li>
+      <li><input type="button" class="btn_baocun" id="" style="margin-bottom:30px" value="保 存" onclick="saveAddr()">
+        <input type="button" class="btn_quxiao" id="" value="取 消" onclick="closeAddr()"></li>
     </ul>
   </form>
 </div>
-<div class="shops_f"><a href="#"><img src="<%= CssPath %>/pc/img/icon/shop_s.png"/>确认收货地址</a></div>
+<div class="shops_f"><img src="<%= CssPath %>/pc/img/icon/shop_s.png"/>确认收货地址</div>
 <div class="z_dizhi cf2">
-  <ul class="z_dizhi_first">
-    <li class="z_dizhi_firston"><span><em>王小明</em><i>13012345678</i></span>
-      <p>安徽省合肥蜀山区市黄山路599号时代数码港1202</p></li>
-    <li><span><em>王小明</em><i>13012345678</i></span>
-      <p>安徽省合肥蜀山区市黄山路599号时代数码港1202</p></li>
-    <li><span><em>王小明</em><i>13012345678</i></span>
-      <p>安徽省合肥蜀山区市黄山路599号时代数码港1202</p></li>
-    <li><span><em>王小明</em><i>13012345678</i></span>
-      <p>安徽省合肥蜀山区市黄山路599号时代数码港1202</p></li>
-    <li><span><em>王小明</em><i>13012345678</i></span>
-      <p>安徽省合肥蜀山区市黄山路599号时代数码港1202</p></li>
+  <ul id="addrList" class="z_dizhi_first">
   </ul>
   <div class="z_dizhi_second"><p>
-      <a href="###">显示全部常用地址 <img src="<%= CssPath %>/pc/img/public/san_x.png" class="mi">
+      <a href="javascript:;">显示全部常用地址 <img src="<%= CssPath %>/pc/img/public/san_x.png" class="mi">
         <img src="<%= CssPath %>/pc/img/public/san_xa.png" class="mm img_line"></a></p></div>
-  <div class="z_dizhi_third shops_s7"><input type="button" value="新增收货地址"></div>
-  <ul class="z_dizhi_four">
-    <li><span class="z_dizhi_foura">收货人姓名</span><span class="z_dizhi_fours"><input type="text"></span></li>
-    <li>
-      <span class="z_dizhi_foura">省市区</span><span class="z_dizhi_fourd">
-        		<select>
-              <option>安徽</option>
-              <option>浙江</option>
-              <option>广东</option>
-              <option>河北</option>
-            </select>
-        		<select>
-              <option>安徽</option>
-              <option>浙江</option>
-              <option>广东</option>
-              <option>河北</option>
-            </select>
-        		<select>
-              <option>安徽</option>
-              <option>浙江</option>
-              <option>广东</option>
-              <option>河北</option>
-            </select>
-        	</span>
-    </li>
-    <li><span class="z_dizhi_foura">详细地址</span><span class="z_dizhi_fours"><input type="text"></span></li>
-    <li><span class="z_dizhi_foura">手机号码</span><span class="z_dizhi_fourf"><input type="text"></span></li>
-    <li><input type="button" value="保存到常用地址" class="z_dizhi_fourg"></li>
-  </ul>
+  <div class="z_dizhi_third shops_s7"><input onclick="addAddr()" type="button" value="新增收货地址"></div>
 </div>
 
 
-<div class="shops_f"><a href="#"><img src="<%=CssPath%>/pc/img/icon/shop_s.png"/>商品清单</a></div>
+<div class="shops_f"><img src="<%=CssPath%>/pc/img/icon/shop_s.png"/>商品清单</div>
 <table class="tab-b">
   <tr bordercolor="#ddd" height="40px" bgcolor="#eee">
+    <td width="30"></td>
     <td align="center">商品名称</td>
     <td></td>
-    <td align="center">商品规格</td>
-    <td align="center">价格</td>
+    <td align="center"></td>
+    <td align="center">单价</td>
     <td align="center">数量</td>
-    <td align="center">合计</td>
+    <td align="center">小计</td>
   </tr>
+  <%cartGoods.list.forEach(function(o){%>
   <tr>
-    <td><img src="shopn_files/551860e3ef97462ca2f2bc27d1c79533.jpg" height="70" width="70" class="second-img">
+    <td></td>
+    <td><img src="<%=o.imgurl||''%>?type=s" height="70" width="70" class="second-img">
     </td>
-    <td><span class="tab-txt">山东特产正宗潍县萝卜青萝卜</span></td>
+    <td><span class="tab-txt"><%=o.name||''%></span></td>
     <td><span class="tab-gui"></span></td>
-    <td><span class="tab-num">&yen;18.90</span></td>
-    <td align="center"><span class="tab-deg">1</span></td>
-    <td><span class="tad-l">&yen;18.90</span></td>
+    <td><span class="tab-num">&yen;<%=o.showPrice||'0.00'%></span></td>
+    <td align="center"><span class="tab-deg"><%=o.num||'0'%></span></td>
+    <td><span class="tad-l">&yen;<%=o.showSumPrice||'0.00'%></span></td>
   </tr>
+  <%});%>
 </table>
+<div class="shops_f cf clear"><img src="<%=CssPath%>/pc/img/icon/shop_s.png">选择支付方式</div>
+
+<ul class="shops_s_a w1200">
+  <li class="shops_s1">
+        <span>
+            <!-- 支付宝支付 -->
+            <input value="1" name="paytype" checked="checked" type="radio"><img src="<%=CssPath%>/pc/img/public/alipay.jpg">
+        </span>&nbsp;&nbsp;&nbsp;&nbsp;
+        <span>
+            <!-- 微信支付 -->
+            <input value="4" name="paytype" type="radio"><img src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+        </span>
+        <span>
+            <!-- 货到付款 -->
+            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/huodf.jpg">
+        </span>
+            <span>
+            <!-- 货到付款 -->
+            <input value="2" name="paytype" class="ml20" type="radio"><img src="<%=CssPath%>/pc/img/public/mypay.jpg">
+        </span>
+  </li>
+  <li class="shops_s2">
+    使用优惠券：
+    <select id="youhuiquan">
+      <option value="">选择优惠劵</option>
+      <%couponList.forEach(function(y){%>
+      <option value="<%=y.id%>"><%=y.couponName%></option>
+      <%});%>
+    </select>
+    <input onclick="doCoupon()" type="button" value="使用" class="shops_s2s" id="use_t" style="cursor:pointer">
+    <span class="error" style="display:none " id="youhuiquan_tip"></span>
+
+  </li>
+</ul>
 
 <ul class="shop_s w1200">
-  <li class="shop_s1"><span class="z_guige_five">补充说明<input type="text" placeholder="选填，可告诉买家您的特殊要求"></span></li>
-  <li class="shop_s2"><span class="shop_numk"><em class="shop_num">2 </em>件商品&nbsp;   合计：<br>运费：</span><span class="shop_numa"><i>选择优惠券<input type="text" placeholder="输入优惠券密码" class="shop_nums"><input type="button" value="验证" class="shop_numd"><a href="#">使用优惠券</a></i><em>总计：</em></span></li>
-  <li class="shop_s3"><i>￥37.80 <br />￥6.00</i><br><span>￥43.80</span> </li>
+  <li class="shop_s1">
+    <span class="z_guige_five">订单留言<input maxlength="100" type="text" placeholder="可告诉我们您的特殊要求，如配送时间等，限100字以内"></span>
+    <input id="chkFapiao" type="checkbox" style="<%=cartGoods.allPrice>=ShopConfig.tax_price*100?'':'display:none'%>">开具发票：商品总价（不含运费）满<%=ShopConfig.tax_price%>元可开具发票，企业请务必填写税号
+    <div class="fapiao" style="display: none">
+      <%if(cartGoods.allPrice>=ShopConfig.tax_price*100){%>
+      发票类型：<input name="taxType" type="radio" value="1">企业<input name="taxType" type="radio" value="2" checked>个人<br>
+      发票抬头：<input id="taxTitle" name="taxTitle" type="text" maxlength="100" style="width: 250px;"><br>
+      发票内容：<input id="taxCentent" name="taxTitle" type="text" maxlength="200" style="width: 250px;"><br>
+      发票税号：<input id="taxNo" name="taxTitle" type="text" maxlength="50"><br>
+      <%}%>
+    </div>
+  </li>
+  <li class="shop_s2">
+    <span class="shop_numk">商品总价：<br>运费：<br>优惠券：</span>
+    <span class="shop_numa"><em>实际支付：</em></span></li>
+  <li class="shop_s3">
+    <span class="i1" id="goodsAmount">&yen;<%=cartGoods.showAllprice||'0.00'%></span>
+    <br><span class="i2" id="freightAmount">&yen;<%=cartGoods.showYunMoney||'0.00'%></span>
+    <br><span class="i3" id="discountAmount">-&yen;0.00</span>
+    <br><span class="i4">&yen;<%=cartGoods.showTotalMoney||'0.00'%></span> </li>
 
 </ul>
-<div class="shops_s6"><a href="04-购物车-c第三步.html"><input type="botton" value="确认提交" /></a></div>
+<div class="shops_s6"><input onclick="doOrder()" class="" type="botton" value="提交订单" /></div>
 <div id="tip" style="display: none">
   <div class="oc_pro_bg"></div>
   <div class="oc_pro_m">
@@ -190,5 +149,11 @@
     <span><input value="继续购物" type="button" class="oc_pro" /><input type="button" value="取消" class="oc_pro1" /></span>
   </div>
 </div>
+<script>
+  var yunMoney=<%=cartGoods.yunMoney%>;
+  var allPrice=<%=cartGoods.allPrice%>;
+  var totalMoney=<%=cartGoods.totalMoney%>;
+  var couponList=<%-JSON.stringify(couponList)%>;
+</script>
 <script src="<%=CssPath%>/pc/js/buy.js"></script>
 <% include common_buttom.ejs %>

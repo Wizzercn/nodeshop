@@ -1,7 +1,7 @@
 /**
  * Created by root on 3/10/16.
  */
-var StringUtil = require('../../../../common/StringUtil');
+var StringUtil = require('../../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   index: function (req, res) {

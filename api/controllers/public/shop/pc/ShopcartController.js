@@ -610,7 +610,6 @@ module.exports = {
           });
         },
         cartGoods: function (done) {
-          if (member && member.memberId > 0) {
             Shop_member_cart.find({memberId: member.memberId, is_buy: true}).exec(function (err, list) {
               var allPrice = 0;
               var count = 0;
@@ -639,7 +638,7 @@ module.exports = {
                   }
                 }
               }
-              return done(null, {
+              done(null, {
                 allPrice: allPrice,
                 showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
                 count: count,
@@ -651,11 +650,16 @@ module.exports = {
                 list: list_new
               });
             });
-          }
+        },
+        couponList:function(done){
+          Shop_member_coupon.find({memberId:member.memberId,status:0}).exec(function(e,l){
+            done(null,l);
+          });
         }
       }, function (err, result) {
         req.data.channelList = result.channelList || [];
         req.data.allClassList = result.allClassList || [];
+        req.data.couponList = result.couponList || [];
         req.data.cartGoods = result.cartGoods || {};
         req.data.StringUtil = StringUtil;
         req.data.moment = moment;

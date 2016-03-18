@@ -34,8 +34,7 @@ module.exports = {
    * @param res
    */
   tree: function (req, res) {
-    var pid = req.query.pid;
-    if (!pid)pid = '0';
+    var pid = req.query.pid||0;
     Shop_area.find().where({parentId: pid}).sort('location asc').sort('path asc').exec(function (err, objs) {
       var str = [];
       if (objs) {
@@ -88,6 +87,7 @@ module.exports = {
         } else {
           path = path + '0001';
         }
+        body.disabled=body.disabled=='on';
         body.parentId=parentId;
         body.path = path;
         body.location = 0;

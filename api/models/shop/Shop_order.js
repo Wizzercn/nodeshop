@@ -124,7 +124,7 @@ module.exports = {
     //收货地址
     shipAddr:{
       type: 'string',
-      size:100
+      size:255
     },
     //收货人
     shipName:{
@@ -156,7 +156,7 @@ module.exports = {
     //发票抬头
     taxTitle:{
       type: 'string',
-      size:255
+      size:100
     },
     //发票内容
     taxCentent:{

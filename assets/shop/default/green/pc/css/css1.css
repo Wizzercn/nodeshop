@@ -944,12 +944,13 @@ a, a:hover {
 .shop_s1 a:first-child{padding:9px 25px;}
 .shop_s1 a:last-child{padding:9px 20px;}
 .shop_s1{width:450px;height:120px;float:left;line-height:55px;margin-top:10px;}
+.shop_s1 .fapiao{line-height: 20px;margin-top: -10px;}
 .shop_f1s:hover{background:#f6f5f1;}
 .shop_numd{width:60px !important;height:36px !important;background:#049b81;color:#fff;border:none;}
 
 .shop_s2{width:600px;height:120px;display:block;float:left;line-height:25px;text-align:right;font-size:14px;}
 .shop_s2_o{width:1050px;height:70px;display:block;float:left;line-height:25px;text-align:right;font-size:14px;}
-.shop_numk{height:68px;display:block;margin-top:10px;}
+.shop_numk{display:block;margin-top:10px;}
 .shop_numa{width:640px;height:60px;line-height:24px;font-size:14px;}
 .shop_numa i{display:inline-block;color:#999;font-size:14px;margin-right:25px;}
 .shop_numa i input{margin-right:5px;}
@@ -958,9 +959,13 @@ a, a:hover {
 .shop_nums{width:170px !important;height:24px !important;margin-top:7px;margin-bottom:7px !important;margin-left:10px;margin-right:5px;}
 
 .shop_s2 em{padding-top:10px;}
-.shop_s3{width:125px;text-align:center;line-height:25px;font-size:22px;float:right;}
+.shop_s3{width:125px;text-align:center;line-height:29px;font-size:22px;float:right;}
 .shop_s3 span{color:#ff0000;font-size:30px;}
 .shop_s3 i{height:50px;display:block;margin-top:10px;}
+.shop_s3 .i1{color:#fe6000;font-size:30px;float:right;}
+.shop_s3 .i2{color:#000;font-size:16px;float:right;}
+.shop_s3 .i3{color:#000;font-size:16px;float:right;}
+.shop_s3 .i4{color:#fe6000;font-size:30px;float:right;}
 .shop_num{font-size:18px;color:#ff0000;}
 .shop_t{height:90px;}
 .shop_t>a{margin-top:10px;color:#000;width:110px;height:40px;display:block;float:left;line-height:40px;text-align:center;border-radius:3px;margin-left:20px;font-size:14px;}
@@ -982,13 +987,15 @@ a, a:hover {
 
 .shops_s{height:195px;border-left:1px solid #dddddd;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;}
 .shops_s_a{border-left:1px solid #dddddd;border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;}
-.shops_s1{display:block;height:110px;width:1160px;margin:0 auto;margin-left:20px;}
+.shops_s1{display:block;height:110px;width:1160px;margin:0 auto;margin-left:20px;border-bottom: 1px dashed #dddddd;}
 .shops_s1 input{margin-top:45px;}
 .shops_s1 img{margin-top:30px;margin-left:5px;}
-
-.shops_s2{height:80px;display:block;text-indent:40px;line-height:80px;}
+.shops_s2{height:80px;display:block;text-indent:40px;line-height:80px;font-size: 14px;}
+.shops_s2 .error{color:#9e1634;background:url(../img/error.png) no-repeat 10px -6px; padding-left:32px;}
+.shops_s2 select{height: 30px;line-height: 30px;width: 150px;}
+.shops_s2 input{height: 30px;line-height: 30px;}
 .shops_s2a{width:240px !important;height:40px !important;border:1px solid #dddddd;background:none;margin-left:10px;margin-right:10px;}
-.shops_s2s{width:120px !important;height:40px !important;border:none;position:relative;top:-5px;left:0px;border-radius:3px;font-size:14px;}
+.shops_s2s{width:120px !important;height:35px !important;border:none;position:relative;left:0px;border-radius:3px;font-size:14px;}
 .shops_t{height:108px;border-right:1px solid #dddddd;border-left:1px solid #dddddd;border-bottom:1px solid #dddddd;display:block;}
 .shopst1{width:1005px;height:100px;line-height:50px;font-size:14px;text-align:right;margin-top:5px;float:left;}
 .shopst1 span{color:#ce0020;}
@@ -1002,7 +1009,7 @@ a, a:hover {
 .shops_s5{width:578px;height:95px;margin-left:40px;margin-top:30px;}
 .shops_s5 textarea{width:578px;height:95px;}
 .shops_s6{height:110px;width: 1137px;margin: 0px auto;text-align: right;}
-.shops_s6 input{width:148px;height:38px;border-radius:3px;border:none;font-size:18px;color:#fff;text-align:center;line-height:38px;margin-left:40px;margin-top:30px; cursor:pointer;}
+.shops_s6 input{background:#9f1432;width:148px;height:38px;border-radius:3px;border:none;font-size:18px;color:#fff;text-align:center;line-height:38px;margin-left:40px;margin-top:30px; cursor:pointer;}
 .shops_s7{height:110px;width: 1137px;margin: 0px auto;text-align: left;}
 .shops_s7 input{width:148px;height:38px;border-radius:3px;border:none;font-size:16px;color:#fff;text-align:center;line-height:38px;margin-top:5px; cursor:pointer;}
 
@@ -1032,8 +1039,8 @@ a, a:hover {
 .z_dizhi_fourf{width:1000px;height:34px;display:block;float:left;}
 .z_dizhi_fourf input{width:190px;height:34px;}
 .z_dizhi_fourg{width:210px !important;height:40px;background:#00aa3a;display:block;border:none;border-radius:3px;color:#fff;text-align:center;margin-left:98px;}
-.z_guige_five{width:380px;margin-left:10px;background:#f2f6ff;height:50px;display:block;line-height:36px;color:#999999;text-indent:10px;}
-.z_guige_five input{width:300px;height:22px;border-radius:0px;padding:0px 5px;height:40px;font-size:12px;margin-left:10px;margin-top:5px;}
+.z_guige_five{width:452px;margin-left:10px;background:#f2f6ff;height:50px;display:block;line-height:36px;color:#999999;text-indent:10px;}
+.z_guige_five input{width:380px;height:22px;border-radius:0px;padding:0px 5px;height:40px;font-size:12px;margin-left:10px;margin-top:5px;}
 
 /*--------购物车第三步-------*/
 .yudd_dm{width:650px;height:300px;margin:0 auto;}
@@ -1367,7 +1374,7 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 .service-menu .menu-p:hover .menu-i,.menu-iadd{color:#00aa3a;background:#fff;}
 .zixun1a>i,.k_logolfi span{color:#194833;}
 .public_bg,.k_hotc,.order_f1,.shop_t a,.c_jifen,.c_jifens,.s_returnf,.asset,.c_guk{background:#eeeeee;}
-.nav_a,.k_hotcf1h,.about_usm,/*.c_shop:hover,*/.s_pagel:hover,.s_pagel1:hover,.s_pager:hover,.s_pageron,.shuz,.k_hotc .k_hotch li:hover a,.k_hotc .k_hotch0 li:hover a,.k_hotcf1:hover .jiaru input,.s_details>li,.c_landf input,.q_header,.member_cfon,.member_cf:hover,.member_crsi,.shop_t span input,.shops_s6 input,.shops_s7 input,.shops_s2s,.xuanze5,.address_more,.passwordh input,.land_six,.password5 .input_2,a.gife_btn,.c_button input,.menu-i,.service-menu .menu-p:hover,.menu-p:visited,.shop_s1 a:hover,.shop_t>a:hover,ul.gife_list li dl,.tan_show p:hover,.assert_fa4 input{ background:#00aa3a;color:#fff;}
+.nav_a,.k_hotcf1h,.about_usm,/*.c_shop:hover,*/.s_pagel:hover,.s_pagel1:hover,.s_pager:hover,.s_pageron,.shuz,.k_hotc .k_hotch li:hover a,.k_hotc .k_hotch0 li:hover a,.k_hotcf1:hover .jiaru input,.s_details>li,.c_landf input,.q_header,.member_cfon,.member_cf:hover,.member_crsi,.shop_t span input,.shops_s7 input,.shops_s2s,.xuanze5,.address_more,.passwordh input,.land_six,.password5 .input_2,a.gife_btn,.c_button input,.menu-i,.service-menu .menu-p:hover,.menu-p:visited,.shop_s1 a:hover,.shop_t>a:hover,ul.gife_list li dl,.tan_show p:hover,.assert_fa4 input{ background:#00aa3a;color:#fff;}
 .lanrenzhijia li a:hover,.k_hotcf1h:hover,.about_us,.about_usr i:hover,.footer_li:hover,.thumbs li.curr,
 .thumbs li:hover,#about,.c_landf input:hover,.shop_t span input:hover,.xuanze6,a.gife_btn:hover,.c_button input:hover{ background:#194833;color:#fff;}
 
@@ -1698,14 +1705,14 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .shop-title{float:left;display:inline-block;*display:inline;width:180px;margin-left:20px;font-size:14px;}
 .shop-title p{width:100%;height:100%;vertical-align: middle;}
 
-.tab-b{margin: 0 auto;border:1px solid #ddd;width:1200px}
-.tab-b tr{border-bottom:1px solid #ddd;}
-.tab-txt{width:220px;display:inline-block;}
-.second-img{width:70px;height:70px;margin-left:20px;margin-right:20px;margin-top:20px;margin-bottom:20px;}
-.tab-gui{display:inline-block;width:240px;}
-.tab-num{display:inline-block;width:200px;text-align:center;}
-.tad-l{display:inline-block;width:200px;text-align:center;}
-.tab-deg{width:160px;display:inline-block;}
+.tab-b{margin: 0 auto;border:1px solid #ddd;width:1200px;}
+.tab-b tr{border-bottom:1px solid #ddd;font-size: 14px;}
+.tab-txt{width:220px;display:inline-block;font-size: 14px;}
+.second-img{width:70px;height:70px;margin-left:20px;margin-right:20px;margin-top:10px;margin-bottom:10px;}
+.tab-gui{display:inline-block;width:240px;font-size: 14px;}
+.tab-num{display:inline-block;width:200px;text-align:center;font-size: 14px;}
+.tad-l{display:inline-block;width:200px;text-align:center;font-size: 14px;}
+.tab-deg{width:160px;display:inline-block;font-size: 14px;}
 
 
 #pageOverlay {position:fixed;top:0;left:0; z-index:1001; width:100%; height:100%; background:#000;
@@ -1716,15 +1723,10 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   position: fixed!important;left: 36%; top: 50%;margin-top:-100px;z-index: 1050; border:1px solid #e0e0e0;}
 .address-box input{height: 30px;}
 .address-box select{height: 30px;}
-#dingdan.address-box{ left: 34%!important; top: 50%;margin-top:-150px;}
+#addr.address-box{ left: 34%!important; top: 50%;margin-top:-150px;}
 .address-box form.checkout_or{margin:15px 30px;}
 .address-box form.checkout_or ul.radio{	padding:0px!important;list-style: none!important;}
-.address-box form.checkout_or ul.radio li{line-height: 30px;margin:10px 0 0 0;}
-.address-box form.checkout_or ul.radio li.tishi_error_line{margin:0 0 0 70px;color:#9F1432;
-  height: 20px;padding:0px 0 0 25px;background:url(../images/note_error.png) no-repeat 0 34%;}
-.address-box form.checkout_or ul.radio li.tishi_ok_line{
-  margin:0 0 0 70px;color:#9F1432;height:14px;height: 20px;padding:0px 0 0 25px;
-  background:url(../images/note_ok.png) no-repeat 0 34%;}
+.address-box form.checkout_or ul.radio li{line-height:20px;margin:5px 0  0;}
 .address-box form.checkout_or ul.radio li input[type="button"]{
   float: left;border-radius: 2px;-moz-border-radius: 2px;-khtml-border-radius: 2px;}
 .address-box form.checkout_or ul.radio li .input_one{width:256px;}
@@ -1733,13 +1735,7 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   color:#444 ;background-color:#faf4ea ;text-align:center;border:1px solid #e0e0e0;}
 .address-box form.checkout_or ul.radio li span.get_passwd .btn_duanxin:hover{
   background-color:#fe875b!important;color:#fff;}
-.address-box form.checkout_or ul.radio li span.tishi_error_duan{
-  position: absolute;	float:left;	width: 160px;height: 35px;line-height: 35px;color: #9e1634;
-  padding-left:25px;margin-left:108px;background:url(../images/note_error.png) no-repeat;}
-.address-box form.checkout_or ul.radio li span.tishi_error{
-  position: absolute;float:left;width:auto;height: 35px;line-height: 35px;color: #9e1634;
-  padding-left:25px;background:url(../images/note_error.png) no-repeat;}
-
+.address-box .error{color:#9e1634;background:url(../img/error.png) no-repeat 70px -6px; padding-left:95px;}
 .btn_xinzeng{color:#fff; font:13px/30px  Arial,"microsoft yahei",sans-serif;width:135px;
   height:30px;margin-left:80px;background-color:#fe875b;display:inline-block;text-align:center;}
 .btn_xinzeng:hover{color:#fff;background-color:#be5e3b;display:inline-block; }
