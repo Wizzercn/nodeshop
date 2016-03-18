@@ -202,6 +202,34 @@ function doOrder(){
       obj.num= $(this).attr("data-num");
       list.push(obj);
   });
+  var fapiao={};
+  var is_fapiao=$("#chkFapiao").prop("checked");
+  if(is_fapiao){
+    fapiao.taxType=$("input[name='taxType'][checked]").val();
+    fapiao.taxNo=$("#taxNo").val();
+    fapiao.taxTitle=$("#taxTitle").val();
+    fapiao.taxCentent=$("#taxCentent").val();
+  }
+  is_submit=true;
+  $.ajax({
+    type : "POST",
+    url : "/public/shop/pc/shopcart/orderSave",
+    data:{
+      list:list,
+      addrId:addId,
+      payType:$("input[name='payType'][checked]").val(),
+      couponId:$("#youhuiquan").val(),
+      fapiao:fapiao
+    },
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+
+      }else if(data.code==1){
+        window.location.href='/login';
+      }
+    }
+  });
 }
 $(function(){
   $("#cartDiv").unbind("mouseover");

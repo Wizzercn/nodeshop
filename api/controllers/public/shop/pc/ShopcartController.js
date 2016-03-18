@@ -610,50 +610,53 @@ module.exports = {
           });
         },
         cartGoods: function (done) {
-            Shop_member_cart.find({memberId: member.memberId, is_buy: true}).exec(function (err, list) {
-              var allPrice = 0;
-              var count = 0;
-              var weight = 0;
-              var list_new = [];
-              if (list.length > 0) {
-                list.forEach(function (obj) {
-                  count += obj.num;
-                  allPrice += obj.num * obj.price;
-                  weight += obj.num * obj.weight;
-                  obj.showPrice = StringUtil.setPrice(obj.price.toString());
-                  obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
-                  list_new.push(obj);
-                });
-              }
-              //计算运费
-              var yunMoney = 0;
-              if (ShopConfig.freight_disabled == false && allPrice > 0) {
-                if (ShopConfig.freight_type == 'price') {
-                  if (allPrice < ShopConfig.freight_num * 100) {
-                    yunMoney = ShopConfig.freight_price * 100;
-                  }
-                } else if (ShopConfig.freight_type == 'weight') {
-                  if (weight >= ShopConfig.freight_num) {
-                    yunMoney = ShopConfig.freight_price * 100;
-                  }
+          Shop_member_cart.find({memberId: member.memberId, is_buy: true}).exec(function (err, list) {
+            var allPrice = 0;
+            var count = 0;
+            var weight = 0;
+            var list_new = [];
+            if (list.length > 0) {
+              list.forEach(function (obj) {
+                count += obj.num;
+                allPrice += obj.num * obj.price;
+                weight += obj.num * obj.weight;
+                obj.showPrice = StringUtil.setPrice(obj.price.toString());
+                obj.showSumPrice = StringUtil.setPrice((obj.price * obj.num).toString());
+                list_new.push(obj);
+              });
+            }
+            //计算运费
+            var yunMoney = 0;
+            if (ShopConfig.freight_disabled == false && allPrice > 0) {
+              if (ShopConfig.freight_type == 'price') {
+                if (allPrice < ShopConfig.freight_num * 100) {
+                  yunMoney = ShopConfig.freight_price * 100;
+                }
+              } else if (ShopConfig.freight_type == 'weight') {
+                if (weight >= ShopConfig.freight_num) {
+                  yunMoney = ShopConfig.freight_price * 100;
                 }
               }
-              done(null, {
-                allPrice: allPrice,
-                showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
-                count: count,
-                weight: weight,
-                yunMoney: yunMoney,
-                showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
-                totalMoney: yunMoney + allPrice,
-                showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
-                list: list_new
-              });
+            }
+            done(null, {
+              allPrice: allPrice,
+              showAllprice: StringUtil.setPrice(allPrice.toString()) || '0.00',
+              count: count,
+              weight: weight,
+              yunMoney: yunMoney,
+              showYunMoney: StringUtil.setPrice(yunMoney.toString()) || '0.00',
+              totalMoney: yunMoney + allPrice,
+              showTotalMoney: StringUtil.setPrice((yunMoney + allPrice).toString()) || '0.00',
+              list: list_new
             });
+          });
         },
-        couponList:function(done){
-          Shop_member_coupon.find({select:['id','couponName','couponPrice'],where:{memberId:member.memberId,status:0}}).exec(function(e,l){
-            done(null,l);
+        couponList: function (done) {
+          Shop_member_coupon.find({
+            select: ['id', 'couponName', 'couponPrice'],
+            where: {memberId: member.memberId, status: 0}
+          }).exec(function (e, l) {
+            done(null, l);
           });
         }
       }, function (err, result) {
@@ -670,6 +673,22 @@ module.exports = {
       });
     } else {
       return res.redirect('/login');
+    }
+  },
+  //生成订单
+  orderSave: function (req, res) {
+    var ShopConfig = sails.config.system.ShopConfig;
+    var member = req.session.member;
+    if (member && member.memberId > 0) {
+      async.waterfall([function (list,cb) {
+        var y = moment().format('YYMMDD');
+      },function(sn,cb){
+
+      }],function(err,obj){
+
+      });
+    } else {
+      return res.json({code:1,msg:'会员未登录'});
     }
   }
 };
