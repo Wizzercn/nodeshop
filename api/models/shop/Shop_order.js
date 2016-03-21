@@ -74,7 +74,7 @@ module.exports = {
         return 0;
       }
     },
-    //付款状态
+    //付款状态 0 待付款 1已付款 2申请退款 3已退款
     payStatus:{
       type: 'integer',
       defaultsTo: function () {

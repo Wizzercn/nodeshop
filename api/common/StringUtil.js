@@ -154,10 +154,16 @@ module.exports = {
   setPrice: function (str) {
     if (typeof str == 'string' && str.length > 2) {
       return str.substring(0, str.length - 2) + '.' + str.substring(str.length - 2);
+    }else if(typeof str == 'string' && str.length == 2){
+      return '0.'+str;
+    }else if(typeof str == 'string' && str.length == 1){
+      return '0.0'+str;
+    }else if(typeof str == 'string'){
+      return '0.00';
     }
     if (typeof str == 'number') {
       var s = str.toString();
-      return s.substring(0, s.length - 2) + '.' + s.substring(s.length - 2);
+      return this.setPrice(s);
     }
   },
   getInt: function (str) {

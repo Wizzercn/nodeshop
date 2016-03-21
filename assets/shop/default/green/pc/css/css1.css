@@ -1646,8 +1646,8 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 #tip{z-index:1003}
 .oc_pro_bg{z-index:1001;position:fixed;top:0;left:0;width:100%; height:100%; background:#000;
   filter:alpha(opacity=30); opacity:0.3; }
-.oc_pro_m{z-index:1002; width:270px;background:#fff;border:1px solid #dddddd;text-align:center;position:fixed;top:50%;left:50%;margin-left:-135px;margin-top:-100px;border-radius:6px;}
-.oc_pro_a{width:180px;margin:0 auto;line-height:20px;color:#333333;display:block;padding-bottom:20px}
+.oc_pro_m{box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);z-index:1002; width:270px;background:#fff;border:1px solid #dddddd;text-align:center;position:fixed;top:50%;left:50%;margin-left:-135px;margin-top:-100px;border-radius:6px;}
+.oc_pro_a{width:220px;margin:0 auto;line-height:20px;color:#333333;display:block;padding-bottom:20px}
 .oc_pro_b{display:block;color:#FE6000;width:80%;margin:10px auto;height:40px;line-height:40px;font-size:18px;}
 .oc_pro{    width: 50%;
   height: 40px;
@@ -1659,6 +1659,15 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   border-width: 1px 1px medium medium;
   border-style: solid solid none none;
   border-color: #DDD #DDD -moz-use-text-color -moz-use-text-color;
+}
+.oc_pro_close a {
+  position: relative;
+  float: right;
+  font: 30px Arial,"microsoft yahei",sans-serif;
+  color: #444;
+  margin-top: -30px;
+  margin-right: -20px;
+  text-decoration: none;
 }
 .oc_pro:hover{background:#00aa3a;color:#fff;border-radius:0px 0px 0px 3px;}
 .oc_pro1{    width: 50%;
@@ -1776,3 +1785,31 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   text-align: center;
   border: none;
 }
+.btn_shiyong_no {
+  padding: 5px 10px 5px 10px;
+  color: #777;
+  margin: 0 10px 0 0;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  font: 12px Arial,"microsoft yahei",sans-serif;
+}
+.btn_shiyong_yes {
+  padding: 5px 10px 5px 10px;
+  color: #777;
+  margin: 0 10px 0 0;
+  background-color: #ffe4d0;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -khtml-border-radius: 2px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+  font: 12px Arial,"microsoft yahei",sans-serif;
+}
+#sendMsgLi .error{float:left;padding-top: 23px;background:url(../img/error.png) no-repeat 10px 18px; padding-left:32px;}
+

@@ -11,6 +11,8 @@
     <li class="tian7">3、成功提交订单</li>
   </ul>
 </div>
+<%if(order&&order.id>0){%>
+<%if(order.payStatus==0){%>
 <form id="payForm" action="/public/pc/shopcart/pay" id="payForm" target="_blank" method="post">
   <input type="hidden" name="id" value="<%=order.id%>">
   <input type="hidden" name="finishAmount" value="<%=order.finishAmount%>">
@@ -25,53 +27,119 @@
     支付方式：<span>货到付款</span>
     <%}%>
   </li>
-    <li class="g_zhifu" style="display: <%=order.payType=='pay_cash'?'none':';'%>">
+    <li class="g_zhifu" style="display: <%=order.payType=='pay_cash'?'none':'block'%>">
       <%if(ShopConfig.pay_alipay){%>
       <span>
             <!-- 支付宝支付 -->
-            <input value="pay_alipay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_alipay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+            <input value="pay_alipay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_alipay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/alipay.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_wxpay){%>
       <span>
             <!-- 微信支付 -->
-            <input value="pay_wxpay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_wxpay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+            <input value="pay_wxpay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_wxpay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_cash){%>
       <span>
             <!-- 货到付款 -->
-            <input value="pay_cash" name="payType" class="ml20" type="radio" <%=order.payType=='pay_cash'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_cash]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/cash.jpg">
+            <input value="pay_cash" name="payType" class="ml20" type="radio" <%=order.payType=='pay_cash'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_cash]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/cash.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_money){%>
       <span>
             <!-- 余额支付 -->
-            <input value="pay_money" name="payType" class="ml20" type="radio" <%=order.payType=='pay_money'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_money]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/money.jpg">
+            <input value="pay_money" name="payType" class="ml20" type="radio" <%=order.payType=='pay_money'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_money]').attr('checked',true);$('#sendMsgLi').show();" src="<%=CssPath%>/pc/img/public/money.jpg">
         </span>
       <%}%>
     </li>
+  <li style="display: <%=order.payType=='pay_money'?'block':'none'%>;height: 50px;margin-top: 20px;line-height: 22px;font-size: 14px;" class="g_zhifu ml20" id="sendMsgLi">
+    <div style="">
+      <span style="margin-left:30px; color:#333;">帐户余额：</span><span class="score_num" style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>
+    </div>
+    <div style="margin-left:30px;">
+      <span style="float: left"><input placeholder="短信验证码" style="height: 30px;" type="text" id="smscode" maxlength="6" />
+      <input id="btnSms" type="button" class="<%=order.finishAmount<=dbMember.money?'btn_shiyong_yes':'btn_shiyong_no'%>"
+             value="发送验证码" <%-order.finishAmount<=dbMember.money?'onclick="sendMsg()"':''%>/>
+      </span>
+			<span id="smscode_tip" class="error" style="display: <%=order.finishAmount<=dbMember.money?'none':'block'%>">账户余额不足！请先<span><a style="color: red"
+                                                                                                                                     href="/member/pay">充值</a></span>或使用其他支付方式！</span>
 
-
+    </div>
+    <div class="clear"></div>
+  </li>
   <li class="<%=order.payType=='pay_cash'?'xuanze5b':'xuanze5a'%>">
     <%if(order.payType=='pay_cash'){%>
     <input type="button" value="查看订单" class="xuanze5 ml20" onclick="window.location.href='/member/order'">
     <input type="button" value="继续购物" class="xuanze6" onclick="window.location.href='/'">
-    <%}else if(order.payType=='pay_money'){%>
-    <input id="payMoney" type="button" value="立即支付" class="xuanze5 ml20" >
-    <span><a href="/member">稍后支付</a></span>
     <%}else{%>
     <input id="payOnline" type="button" value="立即支付" class="xuanze5 ml20" >
     <span><a href="/member">稍后支付</a></span>
-
     <%}%>
   </li>
 
 </ul>
 </form>
+<%}else{%>
+<ul class="yudd_dm">
+  <li class="g_chengm"><center><img src="<%=CssPath%>/pc/img/icon/g_xiaol.jpg">您已成功支付订单！</center></li>
+  <li class="g_dingdan">订单号：<span><%=order.id%></span>
+    <br>
+    支付金额：<span>&yen;<%=StringUtil.setPrice(order.finishAmount)||'0.00'%></span>
+    <%if(order.payType=='pay_cash'){%>
+    <br>
+    支付方式：<span>货到付款</span>
+    <%}%>
+    <%if(order.payType=='pay_money'){%>
+    <br>
+    支付方式：<span>余额支付</span>
+    <%}%>
+    <%if(order.payType=='pay_alipay'){%>
+    <br>
+    支付方式：<span>支付宝支付</span>
+    <%}%>
+    <%if(order.payType=='pay_wxpay'){%>
+    <br>
+    支付方式：<span>微信支付</span>
+    <%}%>
+  </li>  <li class="xuanze5b">
+    <input type="button" value="查看订单" class="xuanze5 ml20" onclick="window.location.href='/member/order'">
+    <input type="button" value="继续购物" class="xuanze6" onclick="window.location.href='/'">
+
+  </li>
+</ul>
+<%}%>
+<%}else{%>
+<ul class="yudd_dm">
+  <li class="g_chengm">对不起，这不是您的订单，您无权查看。</li>
+</ul>
+<%}%>
+<div id="tip1" style="display: none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a">请您到新打开的支付页面上进行支付，支付完成前请不要关闭当前窗口！</span>
+    <span><input value="已完成支付" type="button" class="oc_pro" onclick="window.location.href='/shopcart/payinfo/<%=order.id%>'" /><input type="button" value="支付遇到问题" class="oc_pro1" onclick="$('#tip1').hide();$('#tip2').show();" /></span>
+  </div>
+</div>
+<div id="tip2" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a">如果您的支付遇到问题，请联系在线客服，或致电客服电话<span style="font-size:14px;line-height: 20px;color: red"><%=SiteConfig.site_tel||''%></span></span>
+    <span><input value="确定" type="button" class="oc_pro" onclick="$('#tip2').hide();"/><input type="button" value="取消" class="oc_pro1"  onclick="$('#tip2').hide();"/></span>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+  </div>
+</div>
 <script>
-  var payType='<%=order.payType||''%>';
-  var orderId='<%=order.id||''%>';
+  var orderId='<%=order.id%>';
 </script>
-<script src="<%=CssPath%>/pc/js/pay.js"></script>
+<script src="<%=CssPath%>/pc/js/order.js"></script>
 <% include common_buttom.ejs %>

@@ -822,8 +822,34 @@ module.exports = {
           });
         }], function (err, order) {
         if (err) {
+          /*订单日志表
+           opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+           opType:admin,member
+           opResult:ok,fail
+           */
+          Shop_order_log.create({orderId:order.id,opTag:'create',opContent:'创建订单',opType:'member',
+            opId:member.memberId,
+            opNickname:member.nickname,
+            opAt:moment().format('X'),
+            opResult:'fail'
+          }).exec(function(el1,ol1){
+
+          });
           return res.json({code: 2, msg: ''});
         } else {
+          /*订单日志表
+           opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+           opType:admin,member
+           opResult:ok,fail
+          */
+          Shop_order_log.create({orderId:order.id,opTag:'create',opContent:'创建订单',opType:'member',
+            opId:member.memberId,
+            opNickname:member.nickname,
+            opAt:moment().format('X'),
+            opResult:'ok'
+          }).exec(function(el1,ol1){
+
+          });
           //订单提交成功则更新优惠券状态  0未使用  1已使用  2已失效
           Shop_member_coupon.update(couponId, {
             status: 1,
@@ -841,7 +867,7 @@ module.exports = {
             }).exec(function (e) {
             });
           });
-          return res.json({code: 0, msg: '订单生成成功'});
+          return res.json({code: 0, msg: '订单生成成功',orderId:order.id});
         }
       });
     } else {
@@ -852,7 +878,6 @@ module.exports = {
     var id = req.params.id || '';
     var member = req.session.member;
     if (member && member.memberId > 0) {
-
       async.parallel({
         //获取cms栏目分类
         channelList: function (done) {
@@ -867,7 +892,7 @@ module.exports = {
           });
         },
         order: function (done) {
-          Shop_order.findOne(id).exec(function (e, o) {
+          Shop_order.findOne({id:id,memberId:member.memberId}).exec(function (e, o) {
             done(null, o);
           });
         },
@@ -891,6 +916,9 @@ module.exports = {
       req.data.r = '/member/order';
       return res.redirect('/login');
     }
+  },
+  sendSms:function(req,res){
+
   }
 
 };

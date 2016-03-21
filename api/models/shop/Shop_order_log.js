@@ -46,6 +46,11 @@ module.exports = {
       defaultsTo: function () {
         return moment().format('X');
       }
+    },
+    opResult:{
+      type:'string',
+      enum: ['ok','fail'],
+      size: 10
     }
 
   }
