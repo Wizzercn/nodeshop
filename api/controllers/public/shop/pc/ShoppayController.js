@@ -12,7 +12,7 @@ module.exports = {
       Shop_member.findOne(member.memberId).exec(function (e2, m) {
         RedisService.get('sms_vercode_' + m.mobile, function (e, o) {
           if (o && smscode == o.toString()) {
-            Shop_order.query("START TRANSACTION;SAVEPOINT ORDER_PAY_"+id+";");
+            //Shop_order.query("START TRANSACTION;SAVEPOINT ORDER_PAY_"+id+";");
             Shop_order.findOne({id: id, memberId: member.memberId}).exec(function (e1, order) {
               if(order.payStatus!=0){
                 return res.json({code: 5, msg: '', orderId: id});
@@ -50,10 +50,10 @@ module.exports = {
                          opResult:ok,fail
                          */
                         //回滚
-                        Shop_order.query("ROLLBACK TO SAVEPOINT ORDER_PAY_"+id+";", function (rerr) {
-                          if (rerr) {
-                            console.log('shopay::' + id + '::' + rerr)
-                          }
+                        //Shop_order.query("ROLLBACK TO SAVEPOINT ORDER_PAY_"+id+";", function (rerr) {
+                        //  if (rerr) {
+                        //    console.log('shopay::' + id + '::' + rerr)
+                        //  }
                           Shop_order_log.create({
                             orderId: order.id, opTag: 'payment', opContent: '订单付款:余额支付', opType: 'member',
                             opId: member.memberId,
@@ -62,7 +62,7 @@ module.exports = {
                             opResult: 'fail'
                           }).exec(function (el1, ol1) {
                           });
-                        });
+                        //});
                         return res.json({code: 4, msg: '付款失败，请重试或联系客服', orderId: id});
                       } else {
                         /*订单日志表
@@ -99,7 +99,7 @@ module.exports = {
                               createdBy: 0,
                               createdAt: moment().format('X')
                             }).exec(function (es, os) {
-                              Shop_order.query("COMMIT;");
+                              //Shop_order.query("COMMIT;");
                               return res.json({code: 0, msg: '付款成功', orderId: id});
                             });
                           });
