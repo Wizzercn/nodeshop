@@ -47,6 +47,7 @@ module.exports.routes = {
   '/member': 'public/shop/pc/member/MemberController.index',
   '/shopcart/list': 'public/shop/pc/ShopcartController.list',
   '/shopcart/buy': 'public/shop/pc/ShopcartController.buy',
+  '/shopcart/order/:id': 'public/shop/pc/ShopcartController.order',
   '/sysadmin': 'private/LoginController.login',
   '/sysadmin/home': 'private/HomeController.index',
   '/test':'/sysadmin'

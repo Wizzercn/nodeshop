@@ -31,16 +31,11 @@ module.exports = {
       }
     },
     orderId: {
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      type: 'string',
+      size:20
     },
     orderAt: {
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      type: 'integer'
     },
     //0未使用  1已使用  2已失效
     status: {

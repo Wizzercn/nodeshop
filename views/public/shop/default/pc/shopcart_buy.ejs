@@ -89,13 +89,13 @@
     <%if(ShopConfig.pay_alipay){%>
         <span>
             <!-- 支付宝支付 -->
-            <input value="pay_alipay" name="payType" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+            <input value="pay_alipay" name="payType" class="ml20" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_wxpay){%>
         <span>
             <!-- 微信支付 -->
-            <input value="pay_wxpay" name="payType" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+            <input value="pay_wxpay" name="payType" class="ml20" type="radio"><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
         </span>
     <%}%>
     <%if(ShopConfig.pay_cash){%>

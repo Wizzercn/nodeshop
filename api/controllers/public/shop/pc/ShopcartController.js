@@ -511,7 +511,7 @@ module.exports = {
     if (member && member.memberId > 0) {
       if (goodsId && productId) {
         Shop_goods_products.findOne({
-          select: ['id', 'spec', 'price', 'weight', 'goodsid'],
+          select: ['id', 'name', 'spec', 'price', 'weight', 'goodsid'],
           where: {disabled: false, id: productId, goodsid: goodsId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -543,25 +543,28 @@ module.exports = {
                     hyprice = obj.price * lv.member_lv.dis_count / 100;
                   }
                 }
-                //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
-                Shop_member_cart.findOne({
-                  memberId: member.memberId,
-                  productId: productId,
-                  goodsId: goodsId
-                }).exec(function (e, o) {
-                  if (o) {
-                    obj.price = hyprice;
-                    Shop_member_cart.update(o.id, obj).exec(function (e1, o1) {
-                      return res.json({code: 0, msg: ''});
-                    });
-                  } else {
-                    obj.memberId = member.memberId;
-                    obj.price = hyprice;
-                    Shop_member_cart.create(obj).exec(function (e2, o2) {
-                      return res.json({code: 0, msg: ''});
+                //将购物车其他商品置为非购买状态
+                Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
+                  //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
+                  Shop_member_cart.findOne({
+                    memberId: member.memberId,
+                    productId: productId,
+                    goodsId: goodsId
+                  }).exec(function (e, o) {
+                    if (o) {
+                      obj.price = hyprice;
+                      Shop_member_cart.update(o.id, obj).exec(function (e1, o1) {
+                        return res.json({code: 0, msg: ''});
+                      });
+                    } else {
+                      obj.memberId = member.memberId;
+                      obj.price = hyprice;
+                      Shop_member_cart.create(obj).exec(function (e2, o2) {
+                        return res.json({code: 0, msg: ''});
 
-                    });
-                  }
+                      });
+                    }
+                  });
                 });
               });
             });
@@ -571,6 +574,7 @@ module.exports = {
         });
       } else {
         var list = req.body.list || [];
+        //将购物车其他商品置为非购买状态
         Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
           var i = 0;
           list.forEach(function (o) {
@@ -699,7 +703,7 @@ module.exports = {
           var count = 0;
           var weight = 0;
           var i = 0;
-          var score=0;
+          var score = 0;
           Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
             //计算会员价
             var lv = {member_lv: olv || {}};
@@ -741,13 +745,19 @@ module.exports = {
                     weight += goods.num * goods.weight;
                     goods.amount = goods.num * goods.price;
                     goods.score = Math.floor(goods.amount / 100);
-                    score+=goods.score;
+                    score += goods.score;
                     Shop_order_goods.create(goods).exec(function (err1, obj1) {
 
                     });
                     i++;
                     if (i == list.length) {
-                      cb(null, {id: orderId, score:score,memberId: member.memberId, goodsAmount: allPrice, weight: weight});
+                      cb(null, {
+                        id: orderId,
+                        score: score,
+                        memberId: member.memberId,
+                        goodsAmount: allPrice,
+                        weight: weight
+                      });
                     }
                   });
                 }
@@ -757,7 +767,6 @@ module.exports = {
         },
         //3.计算运费
         function (order, cb) {
-          console.log('order::'+JSON.stringify(order));
           var yunMoney = 0;
           if (ShopConfig.freight_disabled == false && order.goodsAmount > 0) {
             if (ShopConfig.freight_type == 'price') {
@@ -812,16 +821,24 @@ module.exports = {
             cb(e, order);
           });
         }], function (err, order) {
-        if (err){
+        if (err) {
           return res.json({code: 2, msg: ''});
-        }else {
+        } else {
+          //订单提交成功则更新优惠券状态  0未使用  1已使用  2已失效
+          Shop_member_coupon.update(couponId, {
+            status: 1,
+            orderId: order.id,
+            orderAt: moment().format('X')
+          }).exec(function (e, o) {
+
+          });
           //订单提交成功则删除购物车数据
           list.forEach(function (o) {
             Shop_member_cart.destroy({
               memberId: member.memberId,
               productId: o.productId,
               goodsId: o.goodsId
-            }).exec(function (err) {
+            }).exec(function (e) {
             });
           });
           return res.json({code: 0, msg: '订单生成成功'});
@@ -830,5 +847,50 @@ module.exports = {
     } else {
       return res.json({code: 1, msg: '会员未登录'});
     }
+  },
+  order: function (req, res) {
+    var id = req.params.id || '';
+    var member = req.session.member;
+    if (member && member.memberId > 0) {
+
+      async.parallel({
+        //获取cms栏目分类
+        channelList: function (done) {
+          Cms_channel.getChannel(function (list) {
+            done(null, list);
+          });
+        },
+        //获取所有商品分类
+        allClassList: function (done) {
+          Shop_goods_class.getAllClass(function (list) {
+            done(null, list);
+          });
+        },
+        order: function (done) {
+          Shop_order.findOne(id).exec(function (e, o) {
+            done(null, o);
+          });
+        },
+        member: function (done) {
+          Shop_member.findOne(member.memberId).exec(function (e, o) {
+            done(null, o);
+          });
+        }
+      }, function (err, result) {
+        req.data.channelList = result.channelList || [];
+        req.data.allClassList = result.allClassList || [];
+        req.data.order = result.order || {};
+        req.data.dbMember = result.member || {};
+        req.data.member = member;
+        req.data.StringUtil = StringUtil;
+        req.data.moment = moment;
+        req.data.siteTitle = '成功提交订单_' + req.data.siteTitle;
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_order', req.data);
+      });
+    } else {
+      req.data.r = '/member/order';
+      return res.redirect('/login');
+    }
   }
+
 };

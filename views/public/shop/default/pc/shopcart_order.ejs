@@ -1,0 +1,77 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div class="w1200 shop_f1">
+  <div class="shop_f2">我的购物车</div>
+  <ul class="shop_f">
+    <li class="tian4">1、我的购物车</li>
+    <li class="tian2">2、确认订单信息</li>
+    <li class="tian7">3、成功提交订单</li>
+  </ul>
+</div>
+<form id="payForm" action="/public/pc/shopcart/pay" id="payForm" target="_blank" method="post">
+  <input type="hidden" name="id" value="<%=order.id%>">
+  <input type="hidden" name="finishAmount" value="<%=order.finishAmount%>">
+  <input type="hidden" name="payType" value="<%=order.payType%>">
+<ul class="yudd_dm">
+  <li class="g_chengm"><center><img src="<%=CssPath%>/pc/img/icon/g_xiaol.jpg">您已成功提交订单 <%=order.payType=='pay_cash'?'！':'，请支付 ！'%></center></li>
+  <li class="g_dingdan">订单号：<span><%=order.id%></span>
+    <br>
+    支付金额：<span>&yen;<%=StringUtil.setPrice(order.finishAmount)||'0.00'%></span>
+    <%if(order.payType=='pay_cash'){%>
+    <br>
+    支付方式：<span>货到付款</span>
+    <%}%>
+  </li>
+    <li class="g_zhifu" style="display: <%=order.payType=='pay_cash'?'none':';'%>">
+      <%if(ShopConfig.pay_alipay){%>
+      <span>
+            <!-- 支付宝支付 -->
+            <input value="pay_alipay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_alipay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+        </span>
+      <%}%>
+      <%if(ShopConfig.pay_wxpay){%>
+      <span>
+            <!-- 微信支付 -->
+            <input value="pay_wxpay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_wxpay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+        </span>
+      <%}%>
+      <%if(ShopConfig.pay_cash){%>
+      <span>
+            <!-- 货到付款 -->
+            <input value="pay_cash" name="payType" class="ml20" type="radio" <%=order.payType=='pay_cash'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_cash]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/cash.jpg">
+        </span>
+      <%}%>
+      <%if(ShopConfig.pay_money){%>
+      <span>
+            <!-- 余额支付 -->
+            <input value="pay_money" name="payType" class="ml20" type="radio" <%=order.payType=='pay_money'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_money]').attr('checked',true);" src="<%=CssPath%>/pc/img/public/money.jpg">
+        </span>
+      <%}%>
+    </li>
+
+
+  <li class="<%=order.payType=='pay_cash'?'xuanze5b':'xuanze5a'%>">
+    <%if(order.payType=='pay_cash'){%>
+    <input type="button" value="查看订单" class="xuanze5 ml20" onclick="window.location.href='/member/order'">
+    <input type="button" value="继续购物" class="xuanze6" onclick="window.location.href='/'">
+    <%}else if(order.payType=='pay_money'){%>
+    <input id="payMoney" type="button" value="立即支付" class="xuanze5 ml20" >
+    <span><a href="/member">稍后支付</a></span>
+    <%}else{%>
+    <input id="payOnline" type="button" value="立即支付" class="xuanze5 ml20" >
+    <span><a href="/member">稍后支付</a></span>
+
+    <%}%>
+  </li>
+
+</ul>
+</form>
+<script>
+  var payType='<%=order.payType||''%>';
+  var orderId='<%=order.id||''%>';
+</script>
+<script src="<%=CssPath%>/pc/js/pay.js"></script>
+<% include common_buttom.ejs %>
