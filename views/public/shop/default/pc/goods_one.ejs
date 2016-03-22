@@ -54,7 +54,7 @@
     if(lv.product_lv&&lv.product_lv.price>0){
       hyprice=lv.product_lv.price;
     }else {
-      hyprice = goods.price>100?o.price * lv.member_lv.dis_count / 100:goods.price;
+      hyprice = goods.price>100?goods.price * lv.member_lv.dis_count / 100:goods.price;
 
     }
   }
