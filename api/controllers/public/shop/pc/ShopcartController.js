@@ -419,7 +419,7 @@ module.exports = {
           Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
             //计算会员价
             var lv = {member_lv: olv || {}, product_lv: os || {}};
-            var hyprice = 0;
+            var hyprice = cartObj.price;
             if (lv && lv.member_lv && lv.member_lv.disabled == false) {
               if (lv.product_lv && lv.product_lv.price > 0) {
                 hyprice = lv.product_lv.price;
@@ -535,7 +535,7 @@ module.exports = {
               Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
                 //计算会员价
                 var lv = {member_lv: olv || {}, product_lv: os || {}};
-                var hyprice = 0;
+                var hyprice = obj.price;
                 if (lv && lv.member_lv && lv.member_lv.disabled == false) {
                   if (lv.product_lv && lv.product_lv.price > 0) {
                     hyprice = lv.product_lv.price;
@@ -724,6 +724,7 @@ module.exports = {
                   goods.name = o.name;
                   goods.spec = o.spec;
                   goods.gprice = o.price;
+                  goods.price = o.price;
                   goods.weight = o.weight;
                   Shop_goods_lv_price.findOne({
                     lvid: member.lvId,
@@ -731,7 +732,7 @@ module.exports = {
                     goodsid: obj.goodsId
                   }).exec(function (es, os) {
                     lv.product_lv = os || {};
-                    var hyprice = 0;
+                    var hyprice = o.price;
                     if (lv && lv.member_lv && lv.member_lv.disabled == false) {
                       if (lv.product_lv && lv.product_lv.price > 0) {
                         hyprice = lv.product_lv.price;
@@ -823,6 +824,7 @@ module.exports = {
             cb(e, order);
           });
         }], function (err, order) {
+        sails.log.debug('saveOrder err::'+JSON.stringify(err))
         if (err) {
           /*订单日志表
            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
