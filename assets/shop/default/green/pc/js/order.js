@@ -131,10 +131,11 @@ function wxPay(){
           $("#tip").hide();
         });
       }else{
+        is_wxpay=false;
         $("#tip .oc_pro_a").html("微信支付不可用，请使用其他支付方式");
         $("#tip").show();
         $("#tip .oc_pro").on("click",function(){
-          window.location.reload();
+          $("#tip").hide();
         });
         $("#tip .oc_pro1").on("click",function(){
           $("#tip").hide();
