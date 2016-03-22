@@ -31,31 +31,31 @@
       <%if(ShopConfig.pay_alipay){%>
       <span>
             <!-- 支付宝支付 -->
-            <input value="pay_alipay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_alipay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_alipay]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+            <input value="pay_alipay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_alipay'?'checked':''%>><img style="cursor: pointer" data-id="pay_alipay" src="<%=CssPath%>/pc/img/public/alipay.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_wxpay){%>
       <span>
             <!-- 微信支付 -->
-            <input value="pay_wxpay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_wxpay'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_wxpay]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+            <input value="pay_wxpay" name="payType" class="ml20" type="radio" <%=order.payType=='pay_wxpay'?'checked':''%>><img style="cursor: pointer" data-id="pay_wxpay" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_cash){%>
       <span>
             <!-- 货到付款 -->
-            <input value="pay_cash" name="payType" class="ml20" type="radio" <%=order.payType=='pay_cash'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_cash]').attr('checked',true);$('#sendMsgLi').hide();" src="<%=CssPath%>/pc/img/public/cash.jpg">
+            <input value="pay_cash" name="payType" class="ml20" type="radio" <%=order.payType=='pay_cash'?'checked':''%>><img style="cursor: pointer" data-id="pay_cash" src="<%=CssPath%>/pc/img/public/cash.jpg">
         </span>
       <%}%>
       <%if(ShopConfig.pay_money){%>
       <span>
             <!-- 余额支付 -->
-            <input value="pay_money" name="payType" class="ml20" type="radio" <%=order.payType=='pay_money'?'checked':''%>><img style="cursor: pointer" onclick="$('input[name=payType][value=pay_money]').attr('checked',true);$('#sendMsgLi').show();" src="<%=CssPath%>/pc/img/public/money.jpg">
+            <input value="pay_money" name="payType" class="ml20" type="radio" <%=order.payType=='pay_money'?'checked':''%>><img style="cursor: pointer" data-id="pay_money" src="<%=CssPath%>/pc/img/public/money.jpg">
         </span>
       <%}%>
     </li>
   <li style="display: <%=order.payType=='pay_money'?'block':'none'%>;height: 50px;margin-top: 20px;line-height: 22px;font-size: 14px;" class="g_zhifu ml20" id="sendMsgLi">
     <div style="">
-      <span style="margin-left:30px; color:#333;">帐户余额：</span><span class="score_num" style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>
+      <span style="margin-left:30px; color:#333;">账户余额：</span><span class="score_num" style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>
     </div>
     <div style="margin-left:30px;">
       <span style="float: left"><input placeholder="短信验证码" style="height: 30px;" type="text" id="smscode" maxlength="6" />
@@ -68,7 +68,18 @@
     </div>
     <div class="clear"></div>
   </li>
-  <li class="<%=order.payType=='pay_cash'?'xuanze5b':'xuanze5a'%>">
+  <li id="wxLi" class="xuanze5c" style="height: 200px;display: <%=order.payType=='pay_wxpay'?'block':'none'%>;">
+    <div id="qrCode" style="font-size: 22px;">二维码加载中...</div>
+    <div style="padding-top: 10px;"><img src="<%=CssPath%>/pc/img/public/wxpay_b.png" width="200" height="65"></div>
+  </li>
+  <%if(order.payType=='pay_wxpay'){%>
+  <script>
+    $(function(){
+      wxPay();
+    });
+  </script>
+  <%}%>
+  <li id="payLi" class="<%=order.payType=='pay_cash'?'xuanze5b':'xuanze5a'%>" style="display: <%=order.payType=='pay_wxpay'?'none':'block'%>;">
     <%if(order.payType=='pay_cash'){%>
     <input type="button" value="查看订单" class="xuanze5 ml20" onclick="window.location.href='/member/order'">
     <input type="button" value="继续购物" class="xuanze6" onclick="window.location.href='/'">
@@ -77,7 +88,6 @@
     <span><a href="/member">稍后支付</a></span>
     <%}%>
   </li>
-
 </ul>
 </form>
 <%}else{%>
@@ -140,6 +150,8 @@
 </div>
 <script>
   var orderId='<%=order.id%>';
+
 </script>
+<script src="/plugins/jquery.qrcode.min.js"></script>
 <script src="<%=CssPath%>/pc/js/order.js"></script>
 <% include common_buttom.ejs %>

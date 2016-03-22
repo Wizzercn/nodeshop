@@ -1044,7 +1044,7 @@ a, a:hover {
 .z_guige_five input{width:380px;height:22px;border-radius:0px;padding:0px 5px;height:40px;font-size:12px;margin-left:10px;margin-top:5px;}
 
 /*--------购物车第三步-------*/
-.yudd_dm{width:650px;height:400px;margin:0 auto;}
+.yudd_dm{width:650px;height:550px;margin:0 auto;}
 .g_chengm{width:550px;height:74px;line-height:64px;font-size:30px;margin-left:40px;margin-top:62px;}
 .g_chengm img{margin-right:10px;width:70px;height:70px;}
 .g_dingdan{width:550px;height:80px;line-height:30px;font-size:16px;color:#333333;margin-left:220px;text-align:left;}
@@ -1056,6 +1056,7 @@ a, a:hover {
 .g_zhifu input{margin-top:20px;}
 .xuanze5a a{color: #3366cc; margin-left: 20px;font-size: 16px;padding-top: 20px;line-height: 38px;}
 .xuanze5b{width:350px;height:42px;margin-left:165px;margin-top:30px;}
+.xuanze5c{width:350px;height:42px;margin-left:220px;margin-top:30px;}
 /*------预定步骤-----*/
 .tian1{width:200px;height:28px;line-height:28px;color:#fff;font-size:14px;text-indent:42px;background:url(../img/icon/q_y.jpg) no-repeat center left;margin-left:40px;margin-top:15px;}
 .tian2{width:190px;height:28px;line-height:28px;color:#fff;font-size:14px;text-indent:42px;background:url(../img/public/q_y1.png) no-repeat center left;margin-top:15px;position:relative;left:-15px;}

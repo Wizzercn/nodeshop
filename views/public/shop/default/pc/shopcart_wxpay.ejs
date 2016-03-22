@@ -1,0 +1,19 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div class="w1200 shop_f1">
+  <div class="shop_f2">我的购物车</div>
+  <ul class="shop_f">
+    <li class="tian4">1、我的购物车</li>
+    <li class="tian2">2、确认订单信息</li>
+    <li class="tian7">3、成功提交订单</li>
+  </ul>
+</div>
+
+<script>
+  var orderId='<%=order.id%>';
+</script>
+<script src="<%=CssPath%>/pc/js/order.js"></script>
+<% include common_buttom.ejs %>

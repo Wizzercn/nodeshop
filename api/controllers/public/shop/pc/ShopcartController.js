@@ -424,7 +424,7 @@ module.exports = {
               if (lv.product_lv && lv.product_lv.price > 0) {
                 hyprice = lv.product_lv.price;
               } else {
-                hyprice = cartObj.price * lv.member_lv.dis_count / 100;
+                hyprice = cartObj.price>100?cartObj.price * lv.member_lv.dis_count / 100:cartObj.price;
               }
             }
             //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
@@ -540,7 +540,8 @@ module.exports = {
                   if (lv.product_lv && lv.product_lv.price > 0) {
                     hyprice = lv.product_lv.price;
                   } else {
-                    hyprice = obj.price * lv.member_lv.dis_count / 100;
+                    hyprice = obj.price>100?obj.price * lv.member_lv.dis_count / 100:obj.price;
+
                   }
                 }
                 //将购物车其他商品置为非购买状态
@@ -735,7 +736,8 @@ module.exports = {
                       if (lv.product_lv && lv.product_lv.price > 0) {
                         hyprice = lv.product_lv.price;
                       } else {
-                        hyprice = o.price * lv.member_lv.dis_count / 100;
+                        hyprice = o.price>100?o.price * lv.member_lv.dis_count / 100:o.price;
+
                       }
                       goods.price = hyprice;
                     }
@@ -913,8 +915,7 @@ module.exports = {
         return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_order', req.data);
       });
     } else {
-      req.data.r = '/member/order';
-      return res.redirect('/login');
+      return res.redirect('/login?r=/shopcart/order/'+id);
     }
   },
   sendSms:function(req,res){

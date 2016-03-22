@@ -14,7 +14,7 @@ module.exports = {
           if (o && smscode == o.toString()) {
             //Shop_order.query("START TRANSACTION;SAVEPOINT ORDER_PAY_"+id+";");
             Shop_order.findOne({id: id, memberId: member.memberId}).exec(function (e1, order) {
-              if(order.payStatus!=0){
+              if (order.payStatus != 0) {
                 return res.json({code: 5, msg: '', orderId: id});
               }
               if (m.money >= order.finishAmount) {
@@ -54,14 +54,14 @@ module.exports = {
                         //  if (rerr) {
                         //    console.log('shopay::' + id + '::' + rerr)
                         //  }
-                          Shop_order_log.create({
-                            orderId: order.id, opTag: 'payment', opContent: '订单付款:余额支付', opType: 'member',
-                            opId: member.memberId,
-                            opNickname: member.nickname,
-                            opAt: moment().format('X'),
-                            opResult: 'fail'
-                          }).exec(function (el1, ol1) {
-                          });
+                        Shop_order_log.create({
+                          orderId: order.id, opTag: 'payment', opContent: '订单付款:余额支付', opType: 'member',
+                          opId: member.memberId,
+                          opNickname: member.nickname,
+                          opAt: moment().format('X'),
+                          opResult: 'fail'
+                        }).exec(function (el1, ol1) {
+                        });
                         //});
                         return res.json({code: 4, msg: '付款失败，请重试或联系客服', orderId: id});
                       } else {
@@ -77,32 +77,34 @@ module.exports = {
                           opAt: moment().format('X'),
                           opResult: 'fail'
                         }).exec(function (el1, ol1) {
-                          //余额日志
-                          Shop_member_money_log.create({
-                            memberId: member.memberId,
-                            orderId: order.id,
-                            oldMoney: m.money,
-                            newMoney: m.money - order.finishAmount,
-                            diffMoney: order.finishAmount,
-                            note: '支付订单:' + id,
-                            createdBy: 0,
-                            createdAt: moment().format('X')
-                          }).exec(function (em, om) {
-                            //积分日志
-                            Shop_member_score_log.create({
-                              memberId: member.memberId,
-                              orderId: order.id,
-                              oldScore: m.score,
-                              newScore: m.score - order.score,
-                              diffScore: order.score,
-                              note: '订单:' + id,
-                              createdBy: 0,
-                              createdAt: moment().format('X')
-                            }).exec(function (es, os) {
-                              //Shop_order.query("COMMIT;");
-                              return res.json({code: 0, msg: '付款成功', orderId: id});
-                            });
-                          });
+
+                        });
+                        //余额日志
+                        Shop_member_money_log.create({
+                          memberId: member.memberId,
+                          orderId: order.id,
+                          oldMoney: m.money,
+                          newMoney: m.money - order.finishAmount,
+                          diffMoney: order.finishAmount,
+                          note: '支付订单:' + id,
+                          createdBy: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (em, om) {
+
+                        });
+                        //积分日志
+                        Shop_member_score_log.create({
+                          memberId: member.memberId,
+                          orderId: order.id,
+                          oldScore: m.score,
+                          newScore: m.score - order.score,
+                          diffScore: order.score,
+                          note: '订单:' + id,
+                          createdBy: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (es, os) {
+                          //Shop_order.query("COMMIT;");
+                          return res.json({code: 0, msg: '付款成功', orderId: id});
                         });
                       }
                     });
@@ -129,11 +131,11 @@ module.exports = {
     var member = req.session.member;
     if (member && member.memberId > 0) {
       //更新订单
-      Shop_order.update({id:id,memberId:member.memberId}, {
+      Shop_order.update({id: id, memberId: member.memberId}, {
         payType: 'pay_cash',
         updateAt: moment().format('X')
-      }).exec(function (e,o) {
-        if(e){
+      }).exec(function (e, o) {
+        if (e) {
           /*订单日志表
            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
            opType:admin,member
@@ -147,7 +149,7 @@ module.exports = {
             opResult: 'fail'
           }).exec(function (el1, ol1) {
           });
-        }else {
+        } else {
           /*订单日志表
            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
            opType:admin,member
@@ -164,8 +166,46 @@ module.exports = {
         }
         return res.json({code: 0, msg: ''});
       });
-    }else {
+    } else {
       return res.json({code: 1, msg: ''});
     }
+  },
+  payWxpay: function (req, res) {
+    var id = req.params.id || '';
+    Shop_order.findOne(id).exec(function (e1, order) {
+      WxpayService.init(function (err, wxpay) {
+        if (err) {
+          return res.json({code: 1, msg: ''});
+        } else {
+          wxpay.createUnifiedOrder({
+            body: '订单号:' + id,
+            out_trade_no: id,
+            total_fee: order.finishAmount,
+            spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
+            notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/pc/wxpay/order',
+            trade_type: 'NATIVE',
+            product_id: id
+          }, function (err, result) {
+            sails.log.debug('result::'+JSON.stringify(result));
+            if (err)
+              return res.json({code: 1, msg: ''});
+            if(result.code_url)
+              return res.json({code: 0, msg: '', code_url: result.code_url});
+            return res.json({code: 2, msg: ''});
+          });
+        }
+      });
+
+    });
+  },
+  payStatus:function(req,res){
+    var id = req.params.id || '';
+    Shop_order.find({select:['id','payStatus'],where:{id:id}}).exec(function (e1, order) {
+      if(order.length>0&&order[0].payStatus==1){
+        return res.json({code: 0, msg: ''});
+      }else {
+        return res.json({code: 1, msg: ''});
+      }
+    });
   }
 };

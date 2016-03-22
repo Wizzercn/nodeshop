@@ -5,6 +5,7 @@
   "description": "a Sails shop",
   "keywords": [],
   "dependencies": {
+    "alipay": "0.0.4",
     "async": "~1.5.2",
     "captchapng": "0.0.1",
     "connect-redis": "^3.0.2",
@@ -42,6 +43,7 @@
     "urllib": "^2.8.0",
     "wechat-api": "^1.24.0",
     "wechat-oauth": "^1.1.1",
+    "weixin-pay": "^1.1.6",
     "xml2js": "^0.4.16"
   },
   "scripts": {
