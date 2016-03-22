@@ -234,7 +234,7 @@ module.exports = {
     var type = req.body.type || '';
     var sms = '';
     var member = req.session.member;
-    return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
+    //return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
     if (member && member.memberId > 0) {
       var tmp = sails.config.system.SmsConfig.sms_reg_template;
       if (type == 'join') {
