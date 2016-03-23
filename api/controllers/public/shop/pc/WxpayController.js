@@ -1,4 +1,5 @@
 /**
+ * 微信扫码支付异步通知处理
  * Created by root on 3/21/16.
  */
 var StringUtil = require('../../../../common/StringUtil');

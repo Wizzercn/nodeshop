@@ -5,6 +5,7 @@ var is_sendSMS=false;
 var is_pay=false;
 var is_wxpay=false;
 var timer_wxpay;
+var timer_alipay;
 function sendMsg(){
   if(is_sendSMS){
     $("#smscode_tip").html('<span class="errorn">请勿重复提交</span>');
@@ -103,6 +104,20 @@ function payOnline(){
     $("#payForm").submit();
   }
 }
+function aliPay(){
+  $("#tip1").show();
+  $("#payForm").submit();
+  timer_alipay=setInterval(function(){
+    $.get(
+      "/public/shop/pc/shoppay/payStatus/"+orderId,
+      function(d){
+        if(d.code==0){
+          window.location.reload();
+        }
+      },'json'
+    );
+  },2345);
+}
 function wxPay(){
   if(is_wxpay)
   {
@@ -152,6 +167,9 @@ function binClick(){
   var payType=$('input[name=payType]:checked').val();
   if(timer_wxpay){
     clearInterval(timer_wxpay);
+  }
+  if(timer_alipay){
+    clearInterval(timer_alipay);
   }
   if(payType=='pay_alipay'){
     $('#sendMsgLi').hide();
