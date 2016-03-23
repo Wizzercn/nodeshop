@@ -86,7 +86,7 @@ function getSmscode(){
           $("#vercode").val("");
           $("#vercode").focus();
           $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
-        }if(result.code==2){
+        }else if(result.code==2){
           $("#smscode_tip").html('<span class="errorn">短信未发送成功，请重试</span>');
           $("#smscode_tip").show();
           $("#vercode").val("");

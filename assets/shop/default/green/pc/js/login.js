@@ -108,11 +108,11 @@ $(function(){
             $("#vercode_mobile").val("");
             $("#vercode_mobile").focus();
             $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
-          }if(result.code==2){
-            $("#smscode_tip").html('<span class="errorn">短信未发送成功，请重试</span>');
-            $("#smscode_tip").show();
-            $("#vercode_mobile").val("");
-            $("#vercode_mobile").focus();
+          }else{
+            $("#mobile_tip").html('<span class="errorn">'+result.msg+'</span>');
+            $("#mobile_tip").show();
+            $("#mobile").val("");
+            $("#mobile").focus();
             $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
           }
         },'json'
