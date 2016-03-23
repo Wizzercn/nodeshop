@@ -32,15 +32,14 @@ module.exports.http = {
      * router is invoked by the "router" middleware below.)                     *
      *                                                                          *
      ***************************************************************************/
-    /**
-     * 微信接口
-     * @param req
-     * @param res
-     * @param next
-     */
     rawParser: function (req, res, next) {
+      if (req.url == '/public/shop/pc/alipay/order') {
+        //支付宝异步通知处理
+        req.headers['content-type'] = 'application/x-www-form-urlencoded';
+      }
       switch (req.headers['content-type']) {
         case 'text/xml':
+          //微信回复消息处理
           require('body-parser').raw({type: 'text/xml'})(req, res, next);
           break;
         default :

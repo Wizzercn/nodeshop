@@ -6,19 +6,22 @@ var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   order: function (req, res, next) {
-    AlipayService.initAlipayNotify(function (err, alipayNotify) {
-      if (err||e1) {
+    AlipayService.init(function (err, alipay) {
+      if (err) {
         return res.send("fail");
       } else {
-        alipayNotify.verifyReturn(req.body, function(verify_result){
-          if(verify_result) {//验证成功
+        alipay.create_direct_pay_by_user_notify(req, function(verify_result){
+          sails.log.debug('verify_result::'+verify_result);
+          sails.log.debug('req.body::'+JSON.stringify(req.body));
+          if(verify_result&&req.body.seller_id==alipay.alipay_config.partner) {//验证成功
+
             //商户订单号
             var id = req.body.out_trade_no||'';
             //支付宝交易号
             var trade_no = req.body.trade_no||'';
             //交易状态
             var trade_status = req.body.trade_status||'';
-
+            var buyer_email=req.body.buyer_email||'';
             if(trade_status  == 'TRADE_FINISHED'){
               //交易成功后一个月，支付宝通知finished
               return res.send("success");
@@ -38,7 +41,7 @@ module.exports = {
                         money: order.finishAmount,
                         payType: 'pay_alipay',
                         payName: '支付宝支付',
-                        payAccount: m.nickname,
+                        payAccount: buyer_email,
                         payIp: req.ip,
                         payAt: moment().format('X'),
                         memo: '支付宝支付:￥' + StringUtil.setPrice(order.finishAmount),
@@ -83,23 +86,24 @@ module.exports = {
                                 opId: order.memberId,
                                 opNickname: m.nickname,
                                 opAt: moment().format('X'),
-                                opResult: 'fail'
+                                opResult: 'ok'
                               }).exec(function (el1, ol1) {
 
                               });
                               //积分日志
-                              Shop_member_score_log.create({
-                                memberId: order.memberId,
-                                orderId: order.id,
-                                oldScore: m.score,
-                                newScore: m.score - order.score,
-                                diffScore: order.score,
-                                note: '订单:' + id,
-                                createdBy: 0,
-                                createdAt: moment().format('X')
-                              }).exec(function (es, os) {
-                              });
-
+                              if(order.score>0){
+                                Shop_member_score_log.create({
+                                  memberId: order.memberId,
+                                  orderId: order.id,
+                                  oldScore: m.score,
+                                  newScore: m.score + order.score,
+                                  diffScore: order.score,
+                                  note: '订单:' + id,
+                                  createdBy: 0,
+                                  createdAt: moment().format('X')
+                                }).exec(function (es, os) {
+                                });
+                              }
                               return res.send("success");
                             }
                           });

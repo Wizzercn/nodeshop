@@ -42,10 +42,6 @@ module.exports = {
                       disabled: false,
                       trade_no:transaction_id
                     }).exec(function (e3, o3) {
-                      //更新会员信息 余额 积分
-                      Shop_member.update(order.memberId, {
-                        score: m.score + order.score
-                      }).exec(function (e4, o4) {
                         //更新订单
                         Shop_order.update(id, {
                           payAmount: order.finishAmount,
@@ -53,7 +49,7 @@ module.exports = {
                           payType: 'pay_wxpay',
                           updateAt: moment().format('X')
                         }).exec(function (e5, o5) {
-                          if (e2 || e3 || e4 || e5) {
+                          if (e2 || e3 || e5) {
                             /*订单日志表
                              opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
                              opType:admin,member
@@ -79,27 +75,32 @@ module.exports = {
                               opId: order.memberId,
                               opNickname: m.nickname,
                               opAt: moment().format('X'),
-                              opResult: 'fail'
+                              opResult: 'ok'
                             }).exec(function (el1, ol1) {
 
                             });
-                            //积分日志
-                            Shop_member_score_log.create({
-                              memberId: order.memberId,
-                              orderId: order.id,
-                              oldScore: m.score,
-                              newScore: m.score - order.score,
-                              diffScore: order.score,
-                              note: '订单:' + id,
-                              createdBy: 0,
-                              createdAt: moment().format('X')
-                            }).exec(function (es, os) {
-                            });
+                            if(order.score>0) {
+                              //更新会员信息 余额 积分
+                              Shop_member.update(order.memberId, {
+                                score: m.score + order.score
+                              }).exec(function (e4, o4) {
+                                //积分日志
+                                Shop_member_score_log.create({
+                                  memberId: order.memberId,
+                                  orderId: order.id,
+                                  oldScore: m.score,
+                                  newScore: m.score + order.score,
+                                  diffScore: order.score,
+                                  note: '订单:' + id,
+                                  createdBy: 0,
+                                  createdAt: moment().format('X')
+                                }).exec(function (es, os) {
+                                });
+                              });
+                            }
                             return res.end(util.buildXML({xml: {return_code: 'SUCCESS'}}));
                           }
                         });
-
-                      });
                     });
                   }
                 });

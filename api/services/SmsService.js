@@ -1,7 +1,7 @@
 /**
  * Created by root on 3/8/16.
  */
-TopClient = require('../common/top/topClient').TopClient;
+var TopClient = require('../common/top/topClient').TopClient;
 var client;
 module.exports = {
   sendVercode:function(mobile,param,template,cb){
