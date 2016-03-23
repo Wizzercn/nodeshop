@@ -73,12 +73,12 @@ module.exports = {
       Shop_member_lv.findOne(member.lv_id).exec(function (elv, olv) {
         //计算会员价
         var lv = {member_lv: olv || {}, product_lv: os || {}};
-        var hyprice = 0;
+        var hyprice = cartObj.price;
         if (lv && lv.member_lv && lv.member_lv.disabled == false) {
           if (lv.product_lv && lv.product_lv.price > 0) {
             hyprice = lv.product_lv.price;
           } else {
-            hyprice = cartObj.price * lv.member_lv.dis_count / 100;
+            hyprice = cartObj.price>100?cartObj.price * lv.member_lv.dis_count / 100:cartObj.price;
           }
         }
         async.waterfall([function (cb) {
