@@ -60,10 +60,11 @@ module.exports = {
     var publicCaptcha = req.session.publicCaptcha || '';
     if (vercode == publicCaptcha) {
       Shop_member_account.findOne({
-        login_name: login_name,
-        disabled: false
+        login_name: login_name
       }).populate('memberId').exec(function (err, obj) {
-        if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
+        if (obj&&obj.disabled) {
+          return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
+        }else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
           req.session.member = {
             lvId: obj.memberId.lv_id,
             memberId: obj.memberId.id,
@@ -106,10 +107,11 @@ module.exports = {
     RedisService.get('sms_vercode_' + mobile, function (e, o) {
       if (o && smscode == o.toString()) {
         Shop_member_account.findOne({
-          login_name: mobile,
-          disabled: false
+          login_name: mobile
         }).populate('memberId').exec(function (err, obj) {
-          if (obj) {
+          if (obj&&obj.disabled) {
+            return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
+          }else if (obj) {
             req.session.member = {
               lvId: obj.memberId.lv_id,
               memberId: obj.memberId.id,
@@ -129,8 +131,8 @@ module.exports = {
             Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
               return res.json({code: 0, msg: '登录成功'});
             });
-          } else {
-            return res.json({code: 2, msg: '帐号不存在'});
+          }else {
+            return res.json({code: 2, msg: '用户不存在'});
           }
         });
       } else {
@@ -207,33 +209,62 @@ module.exports = {
     var publicCaptcha = req.session.publicCaptcha || '';
     var code = StringUtil.randomNum(6);
     if (vercode == publicCaptcha) {
-      Shop_member_account.findOne({
-        login_name: mobile,
-        disabled: false
-      }).exec(function (em, om) {
-        if (om) {
-          SmsService.sendVercode(mobile, {
-            code: code,
-            product: sails.config.system.SiteConfig.site_name || 'SunShop'
-          }, tmp, function (result) {
-            if (result) {
-              RedisService.set('sms_vercode_' + mobile, code, 60 * 5, function (e, o) {
-                if (!e) {
-                  Sms_log.create({mobile: mobile, code: code, sms: sms}).exec(function (e1, o1) {
-                  });
-                  return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
-                } else {
-                  return res.json({code: 2, msg: '短信未发送成功，请重试'});
-                }
-              });
-            } else {
-              return res.json({code: 2, msg: '短信未发送成功，请重试'});
-            }
-          });
-        } else {
-          return res.json({code: 3, msg: '用户不存在，请先注册'});
-        }
-      });
+      if(type=='login'){
+        Shop_member_account.findOne({
+          login_name: mobile
+        }).exec(function (em, om) {
+          if (om) {
+            SmsService.sendVercode(mobile, {
+              code: code,
+              product: sails.config.system.SiteConfig.site_name || 'SunShop'
+            }, tmp, function (result) {
+              if (result) {
+                RedisService.set('sms_vercode_' + mobile, code, 60 * 5, function (e, o) {
+                  if (!e) {
+                    Sms_log.create({mobile: mobile, code: code, sms: sms}).exec(function (e1, o1) {
+                    });
+                    return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
+                  } else {
+                    return res.json({code: 2, msg: '短信未发送成功，请重试'});
+                  }
+                });
+              } else {
+                return res.json({code: 2, msg: '短信未发送成功，请重试'});
+              }
+            });
+          } else {
+            return res.json({code: 3, msg: '用户不存在，请先注册'});
+          }
+        });
+      }
+      if(type=='join'){
+        Shop_member_account.findOne({
+          login_name: mobile
+        }).exec(function (em, om) {
+          if (om) {
+            return res.json({code: 3, msg: '用户已存在，请直接登陆'});
+          } else {
+            SmsService.sendVercode(mobile, {
+              code: code,
+              product: sails.config.system.SiteConfig.site_name || 'SunShop'
+            }, tmp, function (result) {
+              if (result) {
+                RedisService.set('sms_vercode_' + mobile, code, 60 * 5, function (e, o) {
+                  if (!e) {
+                    Sms_log.create({mobile: mobile, code: code, sms: sms}).exec(function (e1, o1) {
+                    });
+                    return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
+                  } else {
+                    return res.json({code: 2, msg: '短信未发送成功，请重试'});
+                  }
+                });
+              } else {
+                return res.json({code: 2, msg: '短信未发送成功，请重试'});
+              }
+            });
+          }
+        });
+      }
     } else {
       return res.json({code: 1, msg: '验证码不正确'});
     }

@@ -92,6 +92,12 @@ function getSmscode(){
           $("#vercode").val("");
           $("#vercode").focus();
           $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
+        }else if(result.code==3){
+          $("#mobile_tip").html('<span class="errorn">用户已存在，请直接登陆</span>');
+          $("#mobiletip").show();
+          $("#mobile").val("");
+          $("#mobile").focus();
+          $("#vercode_img").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
         }
       },'json'
     );

@@ -108,8 +108,13 @@ $(function(){
             $("#vercode_mobile").val("");
             $("#vercode_mobile").focus();
             $("#vercode_img_mobile").attr("src","/public/shop/pc/account/captcha?" + new Date().getTime());
-          }else{
-            $("#mobile_tip").html('<span class="errorn">'+result.msg+'</span>');
+          }else if(result.code==2){
+            $("#smscode_tip").html('<span class="errorn">短信未发送成功，请重试</span>');
+            $("#smscode_tip").show();
+            $("#vercode_mobile").val("");
+            $("#vercode_mobile").focus();
+          }else if(result.code==3){
+            $("#mobile_tip").html('<span class="errorn">用户不存在，请先注册</span>');
             $("#mobile_tip").show();
             $("#mobile").val("");
             $("#mobile").focus();
