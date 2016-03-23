@@ -16,10 +16,11 @@ module.exports = {
               appid: o.pay_wxpay_info.wxpay_appid || '',
               mch_id: o.pay_wxpay_info.wxpay_mchid || '',
               partner_key: o.pay_wxpay_info.wxpay_key || '', //微信商户平台API密钥
-              pfx: fs.readFileSync(sails.config.appPath + '/cert/apiclient_cert.p12') //微信商户平台证书
+              pfx: fs.readFileSync(sails.config.appPath + '/cert/wxpay/apiclient_cert.p12') //微信商户平台证书
             });
             cb(null,wxpay);
           } catch (err) {
+            sails.log.debug('WxpayService err::'+JSON.stringify(err));
             cb('error',{});
           }
         } else {

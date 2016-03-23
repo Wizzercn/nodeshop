@@ -172,6 +172,12 @@ module.exports = {
     }
     return parseInt(str);
   },
+  getFloat: function (str) {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
+      return 0;
+    }
+    return parseFloat(str);
+  },
   /**
    * 对数组进行排序
    * @param key

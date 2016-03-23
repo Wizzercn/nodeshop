@@ -170,11 +170,30 @@ module.exports = {
       return res.json({code: 1, msg: ''});
     }
   },
+  payAlipay:function(req,res){
+    var id = req.body.id || '';
+    Shop_order.findOne(id).exec(function (e1, order) {
+      AlipayService.init(function (err, alipay) {
+        if (err||e1) {
+          return res.serverError('支付宝接口异常');
+        } else {
+          var data = {
+            out_trade_no:id
+            ,subject:'订单号:' + id
+            ,total_fee:StringUtil.getFloat(StringUtil.setPrice(order.finishAmount))
+            ,body: '订单号:' + id
+            ,show_url:'http://'+sails.config.system.AppDomain+'/shopcart/order/'+id
+          };
+          return alipay.create_direct_pay_by_user(data, res);
+        }
+      });
+    });
+  },
   payWxpay: function (req, res) {
     var id = req.params.id || '';
     Shop_order.findOne(id).exec(function (e1, order) {
       WxpayService.init(function (err, wxpay) {
-        if (err) {
+        if (err||e1) {
           return res.json({code: 1, msg: ''});
         } else {
           wxpay.createUnifiedOrder({
@@ -207,5 +226,8 @@ module.exports = {
         return res.json({code: 1, msg: ''});
       }
     });
+  },
+  payStatusAlipay:function(req,res){
+    return res.redirect('/member/order');
   }
 };

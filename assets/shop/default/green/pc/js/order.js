@@ -98,6 +98,10 @@ function payOnline(){
       },'json'
     );
   }
+  if(payType=='pay_alipay'){
+    $("#tip1").show();
+    $("#payForm").submit();
+  }
 }
 function wxPay(){
   if(is_wxpay)

@@ -13,10 +13,8 @@
 </div>
 <%if(order&&order.id>0){%>
 <%if(order.payStatus==0){%>
-<form id="payForm" action="/public/pc/shopcart/pay" id="payForm" target="_blank" method="post">
+<form id="payForm" action="/public/shop/pc/shoppay/payAlipay" id="payForm" target="_blank" method="post">
   <input type="hidden" name="id" value="<%=order.id%>">
-  <input type="hidden" name="finishAmount" value="<%=order.finishAmount%>">
-  <input type="hidden" name="payType" value="<%=order.payType%>">
 <ul class="yudd_dm">
   <li class="g_chengm"><center><img src="<%=CssPath%>/pc/img/icon/g_xiaol.jpg">您已成功提交订单 <%=order.payType=='pay_cash'?'！':'，请支付 ！'%></center></li>
   <li class="g_dingdan">订单号：<span><%=order.id%></span>
@@ -129,14 +127,14 @@
   <div class="oc_pro_m">
     <span class="oc_pro_b">提示</span>
     <span class="oc_pro_a">请您到新打开的支付页面上进行支付，支付完成前请不要关闭当前窗口！</span>
-    <span><input value="已完成支付" type="button" class="oc_pro" onclick="window.location.href='/shopcart/payinfo/<%=order.id%>'" /><input type="button" value="支付遇到问题" class="oc_pro1" onclick="$('#tip1').hide();$('#tip2').show();" /></span>
+    <span><input value="已完成支付" type="button" class="oc_pro" onclick="window.location.reload()" /><input type="button" value="支付遇到问题" class="oc_pro1" onclick="$('#tip1').hide();$('#tip2').show();" /></span>
   </div>
 </div>
 <div id="tip2" style="display:none">
   <div class="oc_pro_bg"></div>
   <div class="oc_pro_m">
     <span class="oc_pro_b">提示</span>
-    <span class="oc_pro_a">如果您的支付遇到问题，请联系在线客服，或致电客服电话<span style="font-size:14px;line-height: 20px;color: red"><%=SiteConfig.site_tel||''%></span></span>
+    <span class="oc_pro_a">如果您的支付遇到问题，请使用其他方式支付，或致电客服电话<span style="font-size:14px;line-height: 20px;color: red"><%=SiteConfig.site_tel||''%></span></span>
     <span><input value="确定" type="button" class="oc_pro" onclick="$('#tip2').hide();"/><input type="button" value="取消" class="oc_pro1"  onclick="$('#tip2').hide();"/></span>
   </div>
 </div>
