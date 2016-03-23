@@ -252,8 +252,8 @@ module.exports = {
               Shop_order.findOne(id).exec(function (order_err, order) {
                 if (order) {
                   Shop_member.findOne(order.memberId).exec(function (e2, m) {
-                    if (order.status == 1) {
-                      return res.send("支付成功，您可以关闭此页面~~");
+                    if (order.payStatus == 1) {
+                      return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
                     } else {
                       //更新订单、积分、日志等
                       Shop_history_payments.create({
@@ -325,7 +325,7 @@ module.exports = {
                                 }).exec(function (es, os) {
                                 });
                               }
-                              return res.send("支付成功，您可以关闭此页面~~");
+                              return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
                             }
                           });
 
@@ -342,7 +342,7 @@ module.exports = {
           }
           else {
             //验证失败
-            return res.send("支付失败");
+            return res.send("支付失败，请重新支付，或更换支付方式");
           }
         });
       }

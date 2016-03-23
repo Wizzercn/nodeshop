@@ -31,7 +31,7 @@ module.exports = {
               Shop_order.findOne(id).exec(function (order_err, order) {
                 if (order) {
                   Shop_member.findOne(order.memberId).exec(function (e2, m) {
-                    if (order.status == 1) {
+                    if (order.payStatus == 1) {
                       return res.send("success");
                     } else {
                       //更新订单、积分、日志等
