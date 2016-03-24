@@ -1,6 +1,6 @@
 <ul class="member_cml">
   <li class="member_clogol">
-    <div class="member_clogoli" style="border-radius: 50%;"><img src="<%=CssPath%>/pc/img/hui_logol.jpg" /></div>
+    <div class="member_clogoli" style="border-radius: 50%;cursor: pointer;" onclick="window.location.href='/member'"><img src="<%=CssPath%>/pc/img/hui_logol.jpg" /></div>
     <div class="member_clogolf">
       <span style="font-size: 18px;text-align: center"><%=member.nickname%></span>
       <span style="text-align: center">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</span>
@@ -8,7 +8,7 @@
   </li>
   <li class="per-navs">
     <p class="per-titles">订单管理</p>
-    <a href="/shopcart/list" class="per-link">我的购物车</a>
+    <a href="/shopcart/list" target="_blank" class="per-link">我的购物车</a>
     <a href="/member/order" class="per-link">我的订单</a>
   </li>
   <li class="per-navs">

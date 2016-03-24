@@ -104,10 +104,10 @@ module.exports = {
                             createdBy: 0,
                             createdAt: moment().format('X')
                           }).exec(function (es, os) {
-                            //Shop_order.query("COMMIT;");
-                            return res.json({code: 0, msg: '付款成功', orderId: id});
+
                           });
                         }
+                        return res.json({code: 0, msg: '付款成功', orderId: id});
                       }
                     });
 

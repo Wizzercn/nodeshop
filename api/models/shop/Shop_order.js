@@ -255,5 +255,70 @@ module.exports = {
         return cb(sn);
       }
     });
+  },
+  getPageList: function (pageSize, start, where, sort, cb) {
+    var page = Math.floor(start / pageSize) + 1;
+    Shop_order.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        var next = 0;
+        if ((start + pageSize) < count)next = start + pageSize;
+        var totalPage = Math.floor(count / pageSize);
+        if (totalPage == 0 || count % pageSize != 0) {
+          totalPage++;
+        }
+        Shop_order.find({
+            sort: sort,
+            where: where
+          })
+          .populate('goods', {sort: {productId: 'asc'}})
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            cb({
+              "size": pageSize,
+              "total": count,
+              "next": next,
+              "page": page,
+              "totalPage": totalPage,
+              "data": list
+            });
+          });
+      } else {
+        cb({
+          "size": pageSize,
+          "total": 0,
+          "next": 0,
+          "page": 1,
+          "totalPage": 1,
+          "data": []
+        });
+      }
+    });
+  },
+  enumStatus:function(s){
+    var arr= new Array();
+    arr['active']='活动订单';
+    arr['dead']='已作废';
+    arr['finish']='已完成';
+    return arr[s];
+  },
+  enumPayStatus:function(s){
+    var arr= new Array();
+    arr[0]='未支付';
+    arr[1]='已支付';
+    arr[2]='已付款至到担保方';
+    arr[3]='部分付款';
+    arr[4]='部分退款';
+    arr[5]='全额退款';
+    return arr[s];
+  },
+  enumShipStatus:function(s){
+    var arr= new Array();
+    arr[0]='未发货';
+    arr[1]='已发货';
+    arr[2]='部分发货';
+    arr[3]='部分退货';
+    arr[4]='已退货';
+    return arr[s];
   }
+
 };

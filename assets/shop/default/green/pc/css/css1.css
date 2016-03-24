@@ -851,7 +851,7 @@ a, a:hover {
 
 
 /*会员中心订单部分table*/
-.t_main{width:916px;border:1px solid #ddd;}
+.t_main{width:918px;border:1px solid #ddd;}
 .t_second td:nth-child(2){width:83px;text-align:center;text-align:-moz-center;}
 .t_second td:nth-child(3){width:83px;text-align:center;text-align:-moz-center;}
 .t_second td:nth-child(4){width:83px;text-align:center;text-align:-moz-center;}
@@ -862,7 +862,7 @@ a, a:hover {
 .bor_o1{display:inline-block;padding:3px 10px;border-radius:3px;}
 .t_main tr{border-right:1px solid #dddddd;}
 .t_main td{border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;}
-.t_table_m{width:918px;margin-left:20px;margin-top:20px;}
+.t_table_m{width:918px;margin-left:20px;margin-top:1px;}
 
 
 /*--------订单部分-------*/
@@ -1823,3 +1823,36 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .per-linkon{color:#fe6000;font-size:14px;}
 .per-navs{width:100%;border-bottom:1px solid #ddd;overflow:hidden;padding-bottom:10px;}
 .per-titles{border-bottom:1px solid #ddd;color:#000;font-size:15px;height:40px;line-height:40px;text-indent:16px;font-weight:bold;}
+
+
+.member_index_top{
+  width: 889px;
+  height: 155px;
+  border: 1px solid #e0e0e0;
+  border-right: none;
+  margin-left: 20px;
+  margin-top: 20px;
+}
+.member_index_top ul{
+  border-right: 1px solid #e0e0e0;
+  float: left;
+  height: 153px;
+  width: 222px;
+}
+.member_index_top .ul2 li{
+  text-align: center;
+  color: #555;
+  margin-top: 20px;
+  line-height: 20px;
+  font-size: 14px;
+  font-family: "微软雅黑",Tahoma,Arial;
+}
+.member_index_top .ul2 li a {
+  width: 84px;
+  line-height: 34px;
+  background: #e17083;
+  border-radius: 3px;
+  height: 34px;
+  display: inline-block;
+  color: #fff;
+}

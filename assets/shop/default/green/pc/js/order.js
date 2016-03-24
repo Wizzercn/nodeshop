@@ -41,17 +41,18 @@ function sendMsg(){
 }
 function payOnline(){
   var payType=$('input[name=payType]:checked').val();
+  alert('payType::'+payType+' is_pay::'+is_pay);
   if(payType=='pay_money'){
     if(is_pay){
       return false;
     }
-    is_pay=true;
     if($("#smscode").val().length!=6){
       $("#smscode_tip").html('<span class="errorn">请输入短信验证码</span>');
       $("#smscode_tip").show();
       $("#smscode").focus();
       return false;
     }
+    is_pay=true;
     $("#smscode_tip").hide();
     $.post(
       "/public/shop/pc/shoppay/payMoney/"+orderId,
