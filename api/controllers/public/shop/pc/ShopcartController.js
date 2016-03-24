@@ -704,7 +704,6 @@ module.exports = {
           var count = 0;
           var weight = 0;
           var i = 0;
-          var score = 0;
           Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
             //计算会员价
             var lv = {member_lv: olv || {}};
@@ -751,7 +750,6 @@ module.exports = {
                     weight += goods.num * goods.weight;
                     goods.amount = goods.num * goods.price;
                     goods.score = Math.floor(goods.amount / 100);
-                    score += goods.score;
                     Shop_order_goods.create(goods).exec(function (err1, obj1) {
 
                     });
@@ -759,7 +757,6 @@ module.exports = {
                     if (i == list.length) {
                       cb(null, {
                         id: orderId,
-                        score: score,
                         memberId: member.memberId,
                         goodsAmount: allPrice,
                         weight: weight
@@ -797,6 +794,7 @@ module.exports = {
             }
             order.discountAmount = discountAmount;
             order.finishAmount = order.goodsAmount + order.freightAmount - discountAmount;
+            order.score=Math.floor(order.finishAmount / 100);
             cb(null, order);
           });
         },

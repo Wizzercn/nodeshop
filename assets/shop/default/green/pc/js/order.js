@@ -41,7 +41,6 @@ function sendMsg(){
 }
 function payOnline(){
   var payType=$('input[name=payType]:checked').val();
-  alert('payType::'+payType+' is_pay::'+is_pay);
   if(payType=='pay_money'){
     if(is_pay){
       return false;

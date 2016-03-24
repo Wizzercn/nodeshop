@@ -44,10 +44,10 @@ function list(type,start){
             $.each(o.goods,function(j,goods) {
               str += '<tr class="t_second">' +
                 '<td>' +
-                '<a href="#"><dl class="member_cdss">' +
+                '<dl class="member_cdss">' +
                 '<dt><img src="'+goods.imgurl+'?type=s"></dt>' +
-                '<dd><p>'+goods.name+'</p></dd>' +
-                '</dl></a>' +
+                '<dd><p><a href="/goods/'+goods.goodsId+'" target="_blank">'+goods.name+'</a></p></dd>' +
+                '</dl>' +
                 '</td>' +
                 '<td><span class="number_text">'+goods.num+'</span></td>' +
                 '<td><span class="number_text">'+setPrice(goods.price)+'</span></td>';
@@ -61,9 +61,9 @@ function list(type,start){
                   }
                   if(o.shipStatus==0) {
                     //未支付并且未发货，可以取消订单（注意：货到付款也是未支付状态）
-                    str += '<a href="javascript:dead(\"' + o.id + '\")" class="mo-del">取消</a>';
+                    str += '<a href="javascript:dead(\'' + o.id + '\')" class="mo-del">取消</a>';
                   }else {
-                    str+='<a href="javascript:finish(\"' + o.id + '\")" class="bor_o bg00aa30 mt10">确认收货</a>';
+                    str+='<a href="javascript:finish(\'' + o.id + '\')" class="bor_o bg00aa30 mt10">确认收货</a>';
                   }
                   str+='</td>';
                 }
@@ -89,6 +89,79 @@ function list(type,start){
       }
     }
   });
+}
+function finish(id){
+  $("#tip .oc_pro_a").html("确定收货？");
+  $("#tip").show();
+  $("#tip input[type=button]").eq(0).on("click",function(){
+    $.ajax({
+      type: "GET",
+      url: "/public/shop/pc/member/order/finish/" +id,
+      dataType: "json",
+      success: function (data) {
+        if(data.code==0){
+          $("#tip .oc_pro_a").html("操作成功");
+          $("#tip").show();
+          list('ship');
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+        }else {
+          $("#tip .oc_pro_a").html(data.msg);
+          $("#tip").show();
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+        }
+      }
+    });
+  });
+  $("#tip input[type=button]").eq(1).on("click",function(){
+    $("#tip").hide();
+  });
+
+}
+function dead(id){
+  $("#tip .oc_pro_a").html("确定取消订单？");
+  $("#tip").show();
+  $("#tip input[type=button]").eq(0).on("click",function(){
+    $.ajax({
+      type: "GET",
+      url: "/public/shop/pc/member/order/dead/" +id,
+      dataType: "json",
+      success: function (data) {
+        if(data.code==0){
+          $("#tip .oc_pro_a").html("操作成功");
+          $("#tip").show();
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            window.location.reload();
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            window.location.reload();
+          });
+        }else {
+          $("#tip .oc_pro_a").html(data.msg);
+          $("#tip").show();
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+        }
+      }
+    });
+  });
+  $("#tip input[type=button]").eq(1).on("click",function(){
+    $("#tip").hide();
+  });
+
 }
 $(function(){
   list('nopay');

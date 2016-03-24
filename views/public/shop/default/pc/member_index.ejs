@@ -25,12 +25,12 @@
       </ul>
       <ul class="ul2">
         <li>优惠券</li>
-        <li>0</li>
+        <li><%=couponNum%></li>
         <li><a href="/member/coupon">查看优惠券</a></li>
       </ul>
       <ul class="ul2">
         <li>订单</li>
-        <li>0</li>
+        <li><%=orderNum%></li>
         <li><a href="/member/order">查看订单</a></li>
       </ul>
     </div>
@@ -61,6 +61,14 @@
         </div>
       </div></div>
     </div>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
 <script src="<%=CssPath%>/pc/js/member_index.js"></script>
