@@ -794,7 +794,7 @@ module.exports = {
             }
             order.discountAmount = discountAmount;
             order.finishAmount = order.goodsAmount + order.freightAmount - discountAmount;
-            order.score=Math.floor(order.finishAmount / 100);
+            order.score=Math.floor((order.finishAmount-order.freightAmount) / 100);
             cb(null, order);
           });
         },
