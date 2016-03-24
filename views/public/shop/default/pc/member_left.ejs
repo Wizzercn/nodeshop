@@ -1,0 +1,28 @@
+<ul class="member_cml">
+  <li class="member_clogol">
+    <div class="member_clogoli" style="border-radius: 50%;"><img src="<%=CssPath%>/pc/img/hui_logol.jpg" /></div>
+    <div class="member_clogolf">
+      <span style="font-size: 18px;text-align: center"><%=member.nickname%></span>
+      <span style="text-align: center">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</span>
+    </div>
+  </li>
+  <li class="per-navs">
+    <p class="per-titles">订单管理</p>
+    <a href="/shopcart/list" class="per-link">我的购物车</a>
+    <a href="/member/order" class="per-link">我的订单</a>
+  </li>
+  <li class="per-navs">
+    <p class="per-titles">我的账户</p>
+    <a href="/member/money" class="per-link">我的余额</a>
+    <a href="/member/pay" class="per-link">在线充值</a>
+    <a href="/member/score" class="per-link">积分明细</a>
+    <a href="/member/coupon" class="per-link">优惠券</a>
+  </li>
+  <li class="per-navs">
+    <p class="per-titles">我的个人信息</p>
+    <a href="/member/profile" class="per-link">基本信息</a>
+    <a href="/member/address" class="per-link">收货地址</a>
+    <a href="/member/password" class="per-link">修改密码</a>
+  </li>
+
+</ul>

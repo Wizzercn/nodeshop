@@ -13,10 +13,8 @@ module.exports = {
       primaryKey: true
     },
     lv_id:{
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      model: 'Shop_member_lv',
+      index:true
     },
     nickname:{
       type: 'string'

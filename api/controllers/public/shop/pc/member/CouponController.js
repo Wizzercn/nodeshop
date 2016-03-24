@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/10/16.
+ * Created by root on 3/23/16.
  */
 var StringUtil = require('../../../../../common/StringUtil');
 var moment = require('moment');
@@ -34,7 +34,7 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.siteTitle='会员中心_'+req.data.siteTitle;
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_index', req.data);
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_coupon', req.data);
 
     });
   }
