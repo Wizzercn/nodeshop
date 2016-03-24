@@ -825,7 +825,7 @@ a, a:hover {
 .member_cds{width:292px;height:auto;float:left;border-right:1px solid #dddddd;}
 .member_cdsf{width:290px;height:39px;text-align:center;line-height:39px;color:#221815;}
 .member_cdsf1{width:82px;height:39px;text-align:center;line-height:39px;color:#221815;}
-.member_cdss{width:290px;height:97px;border-bottom:1px solid #ddd;}
+.member_cdss{width:290px;height:97px;}
 .t_second a:last-child .member_cdss{border-bottom:none;}
 .member_cdss dt{width:85px;height:97px;float:left;display:block;}
 .member_cdss dt img{width:59px;height:59px;display:block;margin:20px auto;}

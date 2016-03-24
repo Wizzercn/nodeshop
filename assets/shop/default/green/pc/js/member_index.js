@@ -56,7 +56,7 @@ function list(type,start){
                   '<td rowspan="' + o.goods.length + '">' + enumPayStatus[o.payStatus] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">' + enumStatus[o.status] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">';
-                  if(o.payType!='pay_cash'){
+                  if(o.payStatus==0&&o.payType!='pay_cash'){
                   str+='<a href="/shopcart/order/'+ o.id+'" target="_blank" class="bor_o bg00aa30 mt10">去支付</a>';
                   }
                   if(o.shipStatus==0) {
