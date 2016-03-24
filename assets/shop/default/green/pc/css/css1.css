@@ -809,8 +809,8 @@ a, a:hover {
 .member_cr{width:950px;height:auto;border-left:1px solid #dddddd;float:left;min-height:800px;}
 .member_crf{width:920px;height:40px;border-bottom:2px solid #dddddd;margin-left:20px;margin-top:10px;line-height:40px;font-size:16px;}
 .member_crf img{margin-right:10px;margin-top:10px;}
-.member_crs{width:920px;height:auto;margin-top:20px;margin-left:20px;}
-.member_crs a{width:128px;height:38px;border:1px solid #dddddd;display:block;float:left;margin-right:10px;text-align:center;line-height:38px;border-radius:3px;font-size:14px;}
+.member_crs{position:relative;top:1px;width:920px;height:auto;margin-top:20px;margin-left:20px;}
+.member_crs a{width:128px;height:38px;border:1px solid #dddddd;display:block;float:left;margin-right:10px;text-align:center;line-height:38px;border-radius:3px 3px 0 0;font-size:14px;}
 .member_crs a i{color:#ce0020;font-size:16px;font-weight:600;}
 .member_crsi{color:#fff;width:128px;height:38px;border:none !important;text-align:center;line-height:38px;font-size:14px;}
 .member_crsi:hover{color:#fff;}
@@ -824,7 +824,7 @@ a, a:hover {
 .member_cdf span{color:#999999;margin-left:20px;}
 .member_cds{width:292px;height:auto;float:left;border-right:1px solid #dddddd;}
 .member_cdsf{width:290px;height:39px;text-align:center;line-height:39px;color:#221815;}
-.member_cdsf1{width:83px;height:39px;text-align:center;line-height:39px;color:#221815;}
+.member_cdsf1{width:82px;height:39px;text-align:center;line-height:39px;color:#221815;}
 .member_cdss{width:290px;height:97px;border-bottom:1px solid #ddd;}
 .t_second a:last-child .member_cdss{border-bottom:none;}
 .member_cdss dt{width:85px;height:97px;float:left;display:block;}
@@ -839,8 +839,8 @@ a, a:hover {
 .member_cdfof{width:102px;text-align:center;line-height:90px;float:left;}
 .member_cdfoj{width:100%;text-align:center;line-height:90px;}
 .member_cdfof a{color:#ce0020;}
-.member_cdsfg{width:100px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
-.member_cdsfg1{width:154px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
+.member_cdsfg{width:82px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
+.member_cdsfg1{width:153px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
 .member_cdfi{width:95px;height:auto;float:left;}
 .member_cdsix{width:159px;height:auto;float:left;}
 .payment{color:#027cc9 !important;margin-right:5px;}
@@ -862,13 +862,14 @@ a, a:hover {
 .bor_o1{display:inline-block;padding:3px 10px;border-radius:3px;}
 .t_main tr{border-right:1px solid #dddddd;}
 .t_main td{border-bottom:1px solid #dddddd;border-right:1px solid #dddddd;}
-.t_table_m{width:918px;margin-left:20px;margin-top:1px;}
+.t_table_m{width:918px;margin-left:20px;padding-top: 1px;}
+.t_table_t{width:918px;margin-left:20px;}
 
 
 /*--------订单部分-------*/
-.content{ overflow:hidden;}
+.content{ overflow:hidden;position:relative;z-index: 2;}
 .content .contentl{display:none;}
-.order_f{width:940px;height:auto;margin-top:20px;}
+.order_f{width:940px;height:auto;}
 .order_f1{width:916px;height:35px;line-height:35px;border-bottom:1px solid #dddddd;}
 .order_f1 span{margin-left:20px;}
 .order_4m{width:649px;height:auto;border-right:1px solid #dddddd;float:left;}
@@ -1856,3 +1857,7 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
   display: inline-block;
   color: #fff;
 }
+
+
+/*删除*/
+.mo-del{display:inline-block;background:#eee;width:65px;height:28px;border:1px solid #ddd;line-height:26px;border-radius:3px;}

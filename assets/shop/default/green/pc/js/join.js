@@ -48,7 +48,7 @@ function checkLoginname(){
       "/public/shop/pc/account/checkLoginname/"+self.val(),
       function(result){
         if(result.code==1){
-          $("#mobile_tip").html('<span class="errorn">帐号已存在，请更换号码注册</span>');
+          $("#mobile_tip").html('<span class="errorn">用户已存在，请更换号码注册</span>');
           $("#mobile_tip").show();
         }
       },'json'

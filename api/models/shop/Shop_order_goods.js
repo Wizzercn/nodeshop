@@ -85,6 +85,9 @@ module.exports = {
         return 0;
       }
     },
+    imgurl:{
+      type:'string'
+    },
     createAt:{
       type:'integer',
       defaultsTo:function(){

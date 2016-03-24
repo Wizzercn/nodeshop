@@ -712,6 +712,8 @@ module.exports = {
               Shop_goods_products.findOne({
                 select: ['id', 'name', 'gn', 'spec', 'price', 'weight', 'goodsid'],
                 where: {disabled: false, id: obj.productId, goodsid: obj.goodsId}
+              }).populate('goodsid', {
+                select: ['id', 'imgurl']
               }).exec(function (e, o) {
                 if (o) {
                   var goods = {};
@@ -726,6 +728,7 @@ module.exports = {
                   goods.gprice = o.price;
                   goods.price = o.price;
                   goods.weight = o.weight;
+                  goods.imgurl= o.goodsid.imgurl;
                   Shop_goods_lv_price.findOne({
                     lvid: member.lvId,
                     productId: obj.productId,

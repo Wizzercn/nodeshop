@@ -34,17 +34,17 @@
         <li><a href="/member/order">查看订单</a></li>
       </ul>
     </div>
-    <div class="lanrenzhijiam">
+    <div >
       <ul class="member_crs">
-        <li class="cf2"><a href="###" class="member_crsi">未支付</a>
-          <a href="###">已发货</a>
+        <li class="cf2"><a href="javascript:list('nopay');" class="member_crsi">未支付</a>
+          <a  href="javascript:list('ship');">已发货</a>
       </ul>
     <div class="content">
       <div class="contentl" style="display:block;">
         <div class="order_f cf clear">
-          <div class="t_table_m">
+          <div class="t_table_t">
             <table class="t_main">
-              <tr><td><div class="member_cdsf">商品信息</div></td>
+              <tr class="t_second"><td><div class="member_cdsf">商品信息</div></td>
                 <td><div class="member_cdsf1">数量</div></td>
                 <td><div class="member_cdsf1">单价（元）</div></td>
                 <td><div class="member_cdsfg">实付款（元）</div></td>
@@ -54,31 +54,14 @@
               </tr>
               </table>
            </div>
-          <div class="t_table_m">
-            <div class="member_cdf">订单编号：811261556139650<span>  下单时间：2015-11-26 15:11:13</span></div>
-            <table class="t_main">
-              <tr class="t_second">
-                <td>
-                  <a href="#"><dl class="member_cdss">
-                      <dt><img src="img/chan4.jpg"></dt>
-                      <dd><p>田园日志白薏仁米<br>纯手工加工</p></dd>
-                    </dl></a>
-                </td>
-                <td><span class="number_text">1</span></td>
-                <td><span class="number_text">&yen;12.00</span></td>
-                <td>&yen;12.00</td>
-                <td>支付宝 </td>
-                <td> 未付款</td>
-                <td>
-                  <a href="#" class="bor_o bg00aa30 mt10">去支付</a>
-                </td>
-              </tr>
+          <div id="list" style="margin-bottom: 20px;">
 
-            </table>
           </div>
+          <div class="s_page cf clear tcdPageCode"></div>
         </div>
       </div></div>
     </div>
   </div>
 </div>
+<script src="<%=CssPath%>/pc/js/member_index.js"></script>
 <% include common_buttom.ejs %>

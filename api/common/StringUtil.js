@@ -129,7 +129,7 @@ module.exports = {
    * @returns {*}
    */
   getPrice: function (str) {
-    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null' || str == 'undefined') {
       return 0;
     }
     if (str.indexOf('.') > 0) {
@@ -165,15 +165,16 @@ module.exports = {
       var s = str.toString();
       return this.setPrice(s);
     }
+    return '0.00';
   },
   getInt: function (str) {
-    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null' || str == 'undefined') {
       return 0;
     }
     return parseInt(str);
   },
   getFloat: function (str) {
-    if (typeof str == 'undefined' || str == '' || str == null || str == 'null') {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null' || str == 'undefined') {
       return 0;
     }
     return parseFloat(str);
