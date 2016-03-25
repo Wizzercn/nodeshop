@@ -60,7 +60,7 @@
   }
   %>
 
-  <div style="display: none;" <%if(goods&&!goods.is_spec){%>class="top-float-menu-placeholder"<%}%>>
+  <div style="display: none;" <%if(goods&&!goods.is_spec&&ShopConfig.list_quick_buy){%>class="top-float-menu-placeholder"<%}%>>
     <div class="top-float-menu-panel">
       <div class="top-float-menu">
         <ul>

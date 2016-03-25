@@ -40,7 +40,7 @@ var link=bannerLink.links[0];
       <a href="/goods/<%=hotgoods.id%>" target="_blank"><li class="k_hotcf1a"><%=hotgoods.name%></li></a>
       <li class="<%=len>22?'pro_discript_min':'pro_discript'%>"><%=hotgoods.info||''%></li>
       <li class="k_hotcf1d"><span><i>&yen;<%=StringUtil.setPrice(hotgoods.price)%></i><br><del>&yen;<%=StringUtil.setPrice(hotgoods.priceMarket)%></del></span>
-        <%if(!hotgoods.is_spec){%><input onclick="addToCarShop(this,'<%=hotgoods.id%>','')" type="button" value="加入购物车"><%}%></li>
+        <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><input onclick="addToCarShop(this,'<%=hotgoods.id%>','')" type="button" value="加入购物车"><%}%></li>
 
     </ul>
     <%});%>

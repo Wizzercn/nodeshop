@@ -44,7 +44,7 @@
               if(o.info&& o.info.length>22){
                 css='pro_discript_min';
               }
-              if(!o.is_spec){
+              if(!o.is_spec&&list_quick_buy){
                 btn='<input onclick="addToCarShop(this,\''+ o.id+'\',\'\')" type="button" value="加入购物车">';
               }
               var s='<ul class="k_hotcf1 fl ml20" data-goods-id="'+o.id+'" data-goods-name="'+ o.name+'"  data-goods-price="'+setPrice(o.price)+'" data-goods-imgurl="'+o.imgurl+'?type=s">'+
