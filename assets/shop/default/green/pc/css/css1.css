@@ -1256,6 +1256,9 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 
 .asset_f{width:300px;height:40px;line-height:40px;float:left;}
 .asset_f span{font-size:16px;}
+.asset_mf{width:300px;height:40px;line-height:40px;float:left;}
+.asset_mf span{font-size:16px;}
+.asset_mf input{height: 30px;width: 150px;}
 .asset_f1{width:300px;float:left;height:35px;line-height:36px;color:#999; text-align:right;font-size:12px;}
 .asset_f2{width:920px;height:40px;line-height:38px;border:1px solid #dddddd;margin-top:20px;}
 .asset_f3{width:185px;height:38px;line-height:38px;text-align:center;border-right:1px solid #dddddd;float:left;margin-right:10px}

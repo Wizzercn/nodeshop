@@ -1,0 +1,67 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
+  </div>
+</div>
+<div class="member_cm clear cf">
+<% include member_left.ejs %>
+  <div class="member_cr">
+  <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />我的余额</div>
+    <div class="youhuiq">
+      <div class="asset_s"><div class="asset">
+          <div class="asset_mf">充值金额：<input type="text" id="money" maxlength="8">元</div>
+        </div>
+      </div>
+    <div>
+    <div class="content">
+      <div class="contentl" style="display:block;">
+        <div class="order_f cf clear">
+
+          <li class="g_zhifu" style="margin-top: 20px;">
+            <%if(ShopConfig.pay_alipay){%>
+            <span>
+            <!-- 支付宝支付 -->
+            <input value="pay_alipay" name="payType" class="ml20" type="radio" ><img style="cursor: pointer" data-id="pay_alipay" src="<%=CssPath%>/pc/img/public/alipay.jpg">
+        </span>
+            <%}%>
+            <%if(ShopConfig.pay_wxpay){%>
+            <span>
+            <!-- 微信支付 -->
+            <input value="pay_wxpay" name="payType" class="ml20" type="radio" ><img style="cursor: pointer" data-id="pay_wxpay" src="<%=CssPath%>/pc/img/public/wxpay.jpg">
+        </span>
+            <%}%>
+
+          </li>
+          <li class="g_zhifu">
+            <input id="payOnline" type="button" value="立即支付" class="xuanze5 ml20">
+          </li>
+        </div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div id="tip1" style="display: none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a">请您到新打开的支付页面上进行支付，支付完成前请不要关闭当前窗口！</span>
+    <span><input value="已完成支付" type="button" class="oc_pro" onclick="window.location.href='/member/money'" /><input type="button" value="支付遇到问题" class="oc_pro1" onclick="$('#tip1').hide();" /></span>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+  </div>
+</div>
+<script src="<%=CssPath%>/pc/js/member_pay.js"></script>
+<% include common_buttom.ejs %>

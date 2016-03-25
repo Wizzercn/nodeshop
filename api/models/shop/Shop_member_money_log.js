@@ -34,6 +34,11 @@ module.exports = {
     diffMoney:{
       type: 'integer'
     },
+    //交易单据号
+    trade_no:{
+      type:'string',
+      size:100
+    },
     note:{
       type:'string',
       size:255

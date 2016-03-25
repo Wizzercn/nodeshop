@@ -248,96 +248,125 @@ module.exports = {
               return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
             }
             else if(trade_status == 'TRADE_SUCCESS'){
-              //交易成功后更新订单、积分、会员等
-              Shop_order.findOne(id).exec(function (order_err, order) {
-                if (order) {
-                  Shop_member.findOne(order.memberId).exec(function (e2, m) {
-                    if (order.payStatus == 1) {
-                      return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
-                    } else {
-                      //更新订单、积分、日志等
-                      Shop_history_payments.create({
-                        orderId: order.id,
-                        memberId: order.memberId,
-                        money: order.finishAmount,
-                        payType: 'pay_alipay',
-                        payName: '支付宝支付',
-                        payAccount: buyer_email,
-                        payIp: req.ip,
-                        payAt: moment().format('X'),
-                        memo: '支付宝支付:￥' + StringUtil.setPrice(order.finishAmount),
-                        finishAt: moment().format('X'),
-                        disabled: false,
-                        trade_no:trade_no
-                      }).exec(function (e3, o3) {
-                        //更新会员信息 余额 积分
-                        Shop_member.update(order.memberId, {
-                          score: m.score + order.score
-                        }).exec(function (e4, o4) {
-                          //更新订单
-                          Shop_order.update(id, {
-                            payAmount: order.finishAmount,
-                            payStatus: 1,//0 待付款 1已付款 2申请退款 3已退款
-                            payType: 'pay_alipay',
-                            updateAt: moment().format('X')
-                          }).exec(function (e5, o5) {
-                            if (e2 || e3 || e4 || e5) {
-                              /*订单日志表
-                               opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                               opType:admin,member
-                               opResult:ok,fail
-                               */
-                              Shop_order_log.create({
-                                orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
-                                opId: order.memberId,
-                                opNickname: m.nickname,
-                                opAt: moment().format('X'),
-                                opResult: 'fail'
-                              }).exec(function (el1, ol1) {
-                              });
-                              return res.send("支付失败，请重新支付，或更换支付方式");
-                            } else {
-                              /*订单日志表
-                               opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                               opType:admin,member
-                               opResult:ok,fail
-                               */
-                              Shop_order_log.create({
-                                orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
-                                opId: order.memberId,
-                                opNickname: m.nickname,
-                                opAt: moment().format('X'),
-                                opResult: 'ok'
-                              }).exec(function (el1, ol1) {
-
-                              });
-                              //积分日志
-                              if(order.score>0) {
-                                Shop_member_score_log.create({
-                                  memberId: order.memberId,
-                                  orderId: order.id,
-                                  oldScore: m.score,
-                                  newScore: m.score + order.score,
-                                  diffScore: order.score,
-                                  note: '订单:' + id,
-                                  createdBy: 0,
-                                  createdAt: moment().format('X')
-                                }).exec(function (es, os) {
-                                });
-                              }
-                              return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
-                            }
-                          });
-
-                        });
-                      });
+              if ('余额充值' == req.query.body) {
+                var memberId = req.query.subject || 0;
+                Shop_member.findOne(memberId).exec(function (e_1, m) {
+                  if (e_1) {
+                    return res.send("fail");
+                  }
+                  Shop_member_money_log.findOne({memberId: m.id, trade_no: trade_no}).exec(function (e_2, mlog) {
+                    if (mlog) {
+                      return res.send("success");
                     }
+                    Shop_member.update(memberId, {money: m.money + StringUtil.getFloat(req.query.total_fee) * 100}).exec(function (e_3, m2) {
+                      //余额日志
+                      Shop_member_money_log.create({
+                        memberId: m.id,
+                        orderId: 0,
+                        oldMoney: m.money,
+                        newMoney: m.money + StringUtil.getFloat(req.query.total_fee) * 100,
+                        diffMoney: StringUtil.getFloat(req.query.total_fee) * 100,
+                        note: '余额充值',
+                        trade_no: trade_no,
+                        createdBy: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (em, om) {
+                        return res.send("success");
+                      });
+                    });
                   });
-                } else {
-                  return res.send("支付失败，请重新支付，或更换支付方式");
-                }
-              });
+                });
+              } else {
+                //交易成功后更新订单、积分、会员等
+                Shop_order.findOne(id).exec(function (order_err, order) {
+                  if (order) {
+                    Shop_member.findOne(order.memberId).exec(function (e2, m) {
+                      if (order.payStatus == 1) {
+                        return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
+                      } else {
+                        //更新订单、积分、日志等
+                        Shop_history_payments.create({
+                          orderId: order.id,
+                          memberId: order.memberId,
+                          money: order.finishAmount,
+                          payType: 'pay_alipay',
+                          payName: '支付宝支付',
+                          payAccount: buyer_email,
+                          payIp: req.ip,
+                          payAt: moment().format('X'),
+                          memo: '支付宝支付:￥' + StringUtil.setPrice(order.finishAmount),
+                          finishAt: moment().format('X'),
+                          disabled: false,
+                          trade_no: trade_no
+                        }).exec(function (e3, o3) {
+                          //更新会员信息 余额 积分
+                          Shop_member.update(order.memberId, {
+                            score: m.score + order.score
+                          }).exec(function (e4, o4) {
+                            //更新订单
+                            Shop_order.update(id, {
+                              payAmount: order.finishAmount,
+                              payStatus: 1,//0 待付款 1已付款 2申请退款 3已退款
+                              payType: 'pay_alipay',
+                              updateAt: moment().format('X')
+                            }).exec(function (e5, o5) {
+                              if (e2 || e3 || e4 || e5) {
+                                /*订单日志表
+                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                 opType:admin,member
+                                 opResult:ok,fail
+                                 */
+                                Shop_order_log.create({
+                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
+                                  opId: order.memberId,
+                                  opNickname: m.nickname,
+                                  opAt: moment().format('X'),
+                                  opResult: 'fail'
+                                }).exec(function (el1, ol1) {
+                                });
+                                return res.send("支付失败，请重新支付，或更换支付方式");
+                              } else {
+                                /*订单日志表
+                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                 opType:admin,member
+                                 opResult:ok,fail
+                                 */
+                                Shop_order_log.create({
+                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
+                                  opId: order.memberId,
+                                  opNickname: m.nickname,
+                                  opAt: moment().format('X'),
+                                  opResult: 'ok'
+                                }).exec(function (el1, ol1) {
 
+                                });
+                                //积分日志
+                                if (order.score > 0) {
+                                  Shop_member_score_log.create({
+                                    memberId: order.memberId,
+                                    orderId: order.id,
+                                    oldScore: m.score,
+                                    newScore: m.score + order.score,
+                                    diffScore: order.score,
+                                    note: '订单:' + id,
+                                    createdBy: 0,
+                                    createdAt: moment().format('X')
+                                  }).exec(function (es, os) {
+                                  });
+                                }
+                                return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
+                              }
+                            });
+
+                          });
+                        });
+                      }
+                    });
+                  } else {
+                    return res.send("支付失败，请重新支付，或更换支付方式");
+                  }
+                });
+              }
             }
           }
           else {
