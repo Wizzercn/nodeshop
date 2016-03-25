@@ -14,37 +14,36 @@ module.exports = {
         return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
       } else {
         util.parseXML(body, function (e, msg) {
-          sails.log.debug('weixin-pay order:::'+JSON.stringify(msg));
+          sails.log.debug('weixin-pay:::'+JSON.stringify(msg));
           if (e)
             return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
           if (msg.result_code == 'SUCCESS') {
             var id = msg.out_trade_no;
-            sails.log.debug('weixin-pay order id:::'+id);
             var transaction_id = msg.transaction_id;
             if (msg.attach&&msg.attach.indexOf('余额充值,会员ID:')>-1) {
-              var memberId = msg.attach.substring(msg.attach.indexOf('余额充值,会员ID:'));
+              var memberId = msg.attach.substring(msg.attach.indexOf(':')+1);
               Shop_member.findOne(memberId).exec(function (e_1, m) {
                 if (e_1) {
-                  return res.send("fail");
+                  return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
                 }
                 Shop_member_money_log.findOne({memberId: m.id, trade_no: transaction_id}).exec(function (e_2, mlog) {
                   if (mlog) {
-                    return res.send("success");
+                    return res.end(util.buildXML({xml: {return_code: 'SUCCESS'}}));
                   }
-                  Shop_member.update(memberId, {money: m.money + StringUtil.getInt(msg.total_fee) * 100}).exec(function (e_3, m2) {
+                  Shop_member.update(memberId, {money: m.money + StringUtil.getInt(msg.total_fee)}).exec(function (e_3, m2) {
                     //余额日志
                     Shop_member_money_log.create({
                       memberId: m.id,
                       orderId: 0,
                       oldMoney: m.money,
-                      newMoney: m.money + StringUtil.getInt(msg.total_fee) * 100,
-                      diffMoney: StringUtil.getInt(msg.total_fee) * 100,
-                      note: '余额充值',
+                      newMoney: m.money + StringUtil.getInt(msg.total_fee),
+                      diffMoney: StringUtil.getInt(msg.total_fee),
+                      note: '余额充值(微信支付)',
                       trade_no: transaction_id,
                       createdBy: 0,
                       createdAt: moment().format('X')
                     }).exec(function (em, om) {
-                      return res.send("success");
+                      return res.end(util.buildXML({xml: {return_code: 'SUCCESS'}}));
                     });
                   });
                 });

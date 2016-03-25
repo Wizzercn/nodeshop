@@ -9,14 +9,16 @@
     <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
   </div>
 </div>
+<form id="payForm" action="/public/shop/pc/member/pay/payAlipay" target="_blank" method="post">
 <div class="member_cm clear cf">
 <% include member_left.ejs %>
   <div class="member_cr">
   <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />我的余额</div>
-    <div class="youhuiq">
+    <div class="money_y">
       <div class="asset_s"><div class="asset">
-          <div class="asset_mf">充值金额：<input type="text" id="money" maxlength="8">元</div>
+          <div class="asset_mf">充值金额：<input type="text" id="money" name="money" maxlength="8" value="">元</div>
         </div>
+        <div class="tip">提示：支付成功后，请点击“我的余额”查看最新余额，因网络原因可能会有延迟</div>
       </div>
     <div>
     <div class="content">
@@ -38,7 +40,14 @@
             <%}%>
 
           </li>
-          <li class="g_zhifu">
+          <li id="error" class="g_zhifu" style="height: 30px;margin-top: 20px;padding-left: 20px;display: none">
+            <div style="font-size: 22px;">请输入正确金额...</div>
+          </li>
+          <li id="wxLi" class="g_zhifu" style="height: 300px;margin-top: 20px;padding-left: 20px;display: none">
+            <div id="qrCode" style="font-size: 22px;">二维码加载中...</div>
+            <div style="padding-top: 10px;"><img src="<%=CssPath%>/pc/img/public/wxpay_b.png" width="200" height="65"></div>
+          </li>
+          <li id="alLi" class="g_zhifu" style="display: none">
             <input id="payOnline" type="button" value="立即支付" class="xuanze5 ml20">
           </li>
         </div>
@@ -63,5 +72,6 @@
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
+<script src="/plugins/jquery.qrcode.min.js"></script>
 <script src="<%=CssPath%>/pc/js/member_pay.js"></script>
 <% include common_buttom.ejs %>

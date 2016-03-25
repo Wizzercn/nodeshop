@@ -37,5 +37,62 @@ module.exports = {
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_pay', req.data);
 
     });
+  },
+  payAlipay: function (req, res) {
+    var member = req.session.member;
+    if (!member || member.memberId < 1) {
+      return res.json({code: 1, msg: ''});
+    }
+    var money = StringUtil.getFloat(req.body.money) || 0;
+    AlipayService.init(function (err, alipay) {
+      if (err) {
+        return res.serverError('支付宝接口异常');
+      } else {
+        var s = moment().format('YYMMDDHHmm');
+        var n = StringUtil.getUuid(5, 10);
+        var sn = s + n;
+        var data = {
+          out_trade_no: sn
+          , subject: member.memberId
+          , total_fee: money
+          , body: '余额充值'
+          , show_url: 'http://' + sails.config.system.AppDomain + '/member/money'
+        };
+        return alipay.create_direct_pay_by_user(data, res);
+      }
+    });
+  },
+  payWxpay: function (req, res) {
+    var member = req.session.member;
+    if (!member || member.memberId < 1) {
+      return res.json({code: 1, msg: ''});
+    }
+    var money = StringUtil.getFloat(req.query.money) || 0;
+    WxpayService.init(function (err, wxpay) {
+      if (err) {
+        return res.json({code: 1, msg: ''});
+      } else {
+        var s = moment().format('YYMMDDHHmm');
+        var n = StringUtil.getUuid(5, 10);
+        var sn = s + n;
+        wxpay.createUnifiedOrder({
+          body: '余额充值',
+          out_trade_no: sn,
+          total_fee: money*100,
+          spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
+          notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/pc/wxpay/order',
+          trade_type: 'NATIVE',
+          product_id: member.memberId,
+          attach:'余额充值,会员ID:'+member.memberId
+        }, function (err, result) {
+          sails.log.debug('result::' + JSON.stringify(result));
+          if (err)
+            return res.json({code: 1, msg: ''});
+          if (result.code_url)
+            return res.json({code: 0, msg: '', code_url: result.code_url});
+          return res.json({code: 2, msg: ''});
+        });
+      }
+    });
   }
 };

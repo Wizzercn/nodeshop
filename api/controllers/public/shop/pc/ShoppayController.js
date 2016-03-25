@@ -245,18 +245,18 @@ module.exports = {
             var buyer_email=req.query.buyer_email||'';
             if(trade_status  == 'TRADE_FINISHED'){
               //交易成功后一个月，支付宝通知finished
-              return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
+              return res.send("支付成功，您可以关闭此页面~~");
             }
             else if(trade_status == 'TRADE_SUCCESS'){
               if ('余额充值' == req.query.body) {
                 var memberId = req.query.subject || 0;
                 Shop_member.findOne(memberId).exec(function (e_1, m) {
                   if (e_1) {
-                    return res.send("fail");
+                    return res.send("支付失败，请重新支付，或更换支付方式");
                   }
                   Shop_member_money_log.findOne({memberId: m.id, trade_no: trade_no}).exec(function (e_2, mlog) {
                     if (mlog) {
-                      return res.send("success");
+                      return res.send("支付成功，您可以关闭此页面~~");
                     }
                     Shop_member.update(memberId, {money: m.money + StringUtil.getFloat(req.query.total_fee) * 100}).exec(function (e_3, m2) {
                       //余额日志
@@ -266,12 +266,12 @@ module.exports = {
                         oldMoney: m.money,
                         newMoney: m.money + StringUtil.getFloat(req.query.total_fee) * 100,
                         diffMoney: StringUtil.getFloat(req.query.total_fee) * 100,
-                        note: '余额充值',
+                        note: '余额充值(支付宝支付)',
                         trade_no: trade_no,
                         createdBy: 0,
                         createdAt: moment().format('X')
                       }).exec(function (em, om) {
-                        return res.send("success");
+                        return res.send("支付成功，您可以关闭此页面~~");
                       });
                     });
                   });
@@ -282,7 +282,7 @@ module.exports = {
                   if (order) {
                     Shop_member.findOne(order.memberId).exec(function (e2, m) {
                       if (order.payStatus == 1) {
-                        return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
+                        return res.send("支付成功，您可以关闭此页面~~");
                       } else {
                         //更新订单、积分、日志等
                         Shop_history_payments.create({
@@ -354,7 +354,7 @@ module.exports = {
                                   }).exec(function (es, os) {
                                   });
                                 }
-                                return res.send("支付成功，您可以关闭此页面~~<script>window.close();</script>");
+                                return res.send("支付成功，您可以关闭此页面~~");
                               }
                             });
 

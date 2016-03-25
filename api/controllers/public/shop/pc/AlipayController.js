@@ -45,7 +45,7 @@ module.exports = {
                         oldMoney: m.money,
                         newMoney: m.money + StringUtil.getFloat(req.body.total_fee) * 100,
                         diffMoney: StringUtil.getFloat(req.body.total_fee) * 100,
-                        note: '余额充值',
+                        note: '余额充值(支付宝支付)',
                         trade_no: trade_no,
                         createdBy: 0,
                         createdAt: moment().format('X')

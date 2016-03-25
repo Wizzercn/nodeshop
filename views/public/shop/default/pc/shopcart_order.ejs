@@ -13,7 +13,7 @@
 </div>
 <%if(order&&order.id>0){%>
 <%if(order.payStatus==0){%>
-<form id="payForm" action="/public/shop/pc/shoppay/payAlipay" id="payForm" target="_blank" method="post">
+<form id="payForm" action="/public/shop/pc/shoppay/payAlipay" target="_blank" method="post">
   <input type="hidden" name="id" value="<%=order.id%>">
 <ul class="yudd_dm">
   <li class="g_chengm"><center><img src="<%=CssPath%>/pc/img/icon/g_xiaol.jpg">您已成功提交订单 <%=order.payType=='pay_cash'?'！':'，请支付 ！'%></center></li>

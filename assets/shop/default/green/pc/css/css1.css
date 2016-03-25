@@ -1164,6 +1164,9 @@ a, a:hover {
 .youhuiq{width:920px;margin-left:20px;height:auto;}
 .youhuiqm{display:none;}
 
+.money_y{width:920px;margin-left:20px;height:auto;}
+.money_ym{display:none;}
+.money_y .tip{line-height: 40px;margin-left: 10px;color: #aa7700;float: left;}
 /*----------------------兑换礼品*/
 dl.d_th{ clear:both; height:40px; line-height:40px; background:#e9e9e9; border-bottom:1px solid #ddd; overflow:hidden;}
 dl.d_th dd{ float:left; color:#fff; font-size:14px; background:#ff9000 url(../images/th_r.gif) no-repeat right top; padding:0 55px 0 25px; border-left:10px solid #d9301d;}
