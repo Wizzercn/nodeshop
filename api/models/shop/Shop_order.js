@@ -172,14 +172,6 @@ module.exports = {
       type: 'string',
       size:255
     },
-    //收货状态   0  1
-    receivedStatus:{
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      },
-      index:true
-    },
     createdIp:{
       type: 'string',
       size:100
@@ -189,6 +181,14 @@ module.exports = {
       type: 'integer',
       defaultsTo: function () {
         return moment().format('X');
+      },
+      index:true
+    },
+    //收货状态   0  1
+    receivedStatus:{
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
       },
       index:true
     },

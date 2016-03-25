@@ -18,12 +18,31 @@ enumPayType['pay_money']='余额支付';
 enumPayType['pay_alipay']='支付宝支付';
 enumPayType['pay_wxpay']='微信支付';
 function list(type,start){
-  if(type=='nopay'){
+  if(type=='all'){
+    $(".member_crs a").each(function(){
+      $(this).removeClass("member_crsi");
+    });
     $(".member_crs a").eq(0).addClass("member_crsi");
-    $(".member_crs a").eq(1).removeClass("member_crsi");
-  }else if(type=='ship'){
+  }else if(type=='nopay'){
+    $(".member_crs a").each(function(){
+      $(this).removeClass("member_crsi");
+    });
     $(".member_crs a").eq(1).addClass("member_crsi");
-    $(".member_crs a").eq(0).removeClass("member_crsi");
+  }else if(type=='ship'){
+    $(".member_crs a").each(function(){
+      $(this).removeClass("member_crsi");
+    });
+    $(".member_crs a").eq(2).addClass("member_crsi");
+  }else if(type=='finish'){
+    $(".member_crs a").each(function(){
+      $(this).removeClass("member_crsi");
+    });
+    $(".member_crs a").eq(3).addClass("member_crsi");
+  }else if(type=='dead'){
+    $(".member_crs a").each(function(){
+      $(this).removeClass("member_crsi");
+    });
+    $(".member_crs a").eq(4).addClass("member_crsi");
   }
   if(!start)start=0;
   $("#list").html("");
@@ -57,14 +76,17 @@ function list(type,start){
                   '<td rowspan="' + o.goods.length + '">' + enumPayStatus[o.payStatus] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">' + enumStatus[o.status] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">';
-                  if(o.payStatus==0&&o.payType!='pay_cash'){
+                  if(o.status=='active'&&o.payStatus==0&&o.payType!='pay_cash'){
                   str+='<a href="/shopcart/order/'+ o.id+'" target="_blank" class="bor_o bg00aa30 mt10">去支付</a>';
                   }
-                  if(o.shipStatus==0) {
+                  if(o.status=='active'&&o.shipStatus==0) {
                     //未支付并且未发货，可以取消订单（注意：货到付款也是未支付状态）
                     str += '<a href="javascript:dead(\'' + o.id + '\')" class="mo-del">取消</a>';
-                  }else if(o.receivedStatus==0){
+                  }else if(o.status=='active'&&o.receivedStatus==0){
                     str+='<a href="javascript:receive(\'' + o.id + '\')" class="bor_o bg00aa30 mt10">确认收货</a>';
+                  }
+                  if(o.status=='dead'){
+                    str += '<a href="javascript:del(\'' + o.id + '\')" class="mo-del">删除</a>';
                   }
                   str+='</td>';
                 }
@@ -101,15 +123,38 @@ function receive(id){
       dataType: "json",
       success: function (data) {
         if(data.code==0){
-          $("#tip .oc_pro_a").html("操作成功");
+          $("#tip").hide();
+          reloadList();
+        }else {
+          $("#tip .oc_pro_a").html(data.msg);
           $("#tip").show();
-          list('ship');
           $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
             $("#tip").hide();
           });
           $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
             $("#tip").hide();
           });
+        }
+      }
+    });
+  });
+  $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+    $("#tip").hide();
+  });
+
+}
+function del(id){
+  $("#tip .oc_pro_a").html("确定删除订单？");
+  $("#tip").show();
+  $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+    $.ajax({
+      type: "GET",
+      url: "/public/shop/pc/member/order/del/" +id,
+      dataType: "json",
+      success: function (data) {
+        if(data.code==0){
+          $("#tip").hide();
+          reloadList();
         }else {
           $("#tip .oc_pro_a").html(data.msg);
           $("#tip").show();
@@ -138,14 +183,8 @@ function dead(id){
       dataType: "json",
       success: function (data) {
         if(data.code==0){
-          $("#tip .oc_pro_a").html("操作成功");
-          $("#tip").show();
-          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
-            window.location.reload();
-          });
-          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
-            window.location.reload();
-          });
+          $("#tip").hide();
+          reloadList();
         }else {
           $("#tip .oc_pro_a").html(data.msg);
           $("#tip").show();
@@ -164,6 +203,10 @@ function dead(id){
   });
 
 }
+function reloadList(){
+  var type=$(".member_crs .member_crsi").attr("data-id");
+  list(type);
+}
 $(function(){
-  list('nopay');
+  list('all');
 });
