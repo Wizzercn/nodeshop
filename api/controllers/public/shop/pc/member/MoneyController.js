@@ -37,5 +37,18 @@ module.exports = {
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_money', req.data);
 
     });
+  },
+  list: function (req, res) {
+    var member = req.session.member;
+    if (!member || member.memberId < 1) {
+      return res.json({code: 1, msg: ''});
+    }
+    var pageSize = 10;
+    var start = StringUtil.getInt(req.query.start);
+    var sort = {createdAt: 'desc'};
+    var where = {memberId:member.memberId};
+    Shop_member_money_log.getPageList(pageSize, start, where, sort, function (obj) {
+      return res.json({code: 0, msg: '', data: obj});
+    });
   }
 };

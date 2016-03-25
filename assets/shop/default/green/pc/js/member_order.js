@@ -98,10 +98,14 @@ function list(type,start){
 
           $("#list").html(str);
           if(data.data.total>0){
+            var is_page=false;
             $(".tcdPageCode").createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){
+                if(is_page)
+                  return false;
+                is_page=true;
               var pageSize=data.data.size;
               var s=(p-1)*pageSize;
                 list(type,s);
@@ -209,4 +213,7 @@ function reloadList(){
 }
 $(function(){
   list('all');
+  $(".member_cml .per-navs").eq(0).find('p').removeClass("per-titles");
+  $(".member_cml .per-navs").eq(0).find('p').addClass("per-title");
+  $(".member_cml .per-navs").eq(0).find('a').eq(1).addClass("per-linkon");
 });

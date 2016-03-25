@@ -1,0 +1,63 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
+  </div>
+</div>
+<div class="member_cm clear cf">
+<% include member_left.ejs %>
+  <div class="member_cr">
+  <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />我的余额</div>
+    <div class="youhuiq">
+      <div class="asset_s"><div class="asset">
+          <div class="asset_f">可用余额：<span class="colorb ml20"><b><%=StringUtil.setPrice(dbMember.money)%></b></span>元</div>
+        </div>
+        <div class="asset_fa">
+          <input type="button" value="充值" class="bg00aa30" onclick="window.location.href='/member/pay'">
+
+        </div>
+      </div>
+    <div>
+    <div class="content">
+      <div class="contentl" style="display:block;">
+        <div class="order_f cf clear">
+          <div class="asset_f2">
+            <div class="asset_f3_n">序号</div>
+            <div class="asset_f3">日期</div>
+            <div class="asset_f5">收入</div>
+            <div class="asset_f5">支出</div>
+            <div class="asset_f6_m">详情</div>
+          </div>
+          <div id="list" style="margin-bottom: 20px;">
+            <div class="asset_s">
+              <div class="asset_s1_a_o">支出</div>
+              <div class="asset_s1_m">2015-08-31 09:43:01</div>
+              <div class="asset_s3_m"><span class="colorb">0</span></div>
+              <div class="asset_s3_m"><span class="colorr">-200:00</span></div>
+              <div class="assert_s5_a">详情详情详情详情</div>
+            </div>
+          </div>
+
+
+        </div>
+          <div class="s_page cf clear tcdPageCode"></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+  </div>
+</div>
+<script src="<%=CssPath%>/pc/js/member_money.js"></script>
+<% include common_buttom.ejs %>

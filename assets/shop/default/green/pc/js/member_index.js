@@ -76,12 +76,16 @@ function list(type,start){
 
           $("#list").html(str);
           if(data.data.total>0){
+            var is_page=false;
             $(".tcdPageCode").createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){
-              var pageSize=data.data.size;
-              var s=(p-1)*pageSize;
+                if(is_page)
+                  return false;
+                is_page=true;
+                var pageSize=data.data.size;
+                var s=(p-1)*pageSize;
                 list(type,s);
               }
             });
@@ -166,4 +170,6 @@ function dead(id){
 }
 $(function(){
   list('nopay');
+  $(".member_cml .per-navtop p").removeClass("per-titles");
+  $(".member_cml .per-navtop p").addClass("per-title");
 });

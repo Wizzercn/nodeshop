@@ -154,10 +154,14 @@ function commentData(goodsId,start){
             '</div>';
         });
         $("#pj_list").html(str);
+        var is_page=false;
         $(".tcdPageCode").createPage({
           pageCount:obj.totalPage,
           current:obj.page,
           backFn:function(p){
+            if(is_page)
+              return false;
+            is_page=true;
             commentLoad(goodsId,(p-1)*10);
           }
         });
