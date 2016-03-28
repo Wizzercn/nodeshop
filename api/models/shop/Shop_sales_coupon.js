@@ -27,6 +27,13 @@ module.exports = {
     hasNum:{
       type:'integer'
     },
+    //是否可用于积分兑换
+    is_score:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     //兑换需要积分
     score:{
       type:'integer'

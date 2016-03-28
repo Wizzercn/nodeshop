@@ -1290,6 +1290,10 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 .assert_s7{width:100px;float:right;text-indent:22px;line-height:40px;}
 .asset_s6m{width:145px;height:50px;line-height:40px;float:left;text-align:center;}
 
+.asset_jf{height:40px;text-align:center;}
+.asset_jf input:first-child{width:100px;height:40px;font-size:16px;border:none;padding:0;border-right:1px solid #fff;float:left;border-radius:3px 0 0 3px;}
+.asset_jf input:last-child{width:100px;height:40px;font-size:16px;border:none;padding:0;float:left;border-radius:0 3px 3px 0;}
+
 
 /*--------左侧列表--------*/
 .service-menu .menu-p i{ font-style:normal !important;}

@@ -12,13 +12,13 @@
 <div class="member_cm clear cf">
 <% include member_left.ejs %>
   <div class="member_cr">
-  <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />我的余额</div>
+  <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />积分明细</div>
     <div class="youhuiq">
       <div class="asset_s"><div class="asset">
-          <div class="asset_f">可用余额：<span class="colorb ml20"><b><%=StringUtil.setPrice(dbMember.money)%></b></span>元</div>
+          <div class="asset_f">可用积分：<span class="colorb ml20"><b><%=dbMember.score||0%></b></span></div>
         </div>
-        <div class="asset_fa">
-          <input type="button" value="充值" class="bg00aa30" onclick="window.location.href='/member/pay'">
+        <div class="asset_jf">
+          <input type="button" value="兑换优惠券" class="bg00aa30">
 
         </div>
       </div>
@@ -29,8 +29,7 @@
           <div class="asset_f2">
             <div class="asset_f3_n">序号</div>
             <div class="asset_f3">日期</div>
-            <div class="asset_f5">收入</div>
-            <div class="asset_f5">支出</div>
+            <div class="asset_f5">积分变化</div>
             <div class="asset_f6_m">详情</div>
           </div>
           <div id="list" style="margin-bottom: 20px;">
@@ -52,5 +51,5 @@
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
-<script src="<%=CssPath%>/pc/js/member_money.js"></script>
+<script src="<%=CssPath%>/pc/js/member_score.js"></script>
 <% include common_buttom.ejs %>
