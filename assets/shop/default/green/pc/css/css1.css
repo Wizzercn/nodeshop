@@ -1178,9 +1178,9 @@ input.th_page_l:hover{ border:1px solid #ff9900; background:#fff url(../images/t
 input.th_page_r:hover{ border:1px solid #ff9900; background:#fff url(../images/th_page_r_o.gif) no-repeat center center;}
 /*礼品列表*/
 ul.gife_list{ clear:both; padding:18px 0; width:100%; margin:0 auto;}
-ul.gife_list li{ float:left; width:24.9%; margin-bottom:20px; overflow:hidden; zoom:1;height:210px;}
-ul.gife_list dl{ margin:0 auto; clear:both; width:210px; border:1px solid #ddd; height:210px; overflow:hidden;}
-ul.gife_list dt{ height:93px; overflow:hidden; clear:both;border-bottom:1px dashed #ffffff;line-height:93px;text-align:center;font-size:48px;font-weight:bold;font-family:'微软雅黑';margin-top:10px;}
+ul.gife_list li{ height:110px;float:left; width:24.9%; margin-bottom:20px; overflow:hidden; zoom:1;}
+ul.gife_list dl{ margin:0 auto; clear:both; width:210px; border:1px solid #ddd; overflow:hidden;}
+ul.gife_list dt{ height:93px; overflow:hidden; clear:both;border:1px dashed #ffffff;line-height:93px;text-align:center;font-size:48px;font-weight:bold;font-family:'微软雅黑';}
 ul.gife_list dd{width:185px;height:60px;line-height:26px;display:block;color:#ffffff;text-align:center;margin-top:20px;}
 ul.gife_list dd span{color:#fff;font-family:'微软雅黑'}
 ul.gife_list dd p{color:#fff;font-family:'微软雅黑'}
@@ -1193,7 +1193,7 @@ ul.gife_list a:hover{filter:alpha(opacity=80);
 .dl_kbgl{background:#333;filter:alpha(opacity=40);
   -moz-opacity:0.4;
   -khtml-opacity:0.4;
-  opacity:0.4;color:#ffffff;font-size:36px;line-height:210px;position:relative;top:-210px;width:210px;margin:0 auto;text-align:center;}
+  opacity:0.4;color:#ffffff;font-size:20px;line-height:105px;position:relative;top:-105px;width:210px;margin:0 auto;text-align:center;}
 
 
 /*--------积分管理-------*/
@@ -1539,11 +1539,6 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .ligin img{width:400px;height:350px;}
 .c_lankj{width:400px;margin:0 auto;position:relative;top:-20px;font-size:14px;}
 
-.dl_kbg{background:#eeeeee !important;}
-.dl_kbgl{background:#333;filter:alpha(opacity=40);
-  -moz-opacity:0.4;
-  -khtml-opacity:0.4;
-  opacity:0.4;color:#ffffff;font-size:36px;line-height:210px;position:relative;top:-210px;width:210px;margin:0 auto;text-align:center;}
 
 .color_y{color: #ce0020;}
 
