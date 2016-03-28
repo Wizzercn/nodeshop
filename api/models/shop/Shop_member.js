@@ -17,10 +17,28 @@ module.exports = {
       index:true
     },
     nickname:{
-      type: 'string'
+      type: 'string',
+      size:50
+    },
+    realname:{
+      type: 'string',
+      size:50
+    },
+    province:{
+      type:'string',
+      size:20
+    },
+    city:{
+      type:'string',
+      size:20
     },
     area:{
-      type: 'string'
+      type:'string',
+      size:20
+    },
+    addr:{
+      type:'string',
+      size:255
     },
     mobile:{
       type: 'string',
@@ -32,7 +50,7 @@ module.exports = {
     },
     email:{
       type: 'string',
-      size:100
+      size:255
     },
     order_num:{
       type: 'integer',

@@ -1088,10 +1088,12 @@ a, a:hover {
 .onf1{display:block;}
 
 .password{width:400px;height:550px;margin:0 auto;font-size:14px;}
+.password .error{height:20px;color:#9e1634;background:url(../img/error.png) no-repeat 100px -6px; text-indent:120px;line-height: 18px;}
 .password1{width:340px;height:90px;line-height:90px;text-align:center;font-size:24px;color:#000;margin-left:20px;border-bottom:1px solid #dddddd;font-size:14px;}
-.password2{width:400px;height:60px;margin-top:10px;font-size:14px;}
-.password2 input{width:260px;height:40px;border:1px solid #dddddd;border-radius:3px;text-indent:20px;margin-left:10px;}
-.password3{width:350px;height:60px;line-height:50px;font-size:14px;margin-top:10px;}
+.password2{width:400px;height:40px;margin-top:10px;font-size:14px;}
+.password2 select{height:40px;border:1px solid #dddddd;margin-left: 1px;}
+.password2 input{width:260px;height:40px;border:1px solid #dddddd;border-radius:3px;text-indent:10px;margin-left:10px;}
+.password3{width:350px;height:40px;line-height:50px;font-size:14px;margin-top:10px;}
 .password3_a{width:400px;height:60px;line-height:50px;font-size:14px;margin-top:10px;}
 .xinm{margin-left:20px;color:#666666;}
 .password3a{width:120px !important;height:40px !important;border-radius:3px;border:1px solid #dddddd;text-indent:10px;margin-left:10px;}
@@ -1116,10 +1118,10 @@ a, a:hover {
 .my_icon_second input{display:inline-block;height:40px;width:100px;text-align:center;font-size:14px;background:#ffffff;border:1px solid #dddddd;border-radius:3px;}
 
 /*---------确定按钮---------*/
-.land_six{width:340px;height:40px;border-radius:3px;margin-left:20px;margin-top:15px;text-align:center;}
-.land_six input{width:330px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
-.land_six_a{width:340px;height:40px;border-radius:3px;margin-left:5px;margin-top:15px;text-align:center;}
-.land_six_a input{width:330px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
+.land_six{width:140px;height:40px;border-radius:3px;margin-left:20px;margin-top:15px;text-align:center;}
+.land_six input{width:130px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
+.land_six_a{width:140px;height:40px;border-radius:3px;margin-left:5px;margin-top:15px;text-align:center;}
+.land_six_a input{width:130px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
 
 
 /*-----添加地址-----*/

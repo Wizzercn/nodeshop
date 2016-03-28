@@ -1,0 +1,71 @@
+<script type="text/javascript" src="<%=CssPath%>/pc/js/My97DatePicker/WdatePicker.js"></script>
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
+  </div>
+</div>
+<div class="member_cm clear cf">
+<% include member_left.ejs %>
+  <div class="member_cr">
+  <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />基本信息</div>
+    <div class="content">
+      <ul class="password mt30">
+        <li class="password2 clear"><span class="ad_bei fl mr5">昵&nbsp;&nbsp;&nbsp;&nbsp;称：</span><input type="text" id="nickname" value="<%-dbMember.nickname%>" class="fl" maxlength="20"/></li>
+        <li class="password2 clear"><span class="ad_bei fl mr5">手&nbsp;机&nbsp;号：</span><input style="background-color: #E0E0E0;" value="<%-dbMember.mobile%>" readonly type="text" placeholder="手机号码" class="fl" /></li>
+        <li class="password2 clear"><span class="ad_bei fl mr5">电子邮箱：</span><input onchange="checkEMail()" type="text" id="email" value="<%-dbMember.email||''%>" class="fl" maxlength="20"/></li>
+        <li class="error" style="display:none " id="_email_tip"></li>
+        <li class="password2 clear"><span class="ad_bei fl mr5">真实姓名：</span><input onchange="checkRealName()" type="text" id="realname" value="<%-dbMember.realname||''%>" class="fl" maxlength="20"/></li>
+        <li class="error" style="display:none " id="_realname_tip"></li>
+        <%
+         var wdate='';
+          if(dbMember.b_year>0&&dbMember.b_month>0&&dbMember.b_day>0){
+            wdate=moment(dbMember.b_year+'-'+dbMember.b_month+'-'+dbMember.b_day).format('YYYY-MM-DD');
+          }
+          %>
+        <li class="password2 clear"><span class="ad_bei fl mr5">出生日期：</span><input id="wdate" value="<%=wdate%>" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd',maxDate:'%y-%M-%d'})"
+                                                                                   class="Wdate" type="text" /></li>
+        <li class="password3 clear"><span class="ad_bei fl mr5">姓&nbsp;&nbsp;&nbsp;&nbsp;别：</span><input type="radio" value="1" name="sex" class="sex_m" <%=dbMember.sex==1?'checked':''%>/>男&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<input type="radio"  <%=dbMember.sex==2?'checked':''%> value="2" name="sex" class="sex_w" />女</li>
+        <li class="password2 clear" style="width: 500px;"><span class="ad_bei fl mr5">所在地区：</span>
+          <select id="_province" class="fl">
+            <option value="" >请选择省</option>
+            <%if(dbMember.province){%>
+            <option selected value="<%=dbMember.province%>"><%=dbMember.province%></option>
+            <%}%>
+          </select>
+          <select class="fl" id="_city">
+            <option value="">请选择市</option>
+            <%if(dbMember.city){%>
+            <option selected value="<%=dbMember.city%>"><%=dbMember.city%></option>
+            <%}%>
+          </select>
+          <select id="_area" class="fl">
+            <option value="">请选择区县</option>
+            <%if(dbMember.area){%>
+            <option selected value="<%=dbMember.area%>"><%=dbMember.area%></option>
+            <%}%>
+          </select></li>
+        <li class="password2 clear"><span class="ad_bei fl mr5">所在地址：</span><input maxlength="120" id="_addr" value="<%-dbMember.area||''%>" type="text" class="fl" /></li>
+
+        <li><div class="land_six" style="margin-top:40px;margin-left:30px;"><input type="submit" value="保 存" onclick="save()"/></div></li>
+
+      </ul>
+
+    </div>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+  </div>
+</div>
+<script src="<%=CssPath%>/pc/js/member_profile.js"></script>
+<% include common_buttom.ejs %>
