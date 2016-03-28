@@ -20,10 +20,7 @@ module.exports = {
     orderId: {
       model: 'Shop_order',
       index: true,
-      size: 20,
-      defaultsTo: function () {
-        return 0;
-      }
+      size: 20
     },
     oldScore:{
       type: 'integer'
@@ -40,10 +37,7 @@ module.exports = {
     },
     //若管理员调整则记录管理员id
     createdBy: {
-      type: 'integer',
-      defaultsTo: function () {
-        return moment().format('X');
-      }
+      type: 'integer'
     },
     createdAt: {
       type: 'integer',

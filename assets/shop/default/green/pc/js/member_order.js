@@ -62,6 +62,7 @@ function list(type,start){
           '<div class="member_cdf">订单编号：'+ o.id+'<span>  下单时间：'+new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span></div>'+
           '<table class="t_main">';
             $.each(o.goods,function(j,goods) {
+
               str += '<tr class="t_second">' +
                 '<td>' +
                 '<dl class="member_cdss">' +
@@ -72,7 +73,7 @@ function list(type,start){
                 '<td><span class="number_text">'+goods.num+'</span></td>' +
                 '<td><span class="number_text">'+setPrice(goods.price)+'</span></td>';
                 if(j==0) {
-                  str+='<td rowspan="' + o.goods.length + '"><span style="color: #dc4e4b;font-size: 14px;">' + setPrice(o.finishAmount) + '</span>'+'<br><br>(含运费:' + setPrice(o.freightAmount) +')<br>'+enumPayType[o.payType]+'</td>' +
+                  str+='<td rowspan="' + o.goods.length + '"><span style="color: #dc4e4b;font-size: 14px;">' + setPrice(o.finishAmount) + '</span>'+'<br><br>(运费:' + setPrice(o.freightAmount) +')<br>(优惠:' + setPrice(o.discountAmount) +')<br>'+enumPayType[o.payType]+'</td>' +
                   '<td rowspan="' + o.goods.length + '">' + enumPayStatus[o.payStatus] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">' + enumStatus[o.status] + '</td>' +
                   '<td rowspan="' + o.goods.length + '">';

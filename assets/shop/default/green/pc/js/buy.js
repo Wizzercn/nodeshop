@@ -160,8 +160,14 @@ function doCoupon(){
         p= o.couponPrice;
       }
     });
+    var s=totalMoney;
+    if(totalMoney-p<0){
+      s=1;
+    }else {
+      s=totalMoney-p;
+    }
     $("#discountAmount").html("-&yen;"+setPrice(p));
-    $("#finishAmount").html("&yen;"+setPrice((totalMoney-p)));
+    $("#finishAmount").html("&yen;"+setPrice(s));
   }else {
     $("#discountAmount").html("-&yen;0.00");
     $("#finishAmount").html("&yen;"+setPrice(totalMoney));

@@ -18,7 +18,7 @@
           <div class="asset_f">可用积分：<span class="colorb ml20"><b><%=dbMember.score||0%></b></span></div>
         </div>
         <div class="asset_jf">
-          <input type="button" value="兑换优惠券" class="bg00aa30">
+          <input type="button" value="兑换优惠券" class="bg00aa30" onclick="showCoupon()">
 
         </div>
       </div>
@@ -42,6 +42,34 @@
       </div></div>
     </div>
   </div>
+</div>
+<div id="pageOverlay" style="display:none ;"></div>
+<div id="yhq" class="address-box" style="display:none;">
+  <form class="checkout_or" id="checkout_or">
+    <p>兑换优惠券</p><div class="bianji-close"><a href="javascript:closeCoupon()">×</a></div>
+    <ul class="radio">
+      <li>优&nbsp;惠&nbsp;券:
+        <select id="couponid" class="province">
+          <option value="0" >请选择要兑换的优惠券</option>
+          <%couponList.forEach(function(o){%>
+          <option value="<%=o.id%>" ><%=o.name%></option>
+          <%});%>
+        </select>
+      </li>
+      <li class="error" style="display: none" id="_couponid_tip"></li>
+      <li>剩余数量:
+        <span id="num" style="color: red">0</span>
+      </li>
+      <li class="error" style="display: none" id="_num_tip"></li>
+      <li>所需积分:
+        <span id="score" style="color: green">0</span>
+      </li>
+      <li class="error" style="display:none " id="_score_tip"></li>
+      <li>
+        <input type="button" class="btn_baocun" id="" style="margin-bottom:30px" value="兑 换" onclick="saveCoupon()">
+        <input type="button" class="btn_quxiao" id="" value="取 消" onclick="closeCoupon()"></li>
+    </ul>
+  </form>
 </div>
 <div id="tip" style="display:none">
   <div class="oc_pro_bg"></div>

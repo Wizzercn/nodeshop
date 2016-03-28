@@ -794,7 +794,14 @@ module.exports = {
             }
             order.discountAmount = discountAmount;
             order.finishAmount = order.goodsAmount + order.freightAmount - discountAmount;
-            order.score=Math.floor((order.finishAmount-order.freightAmount) / 100);
+            if(order.finishAmount<1){
+              order.finishAmount=1;
+            }
+            if(order.finishAmount-order.freightAmount>0){
+              order.score=Math.floor((order.finishAmount-order.freightAmount) / 100);
+            }else {
+              order.score=0;
+            }
             cb(null, order);
           });
         },
@@ -856,13 +863,15 @@ module.exports = {
 
           });
           //订单提交成功则更新优惠券状态  0未使用  1已使用  2已失效
-          Shop_member_coupon.update(couponId, {
-            status: 1,
-            orderId: order.id,
-            orderAt: moment().format('X')
-          }).exec(function (e, o) {
+          if(couponId){
+            Shop_member_coupon.update(couponId, {
+              status: 1,
+              orderId: order.id,
+              orderAt: moment().format('X')
+            }).exec(function (e, o) {
 
-          });
+            });
+          }
           //订单提交成功则删除购物车数据
           list.forEach(function (o) {
             Shop_member_cart.destroy({
@@ -920,9 +929,6 @@ module.exports = {
     } else {
       return res.redirect('/login?r=/shopcart/order/'+id);
     }
-  },
-  sendSms:function(req,res){
-
   }
 
 };
