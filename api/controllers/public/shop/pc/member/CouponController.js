@@ -43,7 +43,7 @@ module.exports = {
     if (!member || member.memberId < 1) {
       return res.json({code: 1, msg: ''});
     }
-    var pageSize = 20;
+    var pageSize = 16;
     var start = StringUtil.getInt(req.query.start);
     var sort = {status:'asc',createdAt: 'desc'};
     var where = {memberId: member.memberId};
