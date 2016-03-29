@@ -40,6 +40,10 @@ module.exports = {
       type:'string',
       size:255
     },
+    postcode:{
+      type:'string',
+      size:6
+    },
     is_default: {
       type: 'boolean',
       defaultsTo: function () {

@@ -1,0 +1,81 @@
+<script type="text/javascript" src="<%=CssPath%>/pc/js/My97DatePicker/WdatePicker.js"></script>
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/member" class="color_y">会员中心</a></div>
+  </div>
+</div>
+<div class="member_cm clear cf">
+  <% include member_left.ejs %>
+  <div class="member_cr">
+    <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />收货地址</div>
+    <div id="pageOverlay" style="display: none;"></div>
+    <div id="addr" class="address-box" style="display: none;">
+      <form class="checkout_or" id="checkout_or">
+        <input type="hidden" name="_id" value="" id="_id">
+        <p>使用新地址：</p><div class="bianji-close"><a href="javascript:closeAddr()">×</a></div>
+        <ul class="radio">
+          <li>收&nbsp;货&nbsp;人:<sup class="surely">*</sup>
+            <input id="_name" type="text" maxlength="50" value="">
+          </li>
+          <li class="error" style="display: none" id="_name_tip"></li>
+          <li>选择地区:<sup class="surely">*</sup>
+            <select id="_province" class="province">
+              <option value="" >请选择省</option>
+            </select>
+            <select class="city" id="_city">
+              <option value="">请选择市</option>
+            </select>
+            <select id="_area" class="county">
+              <option value="">请选择区县</option>
+            </select>
+          </li>
+          <li class="error" style="display: none" id="_area_tip"></li>
+          <li>街道地址:<sup class="surely">*</sup>
+            <input type="text" id="_addr" style="width: 300px;" maxlength="120" value="">
+          </li>
+          <li class="error" style="display: none" id="_addr_tip"></li>
+          <li>手机号码:<sup class="surely">*</sup>
+            <input type="text" id="_mobile" class="" value="" size="11" maxlength="11">
+            邮编:<input type="text" maxlength="6" id="_postcode" size="6">
+          </li>
+          <li class="error" style="display: none" id="_mobile_tip"></li>
+          <li>设置默认<input type="checkbox" id="_is_default" style="margin-left:15px;vertical-align: middle;width: 16px;" value="1"></li>
+          <li><input type="button" class="btn_baocun" id="save" style="margin-bottom:30px" value="保 存">
+            <input type="button" class="btn_quxiao" id="" value="取 消" onclick="closeAddr()"></li>
+        </ul>
+      </form>
+    </div>
+    <div class="content">
+      <input class="address_more" type="button" value="添加新地址" onclick='addAddr()'>
+
+
+      <ul class="collecte cf clear">
+        <li class="adress_f">收货人</li>
+        <li class="adress_s">收货地址</li>
+        <li class="adress_t">联系电话</li>
+        <li class="adress_t">是否默认</li>
+        <li class="collecte3">操作</li>
+      </ul>
+
+      <div id="addrList">
+
+      </div>
+    </div>
+  </div>
+</div>
+<div id="tip" style="display:none">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">提示</span>
+    <span class="oc_pro_a"></span>
+    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+  </div>
+</div>
+<script src="<%=CssPath%>/pc/js/member_address.js"></script>
+<% include common_buttom.ejs %>

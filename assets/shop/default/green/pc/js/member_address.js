@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/17/16.
+ * Created by root on 3/28/16.
  */
 function closeAddr(){
   $("#pageOverlay").hide();
@@ -7,7 +7,13 @@ function closeAddr(){
   $("#addr").find("form").each(function(){this.reset();});
 }
 function addAddr(){
-
+  $("#addr").find("form").each(function(){this.reset();});
+  $("#save").on("click",function(){
+    saveAddr();
+  });
+  $('#_province').attr('value','');
+  $('#_city').attr('value','');
+  $('#_area').attr('value','');
   $("#pageOverlay").show();
   $("#addr").show();
 }
@@ -67,6 +73,75 @@ function saveAddr(){
     }
   });
 }
+function editAddr(){
+  $.ajax({
+    type : "POST",
+    url : "/public/shop/pc/member/area/editAddr",
+    data:{
+      id:$("#_id").val(),
+      name:$("#_name").val(),
+      mobile:$("#_mobile").val(),
+      province:$("#_province").val(),
+      city:$("#_city").val(),
+      area:$("#_area").val(),
+      addr:$("#_addr").val(),
+      postcode:$("#_postcode").val(),
+      is_default:$("#_is_default").prop("checked")
+    },
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        closeAddr();
+        listAddr();
+      }
+    }
+  });
+}
+function edit(id){
+  var obj=$("#d"+id);
+  $("#_id").val(id);
+  $("#_name").val(obj.attr('data-name'));
+  $("#_province").append("<option value='"+obj.attr('data-province')+"' selected>"+obj.attr('data-province')+"</option>");
+  $("#_city").append("<option value='"+obj.attr('data-city')+"' selected>"+obj.attr('data-city')+"</option>");
+  $("#_area").append("<option value='"+obj.attr('data-area')+"' selected>"+obj.attr('data-area')+"</option>");
+  $("#_addr").val(obj.attr('data-addr'));
+  $("#_mobile").val(obj.attr('data-mobile'));
+  $("#_postcode").val(obj.attr('data-postcode'));
+  if("true"==obj.attr('data-default')){
+    $("#_is_default").prop("checked",true);
+  }
+  $("#save").on("click",function(){
+    editAddr();
+  });
+  $("#pageOverlay").show();
+  $("#addr").show();
+}
+function del(id){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/member/area/del/"+id,
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        closeAddr();
+        listAddr();
+      }
+    }
+  });
+}
+function setDefault(id){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/member/area/setDefault/"+id,
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        closeAddr();
+        listAddr();
+      }
+    }
+  });
+}
 function listAddr(){
   $.ajax({
     type : "GET",
@@ -77,22 +152,17 @@ function listAddr(){
         var str='';
         var df=0;
         $.each(data.list,function(i,o){
-          if(i==0)
-            df= o.id;
-          if(o.is_default)
-            df= o.id;
-          str+='<li data-id="'+o.id+'" id="add_l_'+o.id+'"><span><em>'+ o.name+'</em><i>'+ o.mobile+'</i></span><p>'+ o.province+ o.city+ o.area+ o.addr+'</p></li>';
+          str+='<dl id="d'+ o.id+'" data-name="'+o.name+'" data-province="'+o.province+'" data-city="'+o.city+'" data-area="'+o.area+'" data-addr="'+o.addr+'" data-mobile="'+ o.mobile+'" data-postcode="'+ o.postcode+'" data-default="'+o.is_default+'" class="adress_m">'+
+            '<dd class="adress_f1">'+ o.name+'</dd>'+
+            '<dd class="adress_f2">'+ o.province+ o.city+ o.area+'<br>'+ o.addr+'</dd>'+
+            '<dd class="adress_f3">'+ o.mobile+'</dd>'+
+            '<dd class="adress_f3">'+ (o.is_default==true?'默认':'')+'</dd>'+
+            '<dd class="adress_f5"><a href="javascript:setDefault('+ o.id+');">设为默认</a> | '+
+            '<a href="javascript:edit('+ o.id+');">编辑&nbsp;</a> | '+
+            '<a href="javascript:del('+ o.id+');">&nbsp;删除</a></dd>'+
+            '</dl>';
         });
         $("#addrList").html(str);
-        $("#add_l_"+df).addClass("z_dizhi_firston");
-        $(".z_dizhi_second a").click(function(){
-          $(this).children(".mi").toggle("img_line");
-          $(this).children(".mm").toggle("img_line");
-          $(this).parent().parent().parent().children(".z_dizhi_first").toggleClass("height_auto")
-        });
-        $(".z_dizhi_first li").click(function(){
-          $(this).addClass("z_dizhi_firston").siblings().removeClass("z_dizhi_firston");
-        });
       }
     }
   });
@@ -152,97 +222,10 @@ function loadProvince(){
     });
   });
 }
-function doCoupon(){
-  var id=$("#youhuiquan").val();
-  if(id!=''){
-    var p=0;
-    $.each(couponList,function(i,o){
-      if(o.id==parseInt(id)){
-        p= o.couponPrice;
-      }
-    });
-    var s=totalMoney;
-    if(totalMoney-p<0){
-      s=1;
-    }else {
-      s=totalMoney-p;
-    }
-    $("#discountAmount").html("-&yen;"+setPrice(p));
-    $("#finishAmount").html("&yen;"+setPrice(s));
-  }else {
-    $("#discountAmount").html("-&yen;0.00");
-    $("#finishAmount").html("&yen;"+setPrice(totalMoney));
-  }
-}
-var is_submit=false;
-function doOrder(){
-  if(is_submit){
-    $("#order_tip").show();
-    return false;
-  }
-  var addId=$("#addrList .z_dizhi_firston").attr("data-id");
-  if(addId==''||addId==undefined){
-    $("#tip .oc_pro_a").html("请设置收货地址");
-    $("#tip").show();
-    $("#tip .oc_pro").on("click",function(){
-      $("#tip").hide();
-    });
-    $("#tip .oc_pro1").on("click",function(){
-      $("#tip").hide();
-    });
-    return false;
-  }
-  var list=[];
-  $("#buyGoods tr[class=data]").each(function(){
-      var obj={};
-      obj.goodsId= $(this).attr("data-goodsid");
-      obj.productId= $(this).attr("data-productid");
-      obj.num= $(this).attr("data-num");
-      list.push(obj);
-  });
-  var fapiao={};
-  var is_fapiao=$("#chkFapiao").prop("checked");
-  if(is_fapiao){
-    fapiao.taxType=$("input[name='taxType']:checked").val();
-    fapiao.taxNo=$("#taxNo").val();
-    fapiao.taxTitle=$("#taxTitle").val();
-    fapiao.taxCentent=$("#taxCentent").val();
-  }
-  is_submit=true;
-  $.ajax({
-    type : "POST",
-    url : "/public/shop/pc/shopcart/orderSave",
-    data:{
-      list:list,
-      addrId:addId,
-      payType:$("input[name='payType']:checked").val(),
-      couponId:$("#youhuiquan").val(),
-      fapiao:fapiao,
-      memo:$("#memo").val()
-    },
-    dataType : "json",
-    success : function(data) {
-      if(data.code==0){
-        window.location.href='/shopcart/order/'+data.orderId;
-      }else if(data.code==1){
-        window.location.href='/login';
-      }
-    }
-  });
-}
 $(function(){
-  $("#cartDiv").unbind("mouseover");
   listAddr();
   loadProvince();
-  $("#chkFapiao").on("click",function(){
-    if($(this).prop("checked")){
-      $(".fapiao").show();
-    }else {
-      $(".fapiao").hide();
-    }
-  });
-  $("input[name=payType]").eq(0).prop("checked",true);
-  console.log("%c%s","color: red; background: yellow; font-size: 24px; font-weight: bold;","\u5b89\u5168\u8b66\u544a!");
-  console.log("%c%s","color: black; font-size: 18px;","\u8bf7\u52ff\u5728\u6b64\u63a7\u5236\u53f0\u8f93\u5165\u6216\u7c98\u8d34\u4f60\u4e0d\u660e\u767d\u7684\u4ee3\u7801\uff0c\u4ee5\u907f\u514d\u653b\u51fb\u8005\u7a83\u53d6\u4f60\u7684\u4fe1\u606f\u6765\u5192\u5145\u4f60\u3002");
-
+  $(".member_cml .per-navs").eq(2).find('p').removeClass("per-titles");
+  $(".member_cml .per-navs").eq(2).find('p').addClass("per-title");
+  $(".member_cml .per-navs").eq(2).find('a').eq(1).addClass("per-linkon");
 });
