@@ -16,11 +16,12 @@
     <div >
       <ul class="member_crs">
         <li class="cf2">
-        <a data-id="all" href="javascript:list('all');" class="member_crsi">所有订单</a>
-        <a data-id="nopay" href="javascript:list('nopay');">未支付</a>
-        <a data-id="ship"  href="javascript:list('ship');">已发货</a>
-        <a data-id="finish"  href="javascript:list('finish');">已完成</a>
-        <a data-id="dead"  href="javascript:list('dead');">已取消</a>
+        <a data-id="all" href="/member/order?orderType=all" class="<%=orderType=='all'?'member_crsi':''%>">所有订单</a>
+        <a data-id="nopay" href="/member/order?orderType=nopay" class="<%=orderType=='nopay'?'member_crsi':''%>">未支付</a>
+        <a data-id="ship" href="/member/order?orderType=ship" class="<%=orderType=='ship'?'member_crsi':''%>">已发货</a>
+        <a data-id="finish" href="/member/order?orderType=finish" class="<%=orderType=='finish'?'member_crsi':''%>">已完成</a>
+        <a data-id="dead" href="/member/order?orderType=dead" class="<%=orderType=='dead'?'member_crsi':''%>">已取消</a>
+
       </ul>
     <div class="content">
       <div class="contentl" style="display:block;">
@@ -40,11 +41,7 @@
           <div id="list" style="margin-bottom: 20px;">
 
           </div>
-          <div id="page_all" style="display:none" class="s_page cf clear tcdPageCode"></div>
-          <div id="page_nopay" style="display:none" class="s_page cf clear tcdPageCode"></div>
-          <div id="page_ship" style="display:none" class="s_page cf clear tcdPageCode"></div>
-          <div id="page_finish" style="display:none" class="s_page cf clear tcdPageCode"></div>
-          <div id="page_dead" style="display:none" class="s_page cf clear tcdPageCode"></div>
+          <div class="s_page cf clear tcdPageCode"></div>
         </div>
       </div></div>
     </div>
@@ -58,5 +55,8 @@
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
+<script>
+  var orderType='<%=orderType%>';
+</script>
 <script src="<%=CssPath%>/pc/js/member_order.js"></script>
 <% include common_buttom.ejs %>

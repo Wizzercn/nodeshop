@@ -17,9 +17,7 @@ enumPayType['pay_cash']='货到付款';
 enumPayType['pay_money']='余额支付';
 enumPayType['pay_alipay']='支付宝支付';
 enumPayType['pay_wxpay']='微信支付';
-var is_page= new Array();
-is_page['nopay']=true;
-is_page['ship']=true;
+var is_page= true;
 function list(type,start){
   if(type=='nopay'){
     $(".member_crs a").eq(0).addClass("member_crsi");
@@ -30,14 +28,7 @@ function list(type,start){
   }
   if(!start){
     start=0;
-    if(parseInt($("#page_"+type+" .current").text())>0){
-      start=(parseInt($("#page_"+type+" .current").text())-1)*5;
-    }
   }
-  $(".tcdPageCode").each(function(){
-    $(this).hide();
-  });
-  $("#page_"+type).show();
   $("#list").html("");
   $.ajax({
     type: "GET",
@@ -86,9 +77,9 @@ function list(type,start){
           });
 
           $("#list").html(str);
-          if(data.data.total>0&&is_page[type]){
-            is_page[type]=false;
-            $("#page_"+type).createPage({
+          if(data.data.total>0&&is_page){
+            is_page=false;
+            $(".tcdPageCode").createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){
@@ -115,7 +106,7 @@ function receive(id){
         if(data.code==0){
           $("#tip .oc_pro_a").html("操作成功");
           $("#tip").show();
-          list('ship');
+          window.location.reload();
           $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
             $("#tip").hide();
           });
@@ -177,7 +168,7 @@ function dead(id){
 
 }
 $(function(){
-  list('nopay');
+  list(orderType);
   $(".member_cml .per-navtop p").removeClass("per-titles");
   $(".member_cml .per-navtop p").addClass("per-title");
 });

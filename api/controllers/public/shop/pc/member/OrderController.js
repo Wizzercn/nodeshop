@@ -28,6 +28,7 @@ module.exports = {
         });
       }
     }, function (err, result) {
+      req.data.orderType=req.query.orderType||'all';
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.dbMember = result.dbMember || {};
