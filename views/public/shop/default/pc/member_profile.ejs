@@ -16,7 +16,8 @@
   <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />基本信息</div>
     <div class="content">
       <ul class="password mt30">
-        <li class="password2 clear"><span class="ad_bei fl mr5">昵&nbsp;&nbsp;&nbsp;&nbsp;称：</span><input type="text" id="nickname" value="<%-dbMember.nickname%>" class="fl" maxlength="20"/></li>
+        <li class="password2 clear"><span class="ad_bei fl mr5">昵&nbsp;&nbsp;&nbsp;&nbsp;称：</span><input onchange="checkNickname()" type="text" id="nickname" value="<%-dbMember.nickname%>" class="fl" maxlength="20"/></li>
+        <li class="error" style="display:none " id="_nickname_tip"></li>
         <li class="password2 clear"><span class="ad_bei fl mr5">手&nbsp;机&nbsp;号：</span><input style="background-color: #E0E0E0;" value="<%-dbMember.mobile%>" readonly type="text" placeholder="手机号码" class="fl" /></li>
         <li class="password2 clear"><span class="ad_bei fl mr5">电子邮箱：</span><input onchange="checkEMail()" type="text" id="email" value="<%-dbMember.email||''%>" class="fl" maxlength="20"/></li>
         <li class="error" style="display:none " id="_email_tip"></li>

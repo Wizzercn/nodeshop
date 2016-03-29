@@ -85,6 +85,8 @@ module.exports = {
         if (e2) {
           return res.json({code: 1, msg: ''});
         } else {
+          member.nickname=req.body.nickname||'';
+          req.session.member=member;
           return res.json({code: 0, msg: ''});
         }
       });

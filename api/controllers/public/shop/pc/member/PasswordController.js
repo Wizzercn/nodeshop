@@ -37,5 +37,8 @@ module.exports = {
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_password', req.data);
 
     });
+  },
+  save:function(req,res){
+
   }
 };

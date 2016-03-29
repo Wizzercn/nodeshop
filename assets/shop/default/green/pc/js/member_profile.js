@@ -53,6 +53,15 @@ function loadProvince(){
     });
   });
 }
+function checkNickname(){
+  $("#_nickname_tip").hide();
+  if($("#nickname").val()==''){
+    $("#_nickname_tip").html("昵称不可为空");
+    $("#_nickname_tip").show();
+    return false;
+  }
+  return true;
+}
 function isChinaOrLett(s) {//判断是否是汉字、字母组成
   var regu = "^[a-zA-Z\u4e00-\u9fa5]+$";
   var re = new RegExp(regu);
@@ -94,7 +103,7 @@ function save(){
       return false;
     }
   });
-  if(is_submit){
+  if(checkNickname()&&is_submit){
     $.ajax({
       type : "POST",
       url : "/public/shop/pc/member/profile/save",
@@ -112,6 +121,7 @@ function save(){
       dataType : "json",
       success : function(data) {
         if(data.code==0){
+          $("#left_nickname").html($("#nickname").val());
           $("#tip .oc_pro_a").html("保存成功");
           $("#tip").show();
           $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
