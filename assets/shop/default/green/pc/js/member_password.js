@@ -62,8 +62,8 @@ function save(){
     type : "POST",
     url : "/public/shop/pc/member/password/save",
     data:{
-      oldpassword:$("#oldpassword").val(),
-      newpassword:$("#newpassword").val()
+      newpassword:$("#newpassword").val(),
+      smscode:$("#smscode").val()
     },
     dataType : "json",
     success : function(data) {

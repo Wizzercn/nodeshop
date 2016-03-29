@@ -39,6 +39,32 @@ module.exports = {
     });
   },
   save:function(req,res){
+    var member = req.session.member;
+    if (!member || member.memberId < 1) {
+      return res.json({code: 1, msg: ''});
+    }
+    var newpassword=req.body.newpassword||'';
+    var smscode=req.body.smscode||'';
+    Shop_member.findOne(member.memberId).exec(function (e2, m) {
+      RedisService.get('sms_vercode_' + m.mobile, function (e, o) {
+        if (o && smscode == o.toString()) {
+          Shop_member_account.find({memberId:member.memberId}).exec(function(el,list){
+            var i=0;
+            list.forEach(function(account){
+              i++;
+              var login_password=StringUtil.password(newpassword, account.login_name, account.createdAt);
+              Shop_member_account.update(account,{login_password:login_password}).exec(function(ep,op){
+                if(i==list.length){
+                  return res.json({code: 0, msg: ''});
+                }
+              });
+            });
+          });
 
+        } else {
+          return res.json({code: 2, msg: ''});
+        }
+      });
+    });
   }
 };
