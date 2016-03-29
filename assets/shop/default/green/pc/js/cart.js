@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/16/16.
+ * Created by wizzer.cn on 3/16/16.
  */
 var is_save=false;
 function removeGoodsList(goodsId,productId){

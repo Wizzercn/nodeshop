@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/28/16.
+ * Created by wizzer.cn on 3/28/16.
  */
 function closeAddr(){
   $("#pageOverlay").hide();

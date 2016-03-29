@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/28/16.
+ * Created by wizzer.cn on 3/28/16.
  */
 var is_sendSMS=false;
 function checkPassword(){

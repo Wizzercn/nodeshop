@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/20/16.
+ * Created by wizzer.cn on 3/20/16.
  */
 var is_sendSMS=false;
 var is_pay=false;

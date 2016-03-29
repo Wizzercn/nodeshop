@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/10/16.
+ * Created by wizzer.cn on 3/10/16.
  */
 function checkLoginName(){
   if($("#login_name").val()==""){

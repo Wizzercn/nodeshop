@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/23/16.
+ * Created by wizzer.cn on 3/23/16.
  */
 var enumPayStatus= new Array();
 enumPayStatus[0]='未支付';
@@ -17,7 +17,12 @@ enumPayType['pay_cash']='货到付款';
 enumPayType['pay_money']='余额支付';
 enumPayType['pay_alipay']='支付宝支付';
 enumPayType['pay_wxpay']='微信支付';
-var is_page=true;
+var is_page=new Array();
+is_page['all']=true;
+is_page['nopay']=true;
+is_page['ship']=true;
+is_page['finish']=true;
+is_page['dead']=true;
 function list(type,start){
   if(type=='all'){
     $(".member_crs a").each(function(){
@@ -45,7 +50,16 @@ function list(type,start){
     });
     $(".member_crs a").eq(4).addClass("member_crsi");
   }
-  if(!start)start=0;
+  if(!start){
+    start=0;
+    if(parseInt($("#page_"+type+" .current").text())>0){
+      start=(parseInt($("#page_"+type+" .current").text())-1)*5;
+    }
+  }
+  $(".tcdPageCode").each(function(){
+    $(this).hide();
+  });
+  $("#page_"+type).show();
   $("#list").html("");
   $.ajax({
     type: "GET",
@@ -98,9 +112,9 @@ function list(type,start){
           });
 
           $("#list").html(str);
-          if(data.data.total>0&&is_page){
-            is_page=false;
-            $(".tcdPageCode").createPage({
+          if(data.data.total>0&&is_page[type]){
+            is_page[type]=false;
+            $("#page_"+type).createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){

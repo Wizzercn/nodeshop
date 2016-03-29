@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/9/16.
+ * Created by wizzer.cn on 3/9/16.
  */
 function loadimage(obj) {
   var $obj = $(obj);

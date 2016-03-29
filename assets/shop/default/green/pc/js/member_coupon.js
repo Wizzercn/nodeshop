@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/27/16.
+ * Created by wizzer.cn on 3/27/16.
  */
 var is_page=true;
 function list(start){

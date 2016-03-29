@@ -1,5 +1,5 @@
 /**
- * Created by root on 3/14/16.
+ * Created by wizzer.cn on 3/14/16.
  */
 
 function picLunbo(){
