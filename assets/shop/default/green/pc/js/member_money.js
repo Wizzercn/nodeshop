@@ -1,8 +1,7 @@
-
+var is_page=true;
 function list(start){
   if(!start)start=0;
   $("#list").html("");
-  $(".tcdPageCode").html("");
   $.ajax({
     type: "GET",
     url: "/public/shop/pc/member/money/list?start="+start,
@@ -22,16 +21,12 @@ function list(start){
           '</div>';
           });
           $("#list").html(str);
-          if(data.data.total>0){
-            var is_page=false;
+          if(data.data.total>0&&is_page){
+            is_page=false;
             $(".tcdPageCode").createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){
-                console.log(is_page);
-                if(is_page)
-                  return false;
-                is_page=true;
                 var pageSize=data.data.size;
                 var s=(p-1)*pageSize;
                 list(s);

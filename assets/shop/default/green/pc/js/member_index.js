@@ -17,6 +17,7 @@ enumPayType['pay_cash']='货到付款';
 enumPayType['pay_money']='余额支付';
 enumPayType['pay_alipay']='支付宝支付';
 enumPayType['pay_wxpay']='微信支付';
+var is_page=true;
 function list(type,start){
   if(type=='nopay'){
     $(".member_crs a").eq(0).addClass("member_crsi");
@@ -27,7 +28,6 @@ function list(type,start){
   }
   if(!start)start=0;
   $("#list").html("");
-  $(".tcdPageCode").html("");
   $.ajax({
     type: "GET",
     url: "/public/shop/pc/member/order/list?type="+type+"&start="+start,
@@ -75,15 +75,12 @@ function list(type,start){
           });
 
           $("#list").html(str);
-          if(data.data.total>0){
-            var is_page=false;
+          if(data.data.total>0&&is_page){
+            is_page=false;
             $(".tcdPageCode").createPage({
                 pageCount:data.data.totalPage,
               current:data.data.page,
               backFn:function(p){
-                if(is_page)
-                  return false;
-                is_page=true;
                 var pageSize=data.data.size;
                 var s=(p-1)*pageSize;
                 list(type,s);
