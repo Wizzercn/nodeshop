@@ -106,12 +106,11 @@ function receive(id){
         if(data.code==0){
           $("#tip .oc_pro_a").html("操作成功");
           $("#tip").show();
-          window.location.reload();
           $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
-            $("#tip").hide();
+            window.location.reload();
           });
           $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
-            $("#tip").hide();
+            window.location.reload();
           });
         }else {
           $("#tip .oc_pro_a").html(data.msg);
