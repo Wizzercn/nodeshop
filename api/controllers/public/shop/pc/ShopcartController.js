@@ -785,7 +785,7 @@ module.exports = {
           order.freightAmount = yunMoney;
           cb(null, order);
         },
-        //4.计算优惠券
+        //4.计算优惠券,和积分
         function (order, cb) {
           Shop_member_coupon.findOne({memberId: member.memberId, id: couponId, status: 0}).exec(function (e, o) {
             var discountAmount = 0;
@@ -797,8 +797,8 @@ module.exports = {
             if(order.finishAmount<1){
               order.finishAmount=1;
             }
-            if(order.finishAmount-order.freightAmount>0){
-              order.score=Math.floor((order.finishAmount-order.freightAmount) / 100);
+            if(order.finishAmount-order.freightAmount-discountAmount>0){
+              order.score=Math.floor((order.finishAmount-order.freightAmount-discountAmount) / 100);
             }else {
               order.score=0;
             }
