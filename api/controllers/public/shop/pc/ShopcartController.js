@@ -363,6 +363,7 @@ module.exports = {
     var productId = StringUtil.getInt(req.body.productId);
     var num = StringUtil.getInt(req.body.num);
     if (num == 0)num = 1;
+    var stock=0;
     var member = req.session.member;
 
     async.waterfall([function (cb) {
@@ -380,7 +381,9 @@ module.exports = {
             obj.productId = productId;
             obj.goodsid = o[0].goodsid.id;
             obj.imgurl = o[0].goodsid.imgurl;
+            stock=o[0].stock || 0;
           }
+
           cb(e, obj);
         });
       } else {
@@ -396,13 +399,15 @@ module.exports = {
           obj.spec = '';
           obj.productId = 0;
           if (o && o.length > 0) {
-            obj.name = o[0].name || '';
-            obj.price = o[0].price || 0;
-            obj.weight = o[0].weight || 0;
+
             obj.imgurl = o[0].imgurl || '';
             var p = o[0].products;
             if (p.length == 1) {
+              obj.name = p[0].name || '';
+              obj.price = p[0].price || 0;
+              obj.weight = p[0].weight || 0;
               obj.productId = p[0].id;
+              stock=p[0].stock || 0;
             }
           }
           cb(e, obj);
@@ -438,16 +443,24 @@ module.exports = {
                 if (o) {
                   cartObj.num = o.num + num;
                   cartObj.price = hyprice;
+                  if(cartObj.num>stock){
+                    return res.json({code: 2, msg: '库存不足'});
+                  }
                   Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
+                    return res.json({code: 0, msg: ''});
                   });
                 } else {
                   cartObj.num = num;
                   cartObj.memberId = member.memberId;
                   cartObj.price = hyprice;
+                  if(cartObj.num>stock){
+                    return res.json({code: 2, msg: '库存不足'});
+                  }
                   Shop_member_cart.create(cartObj).exec(function (e2, o2) {
+                    return res.json({code: 0, msg: ''});
                   });
                 }
-                return res.json({code: 0, msg: ''});
+
               });
             });
           });
@@ -457,23 +470,30 @@ module.exports = {
         if (cookieGoods) {
           var obj = JSON.parse(cookieGoods);
           cartObj.num = obj.num + num;
+          if(cartObj.num>stock){
+            return res.json({code: 2, msg: '库存不足'});
+          }
           res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             path: '/',
             secure: false
           });
+          return res.json({code: 0, msg: ''});
         } else {
           cartObj.num = num;
+          if(cartObj.num>stock){
+            return res.json({code: 2, msg: '库存不足'});
+          }
           res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
             path: '/',
             secure: false
           });
-
+          return res.json({code: 0, msg: ''});
         }
-        return res.json({code: 0, msg: ''});
+
       }
     });
 
@@ -513,7 +533,7 @@ module.exports = {
     if (member && member.memberId > 0) {
       if (goodsId && productId) {
         Shop_goods_products.findOne({
-          select: ['id', 'name', 'spec', 'price', 'weight', 'goodsid'],
+          select: ['id', 'name', 'spec', 'price', 'weight','stock', 'goodsid'],
           where: {disabled: false, id: productId, goodsid: goodsId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -529,6 +549,9 @@ module.exports = {
             obj.imgurl = o.goodsid.imgurl;
             obj.is_buy = true;
             obj.num = num;
+            if(num>o.stock){
+              return res.json({code: 3, msg: '库存不足'});
+            }
             Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb) {
 
               Shop_goods_lv_price.findOne({
@@ -715,7 +738,7 @@ module.exports = {
             var lv = {member_lv: olv || {}};
             list.forEach(function (obj) {
               Shop_goods_products.findOne({
-                select: ['id', 'name', 'gn', 'spec', 'price', 'weight', 'goodsid'],
+                select: ['id', 'name', 'gn', 'spec', 'price', 'stock','weight', 'goodsid'],
                 where: {disabled: false, id: obj.productId, goodsid: obj.goodsId}
               }).populate('goodsid', {
                 select: ['id', 'imgurl']
@@ -734,6 +757,9 @@ module.exports = {
                   goods.price = o.price;
                   goods.weight = o.weight;
                   goods.imgurl= o.goodsid.imgurl;
+                  if(goods.num> o.stock){
+                    cb({code:3,msg:o.name},null);
+                  }
                   Shop_goods_lv_price.findOne({
                     lvid: mmb.lv_id,
                     productId: obj.productId,
@@ -839,8 +865,11 @@ module.exports = {
             cb(e, order);
           });
         }], function (err, order) {
-        sails.log.debug('saveOrder err::'+JSON.stringify(err))
+        sails.log.debug('saveOrder err::'+JSON.stringify(err));
         if (err) {
+          if(err.code==3){
+            return res.json({code: 3, msg:'商品:'+ err.msg+'<br>库存不足,请重新下单'});
+          }
           /*订单日志表
            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
            opType:admin,member
@@ -888,6 +917,8 @@ module.exports = {
             }).exec(function (e) {
             });
             Shop_goods.query('UPDATE shop_goods SET buy_count=buy_count+1 WHERE id=?',[o.goodsId],function(gErr,g){
+            });
+            Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock-? WHERE id=?',[StringUtil.getInt(o.num),o.productId],function(gErr,g){
             });
           });
           return res.json({code: 0, msg: '订单生成成功',orderId:order.id});

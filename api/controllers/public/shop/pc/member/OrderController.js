@@ -104,7 +104,13 @@ module.exports = {
               return res.json({code: 3, msg: '系统异常'});
             });
           } else {
-
+            //退库存
+            Shop_order_goods.find({orderId: id}).exec(function(orderErr,orderGoogs){
+              orderGoogs.forEach(function(goodsObj){
+                Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock-? WHERE orderId=? and goodsId=? and productId=?',[StringUtil.getInt(goodsObj.num),goodsObj.orderId,goodsObj.goodsId,goodsObj.productId],function(gErr,g){
+                });
+              });
+            });
             if (order.payStatus == 1) {
               /*订单日志表
                opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel

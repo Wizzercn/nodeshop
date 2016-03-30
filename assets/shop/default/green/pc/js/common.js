@@ -85,6 +85,15 @@ function addToCarData(goodsId,productId,num){
     success : function(data) {
       if(data.code==0){
         showCartNum();
+      }else if(data.code==2){
+        $("#tip .oc_pro_a").html(data.msg);
+        $("#tip").show();
+        $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+          $("#tip").hide();
+        });
+        $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+          $("#tip").hide();
+        });
       }
     }
   });

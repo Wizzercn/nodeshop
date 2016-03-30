@@ -187,6 +187,15 @@ $(function(){
           window.location.href='/shopcart/buy';
         }else if(data.code==1){
           window.location.href='/login?r=/goods/'+goodsid;
+        }else if(data.code==3){
+          $("#tip .oc_pro_a").html(data.msg);
+          $("#tip").show();
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            $("#tip").hide();
+          });
         }
       }
     });
