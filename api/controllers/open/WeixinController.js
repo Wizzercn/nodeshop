@@ -1,4 +1,5 @@
 /**
+ * 这个JS文件写的比较早，也比较乱，我都不忍心看下去了……改动的时候小心点啊
  * Created by root on 10/25/15.
  */
 var emoji=require('emoji');
