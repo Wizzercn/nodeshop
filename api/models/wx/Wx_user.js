@@ -22,9 +22,6 @@ module.exports = {
     },
     unionid :{//同一个微信开放平台帐号下的移动应用、网站应用和公众帐号，用户的unionid是唯一的
       type: 'string',
-      required: true,
-      index: true,
-      unique: true,
       size: 50
     },
     nickname: {//用户的昵称
@@ -71,6 +68,7 @@ module.exports = {
   },
   getUser: function (wxid, api, user_list) {
     api.batchGetUsers(user_list, function (uerr, udata, ures) {
+      sails.log.warn('Wx_user.getUser err::'+JSON.stringify(uerr));
       if (udata) {
         udata.user_info_list.forEach(function (u) {
           if (u && u.subscribe == 1) {
@@ -88,6 +86,7 @@ module.exports = {
   getFollow: function (puling, api, num, wxid) {
     if (puling != '') {
       api.getFollowers(puling, function (err, data, res) {//获取粉丝,大于10000则传递next_openid获取下一页
+        sails.log.warn('Wx_user.getFollow1 err::'+JSON.stringify(err));
         var total = data.total;
         var count = data.count;
         var next_openid = data.next_openid;
@@ -108,7 +107,7 @@ module.exports = {
       });
     } else {
       api.getFollowers(function (err, data, res) {
-        sails.log.warn('api.getFollowers:::'+JSON.stringify(err));
+        sails.log.warn('Wx_user.getFollow2 err::'+JSON.stringify(err));
         if(data){
 
         var total = data.total;

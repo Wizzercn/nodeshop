@@ -65,6 +65,7 @@ module.exports = {
         if (obj&&obj.disabled) {
           return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
         }else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
+          if(obj.memberId){
           req.session.member = {
             memberId: obj.memberId.id,
             nickname: obj.memberId.nickname,
@@ -72,6 +73,7 @@ module.exports = {
             loginIp: obj.loginIp,
             loginAt: obj.loginAt
           };
+          }
           //记录登录IP和时间
           Shop_member_account.update(obj.id, {loginIp: req.ip, loginAt: moment().format('X')}).exec(function (ep, op) {
           });
@@ -110,6 +112,7 @@ module.exports = {
           if (obj&&obj.disabled) {
             return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
           }else if (obj) {
+            if(obj.memberId){
             req.session.member = {
               memberId: obj.memberId.id,
               nickname: obj.memberId.nickname,
@@ -117,6 +120,7 @@ module.exports = {
               loginIp: obj.loginIp,
               loginAt: obj.loginAt
             };
+            }
             //记录登录IP和时间
             Shop_member_account.update(obj.id, {
               loginIp: req.ip,

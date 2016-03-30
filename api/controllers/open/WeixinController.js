@@ -67,7 +67,7 @@ module.exports = {
                                   //注册赠送积分
                                   var member_weixinreg_score=sails.config.system.ShopConfig.member_weixinreg_score||0;
                                   if(member_weixinreg_score>0){
-                                    Shop_member.update(member.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
+                                    Shop_member.update(mmb.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
                                       if(mscore){
                                         Shop_member_score_log.create({
                                           memberId:mmb.id,
@@ -95,7 +95,7 @@ module.exports = {
                                           status:0,
                                           createdAt:moment().format('X')
                                         }).exec(function(mcErr,mc){
-                                          var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
+                                          var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
                                           WeixinService.sendTextMsg(res, msg);//向用户回复消息
                                         });
                                       }else {
@@ -110,6 +110,9 @@ module.exports = {
                                 }
                               });
                             }else {
+                              Shop_member_bind.update({bind_openid:data.openid},{disabled:false}).exec(function(bcErr2,bc2){
+
+                              });
                               return res.send(200, req.query.echostr);
                             }
                           });
@@ -159,7 +162,7 @@ module.exports = {
                                       //注册赠送积分
                                       var member_weixinreg_score=sails.config.system.ShopConfig.member_weixinreg_score||0;
                                       if(member_weixinreg_score>0){
-                                        Shop_member.update(member.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
+                                        Shop_member.update(mmb.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
                                           if(mscore){
                                             Shop_member_score_log.create({
                                               memberId:mmb.id,
@@ -187,7 +190,7 @@ module.exports = {
                                               status:0,
                                               createdAt:moment().format('X')
                                             }).exec(function(mcErr,mc){
-                                              var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
+                                              var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
                                               WeixinService.sendTextMsg(res, msg);//向用户回复消息
                                             });
                                           }else {
@@ -202,6 +205,9 @@ module.exports = {
                                     }
                                   });
                                 }else {
+                                  Shop_member_bind.update({bind_openid:data.openid},{disabled:false}).exec(function(bcErr2,bc2){
+
+                                  });
                                   return res.send(200, req.query.echostr);
                                 }
                               });
@@ -259,6 +265,11 @@ module.exports = {
               Wx_user.update({openid: data.openid, wxid: id}, {subscribe: 0}).exec(function (err, obj) {
 
               });
+              if(sails.config.system.ShopConfig.member_weixinreg_auto){
+                Shop_member_bind.update({bind_openid:data.openid},{disabled:true}).exec(function(bcErr,bc){
+
+                });
+              }
               return res.send(200, req.query.echostr);
             }else if (data.event == 'CLICK') {
               Wx_reply.findOne({wxid: id, type: 'keyword', keyword: data.eventKey}).exec(function (err, obj) {
