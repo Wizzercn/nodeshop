@@ -411,45 +411,47 @@ module.exports = {
     }], function (err, cartObj) {
       //根据用户是否登录存储到不同位置
       if (member && member.memberId > 0) {
-        Shop_goods_lv_price.findOne({
-          lvid: member.lvId,
-          productId: cartObj.productId,
-          goodsid: cartObj.goodsId
-        }).exec(function (es, os) {
-          Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
-            //计算会员价
-            var lv = {member_lv: olv || {}, product_lv: os || {}};
-            var hyprice = cartObj.price;
-            if (lv && lv.member_lv && lv.member_lv.disabled == false) {
-              if (lv.product_lv && lv.product_lv.price > 0) {
-                hyprice = lv.product_lv.price;
-              } else {
-                hyprice = cartObj.price>100?cartObj.price * lv.member_lv.dis_count / 100:cartObj.price;
+        Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb) {
+
+          Shop_goods_lv_price.findOne({
+            lvid: mmb.lv_id,
+            productId: cartObj.productId,
+            goodsid: cartObj.goodsId
+          }).exec(function (es, os) {
+            Shop_member_lv.findOne(mmb.lv_id).exec(function (elv, olv) {
+              //计算会员价
+              var lv = {member_lv: olv || {}, product_lv: os || {}};
+              var hyprice = cartObj.price;
+              if (lv && lv.member_lv && lv.member_lv.disabled == false) {
+                if (lv.product_lv && lv.product_lv.price > 0) {
+                  hyprice = lv.product_lv.price;
+                } else {
+                  hyprice = cartObj.price > 100 ? cartObj.price * lv.member_lv.dis_count / 100 : cartObj.price;
+                }
               }
-            }
-            //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
-            Shop_member_cart.findOne({
-              memberId: member.memberId,
-              productId: cartObj.productId,
-              goodsId: cartObj.goodsId
-            }).exec(function (e, o) {
-              if (o) {
-                cartObj.num = o.num + num;
-                cartObj.price = hyprice;
-                Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
-                });
-              } else {
-                cartObj.num = num;
-                cartObj.memberId = member.memberId;
-                cartObj.price = hyprice;
-                Shop_member_cart.create(cartObj).exec(function (e2, o2) {
-                });
-              }
-              return res.json({code: 0, msg: ''});
+              //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
+              Shop_member_cart.findOne({
+                memberId: member.memberId,
+                productId: cartObj.productId,
+                goodsId: cartObj.goodsId
+              }).exec(function (e, o) {
+                if (o) {
+                  cartObj.num = o.num + num;
+                  cartObj.price = hyprice;
+                  Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
+                  });
+                } else {
+                  cartObj.num = num;
+                  cartObj.memberId = member.memberId;
+                  cartObj.price = hyprice;
+                  Shop_member_cart.create(cartObj).exec(function (e2, o2) {
+                  });
+                }
+                return res.json({code: 0, msg: ''});
+              });
             });
           });
         });
-
       } else {
         var cookieGoods = req.cookies['shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId];
         if (cookieGoods) {
@@ -527,44 +529,47 @@ module.exports = {
             obj.imgurl = o.goodsid.imgurl;
             obj.is_buy = true;
             obj.num = num;
-            Shop_goods_lv_price.findOne({
-              lvid: member.lvId,
-              productId: productId,
-              goodsid: goodsId
-            }).exec(function (es, os) {
-              Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
-                //计算会员价
-                var lv = {member_lv: olv || {}, product_lv: os || {}};
-                var hyprice = obj.price;
-                if (lv && lv.member_lv && lv.member_lv.disabled == false) {
-                  if (lv.product_lv && lv.product_lv.price > 0) {
-                    hyprice = lv.product_lv.price;
-                  } else {
-                    hyprice = obj.price>100?obj.price * lv.member_lv.dis_count / 100:obj.price;
+            Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb) {
 
-                  }
-                }
-                //将购物车其他商品置为非购买状态
-                Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
-                  //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
-                  Shop_member_cart.findOne({
-                    memberId: member.memberId,
-                    productId: productId,
-                    goodsId: goodsId
-                  }).exec(function (e, o) {
-                    if (o) {
-                      obj.price = hyprice;
-                      Shop_member_cart.update(o.id, obj).exec(function (e1, o1) {
-                        return res.json({code: 0, msg: ''});
-                      });
+              Shop_goods_lv_price.findOne({
+                lvid: mmb.lv_id,
+                productId: productId,
+                goodsid: goodsId
+              }).exec(function (es, os) {
+                Shop_member_lv.findOne(mmb.lv_id).exec(function (elv, olv) {
+                  //计算会员价
+                  var lv = {member_lv: olv || {}, product_lv: os || {}};
+                  var hyprice = obj.price;
+                  if (lv && lv.member_lv && lv.member_lv.disabled == false) {
+                    if (lv.product_lv && lv.product_lv.price > 0) {
+                      hyprice = lv.product_lv.price;
                     } else {
-                      obj.memberId = member.memberId;
-                      obj.price = hyprice;
-                      Shop_member_cart.create(obj).exec(function (e2, o2) {
-                        return res.json({code: 0, msg: ''});
+                      hyprice = obj.price > 100 ? obj.price * lv.member_lv.dis_count / 100 : obj.price;
 
-                      });
                     }
+                  }
+                  //将购物车其他商品置为非购买状态
+                  Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
+                    //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
+                    Shop_member_cart.findOne({
+                      memberId: member.memberId,
+                      productId: productId,
+                      goodsId: goodsId
+                    }).exec(function (e, o) {
+                      if (o) {
+                        obj.price = hyprice;
+                        Shop_member_cart.update(o.id, obj).exec(function (e1, o1) {
+                          return res.json({code: 0, msg: ''});
+                        });
+                      } else {
+                        obj.memberId = member.memberId;
+                        obj.price = hyprice;
+                        Shop_member_cart.create(obj).exec(function (e2, o2) {
+                          return res.json({code: 0, msg: ''});
+
+                        });
+                      }
+                    });
                   });
                 });
               });
@@ -704,7 +709,8 @@ module.exports = {
           var count = 0;
           var weight = 0;
           var i = 0;
-          Shop_member_lv.findOne(member.lvId).exec(function (elv, olv) {
+          Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb){
+          Shop_member_lv.findOne(mmb.lv_id).exec(function (elv, olv) {
             //计算会员价
             var lv = {member_lv: olv || {}};
             list.forEach(function (obj) {
@@ -729,7 +735,7 @@ module.exports = {
                   goods.weight = o.weight;
                   goods.imgurl= o.goodsid.imgurl;
                   Shop_goods_lv_price.findOne({
-                    lvid: member.lvId,
+                    lvid: mmb.lv_id,
                     productId: obj.productId,
                     goodsid: obj.goodsId
                   }).exec(function (es, os) {
@@ -766,6 +772,7 @@ module.exports = {
                 }
               });
             });
+          });
           });
         },
         //3.计算运费

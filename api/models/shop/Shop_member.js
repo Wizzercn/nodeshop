@@ -130,5 +130,21 @@ module.exports = {
       via: 'memberId'
     }
 
+  },
+  //会员积分变化后，根据会员等级规则，自动升级会员分组
+  afterUpdate:function(obj, next) {
+    Shop_member_lv.find({disabled:false,point:{'<=':obj.score}}).sort({point:'desc'}).limit(1).exec(function(lvErr,lv){
+      if(lv&&lv.length==1){
+        if(obj.lv_id!=lv[0].id){
+          Shop_member.update(obj.id,{lv_id:lv[0].id}).exec(function(e,o){
+            next();
+          });
+        }else {
+          next();
+        }
+      }else {
+        next();
+      }
+    });
   }
 };

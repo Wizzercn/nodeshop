@@ -66,10 +66,8 @@ module.exports = {
           return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
         }else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
           req.session.member = {
-            lvId: obj.memberId.lv_id,
             memberId: obj.memberId.id,
             nickname: obj.memberId.nickname,
-            score: obj.memberId.score,
             login_name: login_name,
             loginIp: obj.loginIp,
             loginAt: obj.loginAt
@@ -113,10 +111,8 @@ module.exports = {
             return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
           }else if (obj) {
             req.session.member = {
-              lvId: obj.memberId.lv_id,
               memberId: obj.memberId.id,
               nickname: obj.memberId.nickname,
-              score: obj.memberId.score,
               login_name: login_name,
               loginIp: obj.loginIp,
               loginAt: obj.loginAt
@@ -151,16 +147,17 @@ module.exports = {
         Shop_member_account.findOne({login_name: mobile}).exec(function (err, obj) {
           if (obj)return res.json({code: 2, msg: '帐号已存在，请更换手机号注册'});
           Shop_member.create({
+            lv_id:0,
             nickname: mobile.substring(0, 3) + '****' + mobile.substring(7),
             mobile: mobile,
             reg_ip: req.ip,
             reg_source: 'pc'
           }).exec(function (err, member) {
             if (member) {
+              //新建登录帐号
               var now = moment().format('X');
               var password = StringUtil.password(pass, mobile, now);
               Shop_member_account.create({
-                lvId: 0,
                 memberId: member.id,
                 login_name: mobile,
                 login_password: password,
@@ -170,14 +167,52 @@ module.exports = {
                   req.session.member = {
                     memberId: member.id,
                     nickname: member.nickname,
-                    score: member.score,
-                    login_name: mobile
+                    login_name: mobile,
+                    loginIp: member.loginIp,
+                    loginAt: member.loginAt
                   };
                   return res.json({code: 0, msg: '注册成功'});
                 } else {
                   return res.json({code: 3, msg: '注册失败，请重试'});
                 }
               });
+              //网页注册赠送优惠券
+              if(sails.config.system.ShopConfig.member_reg_coupon>0){
+                Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function(couponErr,coupon){
+                  if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
+                    Shop_member_coupon.create({
+                      memberId:member.id,
+                      couponId:coupon.id,
+                      couponName:coupon.name,
+                      couponPrice:coupon.price,
+                      status:0,
+                      createdAt:moment().format('X')
+                    }).exec(function(mcErr,mc){
+
+                    });
+                  }
+                });
+              }
+              //网页注册赠送积分
+              var member_reg_score=sails.config.system.ShopConfig.member_reg_score||0;
+              if(member_reg_score>0){
+                Shop_member.update(member.id,{score:member.score+member_reg_score}).exec(function(mscoreErr,mscore){
+                  if(mscore){
+                    Shop_member_score_log.create({
+                      memberId:member.id,
+                      oldScore:member.score,
+                      newScore:member.score+member_reg_score,
+                      diffScore:member_reg_score,
+                      note:'注册会员赠送',
+                      createdBy:0,
+                      createdAt:moment().format('X')
+                    }).exec(function(logErr,log){
+
+                    });
+                  }
+                });
+              }
+
             } else {
               return res.json({code: 3, msg: '注册失败，请重试'});
             }

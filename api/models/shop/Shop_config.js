@@ -98,6 +98,36 @@ module.exports = {
     },
     pay_wxpay_info:{
       type:'json'
+    },
+    member_reg_coupon:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    member_reg_score:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    member_weixinreg_auto: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return true;
+      }
+    },
+    member_weixinreg_coupon:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
+    member_weixinreg_score:{
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     }
   }
 };
