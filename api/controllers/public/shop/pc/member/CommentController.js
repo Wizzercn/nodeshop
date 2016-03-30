@@ -98,7 +98,7 @@ module.exports = {
         if (totalPage == 0 || count % pageSize != 0) {
           totalPage++;
         }
-        Shop_order_goods.query('SELECT a.*,d.* FROM shop_order_goods a,shop_order b,shop_member_comment d WHERE a.orderId=b.id AND b.memberId=? AND a.is_comment=? AND d.orderId=a.orderId AND d.goodsId=a.goodsId AND d.productId=a.productId AND d.memberId=b.memberId AND d.type=1 ORDER BY a.createAt desc LIMIT ? OFFSET ?',[member.memberId,is_comment,pageSize,start],
+        Shop_order_goods.query('SELECT a.*,d.* FROM shop_order_goods a,shop_order b,shop_member_comment d WHERE a.orderId=b.id AND b.memberId=? AND a.is_comment=? AND d.orderId=a.orderId AND d.goodsId=a.goodsId AND d.productId=a.productId AND d.memberId=b.memberId AND d.type=1 ORDER BY d.createdAt desc LIMIT ? OFFSET ?',[member.memberId,is_comment,pageSize,start],
           function (e2, list) {
             return res.json({
               "size": pageSize,
