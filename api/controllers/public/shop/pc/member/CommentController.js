@@ -146,6 +146,8 @@ module.exports = {
         }).exec(function(cErr,c){
           if(c){
             Shop_order_goods.update(id,{is_comment:true,commentAt:moment().format('X')}).exec(function(e,o){
+              Shop_goods.query('UPDATE shop_goods SET comment_count=comment_count+1 WHERE id=?',[id],function(e,o){
+              });
               return res.json({code: 0, msg: ''});
             });
           }else {

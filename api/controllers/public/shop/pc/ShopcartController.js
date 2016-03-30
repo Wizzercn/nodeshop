@@ -887,6 +887,8 @@ module.exports = {
               goodsId: o.goodsId
             }).exec(function (e) {
             });
+            Shop_goods.query('UPDATE shop_goods SET buy_count=buy_count+1 WHERE id=?',[o.goodsId],function(gErr,g){
+            });
           });
           return res.json({code: 0, msg: '订单生成成功',orderId:order.id});
         }
