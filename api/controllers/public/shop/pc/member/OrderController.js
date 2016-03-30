@@ -208,6 +208,7 @@ module.exports = {
     Shop_member.findOne(m.memberId).exec(function (eme, member) {
       Shop_order.update({id: id, memberId: m.memberId}, {
         receivedStatus: 1,
+        status:'finish',
         receivedAt: moment().format('X'),
         updateAt: moment().format('X')
       }).exec(function (e, o) {

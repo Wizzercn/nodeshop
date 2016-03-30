@@ -128,7 +128,14 @@ function receive(id){
       success: function (data) {
         if(data.code==0){
           $("#tip").hide();
-          reloadList();
+          $("#tip .oc_pro_a").html("订单已完成，现在去评价商品？");
+          $("#tip").show();
+          $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
+            window.location.href='/member/comment';
+          });
+          $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
+            window.location.reload();
+          });
         }else {
           $("#tip .oc_pro_a").html(data.msg);
           $("#tip").show();

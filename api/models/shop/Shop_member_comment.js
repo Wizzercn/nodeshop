@@ -57,10 +57,8 @@ module.exports = {
       }
     },
     orderId: {
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      type: 'string',
+      size:20
     },
     createIp:{
       type:'string'

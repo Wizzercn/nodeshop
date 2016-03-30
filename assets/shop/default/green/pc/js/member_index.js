@@ -104,10 +104,10 @@ function receive(id){
       dataType: "json",
       success: function (data) {
         if(data.code==0){
-          $("#tip .oc_pro_a").html("操作成功");
+          $("#tip .oc_pro_a").html("订单已完成，现在去评价商品？");
           $("#tip").show();
           $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
-            window.location.reload();
+            window.location.href='/member/comment';
           });
           $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
             window.location.reload();

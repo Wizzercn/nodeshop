@@ -49,6 +49,7 @@ module.exports.routes = {
   '/member/coupon': 'public/shop/pc/member/CouponController.index',
   '/member/money': 'public/shop/pc/member/MoneyController.index',
   '/member/order': 'public/shop/pc/member/OrderController.index',
+  '/member/comment': 'public/shop/pc/member/CommentController.index',
   '/member/password': 'public/shop/pc/member/PasswordController.index',
   '/member/pay': 'public/shop/pc/member/PayController.index',
   '/member/profile': 'public/shop/pc/member/ProfileController.index',

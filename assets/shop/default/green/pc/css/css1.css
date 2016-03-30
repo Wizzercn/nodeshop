@@ -840,6 +840,7 @@ a, a:hover {
 .member_cdfoj{width:100%;text-align:center;line-height:90px;}
 .member_cdfof a{color:#ce0020;}
 .member_cdsfg{width:82px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
+.member_cdsfg2{width:260px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
 .member_cdsfg1{width:153px;height:39px;text-align:center;line-height:39px;color:#221815;float:left;}
 .member_cdfi{width:95px;height:auto;float:left;}
 .member_cdsix{width:159px;height:auto;float:left;}
@@ -1610,7 +1611,8 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 
 .number_text{display:block;width:100%;line-height:97px;border-bottom:1px solid #ddd;}
 .number_text:last-child{border-bottom:none;}
-
+.number_text2{display:block;width:260px;line-height:16px;border-bottom:1px solid #ddd;}
+.number_text2:last-child{border-bottom:none;}
 .icon_san{position:absolute !important;right:-7px !important;top:15px !important;z-index:2 !important;}
 
 .pro_discript{width:260px;margin:0 auto;border-top:1px solid #ddd;border-bottom:1px solid #ddd;line-height:20px;text-align:center;padding:5px 0;}

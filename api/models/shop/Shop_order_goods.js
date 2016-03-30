@@ -93,6 +93,15 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
+    },
+    is_comment:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    commentAt:{
+      type:'integer'
     }
 
   }
