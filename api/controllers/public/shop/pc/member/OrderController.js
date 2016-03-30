@@ -107,7 +107,7 @@ module.exports = {
             //退库存
             Shop_order_goods.find({orderId: id}).exec(function(orderErr,orderGoogs){
               orderGoogs.forEach(function(goodsObj){
-                Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock-? WHERE orderId=? and goodsId=? and productId=?',[StringUtil.getInt(goodsObj.num),goodsObj.orderId,goodsObj.goodsId,goodsObj.productId],function(gErr,g){
+                Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock+? WHERE goodsId=? and id=?',[StringUtil.getInt(goodsObj.num),goodsObj.goodsId,goodsObj.productId],function(gErr,g){
                 });
               });
             });
