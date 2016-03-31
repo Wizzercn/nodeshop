@@ -89,7 +89,7 @@ module.exports = {
         });
       }
     }, function (err, result) {
-
+      sails.log.debug('member::'+JSON.stringify(req.session.member));
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       //req.data.indexClassList = result.indexClassList || [];
