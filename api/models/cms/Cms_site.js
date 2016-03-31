@@ -36,6 +36,9 @@ module.exports = {
     site_logo:{
       type: 'string'
     },
+    site_wap_logo:{
+      type: 'string'
+    },
     site_qq: {
       type: 'string',
       size: 20

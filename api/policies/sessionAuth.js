@@ -44,16 +44,37 @@ module.exports = function (req, res, next) {
       return res.redirect('/private/login/login');
     }
   } else {
+    var deviceAgent = req.get('user-agent').toLowerCase();
+    var agentID = deviceAgent.match(/(iphone|ipod|ipad|android|mobile)/);
+    var browse_is_mobile=false;
+    var browse_is_weixin=false;
+    var layout_file='layouts/public';
+    sails.log.debug('deviceAgent::'+deviceAgent);
+    if(agentID){
+      browse_is_mobile=true;
+      if(req.options.controller.indexOf('public/shop/pc')==0) {
+        //如果是用手机访问PC地址
+        return res.redirect('/wap' + req.url);
+      }
+    }
+    if (deviceAgent.indexOf('micromessenger') >-1) {
+      browse_is_weixin=true;
+    }
+    if(req.options.controller.indexOf('public/shop/wap')==0) {
+      layout_file='layouts/public_wap';
+    }
     var r=req.query.r||'';
     var siteTitle=sails.config.system.SiteConfig.site_name||'';
     var data = {
-      layout: 'layouts/public',
+      layout: layout_file,
       SiteConfig:sails.config.system.SiteConfig,
       ShopConfig:sails.config.system.ShopConfig,
       CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css,
       r:r,
       member:req.session.member||{},
-      siteTitle:siteTitle
+      siteTitle:siteTitle,
+      browse_is_mobile:browse_is_mobile,
+      browse_is_weixin:browse_is_weixin
     };
     req.data = data;
     return next();

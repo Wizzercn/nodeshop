@@ -31,7 +31,7 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
+  /***********************PC****************************************/
   '/': 'public/shop/pc/IndexController.index',
   '/hot': 'public/shop/pc/HotController.index',
   '/hot/ajax': 'public/shop/pc/HotController.ajax',
@@ -57,6 +57,35 @@ module.exports.routes = {
   '/shopcart/list': 'public/shop/pc/ShopcartController.list',
   '/shopcart/buy': 'public/shop/pc/ShopcartController.buy',
   '/shopcart/order/:id': 'public/shop/pc/ShopcartController.order',
+  /***********************PC****************************************/
+  /***********************WAP****************************************/
+  '/wap': 'public/shop/wap/IndexController.index',
+  '/wap/': 'public/shop/wap/IndexController.index',
+  '/wap/hot': 'public/shop/wap/HotController.index',
+  '/wap/hot/ajax': 'public/shop/wap/HotController.ajax',
+  '/wap/search': 'public/shop/wap/HotController.index',
+  '/wap/search/ajax': 'public/shop/wap/HotController.ajax',
+  '/wap/list/:id': 'public/shop/wap/ListController.index',
+  '/wap/list/:id/ajax': 'public/shop/wap/ListController.ajax',
+  '/wap/goods/:id': 'public/shop/wap/GoodsController.one',
+  '/wap/channel/:id': 'public/shop/wap/ChannelController.index',
+  '/wap/info/:id': 'public/shop/wap/InfoController.index',
+  '/wap/join': 'public/shop/wap/AccountController.join',
+  '/wap/login': 'public/shop/wap/AccountController.login',
+  '/wap/member': 'public/shop/wap/member/MemberController.index',
+  '/wap/member/address': 'public/shop/wap/member/AddressController.index',
+  '/wap/member/coupon': 'public/shop/wap/member/CouponController.index',
+  '/wap/member/money': 'public/shop/wap/member/MoneyController.index',
+  '/wap/member/order': 'public/shop/wap/member/OrderController.index',
+  '/wap/member/comment': 'public/shop/wap/member/CommentController.index',
+  '/wap/member/password': 'public/shop/wap/member/PasswordController.index',
+  '/wap/member/pay': 'public/shop/wap/member/PayController.index',
+  '/wap/member/profile': 'public/shop/wap/member/ProfileController.index',
+  '/wap/member/score': 'public/shop/wap/member/ScoreController.index',
+  '/wap/shopcart/list': 'public/shop/wap/ShopcartController.list',
+  '/wap/shopcart/buy': 'public/shop/wap/ShopcartController.buy',
+  '/wap/shopcart/order/:id': 'public/shop/wap/ShopcartController.order',
+  /***********************WAP****************************************/
   '/sysadmin': 'private/LoginController.login',
   '/sysadmin/home': 'private/HomeController.index',
   '/test':'/sysadmin'
