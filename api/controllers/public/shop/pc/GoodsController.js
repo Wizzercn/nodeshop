@@ -81,7 +81,15 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/goods/'+id;
-      req.data.siteTitle = req.data.goods.name+'_' + req.data.siteTitle;
+      if(result.goods){
+      req.data.siteTitle = result.goods.name+'_' + req.data.siteTitle;
+        if(result.goods.disabled==true){
+          //未上架商品报404
+          return res.notFound('商品未上架');
+        }
+      }else {
+        return res.notFound('无此商品');
+      }
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
 
     });
