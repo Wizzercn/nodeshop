@@ -44,7 +44,7 @@
   <li>
     <%
     } %>
-    <div class="pro_item" data-goods-id="<%= hotgoods.id %>" data-goods-name="<%= hotgoods.name %>"
+    <div id="g<%= hotgoods.id %>" class="pro_item" data-goods-id="<%= hotgoods.id %>" data-goods-name="<%= hotgoods.name %>"
          data-goods-price="<%= StringUtil.setPrice(hotgoods.price) %>"
          data-goods-imgurl="<%= hotgoods.imgurl||'' %>?type=s">
       <a href="/wap/goods/<%= hotgoods.id %>">
@@ -52,7 +52,7 @@
         <h3><%= hotgoods.name %></h3>
       </a>
       <div class="pro_item_bottom">
-        <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarShop(this,<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
+        <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarShop(<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
         <ins class="pro_item_ins">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.price) %></span></ins>
         <del class="pro_item_del">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.priceMarket) %></span>
         </del>
@@ -97,4 +97,5 @@
   <%});%>
   <%}%>
 </ul>
+</div>
 <% include common_buttom.ejs %>

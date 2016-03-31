@@ -671,6 +671,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .tan_main_third input{height:2.5rem;color:#ea535e;display:inline-block;width:100%;  flex: 1;
   -webkit-box-flex: 1;display: -webkit-box;background:none;border:none;}
 .tan_main_third input:first-child{border-right:1px solid #dddddd;}
+#tip{position:fixed;top:15rem;width:100%;text-align:center;display: none}
+#tip span{background-color: rgba(0, 0, 0, 0.7);padding:1rem;margin:0 auto;border-radius: 0.3rem;color:#fff;display:inline-block}
 
 /*---我的资产---*/
 .asset_f{padding:1rem;background:#fdeab9;display:block;text-align:center;}

@@ -29,8 +29,16 @@ function setPrice(str){
     return setPrice(s);
   }
 }
+function tip(word){
+  $('#tip').find('span').html(word);
+  $('#tip').show();
+  setTimeout("$('#tip').hide()",2500);
+}
 function addToCarShop(obj, goodsId,productId, num) {
-  addToCarData(goodsId,productId, num);
+  flyImg(obj,goodsId,productId, num);
+}
+function flyImg(goodsId,productId, num){
+  addToCarData(goodsId,productId,num);
 }
 function addToCarData(goodsId,productId,num){
   if(!num){
@@ -48,15 +56,9 @@ function addToCarData(goodsId,productId,num){
     success : function(data) {
       if(data.code==0){
         showCartNum();
+        tip("添加成功");
       }else if(data.code==2){
-        $("#tip .oc_pro_a").html(data.msg);
-        $("#tip").show();
-        $("#tip input[type=button]").eq(0).unbind("click").on("click",function(){
-          $("#tip").hide();
-        });
-        $("#tip input[type=button]").eq(1).unbind("click").on("click",function(){
-          $("#tip").hide();
-        });
+        tip("库存不足");
       }
     }
   });
