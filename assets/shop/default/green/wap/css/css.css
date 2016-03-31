@@ -403,7 +403,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 /*顶部导航*/
 .bnav{position: fixed; bottom: 0; left: 0; right: 0; display: flex; display: -webkit-box; height: 5rem; text-align: center; font-size: 1.2rem; color: #00aa3a; background-color: #ececec; z-index: 15;}
-.bnav a{display: block; flex: 1; -webkit-box-flex: 1; padding: .2rem 0; width: 20%; height: 5rem; line-height: 2rem; color: #333333; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; border-top: 1px solid #ddd;}
+.bnav a{position:relative;display: block; flex: 1; -webkit-box-flex: 1; padding: .2rem 0; width: 20%; height: 5rem; line-height: 2rem; color: #333333; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; border-top: 1px solid #ddd;}
 /*.bnav a:visited{color: #00aa3a;}
 .bnav a:active{color: #fff; background-color: #00aa3a; border-top-color: #00aa3a;}*/
 .bnav a.on{color:#00aa3a;}
@@ -418,6 +418,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .on.cart_bnav:before, .cart_bnav:active:before{background-position: 0 -17.5rem;}
 .more_bnav:before{background-position: 0 -20rem;}
 .on.more_bnav:before, .more_bnav:active:before{background-position: 0 -22.5rem;}
+.cart_bnav i{position:absolute;top:0.3rem;left: 50%;margin-left: 1.2rem;border-radius:0.5rem;background:#00aa3a;color:#fff;padding:0 0.2rem;min-width:1rem;max-height: 1.5rem;line-height: 1.5rem;}
 
 
 /*距离*/

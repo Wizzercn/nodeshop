@@ -61,6 +61,7 @@ module.exports.routes = {
   /***********************WAP****************************************/
   '/wap': 'public/shop/wap/IndexController.index',
   '/wap/': 'public/shop/wap/IndexController.index',
+  '/wap/wechat/oauth': 'public/shop/wap/WechatController.oauth',
   '/wap/hot': 'public/shop/wap/HotController.index',
   '/wap/hot/ajax': 'public/shop/wap/HotController.ajax',
   '/wap/search': 'public/shop/wap/HotController.index',
