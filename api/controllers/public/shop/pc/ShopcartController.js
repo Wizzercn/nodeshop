@@ -374,6 +374,7 @@ module.exports = {
         }).populate('goodsid', {
           select: ['id', 'imgurl']
         }).exec(function (e, o) {
+          var obj={};
           if (o && o.length > 0) {
             obj.price = o[0].price || 0;
             obj.weight = o[0].weight || 0;

@@ -1,0 +1,101 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit">
+    <%=classObj.name||''%>
+  </h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+
+<section>
+  <ul class="pro_item_box">
+    <%var i = 0;
+    goodsData.data.forEach(function(hotgoods){
+      i++;
+      var len=0;
+      if(hotgoods.info)len=hotgoods.info.length;
+    %>
+    <% if(i % 2 == 1){
+    %>
+    <li>
+      <%
+      } %>
+      <div id="g<%= hotgoods.id %>" class="pro_item" data-goods-id="<%= hotgoods.id %>" data-goods-name="<%= hotgoods.name %>"
+           data-goods-price="<%= StringUtil.setPrice(hotgoods.price) %>"
+           data-goods-imgurl="<%= hotgoods.imgurl||'' %>?type=s">
+        <a href="/wap/goods/<%= hotgoods.id %>">
+          <img src="<%= hotgoods.imgurl||'' %>?type=s"/>
+          <h3><%= hotgoods.name %></h3>
+        </a>
+        <div class="pro_item_bottom">
+          <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarData(<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
+          <ins class="pro_item_ins">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.price) %></span></ins>
+          <del class="pro_item_del">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.priceMarket) %></span>
+          </del>
+        </div>
+      </div>
+      <% if(i % 2 == 0){
+      %>
+    </li>
+    <%
+    } %>
+    <%});%>
+  </ul>
+  <div id="pullUp">
+    <a href="javascript:ajaxpage();" class="big_gray_btn">加载更多商品</a>
+  </div>
+</section>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="on class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script type="text/javascript">
+  var totalPage=<%=goodsData.totalPage||1%>;
+  var page=<%=goodsData.page||1%>;
+  var sort_name='<%=sort_name||'default'%>';
+  var sort_type='<%=sort_type||'desc'%>';
+  var search_name='<%=typeof search_name!='undefined'?search_name||'':''%>';
+
+  function ajaxpage(){
+    if(totalPage==page){
+      tip("已全部加载");
+      return false;
+    }
+    $("#tip span").html("加载中..");
+    $("#tip").show();
+    var pageSize=<%=goodsData.size||8%>;
+    var start=page*pageSize;
+    $.post(
+      "/public/shop/wap/list/ajax/<%=classObj.id%>?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type+"&search_name="+search_name,
+      function(result){
+        $("#tip").hide();
+        tip("加载完成");
+        page=result.page;
+        if(result.data.length>0){
+          var str='';
+          var t=0;
+          $.each(result.data,function(i,o){
+            var btn='';
+            t++;
+            if(!o.is_spec&&list_quick_buy){
+              btn='<a href="javascript:addToCarData(\''+ o.id+'\',\'\')" class="add_cart">&nbsp;&nbsp;&nbsp;</a>';
+            }
+            if(t % 2 == 1){
+              str+='<li>';
+            }
+            str+='<div class="pro_item"><a href="/wap/goods/'+ o.id+'"><img src="'+ o.imgurl+'?type=s" alt="" /><h3>'+ o.name+'</h3></a><div class="pro_item_bottom">'+ btn+'<ins>&yen;<span class="ins_num">'+setPrice(o.price)+'</span></ins><del class="pro_item_del">&yen;<span class="ins_num">'+setPrice(o.priceMarket)+'</span></del></div></div>';
+            if(t % 2 == 0){
+              str+='</li>';
+            }
+          });
+          $(".pro_item_box").append(str);
+        }
+      },'json'
+    );
+    }
+</script>
+<% include common_buttom.ejs %>

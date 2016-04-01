@@ -69,6 +69,7 @@ module.exports.routes = {
   '/wap/list/:id': 'public/shop/wap/ListController.index',
   '/wap/list/:id/ajax': 'public/shop/wap/ListController.ajax',
   '/wap/goods/:id': 'public/shop/wap/GoodsController.one',
+  '/wap/class': 'public/shop/wap/ClassController.index',
   '/wap/channel': 'public/shop/wap/ChannelController.index',
   '/wap/channel/:id': 'public/shop/wap/ChannelController.one',
   '/wap/info/:id': 'public/shop/wap/InfoController.index',

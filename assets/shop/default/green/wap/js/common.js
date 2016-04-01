@@ -34,12 +34,6 @@ function tip(word){
   $('#tip').show();
   setTimeout("$('#tip').hide()",2500);
 }
-function addToCarShop(obj, goodsId,productId, num) {
-  flyImg(obj,goodsId,productId, num);
-}
-function flyImg(goodsId,productId, num){
-  addToCarData(goodsId,productId,num);
-}
 function addToCarData(goodsId,productId,num){
   if(!num){
     num=1;

@@ -1,0 +1,45 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit">
+    商品分类
+  </h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<section class="main">
+  <ul class="more_pg cf2" id="nav">
+    <li><a href="/wap/hot">全部商品</a></li>
+    <%
+    var i=0;
+    allClassList.forEach(function(c1){
+    if(c1.parentId==0){
+      i++;
+    %>
+    <li>
+      <%if(c1.hasChildren){%>
+      <a href="javascript:;"  onclick="DoMenu('m_<%=c1.id%>')"><%=c1.name%></a>
+      <ul id="m_<%=c1.id%>" class="<%=i==1?'':'collapsed'%>">
+        <%allClassList.forEach(function(c2){
+        if(c2.parentId==c1.id){
+        %>
+        <li><a href="/wap/list/<%=c2.id%>"><%=c2.name%></a></li>
+        <%}
+        });%>
+      </ul>
+      <%}else {%>
+      <a href="/wap/list/<%=c1.id%>"><%=c1.name%></a>
+      <%}%>
+    </li>
+    <%}
+    });%>
+  </ul>
+</section>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="on class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<% include common_buttom.ejs %>
