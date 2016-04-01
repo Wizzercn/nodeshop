@@ -83,6 +83,13 @@ function checkRealName() {
 function checkEMail(){
   var email = $.trim($("#email").val());
   $("#_email_tip").hide();
+  if(email){
+    var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    if(!reg.test(email)){
+      $("#_email_tip").html("请输入正确的Email");
+      $("#_email_tip").show();
+      return false;
+    }
   $.post("/public/shop/pc/member/profile/checkEmail", {
     email : email
   }, function(data) {
@@ -91,7 +98,7 @@ function checkEMail(){
        $("#_email_tip").show();
      }
 
-  });
+  });}
 }
 function save(){
   var is_submit=true;

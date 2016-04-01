@@ -105,6 +105,7 @@ module.exports = {
         addr: req.body.addr,
         sex: req.body.sex,
         realname: req.body.realname,
+        email: req.body.email,
         b_year: b_year,
         b_month: b_month,
         b_day: b_day
