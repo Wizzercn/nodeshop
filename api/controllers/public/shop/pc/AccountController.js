@@ -175,57 +175,58 @@ module.exports = {
                     loginIp: member.loginIp,
                     loginAt: member.loginAt
                   };
+//网页注册赠送优惠券
+                  if(sails.config.system.ShopConfig.member_reg_coupon>0){
+                    Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function(couponErr,coupon){
+                      if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
+                        Shop_member_coupon.create({
+                          memberId:member.id,
+                          couponId:coupon.id,
+                          couponName:coupon.name,
+                          couponPrice:coupon.price,
+                          status:0,
+                          createdAt:moment().format('X')
+                        }).exec(function(mcErr,mc){
 
+                        });
+                      }
+                    });
+                  }
+                  //网页注册赠送积分
+                  var member_reg_score=sails.config.system.ShopConfig.member_reg_score||0;
+                  if(member_reg_score>0){
+                    Shop_member.update(member.id,{score:member.score+member_reg_score}).exec(function(mscoreErr,mscore){
+                      if(mscore.length>0){
+                        //将cookies购物车数据同步到数据库
+                        Shop_member.findOne(mscore[0].id).exec(function(findErr,findObj){
+                          Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+                            return res.json({code: 0, msg: '注册成功'});
+                          });
+                        });
+                        Shop_member_score_log.create({
+                          memberId:member.id,
+                          oldScore:member.score,
+                          newScore:member.score+member_reg_score,
+                          diffScore:member_reg_score,
+                          note:'注册会员赠送',
+                          createdBy:0,
+                          createdAt:moment().format('X')
+                        }).exec(function(logErr,log){
+
+                        });
+                      }
+                    });
+                  }else{
+                    //将cookies购物车数据同步到数据库
+                    Shop_member_cart.updateCookieCartDataToDb(req, res, member, function () {
+                      return res.json({code: 0, msg: '注册成功'});
+                    });
+                  }
                 } else {
                   return res.json({code: 3, msg: '注册失败，请重试'});
                 }
               });
-              //网页注册赠送优惠券
-              if(sails.config.system.ShopConfig.member_reg_coupon>0){
-                Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function(couponErr,coupon){
-                  if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
-                    Shop_member_coupon.create({
-                      memberId:member.id,
-                      couponId:coupon.id,
-                      couponName:coupon.name,
-                      couponPrice:coupon.price,
-                      status:0,
-                      createdAt:moment().format('X')
-                    }).exec(function(mcErr,mc){
 
-                    });
-                  }
-                });
-              }
-              //网页注册赠送积分
-              var member_reg_score=sails.config.system.ShopConfig.member_reg_score||0;
-              if(member_reg_score>0){
-                Shop_member.update(member.id,{score:member.score+member_reg_score}).exec(function(mscoreErr,mscore){
-                  sails.log.debug('mscore::'+JSON.stringify(mscore));
-                  if(mscore.length>0){
-                    //将cookies购物车数据同步到数据库
-                    Shop_member_cart.updateCookieCartDataToDb(req, res, mscore[0], function () {
-                      return res.json({code: 0, msg: '注册成功'});
-                    });
-                    Shop_member_score_log.create({
-                      memberId:member.id,
-                      oldScore:member.score,
-                      newScore:member.score+member_reg_score,
-                      diffScore:member_reg_score,
-                      note:'注册会员赠送',
-                      createdBy:0,
-                      createdAt:moment().format('X')
-                    }).exec(function(logErr,log){
-
-                    });
-                  }
-                });
-              }else{
-                //将cookies购物车数据同步到数据库
-                Shop_member_cart.updateCookieCartDataToDb(req, res, member, function () {
-                  return res.json({code: 0, msg: '注册成功'});
-                });
-              }
 
             } else {
               return res.json({code: 3, msg: '注册失败，请重试'});

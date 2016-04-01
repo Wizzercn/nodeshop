@@ -432,7 +432,7 @@ module.exports = {
                 if (lv.product_lv && lv.product_lv.price > 0) {
                   hyprice = lv.product_lv.price;
                 } else {
-                  hyprice = cartObj.price > 100 ? cartObj.price * lv.member_lv.dis_count / 100 : cartObj.price;
+                  hyprice = cartObj.price > 100 ? Math.ceil(cartObj.price * lv.member_lv.dis_count / 100) : cartObj.price;
                 }
               }
               //这里只提交了一个对象，所以不用做同步控制（回调嵌回调即可）不同于 Shop_member_cart.updateCookieCartDataToDb
@@ -568,7 +568,7 @@ module.exports = {
                     if (lv.product_lv && lv.product_lv.price > 0) {
                       hyprice = lv.product_lv.price;
                     } else {
-                      hyprice = obj.price > 100 ? obj.price * lv.member_lv.dis_count / 100 : obj.price;
+                      hyprice = obj.price > 100 ? Math.ceil(obj.price * lv.member_lv.dis_count / 100 ): obj.price;
 
                     }
                   }
@@ -772,7 +772,7 @@ module.exports = {
                       if (lv.product_lv && lv.product_lv.price > 0) {
                         hyprice = lv.product_lv.price;
                       } else {
-                        hyprice = o.price>100?o.price * lv.member_lv.dis_count / 100:o.price;
+                        hyprice = o.price>100?Math.ceil(o.price * lv.member_lv.dis_count / 100):o.price;
 
                       }
                       goods.price = hyprice;
