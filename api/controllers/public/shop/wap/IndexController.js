@@ -7,12 +7,6 @@ module.exports = {
   index: function (req, res) {
     //console.log('req.data::' + JSON.stringify(req.data));
     async.parallel({
-      //获取cms栏目分类
-      channelList: function (done) {
-        Cms_channel.getChannel(function (list) {
-          done(null, list);
-        });
-      },
       //获取cms栏目内容
       centerChannel: function (done) {
         Cms_channel.getChannelByName('关于我们', 1, function (list) {
@@ -22,12 +16,6 @@ module.exports = {
       //获取cms栏目内容
       buttomChannel: function (done) {
         Cms_channel.getChannelByName('活动资讯', 3, function (list) {
-          done(null, list);
-        });
-      },
-      //获取所有商品分类
-      allClassList: function (done) {
-        Shop_goods_class.getAllClass(function (list) {
           done(null, list);
         });
       },
@@ -90,8 +78,6 @@ module.exports = {
       }
     }, function (err, result) {
       sails.log.debug('member::'+JSON.stringify(req.session.member));
-      req.data.channelList = result.channelList || [];
-      req.data.allClassList = result.allClassList || [];
       //req.data.indexClassList = result.indexClassList || [];
       req.data.hotGoodsList = result.hotGoodsList || [];
       req.data.bannerLink = result.bannerLink || {};

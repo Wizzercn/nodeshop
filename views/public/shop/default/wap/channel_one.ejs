@@ -1,0 +1,39 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit">
+    <%=channel.name||'没有此栏目'%>
+  </h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<section class="main">
+  <%if(infoList.total>1){%>
+  <ul class="news_list">
+    <%infoList.data.forEach(function(o){%>
+
+    <li><a href="/wap/info/<%=o.id%>"><img src="<%=o.picurl||CssPath+'/wap/images/pic/10.jpg'%>" width="70" height="70"/><div><h3><%=o.title||''%></h3><p><%if(o.info){if(o.info.length>34){%><%=o.info.substring(0,34)%>...<%}else {%><%=o.info%><%}}%></p></div></a></li>
+    <%});%>
+  </ul>
+  <%}else if(infoList.total==1){
+    var obj=infoList.data[0];
+  %>
+  <ul class="order_text_s">
+    <li class="title_m"><%=obj.title%></li>
+    <li class="order_text_time"><%=moment(obj.createdAt*1000).format('YYYY-MM-DD')%></li>
+    <li><%if(obj.contentId){%><%-obj.contentId.content%><%}%></li>
+  </ul>
+  <%}else {%>
+  <ul>
+    没有内容
+  </ul>
+  <%}%>
+</section>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="on more_bnav">更多</a>
+</nav>
+<% include common_buttom.ejs %>

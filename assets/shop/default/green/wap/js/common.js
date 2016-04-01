@@ -112,7 +112,14 @@ function changeNum(goodsId,productId,num){
     }
   });
 }
+function DoMenu(id){
+  var obj=$("#"+id);
+  $("#nav ul").each(function(){
+    if(!$(this).hasClass('collapsed'))
+      $(this).addClass('collapsed');
+  });
+  obj.removeClass('collapsed');
+}
 $(function(){
-  $.ajaxSetup({cache:false});
   showCartNum();
 });

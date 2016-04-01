@@ -19,8 +19,10 @@
         <li><a href="/private/cms/channel/edit/<%=obj.id%>" data-pjax>修改</a></li>
         <li><a href="javascript:;" onclick="del(<%=obj.id%>)">删除</a></li>
         <li class="divider"></li>
-        <li><a href="/private/cms/channel/add?pid=<%=obj.id%>" data-pjax>添加子菜单</a></li>
-
+        <li><a href="/private/cms/channel/add?pid=<%=obj.id%>" data-pjax>添加子栏目</a></li>
+        <li class="divider"></li>
+        <li><a href="javascript:;" onclick="enableRole(<%=obj.id%>)">启用</a></li>
+        <li><a href="javascript:;" onclick="disableRole(<%=obj.id%>)">禁用</a></li>
       </ul>
     </div>
   </td>

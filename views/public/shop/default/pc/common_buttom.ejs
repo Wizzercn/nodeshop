@@ -8,7 +8,7 @@
     if(channel1.parentId==0){
       %>
     <ul class="footer_n">
-      <li class="footer_nf"><a href="javascript:;"><%=channel1.name%></a></li>
+      <li class="footer_nf"><a href="<%=channel1.hasChildren==true?'javascript:;':'/channel/'+channel1.id%>"><%=channel1.name%></a></li>
       <%channelList.forEach(function(channel2){
         if(channel2.parentId==channel1.id){
       %>

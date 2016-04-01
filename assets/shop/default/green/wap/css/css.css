@@ -483,8 +483,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .more_pg>li>a:before{margin-right: 1rem; width: .6rem; height: .6rem; border: 3px solid #00aa3a; border-radius: 50%;}
 .more_pg a:after, .setting_list a:after{position: absolute; right: 1.2rem; top: 50%; margin-top: -.6rem; vertical-align: text-top;}
 .more_pg a:after, .news_list a:before, .setting_list a:after{width: 1rem; height: 1rem; border-top: 2px solid #b5b5b5; border-right: 2px solid #b5b5b5; transform: rotate(45deg); -webkit-transform: rotate(45deg);}
-.hot_tel{margin: 0 2rem; padding-bottom: .3rem; height: 3rem; line-height: 3rem; text-align: center; font-size: 1.4rem; color: #999; background-color: #fff; background: #fff url(../images/hot_tel.gif) 0 100% repeat-x; background-size: .5rem auto; border-left: 1px solid #ddd; border-right: 1px solid #ddd;}
-.hot_tel em{font-style: normal; color: #fe6000;}
+.hot_tel{margin: 0 2rem;padding-top: 1rem; padding-bottom: .3rem; height: 3rem; line-height: 3rem; text-align: center; font-size: 1.6rem;}
+.hot_tel em{color: #fe6000;}
 
 /*资讯动态*/
 .news_list li{margin: 1rem 0; background-color: #fff; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;}
@@ -512,7 +512,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 /*==================二级目录===================*/
 #nav li ul {list-style:none; text-align:left;}
 #nav li ul li{background: #fff; /*二级目录的背景色*/border-top:1px solid #dddddd;border-bottom:none !important;}
-#nav li ul a{padding-left:5rem;font-size:1.4rem; width:100%;}
+#nav li ul a{padding-left:5rem;font-size:1.4rem;dispay:block;}
+#nav li ul a:after{display:none;}
 /*下面是二级目录的链接样式*/
 #nav li ul a:link  {color:#666; text-decoration:none;}
 #nav li ul a:visited  {color:#666;text-decoration:none;}
@@ -699,7 +700,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 /*分类*/
 .fenl{display:block;}
-.fenl_f{display:block;margin:1rem;background:#fff;border-radius:0.5rem;border:1px solid #ddd;padding:1rem;height:2rem;}
+.fenl_f{position:relative;top:0.5rem;display:block;margin:1rem;background:#fff;border-radius:0.5rem;border:1px solid #ddd;padding:1rem;height:2rem;}
 .fenl_f input{border:none;background:url(../images/icon_public/res_fel.png) no-repeat center left;background-size:1.5rem;height:1.5rem;text-indent:2.5rem;font-size:1.4rem;}
 .fenl_s{padding:1rem;background:#fff;color:#333;position:relative;margin-top:1rem;}
 .fenl_s p{font-size:1.6rem;height:2rem;}

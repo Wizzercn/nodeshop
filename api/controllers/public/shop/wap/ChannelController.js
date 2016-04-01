@@ -6,6 +6,22 @@ var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   index: function (req, res) {
+    async.parallel({
+      //获取cms栏目分类
+      channelList: function (done) {
+        Cms_channel.getChannel(function (list) {
+          done(null, list);
+        });
+      }
+    }, function (err, result) {
+      req.data.channelList = result.channelList || [];
+      req.data.StringUtil = StringUtil;
+      req.data.moment = moment;
+      req.data.siteTitle='更多_'+req.data.siteTitle;
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
+    });
+  },
+  one: function (req, res) {
     var id = req.params.id || '';
     var start = StringUtil.getInt(req.query.start);
     var channelId = 0;
@@ -21,18 +37,6 @@ module.exports = {
       where = {id: StringUtil.getInt(id), disabled: false};
     }
     async.parallel({
-      //获取cms栏目分类
-      channelList: function (done) {
-        Cms_channel.getChannel(function (list) {
-          done(null, list);
-        });
-      },
-      //获取所有商品分类
-      allClassList: function (done) {
-        Shop_goods_class.getAllClass(function (list) {
-          done(null, list);
-        });
-      },
       infoList: function (done) {
         async.waterfall([function (cb) {
           Cms_channel.findOne(where).exec(function (e, o) {
@@ -53,7 +57,7 @@ module.exports = {
           });
         }, function (id, cb) {
           channelId=id;
-          Cms_article.getPageList(5, start, {channelId: id, disabled: false}, {createdAt: 'desc'}, function (list) {
+          Cms_article.getPageList(10, start, {channelId: id, disabled: false}, {createdAt: 'desc'}, function (list) {
             cb(null, list);
           });
         }], function (err, list) {
@@ -61,17 +65,12 @@ module.exports = {
         });
       }
     }, function (err, result) {
-
-      req.data.channelList = result.channelList || [];
-      req.data.allClassList = result.allClassList || [];
       req.data.infoList = result.infoList || [];
       req.data.channelId = channelId;
       req.data.channel = channel||{};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.siteTitle=channel.name+'_'+req.data.siteTitle;
-
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel_one', req.data);
     });
   }
 };

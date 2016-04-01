@@ -1,101 +1,42 @@
 <header class="header">
-  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit">
+    更多
+  </h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
 </header>
-<% if(bannerLink && bannerLink.links && bannerLink.links.length > 0){ %>
-<div class="n_focus mt40" id="focus">
-  <div class="bd">
-    <ul>
-      <% bannerLink.links.forEach(function(link){ %>
-      <li><a href="<%= link.url||'javascript:;' %>"><img width="640" height="200" src="<%= link.picurl || '' %>"></a>
-      </li>
-      <% }); %>
-    </ul>
-  </div>
-  <div class="hd">
-    <ul></ul>
-  </div>
-</div>
-<% } %>
-<ul class="inav">
-  <li>
-    <a href="/wap/hot"><span><i class="pro_inav"></i></span>全部商品</a>
-  </li>
-  <li>
-    <a href="/wap/member"><span><i class="user_inav"></i></span>用户中心</a>
-  </li>
-  <li>
-    <a href="/wap/channel/news"><span><i class="info_inav"></i></span>活动资讯</a>
-  </li>
-  <li>
-    <a href="/wap/channel/about"><span><i class="about_inav"></i></span>关于我们</a>
-  </li>
-</ul>
-<!--  -->
-<h2 class="cline_tit"><span class="cline_title">新品推荐</span></h2>
-<!--  -->
-<ul class="pro_item_box">
-  <%
-  var i = 0;
-  hotGoodsList.forEach(function(hotgoods){
-    i++;
-  %>
-  <% if(i % 2 == 1){
-  %>
-  <li>
-    <%
-    } %>
-    <div id="g<%= hotgoods.id %>" class="pro_item" data-goods-id="<%= hotgoods.id %>" data-goods-name="<%= hotgoods.name %>"
-         data-goods-price="<%= StringUtil.setPrice(hotgoods.price) %>"
-         data-goods-imgurl="<%= hotgoods.imgurl||'' %>?type=s">
-      <a href="/wap/goods/<%= hotgoods.id %>">
-        <img src="<%= hotgoods.imgurl||'' %>?type=s"/>
-        <h3><%= hotgoods.name %></h3>
-      </a>
-      <div class="pro_item_bottom">
-        <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarShop(<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
-        <ins class="pro_item_ins">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.price) %></span></ins>
-        <del class="pro_item_del">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.priceMarket) %></span>
-        </del>
-      </div>
-    </div>
-    <% if(i % 2 == 0){
+<section class="main">
+  <ul class="more_pg cf2" id="nav">
+    <%channelList.forEach(function(channel1){
+    if(channel1.parentId==0){
     %>
-  </li>
-  <%
-  } %>
-  <% }); %>
-</ul>
-
-<a href="/wap/hot" class="big_green_btn">查看更多商品</a>
-<%if(centerChannel&&centerChannel.articles&&centerChannel.articles.length>0){
-  var aobj=centerChannel.articles[0];
-  var len2=0;
-  if (aobj.info)len2 =aobj.info.length;
-%>
-<div class="pro_wbp">
-  <a href="/wap/info/<%=aobj.id%>"><img src="<%=aobj.picurl||''%>" title="<%=centerChannel.name||''%>" alt="<%=centerChannel.name||''%>" class="pic_210"/></a>
-  <section class="wbw">
-    <h3><%=aobj.title||''%></h3>
-    <p><%=len2>70?aobj.info.substring(0,70)+'...':aobj.info%></p>
-    <div><a href="/wap/info/<%=aobj.id%>" class="green_btn">查看详细</a></div>
-  </section>
-</div>
-<%}%>
-<ul class="scut_list">
-  <%if(buttomChannel&&buttomChannel.articles&&buttomChannel.articles.length>0){%>
-  <%buttomChannel.articles.forEach(function(bobj){
-    var len3=0;
-    if (bobj.info)len3 =bobj.info.length;
-  %>
-  <li><a href="/wap/info/<%=bobj.id%>" class="wb">
-      <img src="<%=bobj.picurl||''%>" title="<%=bobj.title||''%>" alt="<%=bobj.title||''%>" class="pic_120"/>
-      <section class="wbw">
-        <h3><%=bobj.title||''%></h3>
-        <div><%=len3>45?bobj.info.substring(0,45)+'...':bobj.info%></div>
-      </section>
-    </a></li>
-  <%});%>
-  <%}%>
-</ul>
-
+    <li>
+      <%if(channel1.hasChildren){%>
+      <a href="javascript:;"  onclick="DoMenu('m_<%=channel1.id%>')"><%=channel1.name%></a>
+      <ul id="m_<%=channel1.id%>" class="collapsed">
+        <%channelList.forEach(function(channel2){
+        if(channel2.parentId==channel1.id){
+        %>
+        <li><a href="/wap/channel/<%=channel2.id%>"><%=channel2.name%></a></li>
+        <%}
+        });%>
+      </ul>
+      <%}else {%>
+      <a href="/wap/channel/<%=channel1.id%>"><%=channel1.name%></a>
+      <%}%>
+    </li>
+    <%}
+    });%>
+  </ul>
+  <ul class="hot_tel">客服热线：<a href='tel:<%=sails.config.system.SiteConfig.site_tel||''%>'><em><%=sails.config.system.SiteConfig.site_tel||''%></em></a></ul>
+</section>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="on more_bnav">更多</a>
+</nav>
 <% include common_buttom.ejs %>
