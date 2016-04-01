@@ -175,7 +175,7 @@ module.exports = {
                     loginIp: member.loginIp,
                     loginAt: member.loginAt
                   };
-                  return res.json({code: 0, msg: '注册成功'});
+
                 } else {
                   return res.json({code: 3, msg: '注册失败，请重试'});
                 }
@@ -201,7 +201,12 @@ module.exports = {
               var member_reg_score=sails.config.system.ShopConfig.member_reg_score||0;
               if(member_reg_score>0){
                 Shop_member.update(member.id,{score:member.score+member_reg_score}).exec(function(mscoreErr,mscore){
-                  if(mscore){
+                  sails.log.debug('mscore::'+JSON.stringify(mscore));
+                  if(mscore.length>0){
+                    //将cookies购物车数据同步到数据库
+                    Shop_member_cart.updateCookieCartDataToDb(req, res, mscore[0], function () {
+                      return res.json({code: 0, msg: '注册成功'});
+                    });
                     Shop_member_score_log.create({
                       memberId:member.id,
                       oldScore:member.score,
@@ -214,6 +219,11 @@ module.exports = {
 
                     });
                   }
+                });
+              }else{
+                //将cookies购物车数据同步到数据库
+                Shop_member_cart.updateCookieCartDataToDb(req, res, member, function () {
+                  return res.json({code: 0, msg: '注册成功'});
                 });
               }
 
