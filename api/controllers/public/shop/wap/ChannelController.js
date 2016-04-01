@@ -17,7 +17,6 @@ module.exports = {
       req.data.channelList = result.channelList || [];
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.siteTitle='更多_'+req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
     });
   },
