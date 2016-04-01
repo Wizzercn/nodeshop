@@ -48,6 +48,7 @@ module.exports = {
                               //如果帐号绑定表数据不存在，则创建
                               Shop_member.create({
                                 nickname:result.nickname,
+                                headimgurl:result.headimgurl||'',
                                 sex:result.sex||0,
                                 reg_ip:req.ip,
                                 reg_time:moment().format('X'),
@@ -95,7 +96,7 @@ module.exports = {
                                           status:0,
                                           createdAt:moment().format('X')
                                         }).exec(function(mcErr,mc){
-                                          var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
+                                          var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您获得一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
                                           WeixinService.sendTextMsg(res, msg);//向用户回复消息
                                         });
                                       }else {
@@ -143,6 +144,7 @@ module.exports = {
                                   //如果帐号绑定表数据不存在，则创建
                                   Shop_member.create({
                                     nickname:result.nickname,
+                                    headimgurl:result.headimgurl||'',
                                     sex:result.sex||0,
                                     reg_ip:req.ip,
                                     reg_time:moment().format('X'),
@@ -190,7 +192,7 @@ module.exports = {
                                               status:0,
                                               createdAt:moment().format('X')
                                             }).exec(function(mcErr,mc){
-                                              var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您得到一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
+                                              var msg = {toUserName: data.openid, fromUserName: conf.ghid, content: '恭喜您获得一张 '+coupon.name+' 优惠券，可在购物结算时使用。'};
                                               WeixinService.sendTextMsg(res, msg);//向用户回复消息
                                             });
                                           }else {

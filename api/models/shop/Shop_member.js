@@ -24,6 +24,10 @@ module.exports = {
       type: 'string',
       size:50
     },
+    headimgurl:{
+      type: 'string',
+      size:255
+    },
     province:{
       type:'string',
       size:20

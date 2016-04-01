@@ -75,6 +75,8 @@ function showCartNum(){
     success : function(data) {
       if(data.code==0){
         $("#cartNum").html(data.num||'');
+      }else {
+        $("#cartNum").html('');
       }
     }
   });
