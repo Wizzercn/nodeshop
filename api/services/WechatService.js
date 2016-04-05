@@ -41,6 +41,43 @@ module.exports = {
       });
     }
   },
+  /**
+   * 通过id初始化
+   * @param wxid
+   * @param callback
+     */
+  init_id: function (wxid, callback) {
+    var now = moment().format('X');
+    var myConfig=sails.config.system.MyConfig;
+    if(myConfig&&myConfig.wxApi){
+      callback(myConfig.wxApi);
+    }else{
+      Wx_config.findOne(wxid).exec(function (err, obj) {
+        sails.log.debug('WechatService.init_id err::'+JSON.stringify(err));
+        var api = new API(obj.appid, obj.appsecret,function (calltoken) {
+          if (obj.access_token && obj.expire_time > 0 && now - obj.expire_time < 7150) {
+            calltoken(null, JSON.parse(obj.access_token));
+          } else {
+            api.getAccessToken(function (e, token) {
+              if (err) {return calltoken(e);}
+              Wx_config.update({id: wxid}, {access_token: JSON.stringify(token), expire_time: now}).exec(function (eu, ou) {
+              });
+              calltoken(null, token);
+
+
+            });
+          }
+        },function (token, calltoken) {
+          Wx_config.update({id: wxid}, {access_token: JSON.stringify(token), expire_time: now}).exec(function (eu, ou) {
+          });
+          calltoken(null);
+        });
+        sails.config.system.MyConfig.wxApi=api;
+        callback(api);
+
+      });
+    }
+  },
   init_js: function (req, res, callback) {
     var wxid='';
     if(req.body&&req.body.wxid){
