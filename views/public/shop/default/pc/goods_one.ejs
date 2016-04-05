@@ -82,7 +82,7 @@
       </li>
      <li class="schedule_hd2m cf clear">
        <div class="guige_add">
-         <span class="jia_ge">促销价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(goods.price)%></i><span class="jia_scj"><s>￥<%=StringUtil.setPrice(goods.priceMarket)%></s></span></div>
+         <span class="jia_ge">销售价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(goods.price)%></i><span class="jia_scj"><s>￥<%=StringUtil.setPrice(goods.priceMarket)%></s></span></div>
 
     </li>
     <%if(is_lv){%>
@@ -118,7 +118,7 @@
 </div>
 <div class="s_pinjia cf">
   <div class="hot_sell">
-    <div class="hot_sella"><span>热销产品</span></div>
+    <div class="hot_sella"><span>热销商品</span></div>
     <%hotGoodsList.data.forEach(function(ho){%>
     <dl class="hot_sells">
       <a href="/goods/<%=ho.id%>" target="_blank">
@@ -133,10 +133,10 @@
     <div id="s_detail">
       <ul class="s_detail">
         <a id="tab1" href="javascript:void(0);" class="s_details s_detaila">
-          <li>产品详情</li>
+          <li>详情</li>
         </a>
         <a id="tab2" href="javascript:void(0);" class="s_details">
-          <li>用户评价</li>
+          <li>评价</li>
         </a>
       </ul>
     </div>

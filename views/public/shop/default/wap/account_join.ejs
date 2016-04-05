@@ -1,0 +1,135 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit">
+    注册
+  </h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<ul class="sign_list">
+  <li class="sign_item sign_bg"><input id="mobile" maxlength="11" type="text" placeholder="手机号" class="phone_sign sign_text" /><i id="mobile_tip"style="display: none" class="blue_notice"></i></li>
+  <li class="sign_item sign_bg"><div class="wbw"><input id="smscode" maxlength="6" type="text" placeholder="手机效验码" class="captcha_sign sign_text" /></div><a href="javascript:getSmscode();" class="c_a">获取效验码&nbsp;</a><i id="smscode_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="sign_item sign_bg"><input id="pass1" type="password" placeholder="输入密码" class="pw_sign sign_text" /><i id="pass1_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="sign_item sign_bg"><input id="pass2" type="password" placeholder="确认密码" class="pw_sign sign_text" /><i id="pass2_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="mt10 mb10"><span class="sign_che"><a href="/wap/channel/user" class="orange_text">《用户协议》</a></span></li>
+  <li class="mb10"><a href="javascript:doJoin();" class="big_green_btn">同意协议并注册</a></li>
+  <li class="text_c">我已经注册，现在就<a href="/wap/login">登录</a></li>
+</ul>
+<input id="r" type="hidden" value="<%=r%>">
+
+<script type="text/javascript">
+  var is_join=true;
+  var is_send=false;
+  function checkMobile(){
+    var self=$("#mobile");
+    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    if(!myreg.test(self.val()))
+    {
+      $("#mobile_tip").html('请输入有效的手机号码');
+      $("#mobile_tip").show();
+      self.focus();
+      return false;
+    }
+    return true;
+  }
+  function checkLoginname(){
+    $("#mobile_tip").hide();
+    var self=$("#mobile");
+    if(self.val().length==11&&checkMobile()){
+      $.post(
+        "/public/shop/wap/account/checkLoginname/"+self.val(),
+        function(result){
+          is_join=true;
+          if(result.code==1){
+            $("#mobile_tip").html('用户已存在，请更换号码注册');
+            $("#mobile_tip").show();
+            is_join=false;
+          }
+        },'json'
+      );
+    }
+  }
+  function checkPass(){
+    if($("#pass1").val().length<6){
+      $("#pass1_tip").html('请设置六位数以上的密码');
+      $("#pass1_tip").show();
+      $("#pass1").focus();
+      return false;
+    }
+    if($("#pass2").val()!=$("#pass1").val()){
+      $("#pass2_tip").html('两次输入的密码不一致');
+      $("#pass2_tip").show();
+      $("#pass2").focus();
+      return false;
+    }
+    return true;
+  }
+  function getSmscode(){
+    $("#smscode_tip").hide();
+    if(is_send){
+      $("#smscode_tip").html('请勿重复获取');
+      $("#smscode_tip").show();
+      return false;
+    }
+    is_send=true;
+    if(is_join&&checkMobile()){
+      $.post(
+        "/public/shop/wap/account/getSmscode",
+        {'mobile':$("#mobile").val(),type:'join'},
+        function(result){
+          $("#smscode").focus();
+          if(result.code==0){
+            tip("短信发送成功，请在5分钟内完成注册");
+          }else if(result.code==2){
+            is_send=false;
+            tip("短信未发送成功，请重试");
+          }else if(result.code==3){
+            is_send=false;
+            tip("用户已存在，请直接登陆");
+          }
+        },'json'
+      );
+    }
+  }
+  function checkSmscode(){
+    var self=$("#smscode");
+    if(self.val().length!=6){
+      $("#smscode_tip").html('请输入手机效验码');
+      $("#smscode_tip").show();
+      self.focus();
+      return false;
+    }
+    return true;
+  }
+  function doJoin(){
+    if(is_join&&checkMobile()&&checkSmscode()&&checkPass()){
+      $.post(
+        "/public/shop/wap/account/doJoin",
+        {'mobile':$("#mobile").val(),'smscode':$("#smscode").val(),'pass':$("#pass1").val()},
+        function(result){
+          if(result.code==0){
+            tip("注册成功");
+            setTimeout(function(){
+              window.location.href=$("#r").val()||'/wap/member';
+            },1500);
+          }else if(result.code==1){
+            $("#smscode_tip").html('手机校验码不正确');
+            $("#smscode_tip").show();
+            $("#smscode").val("");
+            $("#smscode").focus();
+          }else{
+            tip(result.msg);
+          }
+        },'json'
+      );
+    }
+  }
+$(function(){
+  $("#mobile").on("keyup",checkLoginname).on("blur",checkLoginname);
+  $("#smscode").on("keyup",function(){$("#smscode_tip").hide()});
+  $("#pass1").on("keyup",function(){$("#pass1_tip").hide()});
+  $("#pass2").on("keyup",function(){$("#pass2_tip").hide()});
+});
+</script>
+<% include common_buttom.ejs %>

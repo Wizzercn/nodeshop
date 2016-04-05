@@ -70,7 +70,7 @@
     var pageSize=<%=goodsData.size||8%>;
     var start=page*pageSize;
     $.post(
-      "/public/shop/wap/list/ajax/<%=classObj.id%>?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type+"&search_name="+search_name,
+      "/public/shop/wap/hot/ajax?start=" + start+"&sort_name="+sort_name+"&sort_type="+sort_type+"&search_name="+search_name,
       function(result){
         $("#tip").hide();
         page=result.page;
