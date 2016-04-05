@@ -34,7 +34,6 @@ module.exports = {
       req.data.dbMember = result.dbMember || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.siteTitle = '商品评价_' + req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_comment', req.data);
 
     });

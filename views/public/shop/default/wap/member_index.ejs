@@ -7,13 +7,14 @@
   <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
 
 </header>
-<div class="user_banner" style="background-image: url(<%=CssPath%>/wap/images/banner/02.jpg);">
+<div class="user_banner" style="background-image: url(<%=CssPath%>/wap/images/member_bg.jpg);">
   <div class="wbw">
     <div>
-      <img src="images/icon/02.png" alt="" class="user_banner_pic" />
+      <%if(dbMember.headimgurl){%><img src="<%=dbMember.headimgurl%>" class="user_banner_pic" /><%}else {%><img src="<%=CssPath%>/wap/images/icon/02.png" class="user_banner_pic" /><%}%>
     </div>
-    <div><span class="green_text">普通会员</span></div>
-    <div>您好，<span class="orange_text">18324745678</span></div>
+    <div><span class="green_text">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</span></div>
+    <div>您好，<span class="orange_text"><%=member.nickname%></span></div>
+    <div class="head_w">亲爱的小伙伴，欢迎光临 <%=sails.config.system.AppName||''%>！</div>
   </div>
 </div>
 <nav class="mycard_nav">

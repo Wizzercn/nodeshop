@@ -33,7 +33,6 @@ module.exports = {
       req.data.orderNum=result.orderNum||0;
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.siteTitle='会员中心_'+req.data.siteTitle;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_index', req.data);
 
     });
