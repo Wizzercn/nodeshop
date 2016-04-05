@@ -34,6 +34,15 @@ module.exports = {
         return false;
       }
     },
+    binded: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    bindedAt: {
+      type: 'integer'
+    },
     createdAt: {
       type: 'integer',
       defaultsTo: function () {

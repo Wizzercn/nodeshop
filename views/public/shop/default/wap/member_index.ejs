@@ -16,39 +16,41 @@
     <div>您好，<span class="orange_text">18324745678</span></div>
   </div>
 </div>
-<nav class="mycard_nav"><a href="###">
-    <div class="text_eli">0</div>
-    <div class="text_eli">待付款</div>
-  </a><a href="###">
+<nav class="mycard_nav">
+  <div class="text_eli">￥<%=StringUtil.setPrice(dbMember.money)%></div>
+    <div class="text_eli">账户余额</div>
     <div class="text_eli">
       <ins>1</ins>
     </div>
     <div class="text_eli">待发货</div>
-  </a><a href="###">
     <div class="text_eli">0</div>
     <div class="text_eli">已发货</div>
-  </a><a href="###">
+
     <div class="text_eli">0</div>
     <div class="text_eli">已完成</div>
-  </a></nav>
+</nav>
 <!--  -->
 <nav class="usernav">
-  <a href="17order.html" class="order_manage">订单管理</a>
-</nav><nav class="usernav">
-  <a href="21_refund_li.html" class="order_usernav">退款退货</a>
-  <a href="23adress.html" class="return_usernav">收货地址</a>
-  <a href="26comment.html" class="site_usernav">商品评价</a>
-  <a href="27consult.html" class="view_usernav">商品咨询</a>
+  <a href="/wap/member/order" class="order_manage">我的订单</a>
 </nav>
 <nav class="usernav">
-  <a href="29asset.html" class="ask_usernav">我的资产</a>
-  <a href="31coupons.html" class="asset_usernav">优惠券</a>
-  <a href="32integral.html" class="coupon_usernav">积分管理</a>
-  <a href="34data.html" class="jifeng_usernav">资料管理</a>
-  <a href="36password.html" class="file_usernav">修改密码</a>
+  <a href="/wap/member/address" class="return_usernav">收货地址</a>
+  <a href="/wap/member/comment" class="site_usernav">我的评价</a>
 </nav>
-<a href="15land.html" class="big_write_btn">安全退出</a>
+<nav class="usernav">
+  <a href="/wap/member/money" class="ask_usernav">我的余额</a>
+  <a href="/wap/member/pay" class="ask_usernav">在线充值</a>
+  <a href="/wap/member/coupon" class="asset_usernav">优惠券</a>
+  <a href="/wap/member/score" class="coupon_usernav">积分明细</a>
+  <a href="/wap/member/profile" class="jifeng_usernav">个人资料</a>
+  <a href="/wap/member/password" class="file_usernav">修改密码</a>
+</nav>
+<%if(sessionMember.loginWx&&!sessionMember.binded){%>
+<a href="/public/shop/wap/account/change" class="big_write_btn">绑定其他帐号</a>
 
+<%}else {%>
+<a href="/public/shop/wap/account/logout" class="big_write_btn">安全退出</a>
+<%}%>
 <nav class="bnav">
   <a href="/wap/" class="home_bnav">首页</a>
   <a href="/wap/class" class="class_bnav">分类</a>

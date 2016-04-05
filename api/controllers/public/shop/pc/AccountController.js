@@ -116,7 +116,7 @@ module.exports = {
             req.session.member = {
               memberId: obj.memberId.id,
               nickname: obj.memberId.nickname,
-              login_name: login_name,
+              login_name: mobile,
               loginIp: obj.loginIp,
               loginAt: obj.loginAt
             };

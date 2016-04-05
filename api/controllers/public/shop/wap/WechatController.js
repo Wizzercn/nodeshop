@@ -41,7 +41,10 @@ module.exports = {
                   nickname: mmb.nickname,
                   login_name: openid,
                   loginIp: req.ip,
-                  loginAt: moment().format('X')
+                  loginAt: moment().format('X'),
+                  loginWx:true,
+                  binded:bind.binded,
+                  openid:openid
                 };
               }
               return res.redirect(wechat_goto_url);

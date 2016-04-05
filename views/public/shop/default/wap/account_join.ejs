@@ -15,6 +15,8 @@
   <li class="mt10 mb10"><span class="sign_che"><a href="/wap/channel/user" class="orange_text">《用户协议》</a></span></li>
   <li class="mb10"><a href="javascript:doJoin();" class="big_green_btn">同意协议并注册</a></li>
   <li class="text_c">我已经注册，现在就<a href="/wap/login">登录</a></li>
+  <li class="text_c"><a href="/wap/login" class="white_btn">登录</a></li>
+
 </ul>
 <input id="r" type="hidden" value="<%=r%>">
 
@@ -35,6 +37,7 @@
   }
   function checkLoginname(){
     $("#mobile_tip").hide();
+    is_send=false;
     var self=$("#mobile");
     if(self.val().length==11&&checkMobile()){
       $.post(
@@ -126,6 +129,7 @@
     }
   }
 $(function(){
+  document.body.addEventListener("touchstart",function(){});
   $("#mobile").on("keyup",checkLoginname).on("blur",checkLoginname);
   $("#smscode").on("keyup",function(){$("#smscode_tip").hide()});
   $("#pass1").on("keyup",function(){$("#pass1_tip").hide()});
