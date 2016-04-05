@@ -110,9 +110,9 @@
               tip("登录成功");
               setTimeout(function(){
                 window.location.href=$("#r").val()||'/wap/member';
-              },1500);
+              },1000);
             }else if(result.code==1) {
-              $("#smscode_tip").html('手机动态密码不正确，请重新输入或重新获取');
+              $("#smscode_tip").html('手机动态密码不正确');
               $("#smscode_tip").show();
               $("#smscode").val("");
               $("#smscode").focus();
