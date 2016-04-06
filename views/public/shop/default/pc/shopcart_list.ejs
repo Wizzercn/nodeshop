@@ -50,10 +50,10 @@
    var s='';
    if (ShopConfig.freight_disabled == false) {
      if (ShopConfig.freight_type == 'price') {
-         s='运费：'+ShopConfig.freight_price+'元，按订单总金额计算，订单满'+ShopConfig.freight_num+'元减免。';
+         s='运费：'+ShopConfig.freight_price+'元，满'+ShopConfig.freight_num+'元包邮。';
 
      } else if (ShopConfig.freight_type == 'weight') {
-       s='运费：按商品总重量计算，重量超过'+(ShopConfig.freight_num/1000)+'kg，收费'+ShopConfig.freight_price+'元。';
+       s='运费：重量超过'+(ShopConfig.freight_num/1000)+'kg，'+ShopConfig.freight_price+'元/kg。';
 
      }
    }

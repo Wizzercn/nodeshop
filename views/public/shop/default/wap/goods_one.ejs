@@ -40,10 +40,22 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
   <%if(is_lv){%>
   <ul class="pri li_2"><span class="green_text">会员价：</span><ins class="pri_size_a">&yen;<%=StringUtil.setPrice(hyprice)%></ins><span class="ml_30">(您的会员分组:<%=hyname||''%>)</span></ul>
   <%}%>
-  <div><span class="ml_30">重量：<span><%=goods.weight||'0'%>克</span></span><span class="ml_30">计量单位：<span><%=goods.unit||''%></span></span><span class="ml_30">库存：<span><%=goods.products[0].stock||0%>件</span></span></div>
-  <div class="pro_info_data">
-    <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i class="reduce_num2">&#45;</i><input type="number" value="1" class="num_text2" /><i class="add_num2">&#43;</i></span></dd></dl>
-  </div>
+  <div><span>重量：<span><%=goods.weight||'0'%>克</span></span><span class="ml_30">库存：<span><%=goods.products[0].stock||0%><%=goods.unit||''%></span></span></div>
+  <%
+  var s='';
+  if (ShopConfig.freight_disabled == false) {
+    if (ShopConfig.freight_type == 'price') {
+      s='运费：'+ShopConfig.freight_price+'元，满'+ShopConfig.freight_num+'元包邮。';
+
+    } else if (ShopConfig.freight_type == 'weight') {
+      s='运费：重量超过'+(ShopConfig.freight_num/1000)+'kg，'+ShopConfig.freight_price+'元/kg。';
+
+    }
+  }
+  %>
+  <%if(s){%>
+  <div><%=s%></div>
+  <%}%>
 </div>
 
 <div>
@@ -112,8 +124,10 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
 		</span></a><img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn"></div>
     <ul class="popup_f">
        <li class="shopcar_a">
-        <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i class="reduce_num2">&#45;</i><input type="number" value="1" class="num_text2" /><i class="add_num2">&#43;</i></span></dd></dl>
-      </li>
+         <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i id="buy_sub" class="reduce_num2">&#45;</i>
+          <input id="buy_num" type="number" value="1" class="num_text2" /><i id="buy_add" class="add_num2">&#43;</i></span></dd></dl>
+         </dl>
+       </li>
     </ul>
     <div class="shopcar_btn"><input type="button" value="确&nbsp;&nbsp;定"/></div>
   </div>
@@ -121,7 +135,7 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
 <div class="add_detail">
   <div class="btn_box">
     <a href="javascript:buyNow();" class="big_orange_btn">立即购买</a>
-    <a href="###" class="big_green_btn">加入购物车</a>
+    <a href="javascript:addG" class="big_green_btn">加入购物车</a>
   </div>
 </div>
 <input id="r" type="hidden" value="<%=r%>">
@@ -133,4 +147,5 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
     $('#goods-detail img').css('max-width', '100%').css('height', 'auto');
   });
 </script>
+<script src="/shop/default/green/wap/js/goods.js"></script>
 <% include common_buttom.ejs %>

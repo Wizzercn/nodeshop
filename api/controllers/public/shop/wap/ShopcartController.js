@@ -180,7 +180,7 @@ module.exports = {
             }
           } else if (ShopConfig.freight_type == 'weight') {
             if (weight >= ShopConfig.freight_num) {
-              yunMoney = ShopConfig.freight_price * 100;
+              yunMoney = Math.ceil(weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
             }
           }
         }
@@ -225,7 +225,7 @@ module.exports = {
           }
         } else if (ShopConfig.freight_type == 'weight') {
           if (weight >= ShopConfig.freight_num) {
-            yunMoney = ShopConfig.freight_price * 100;
+            yunMoney = Math.ceil(weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
           }
         }
       }
@@ -295,7 +295,7 @@ module.exports = {
             }
           } else if (ShopConfig.freight_type == 'weight') {
             if (weight >= ShopConfig.freight_num) {
-              yunMoney = ShopConfig.freight_price * 100;
+              yunMoney = Math.ceil(weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
             }
           }
         }
@@ -340,7 +340,7 @@ module.exports = {
           }
         } else if (ShopConfig.freight_type == 'weight') {
           if (weight >= ShopConfig.freight_num) {
-            yunMoney = ShopConfig.freight_price * 100;
+            yunMoney = Math.ceil(weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
           }
         }
       }
@@ -668,7 +668,7 @@ module.exports = {
                 }
               } else if (ShopConfig.freight_type == 'weight') {
                 if (weight >= ShopConfig.freight_num) {
-                  yunMoney = ShopConfig.freight_price * 100;
+                  yunMoney = Math.ceil(weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
                 }
               }
             }
@@ -812,7 +812,7 @@ module.exports = {
               }
             } else if (ShopConfig.freight_type == 'weight') {
               if (order.weight >= ShopConfig.freight_num) {
-                yunMoney = ShopConfig.freight_price * 100;
+                yunMoney = Math.ceil(order.weight/ShopConfig.freight_num)*ShopConfig.freight_price * 100;
               }
             }
           }
