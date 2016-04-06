@@ -533,10 +533,9 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .pri_size i{width:1rem;height:1rem;border-top:1px solid #333333;border-left:1px solid #333333; transform:rotate(135deg); -webkit-transform:rotate(135deg);display:inline-block;position:absolute;right:1rem;color:#ececec;}
 
 /*规格弹窗*/
-.popup{height:100%;background:rgba(0,0,0,0.5);position:fixed;top:0px;display:block;width:100%;color:#333;padding:0;z-index:16;}
-.popupon{display:none;}
+.popup{height:100%;background:rgba(0,0,0,0.5);position:fixed;;bottom:0px;margin-top:-6rem;display:block;width:100%;color:#333;padding:0;z-index:16;}
 .popup_m{display:block;position:absolute;bottom:0px;width:100%;background:#fff;}
-.popup_f{min-height:20rem;max-height: 30rem;overflow-x: auto;}
+.popup_f{min-height:7rem;max-height: 20rem;overflow-x: auto;}
 .popup_f1{min-height:24rem;}
 .popup_head{width:100%;line-height:4rem;font-size:1.8rem;text-align:center;color:#333;border-bottom:1px solid #dddddd;position:relative;}
 .popup_head img{width:1.2rem;height:1.2rem;position:absolute;top:1.2rem;left:1rem;display:block;}

@@ -90,13 +90,14 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
     </div>
   </div>
 </div>
-<div class="popup popupon">
+<div class="popup" style="display: none">
   <div class="popup_m">
-    <div class="shopcar_head cf2"><a href="#"><img src="images/pic/02.jpg" class="shopcar_headl">
+    <div class="shopcar_head cf2"><img src="<%=goods.imgurl||''%>?type=s" class="shopcar_headl">
 			<span class="shopcar_headr">
 			<p class="shopcar_headra">￥<%=hyprice>0?StringUtil.setPrice(hyprice):StringUtil.setPrice(goods.price)%></p>
 			<p class="shopcar_headrb">库存<%=goods.products[0].stock||0%><%=goods.unit||''%></p>
-		</span></a><img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn"></div>
+		</span>
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="$('.popup').hide();"></div>
     <ul class="popup_f">
        <li class="shopcar_a">
          <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i id="buy_sub" class="reduce_num2">&#45;</i>
@@ -104,7 +105,9 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
          </dl>
        </li>
     </ul>
-    <div class="shopcar_btn"><input type="button" value="确&nbsp;&nbsp;定"/></div>
+    <div class="shopcar_btn">
+      <a id="save" href="javascript:;" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
   </div>
 </div>
 
@@ -114,8 +117,8 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
     <a id="cartDiv" href="/wap/shopcart/list" class="shop_kb cf2">购物车<i id="cartNum"></i></a>
     <div class="btn_box">
 
-      <a href="10shop.html" class="big_orange_btn">立即购买</a>
-      <a href="###" class="big_green_btn">加入购物车</a>
+      <a href="javascript:buy();" class="big_orange_btn">立即购买</a>
+      <a href="javascript:add();" class="big_green_btn">加入购物车</a>
     </div>
   </div>
 </nav>

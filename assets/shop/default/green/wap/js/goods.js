@@ -98,20 +98,36 @@ function ajaxpage(){
 function buyNow(){
   $.ajax({
     type : "POST",
-    url : "/public/shop/pc/shopcart/save?goodsId="+goodsid+"&productId="+productid+"&num="+$("#buy_num").val(),
+    url : "/public/shop/wap/shopcart/save?goodsId="+goodsid+"&productId="+productid+"&num="+$("#buy_num").val(),
     data : {
       list:[]
     },
     dataType : "json",
     success : function(data) {
       if(data.code==0){
-        window.location.href='/shopcart/buy';
+        window.location.href='/wap/shopcart/buy';
       }else if(data.code==1){
-        window.location.href='/login?r=/goods/'+goodsid;
+        window.location.href='/wap/login?r=/goods/'+goodsid;
       }else if(data.code==3){
         tip(data.msg);
       }
     }
+  });
+}
+function addNow(){
+  addToCarData(goodsid,productid,$("#buy_num").val());
+  $(".popup").hide();
+}
+function buy(){
+  $(".popup").show();
+  $("#save").unbind("click").on("click",function(){
+    buyNow();
+  });
+}
+function add(){
+  $(".popup").show();
+  $("#save").unbind("click").on("click",function(){
+    addNow();
   });
 }
 $(function(){
