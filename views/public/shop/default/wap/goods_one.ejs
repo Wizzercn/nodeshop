@@ -1,0 +1,136 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<div class="n_focus" id="focus">
+  <div class="bd">
+    <ul>
+      <%if(goods.images){goods.images.forEach(function(o){%>
+      <li>
+        <img src="<%=o.imgurl%>?type=m"/>
+      </li>
+      <%});}%>
+    </ul>
+  </div>
+  <div class="hd"><ul></ul></div>
+</div>
+<%
+//计算会员价
+var lv=goods.lvprice;
+var hyprice=0;
+var is_lv=false;//是否启用会员价
+var hyname='';
+if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
+  is_lv=true;
+  hyname=lv.member_lv.name;
+  if(lv.product_lv&&lv.product_lv.price>0){
+    hyprice=lv.product_lv.price;
+  }else {
+    hyprice = goods.price>100?Math.ceil(goods.price * lv.member_lv.dis_count / 100):goods.price;
+
+  }
+}
+%>
+<div class="pro_info">
+  <h2 class="pro_info_tit pro_info_tit_a"><%=goods.name||''%></h2>
+  <ul class="pri li_2"><li><span class="green_text">销售价：</span><ins class="pri_size_a">&yen;<%=StringUtil.setPrice(goods.price)%></ins></li><li>市场价：<del>&yen;<%=StringUtil.setPrice(goods.priceMarket)%></del></li></ul>
+  <%if(is_lv){%>
+  <ul class="pri li_2"><span class="green_text">会员价：</span><ins class="pri_size_a">&yen;<%=StringUtil.setPrice(hyprice)%></ins><span class="ml_30">(您的会员分组:<%=hyname||''%>)</span></ul>
+  <%}%>
+  <div><span class="ml_30">重量：<span><%=goods.weight||'0'%>克</span></span><span class="ml_30">计量单位：<span><%=goods.unit||''%></span></span><span class="ml_30">库存：<span><%=goods.products[0].stock||0%>件</span></span></div>
+  <div class="pro_info_data">
+    <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i class="reduce_num2">&#45;</i><input type="number" value="1" class="num_text2" /><i class="add_num2">&#43;</i></span></dd></dl>
+  </div>
+</div>
+
+<div>
+  <div class="pro_detail_box" id="tabBox">
+    <ul class="green_hd hd"><li><a href="###">详情</a></li><li><a href="###">评价</a></li></ul>
+    <div class="bd" id="tabBox-bd">
+      <div><section class="detail_item">
+          <%if(goods.prop&&goods.prop.length>0){%>
+          <%goods.prop.forEach(function(p){%>
+          <h3 class="detail_tit"><%=p.name%>: <%=p.value%></h3>
+          <%});%>
+          <%}%>
+          <div id="goods-detail">
+            <br>
+            <%-goods.note||''%>
+            <br>
+          </div>
+        </section></div>
+      <div><section class="detail_item">
+          <a href="#" class="add_more"><h3 class="detail_tit">评价</h3><span>更多</span></a>
+          <!--  -->
+          <div class="pro_score_box"><div class="pro_score"><div class="pro_score_num">90%</div><div>好评度</div></div></div>
+          <!--  -->
+          <div class="view_box">
+            <div class="view_nav"><a href="###" class="active">全部（20）</a><a href="###">一般（0）</a><a href="###">较好（20）</a><a href="###">很好（20）</a></div>
+            <!--  -->
+            <ul class="view_ul">
+              <li class="wb">
+                <img src="images/head/01.jpg" alt="" class="view_head" />
+                <seciton class="wbw">
+                  <div class="view_name">jd_site</div>
+                  <p>菜也挺好吃，太好了，感觉挺大气的，服务特别出色，环境不错，很喜欢！！！！</p>
+                  <div class="bottom_info">2014-10-29 11：40<a href="###" class="view_a">&#91;回复&#93;</a></div>
+                </seciton>
+              </li>
+              <li class="wb">
+                <img src="images/head/01.jpg" alt="" class="view_head" />
+                <seciton class="wbw">
+                  <div class="view_name">jd_site</div>
+                  <p>菜也挺好吃，太好了，感觉挺大气的，服务特别出色，环境不错，很喜欢！！！！</p>
+                  <div class="bottom_info">2014-10-29 11：40<a href="###" class="view_a">&#91;回复&#93;</a></div>
+                </seciton>
+              </li>
+              <li class="wb">
+                <img src="images/head/01.jpg" alt="" class="view_head" />
+                <seciton class="wbw">
+                  <div class="view_name">jd_site</div>
+                  <p>菜也挺好吃，太好了，感觉挺大气的，服务特别出色，环境不错，很喜欢！！！！</p>
+                  <div class="bottom_info">2014-10-29 11：40<a href="###" class="view_a">&#91;回复&#93;</a></div>
+                </seciton>
+              </li>
+            </ul>
+          </div>
+
+          <a href="###" class="big_white_btn">查看更多评论</a>
+        </section></div>
+    </div>
+  </div>
+</div>
+<div class="popup popupon">
+  <div class="popup_m">
+    <div class="shopcar_head cf2"><a href="#"><img src="images/pic/02.jpg" class="shopcar_headl">
+			<span class="shopcar_headr">
+			<p class="shopcar_headra">￥<%=hyprice>0?StringUtil.setPrice(hyprice):StringUtil.setPrice(goods.price)%></p>
+			<p class="shopcar_headrb">库存<%=goods.products[0].stock||0%><%=goods.unit||''%></p>
+		</span></a><img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn"></div>
+    <ul class="popup_f">
+       <li class="shopcar_a">
+        <dl class="wb lh_60"><dt>购买数量：</dt><dd class="wbw"><span class="numbox2"><i class="reduce_num2">&#45;</i><input type="number" value="1" class="num_text2" /><i class="add_num2">&#43;</i></span></dd></dl>
+      </li>
+    </ul>
+    <div class="shopcar_btn"><input type="button" value="确&nbsp;&nbsp;定"/></div>
+  </div>
+</div>
+<div class="add_detail">
+  <div class="btn_box">
+    <a href="javascript:buyNow();" class="big_orange_btn">立即购买</a>
+    <a href="###" class="big_green_btn">加入购物车</a>
+  </div>
+</div>
+<input id="r" type="hidden" value="<%=r%>">
+
+<script type="text/javascript">
+  var goodsid=<%=goods.id%>;
+  var productid=<%=goods.products[0].id%>;
+  $(function(){
+    $('#goods-detail img').css('max-width', '100%').css('height', 'auto');
+  });
+</script>
+<% include common_buttom.ejs %>

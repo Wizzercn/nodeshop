@@ -1,9 +1,6 @@
 <header class="header">
   <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
-
-  <h1 class="head_tit">
-    登录
-  </h1>
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
   <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
 
 </header>
@@ -153,11 +150,16 @@
     return true;
   }
 $(function(){
-  document.body.addEventListener("touchstart",function(){});
-
   $("#smscode").on("keyup",function(){$("#smscode_tip").hide();});
   $("#login_name").on("keyup",function(){$("#login_name_tip").hide();is_send=false;});
   $("#login_pass").on("keyup",function(){$("#login_pass_tip").hide();});
 });
 </script>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
 <% include common_buttom.ejs %>

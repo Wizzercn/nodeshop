@@ -61,7 +61,6 @@ module.exports = {
       req.data.moment = moment;
       req.data.r = '/goods/'+id;
       if(result.goods){
-      req.data.siteTitle = result.goods.name+'_' + req.data.siteTitle;
         if(result.goods.disabled==true){
           //未上架商品报404
           return res.notFound('商品未上架');

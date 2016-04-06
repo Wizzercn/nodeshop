@@ -1,0 +1,130 @@
+function buyNum(){
+  $("#buy_num").on("keyup",function(){
+    var buy_num=parseInt($(this).val());
+    if(buy_num==1&&$(this).val().length==1){
+    }else if(buy_num>0){
+      $(this).val(buy_num);
+    }else {
+      $(this).val(1);
+    }
+  });
+  $("#buy_sub").on("click",function(){
+    var buy_num=parseInt($("#buy_num").val());
+    var s=buy_num-1;
+    if(s>0)$("#buy_num").val(s);
+  });
+  $("#buy_add").on("click",function(){
+    var buy_num=parseInt($("#buy_num").val());
+    var s=buy_num+1;
+    if(s<10000)$("#buy_num").val(s);
+  });
+}
+function view(goodsId){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/goods/view/"+goodsId,
+    dataType : "json",
+    success : function(data) {
+
+    }
+  });
+}
+function commentCount(goodsId){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/goods/commentCount/"+goodsId,
+    dataType : "json",
+    success : function(data) {
+      var obj=data.data;
+      if(obj){
+        $("#goodRate").html(obj.goodRate+"%");
+        $("#c0").html(obj.allCount);
+        $("#c3").html(obj.c3);
+        $("#c2").html(obj.c2);
+        $("#c1").html(obj.c1);
+      }
+    }
+  });
+}
+function formatDate(now) {
+  return new Date(parseInt(now) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
+}
+var is_page=true;
+function commentData(goodsId,start){
+  var score=0;
+  $("#pj .tab3").find("a").each(function() {
+    var self = $(this);
+    if(self.hasClass("on3")){
+      score=self.attr("data-id");
+    }
+  });
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/goods/commentAjax/"+goodsId+"?start="+start+"&score="+score,
+    dataType : "json",
+    success : function(data) {
+      var obj=data.data;
+      if(obj){
+        var str='';
+        $.each(obj.data,function(i,o) {
+          var s='很好';
+          if(o.score==2){
+            s='较好';
+          }else if(o.score==1){
+            s='一般';
+          }
+          str += '<div class="s_pinglunsl cf2">' +
+            '<ul class="s_pinglunld">' +
+            '<li class="s_pinglunlf">' +
+            '<i class="zc_pin">'+s+'</i>' +
+            '<span>'+ o.memberNickname+', 评论时间：'+ new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span>' +
+            '</li>' +
+            '<li class="s_pinglung">'+ o.comment+'</li>' +
+            '</ul>' +
+            '</div>';
+        });
+        $("#pj_list").html(str);
+        if(is_page){
+          is_page=false;
+          $(".tcdPageCode").createPage({
+            pageCount:obj.totalPage,
+            current:obj.page,
+            backFn:function(p){
+              commentLoad(goodsId,(p-1)*10);
+            }
+          });
+        }
+      }
+    }
+  });
+}
+function commentLoad(goodsId,start){
+  $("#pj_list").html('<img src="'+csspath+'/pc/img/pj_loading.gif"/>');
+  setTimeout("commentData("+goodsId+","+start+")",300);
+}
+function buyNow(){
+  $.ajax({
+    type : "POST",
+    url : "/public/shop/pc/shopcart/save?goodsId="+goodsid+"&productId="+productid+"&num="+$("#buy_num").val(),
+    data : {
+      list:[]
+    },
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        window.location.href='/shopcart/buy';
+      }else if(data.code==1){
+        window.location.href='/login?r=/goods/'+goodsid;
+      }else if(data.code==3){
+        tip(data.msg);
+      }
+    }
+  });
+}
+$(function(){
+  buyNum();
+  view(goodsid);
+  commentCount(goodsid);
+  commentLoad(goodsid,0);
+
+});

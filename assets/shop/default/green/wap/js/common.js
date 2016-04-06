@@ -116,4 +116,6 @@ function DoMenu(id){
 }
 $(function(){
   showCartNum();
+  document.body.addEventListener("touchstart",function(){});
+
 });
