@@ -117,7 +117,7 @@ function showCartList(){
         $("#tag2").html('0.00');
         $("#tag3").html('0.00');
         $("#tag4").html('0.00');
-        $("#cart_list").html(s);
+        //$("#cart_list").html(s);
       }
     }
   });
