@@ -9,14 +9,16 @@ function buyNum(){
     }
   });
   $("#buy_sub").on("click",function(){
-    var buy_num=parseInt($("#buy_num").val());
+    var self=$("#buy_num");
+    var buy_num=parseInt(self.val());
     var s=buy_num-1;
-    if(s>0)$("#buy_num").val(s);
+    if(s>0)self.val(s);
   });
   $("#buy_add").on("click",function(){
-    var buy_num=parseInt($("#buy_num").val());
+    var self=$("#buy_num");
+    var buy_num=parseInt(self.val());
     var s=buy_num+1;
-    if(s<10000)$("#buy_num").val(s);
+    if(s<10000)self.val(s);
   });
 }
 function view(goodsId){

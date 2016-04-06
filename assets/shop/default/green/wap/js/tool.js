@@ -20,5 +20,5 @@ $(function(){
         if(i>0)bd.parentNode.style.transition="200ms";//添加动画效果
       }
     });
-  };
+  }
 });

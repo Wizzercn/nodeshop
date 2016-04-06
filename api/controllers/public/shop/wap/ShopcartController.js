@@ -380,7 +380,7 @@ module.exports = {
             obj.weight = o[0].weight || 0;
             obj.spec = o[0].spec || '';
             obj.productId = productId;
-            obj.goodsid = o[0].goodsid.id;
+            obj.goodsId = o[0].goodsid.id;
             obj.imgurl = o[0].goodsid.imgurl;
             stock=o[0].stock || 0;
           }
@@ -519,9 +519,8 @@ module.exports = {
       req.data.allClassList = result.allClassList || [];
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      req.data.r = '/shopcart/list';
-      req.data.siteTitle = '我的购物车_' + req.data.siteTitle;
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_list', req.data);
+      req.data.r = '/wap/shopcart/list';
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/shopcart_list', req.data);
 
     });
   },
@@ -700,9 +699,8 @@ module.exports = {
         req.data.cartGoods = result.cartGoods || {};
         req.data.StringUtil = StringUtil;
         req.data.moment = moment;
-        req.data.r = '/shopcart/buy';
-        req.data.siteTitle = '确认订单信息_' + req.data.siteTitle;
-        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_buy', req.data);
+        req.data.r = '/wap/shopcart/buy';
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/shopcart_buy', req.data);
 
       });
     } else {

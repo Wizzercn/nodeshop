@@ -380,7 +380,7 @@ module.exports = {
             obj.weight = o[0].weight || 0;
             obj.spec = o[0].spec || '';
             obj.productId = productId;
-            obj.goodsid = o[0].goodsid.id;
+            obj.goodsId = o[0].goodsid.id;
             obj.imgurl = o[0].goodsid.imgurl;
             stock=o[0].stock || 0;
           }
