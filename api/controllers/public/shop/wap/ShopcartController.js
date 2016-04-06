@@ -369,7 +369,7 @@ module.exports = {
     async.waterfall([function (cb) {
       if (productId > 0) {
         Shop_goods_products.find({
-          select: ['id', 'spec', 'price','stock', 'weight', 'goodsid'],
+          select: ['id', 'spec','name', 'price','stock', 'weight', 'goodsid'],
           where: {disabled: false, id: productId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -379,6 +379,7 @@ module.exports = {
             obj.price = o[0].price || 0;
             obj.weight = o[0].weight || 0;
             obj.spec = o[0].spec || '';
+            obj.name = o[0].name || '';
             obj.productId = productId;
             obj.goodsId = o[0].goodsid.id;
             obj.imgurl = o[0].goodsid.imgurl;
