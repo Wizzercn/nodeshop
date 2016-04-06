@@ -186,7 +186,9 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .pro_score_num{font-size: 3rem; color: #ce0020; vertical-align:middle;}
 .score_bottom{margin-top: .5rem;}
 
-.view_box{margin-top: 1rem; border: 1px solid #ddd;}
+.view_box{margin: 1rem 0; padding: 0 .5rem; overflow: hidden;border: 1px solid #ddd;}
+.view_box>li{margin-bottom: 1rem; display: flex; display: -webkit-box;}
+.view_box>li:last-child{margin-bottom: 0;}
 .view_nav{display: flex; display: -webkit-box; text-align: center; height: 3rem; line-height: 2.9rem; font-size: 1.2rem; color: #333; background-color: #eee;}
 .view_nav a{display: block; flex: 1; -webkit-box-flex: 1; color: #333; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;}
 .view_nav a:last-child{border-right: none;}
@@ -552,10 +554,19 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .popup_but input:first-child{background:#a33a42; content:"";appearance: textfield; -moz-appearance: textfield; -webkit-appearance: textfield;flex: 1 1 0%;display:block;width:100%;height:40px;color:#fff;border:none;border-radius:0.3rem;margin:0 0.5rem 0 1rem;}
 .popup_but input:last-child{background:#4d93b3;content:"";appearance: textfield; -moz-appearance: textfield; -webkit-appearance: textfield;flex: 1 1 0%;display:block;width:100%;height:40px;color:#fff;margin:0 1rem 0 0.5rem;border:none;border-radius:0.3rem;}
 
-.cart_detail{position:fixed;margin-top:10rem;widtH:100%;}
-
 /*---立即购买---*/
 .add_detail{position:fixed;top:100%;margin-top:-6rem;widtH:100%;background:#eee;}
+.shop_k{width:100%;height:5.2rem;background:#eee;border-top:1px solid #ddd;}
+.shop_ka{display: inline-block;float:left;width:15%;padding-top:3rem;line-height:1.8rem;text-align:center;font-size:1.2rem;position:relative;}
+.shop_ka:after{display:inline-block;width:2.6rem;height:2.2rem;background: url(../images/icon/bnav.png) no-repeat;background-size: 2.7rem;position:absolute;top:0.5rem;left:50%;margin-left:-1.3rem;}
+.shop_kb{display: inline-block;float:left;width:15%;padding-top:3rem;line-height:1.8rem;text-align:center;font-size:1.2rem;position:relative;}
+.shop_kb:after{display:inline-block;width:2.6rem;height:2.2rem;background: url(../images/icon/bnav.png) no-repeat 0 -13.8rem;background-size: 2.7rem;position:absolute;top:0.5rem;left:50%;margin-left:-1.3rem;}
+.shop_ka:active,.shop_kb:active{background:#00aa3a;color:#fff;}
+.shop_kb i{position:absolute;top:0.3rem;left: 50%;margin-left: 1.2rem;border-radius:0.5rem;background:#00aa3a;color:#fff;padding:0 0.2rem;min-width:1rem;max-height: 1.5rem;line-height: 1.5rem;}
+
+.add_detaila{position:fixed;bottom:0px;margin-top:-6rem;widtH:100%;background:#eee;}
+.add_detaila .btn_box{padding-left:0.5rem;margin: 0.5rem 0  0.5rem;}
+.add_detaila .btn_box a{margin:0 0.5rem 0 0;}
 /*--我要咨询--*/
 .tit_zi{padding:1rem 0;text-align:right;color:#fe6000;border-top:1px solid #dddddd;border-bottom:1px solid #dddddd;}
 .tit_zi:after{width:0.8rem;height:0.8rem;border-top:0.1rem solid #dddddd;border-left:0.1rem solid #dddddd;transform:rotate(135deg);-webkit-transform:rotate(135deg);display:inline-block;content:"";margin-left:0.5rem;}

@@ -105,7 +105,7 @@ module.exports = {
     if(score>0){
       where.score=score;
     }
-    Shop_member_comment.getPageList(10,start,where,sort,function(l){
+    Shop_member_comment.getPageList(5,start,where,sort,function(l){
       return res.json({code:0,msg:'',data:l});
     });
   }

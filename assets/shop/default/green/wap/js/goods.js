@@ -22,7 +22,7 @@ function buyNum(){
 function view(goodsId){
   $.ajax({
     type : "GET",
-    url : "/public/shop/pc/goods/view/"+goodsId,
+    url : "/public/shop/wap/goods/view/"+goodsId,
     dataType : "json",
     success : function(data) {
 
@@ -32,7 +32,7 @@ function view(goodsId){
 function commentCount(goodsId){
   $.ajax({
     type : "GET",
-    url : "/public/shop/pc/goods/commentCount/"+goodsId,
+    url : "/public/shop/wap/goods/commentCount/"+goodsId,
     dataType : "json",
     success : function(data) {
       var obj=data.data;
@@ -46,61 +46,54 @@ function commentCount(goodsId){
     }
   });
 }
-function formatDate(now) {
-  return new Date(parseInt(now) * 1000).toLocaleString().replace(/年|月/g, "-").replace(/日|上午|下午/g, " ");
-}
-var is_page=true;
-function commentData(goodsId,start){
+var totalPage=1;
+var page=0;
+var pageSize=5;
+function ajaxpage(){
+  var start=page*pageSize;
   var score=0;
-  $("#pj .tab3").find("a").each(function() {
+  $("#pj").find("a").each(function() {
     var self = $(this);
-    if(self.hasClass("on3")){
+    if(self.hasClass("active")){
       score=self.attr("data-id");
     }
   });
+  $("#pBtn1").hide();
+  $("#pBtn2").show();
   $.ajax({
     type : "GET",
-    url : "/public/shop/pc/goods/commentAjax/"+goodsId+"?start="+start+"&score="+score,
+    url : "/public/shop/wap/goods/commentAjax/"+goodsid+"?start="+start+"&score="+score,
     dataType : "json",
     success : function(data) {
       var obj=data.data;
       if(obj){
+        page=obj.page;
+        totalPage=obj.totalPage;
+        if(totalPage==page){
+          $("#pBtn1").hide();
+          $("#pBtn2").hide();
+        }else {
+          $("#pBtn1").show();
+          $("#pBtn2").hide();
+        }
         var str='';
         $.each(obj.data,function(i,o) {
-          var s='很好';
-          if(o.score==2){
-            s='较好';
-          }else if(o.score==1){
-            s='一般';
-          }
-          str += '<div class="s_pinglunsl cf2">' +
-            '<ul class="s_pinglunld">' +
-            '<li class="s_pinglunlf">' +
-            '<i class="zc_pin">'+s+'</i>' +
-            '<span>'+ o.memberNickname+', 评论时间：'+ new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span>' +
-            '</li>' +
-            '<li class="s_pinglung">'+ o.comment+'</li>' +
-            '</ul>' +
-            '</div>';
+          str+='<li class="wb">'+
+            '<seciton class="wbw">'+
+            '<div class="view_name">'+o.memberNickname+'</div>'+
+            ''+o.comment+''+
+            '<div class="bottom_info">'+ new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</div>'+
+            '</seciton>'+
+            '</li>';
         });
-        $("#pj_list").html(str);
-        if(is_page){
-          is_page=false;
-          $(".tcdPageCode").createPage({
-            pageCount:obj.totalPage,
-            current:obj.page,
-            backFn:function(p){
-              commentLoad(goodsId,(p-1)*10);
-            }
-          });
-        }
+        $("#pj_list").append(str);
+        try{
+        var bd = document.getElementById("tabBox-bd");
+        bd.parentNode.style.height = bd.children[1].children[0].offsetHeight+"px";
+        }catch(e) {}
       }
     }
   });
-}
-function commentLoad(goodsId,start){
-  $("#pj_list").html('<img src="'+csspath+'/pc/img/pj_loading.gif"/>');
-  setTimeout("commentData("+goodsId+","+start+")",300);
 }
 function buyNow(){
   $.ajax({
@@ -125,6 +118,17 @@ $(function(){
   buyNum();
   view(goodsid);
   commentCount(goodsid);
-  commentLoad(goodsid,0);
-
+  ajaxpage();
+  $("#pj").find("a").each(function(){
+    var self=$(this);
+    self.on("click",function(){
+      $("#pj").find("a").each(function(){
+        $(this).removeClass("active");
+      });
+      $(this).addClass("active");
+      page=0;
+      $("#pj_list").html("");
+      ajaxpage();
+    });
+  });
 });
