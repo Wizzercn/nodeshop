@@ -15,19 +15,21 @@
     <div class="head_w">亲爱的小伙伴，欢迎光临 <%=sails.config.system.AppName||''%>！</div>
   </div>
 </div>
-<nav class="mycard_nav">
-  <div class="text_eli">￥<%=StringUtil.setPrice(dbMember.money)%></div>
+<nav class="mycard_nav"><a href="/wap/member/money">
+    <div class="text_eli"><ins>￥<%=StringUtil.setPrice(dbMember.money)%></ins></div>
     <div class="text_eli">账户余额</div>
+  </a><a href="/wap/member/score">
     <div class="text_eli">
-      <ins>1</ins>
+      <ins><%=dbMember.score%></ins>
     </div>
-    <div class="text_eli">待发货</div>
-    <div class="text_eli">0</div>
-    <div class="text_eli">已发货</div>
-
-    <div class="text_eli">0</div>
-    <div class="text_eli">已完成</div>
-</nav>
+    <div class="text_eli">积分</div>
+  </a><a href="/wap/member/coupon">
+    <div class="text_eli"><ins><%=couponNum%></ins></div>
+    <div class="text_eli">优惠券</div>
+  </a><a href="/wap/member/order">
+    <div class="text_eli"><ins><%=orderNum%></ins></div>
+    <div class="text_eli">订单</div>
+  </a></nav>
 <!--  -->
 <nav class="usernav">
   <a href="/wap/member/order" class="order_manage">我的订单</a>

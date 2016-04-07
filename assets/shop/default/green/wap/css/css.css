@@ -264,8 +264,11 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .coupon_list>li{margin: 1rem 0; font-size: 1.2rem; color: #fff;}
 .coupon_list .disable{position: relative;}
 .coupon_list .disable .wbc{opacity: .2; position: relative; z-index: 2;}
+.coupon_list .enable{position: relative;}
 .coupon_state{position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: block; display: flex; display: -webkit-box; align-items: center; -webkit-box-align: center; text-align: center; font-size: 2.4rem; color: #fff; background-color: rgba(163,163,163,.5); z-index: 3;}
 .coupon_state_text{flex: 1; -webkit-box-flex: 1;}
+.coupon_state_0{position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: block; display: flex; display: -webkit-box; align-items: center; -webkit-box-align: center; text-align: center; font-size: 2.4rem; color: #fff; z-index: 3;}
+.coupon_state_0_text{flex: 1; -webkit-box-flex: 1;}
 .coupon_list a, .coupon_list a:visited{color: #fff;}
 .coupon_list a:active{background-color: #788a40; box-shadow: 0 0 .6rem rgba(0,0,0,.3);}
 .coupon_list .wbc{min-height: 8rem; background-color: #00aa3a;}
@@ -667,8 +670,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 
 /*---积分管理---*/
-.jifen_f{display:block;padding:1rem;font-size:1.6rem;background:#fff;}
-.jifen_f ins{margin-left:1rem;}
+.jifen_f{text-align:center;display:block;padding:0.5rem;font-size:1.6rem;background:#fff;}
+.jifen_f ins{margin-left:1rem;font-size:1.6rem;}
 .jifen_s{display:block;padding:1rem;background:#fff;margin-top:1rem;}
 .jifen_s1{font-size:1.3rem;width:70%;float:left;}
 .jifen_s1 i,.jifen_s1 ins{margin-right:1rem;}
@@ -744,4 +747,9 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .shopcar_headra{color:#fe6000;font-size:1.4rem;text-indent:0.5rem;}
 .shopcar_headrb{text-indent:0.7rem;font-size:1.2rem;}
 
+.shopcar_heads{position:relative;}
+.shopcars{padding:0 0.5rem 1rem;border-bottom:1px solid #ddd;}
+.shopcars_a{font-size:1.4rem;margin: 1rem 0;padding-left:1rem;padding-bottom:1rem;border-bottom:1px solid #ddd;}
+.shopcars_f{min-height:7rem;max-height: 20rem;overflow-x: auto;}
+.shopcars_f .error{}
 .close_btn{position:absolute;top:0.3rem;right:0.5rem;border:1px solid #ccc;padding:0.4rem;width:1.4rem;height:1.4rem;border-radius:50%;cursor:pointer;}

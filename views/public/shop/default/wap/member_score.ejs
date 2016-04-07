@@ -1,0 +1,52 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<div class="jifen_f">可用积分 <ins><%=dbMember.score||0%></ins>
+<a href="javascript:$('.popup').show();" class="big_green_btn">兑换优惠券</a>
+</div>
+<div id="list">
+</div>
+<div id="pullUp">
+  <a id="pBtn1" href="javascript:ajaxpage();" class="big_gray_btn">查看更多</a>
+  <span id="pBtn2" class="big_gray_btn" style="color: #9fadbd;display: none;">加载中...</span>
+</div>
+<div class="popup" style="display:none; ">
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="$('.popup').hide();"></div>
+    <ul class="shopcars_f">
+      <li class="shopcars_a">优&nbsp;惠&nbsp;券:
+        <select id="couponid" class="province">
+          <option value="0" >请选择要兑换的优惠券</option>
+          <%couponList.forEach(function(o){%>
+          <option value="<%=o.id%>" ><%=o.name%></option>
+          <%});%>
+        </select>
+      </li>
+      <li class="shopcars_a">剩余数量:
+        <span id="num" style="color: red">0</span>
+
+      </li>
+      <li class="shopcars_a">所需积分:
+        <span id="score" style="color: green">0</span>
+      </li>
+    </ul>
+    <div class="shopcar_btn">
+      <a id="save" href="javascript:saveCoupon();" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
+</div>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script src="/shop/default/green/wap/js/member_score.js"></script>
+
+<% include common_buttom.ejs %>
