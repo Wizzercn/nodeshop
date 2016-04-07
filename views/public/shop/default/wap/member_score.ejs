@@ -20,7 +20,7 @@
       <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="$('.popup').hide();"></div>
     <ul class="shopcars_f">
       <li class="shopcars_a">优&nbsp;惠&nbsp;券:
-        <select id="couponid" class="province">
+        <select id="couponid" class="w_text">
           <option value="0" >请选择要兑换的优惠券</option>
           <%couponList.forEach(function(o){%>
           <option value="<%=o.id%>" ><%=o.name%></option>

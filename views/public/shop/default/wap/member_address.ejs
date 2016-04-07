@@ -1,0 +1,53 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<ul class="w_list" id="addrList">
+
+</ul>
+<a href="javascript:addAddr()" id="address_m" class="big_cc_btn big_gray">添加新地址</a>
+<div class="popup" id="addr" style="display:none; ">
+  <form>
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="closeAddr()"></div>
+    <ul class="edit_list">
+      <input id="_id" value="" type="hidden">
+      <li><input id="_name"  maxlength="50" placeholder="收货人姓名" class="w_text" type="text"></li>
+      <li><input id="_mobile" maxlength="11" placeholder="手机号码" class="w_text" type="text"></li>
+      <li><input id="_postcode" maxlength="6" placeholder="邮编" class="w_text" type="text"><span class="r_text">可选填</span></li>
+      <li class="site_sel_a">
+        <select class="w_text" name="province" id="_province">
+          <option value="">请选择省</option>
+        </select>
+        <select class="w_text" name="city" id="_city">
+          <option value="">请选择市</option>
+        </select>
+        <select class="w_text" name="county" id="_area">
+          <option value="">请选择区县</option>
+        </select>
+      </li>
+      <li><input id="_addr" maxlength="200" placeholder="详细地址" class="w_text" type="text"></li>
+    </ul>
+    <div class="shopcar_btn">
+      <a id="save" href="javascript:;" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
+  </form>
+</div>
+
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script type="text/javascript">
+  var from="<%=from%>";
+</script>
+<script src="/shop/default/green/wap/js/member_address.js"></script>
+<% include common_buttom.ejs %>

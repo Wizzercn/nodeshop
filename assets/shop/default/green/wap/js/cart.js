@@ -166,21 +166,17 @@ function save(){
       dataType : "json",
       success : function(data) {
         if(data.code==0){
-          window.location.href='/shopcart/buy';
+          window.location.href='/wap/shopcart/buy';
         }else if(data.code==1){
-          window.location.href='/login?r=/shopcart/list';
+          window.location.href='/wap/login?r=/wap/shopcart/list';
         }
       }
     });
   }else {
-    $("#tip .oc_pro_a").html('购物车中无商品，请先挑选商品加入购物车！');
-    $("#tip").show();
+    tip('您还没有选购商品！');
   }
 }
 $(function(){
-  $("#save").on("click",function(){
-    save();
-  });
   showCartList();
   $("#cart_list input[type=checkbox]").on("click",function(){
     var ck=$(this);

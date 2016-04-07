@@ -388,7 +388,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .sel_list{border-bottom-style: dotted;}
 .sel_list>li{margin: .5rem 0;}
 
-.edit_list{line-height: 2rem;}
+.edit_list{line-height: 2rem;padding: 3rem 1rem 1rem 1rem;}
 .edit_list>li{position: relative; margin-bottom: 1rem;}
 .edit_list>li:last-child{margin-bottom: 0;}
 .edit_list .r_text{position: absolute; right: 1rem; top: 50%; margin-top: -1rem; color: #999;}
@@ -752,7 +752,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .shopcars_a{font-size:1.4rem;margin: 1rem 0;padding-left:1rem;padding-bottom:1rem;border-bottom:1px solid #ddd;}
 .shopcars_f{min-height:7rem;max-height: 20rem;overflow-x: auto;}
 .shopcars_f .error{}
-.close_btn{position:absolute;top:0.3rem;right:0.5rem;border:1px solid #ccc;padding:0.4rem;width:1.4rem;height:1.4rem;border-radius:50%;cursor:pointer;}
+.close_btn{z-index:101;position:absolute;top:0.3rem;right:0.5rem;border:1px solid #ccc;padding:0.4rem;width:1.4rem;height:1.4rem;border-radius:50%;cursor:pointer;}
 
 .del_k{display:inline-block;width:1.8rem;bottom:0.8rem;right:1rem;}
 .del_k img{width:1.8rem;}
@@ -766,6 +766,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .heji_b p{padding-right:2rem;}
 .heji_c{display:inline-block;width:25%;height:3.6rem;line-height:3.6rem;text-align:center;font-size:1.6rem;float:left;color:#fff;background:#00aa3a;}
 .heji_b em{font-size:1.0rem;color:#666;font-style: normal;margin-left:0.5rem;}
+
+.heji_d{display:inline-block;width:25%;height:3.6rem;line-height:3.6rem;text-align:center;font-size:1.6rem;float:left;color:#fff;background:#fe6000;}
 
 .i_select{width:1.2rem;height:1.2rem;border:1px solid #999;background:none;border-radius:50%;margin-right:0.5rem;margin-left:-0.5rem;margin-top:3rem;}
 .i_selecton{background-image:url(../images/icon/i_selecta.png);background-size:1.2rem;border:none;background-repeat: no-repeat;background-position: center;}

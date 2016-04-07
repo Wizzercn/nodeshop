@@ -7,7 +7,7 @@ module.exports = {
   index: function (req, res) {
     var m=req.session.member;
     if(!m|| m.memberId<1){
-      return res.redirect('/login');
+      return res.redirect('/wap/login');
     }
     async.parallel({
       //获取cms栏目分类
@@ -33,6 +33,7 @@ module.exports = {
       req.data.dbMember=result.dbMember||{};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
+      req.data.from=req.query.from||'';
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_address', req.data);
 
     });

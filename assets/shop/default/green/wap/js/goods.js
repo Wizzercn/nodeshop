@@ -109,7 +109,7 @@ function buyNow(){
       if(data.code==0){
         window.location.href='/wap/shopcart/buy';
       }else if(data.code==1){
-        window.location.href='/wap/login?r=/goods/'+goodsid;
+        window.location.href='/wap/login?r=/wap/goods/'+goodsid;
       }else if(data.code==3){
         tip(data.msg);
       }

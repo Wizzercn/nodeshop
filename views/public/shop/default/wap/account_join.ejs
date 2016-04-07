@@ -112,7 +112,7 @@
             tip("注册成功");
             setTimeout(function(){
               window.location.href=$("#r").val()||'/wap/member';
-            },1000);
+            },200);
           }else if(result.code==1){
             $("#smscode_tip").html('手机校验码不正确');
             $("#smscode_tip").show();
