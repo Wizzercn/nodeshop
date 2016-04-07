@@ -87,7 +87,7 @@ function showCartList(){
         $.each(data.list,function(i,o){
 
           html+='<div class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
-            '<li class="wb"><input type="checkbox" class="i_select i_selecton" checked/>'+
+            '<li class="wb"><input name="ids" type="checkbox" class="i_select" checked/>'+
             '<img src="'+o.imgurl+'?type=s" class="pic_160">'+
             '<section class="wbw"><h3>'+o.name+'</h3>'+
             '<div class="num_item">数量：<span class="numbox">'+
@@ -98,10 +98,8 @@ function showCartList(){
           '</section> <a href="javascript:removeGoodsList('+o.goodsId+','+o.productId+')" class="del_k"><img src="'+csspath+'/wap/images/icon/del.png"></a>  </li> </div>';
         });
         $("#cart_list").html(html);
-        $("#tag1").html((data.weight/1000));
-        $("#tag2").html(data.showYunMoney);
-        $("#tag3").html(data.showAllprice);
-        $("#tag4").html(data.showTotalMoney);
+        $("#tag2").html('含运费'+data.showYunMoney);
+        $("#tag4").html('￥'+data.showTotalMoney);
         $("#cart_list input[type=checkbox]").on("click",function(){
           var ck=$(this);
           if(!ck.prop("checked")){
@@ -111,9 +109,7 @@ function showCartList(){
         });
         $("#ck").prop("checked",true);
       }else {
-        $("#tag1").html('0');
-        $("#tag2").html('0.00');
-        $("#tag3").html('0.00');
+        $("#tag2").html('含运费0.00');
         $("#tag4").html('0.00');
         $("#cart_list").html("");
       }
@@ -125,7 +121,7 @@ function readGoods(){
   $("#cart_list input[type=checkbox]").each(function(){
     var self=$(this);
     if(self.prop("checked")){
-      var u=self.closest('ul');
+      var u=self.closest('div');
       var obj={};
       obj.goodsId= u.attr("data-goodsid");
       obj.productId= u.attr("data-productid");
@@ -141,10 +137,8 @@ function readGoods(){
     },
     dataType : "json",
     success : function(data) {
-      $("#tag1").html((data.weight/1000));
-      $("#tag2").html(data.showYunMoney);
-      $("#tag3").html(data.showAllprice);
-      $("#tag4").html(data.showTotalMoney);
+      $("#tag2").html('含运费'+data.showYunMoney);
+      $("#tag4").html('￥'+data.showTotalMoney);
     }
   });
 }
