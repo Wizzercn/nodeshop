@@ -110,6 +110,7 @@ module.exports = {
         productId: productId,
         goodsId: goodsId
       }).exec(function (err, obj) {
+        if(err)return res.json({code: 0, msg: ''});
         var n_num = obj.num + num;
         if (n_num == 0) {
           Shop_member_cart.destroy({

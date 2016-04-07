@@ -44,7 +44,9 @@
   <a href="/wap/member/coupon" class="asset_usernav">优惠券</a>
   <a href="/wap/member/score" class="coupon_usernav">积分明细</a>
   <a href="/wap/member/profile" class="jifeng_usernav">个人资料</a>
+  <%if(sessionMember.loginWx&&!sessionMember.binded){}else {%>
   <a href="/wap/member/password" class="file_usernav">修改密码</a>
+  <%}%>
 </nav>
 <%if(sessionMember.loginWx&&!sessionMember.binded){%>
 <a href="/public/shop/wap/account/change" class="big_write_btn">绑定其他帐号</a>

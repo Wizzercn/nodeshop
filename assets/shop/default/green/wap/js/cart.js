@@ -85,18 +85,17 @@ function showCartList(){
       if(count>0){
         var html='';
         $.each(data.list,function(i,o){
+
           html+='<div class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
-            '<li class="wb">'+
-            '<input name="ids" type="checkbox" checked>'+
+            '<li class="wb"><input type="checkbox" class="i_select i_selecton" checked/>'+
             '<img src="'+o.imgurl+'?type=s" class="pic_160">'+
-          '<section class="wbw"><h3>'+o.name+'</h3>'+
-          ' <div class="num_item">数量：<span class="numbox">'+
-          ' <i class="reduce_num" onclick="changeNumList('+o.goodsId+','+o.productId+',-1)"></i>'+
-          ' <input type="text" class="num_text" value="'+o.num+'" readonly>'+
-          ' <i class="add_num" onclick="changeNumList('+o.goodsId+','+o.productId+',1)"></i></span></div></section>'+
-            ' <ins class="green_text" style="position:absolute;margin-left:-4.4rem;">￥'+o.showSumPrice+'</ins>'+
-          '  <li class="shop_f1sfi"><a href="javascript:removeGoodsList('+o.goodsId+','+o.productId+')">删除</a></li>'+
-          ' </div>';
+            '<section class="wbw"><h3>'+o.name+'</h3>'+
+            '<div class="num_item">数量：<span class="numbox">'+
+            '<i class="reduce_num" onclick="changeNumList('+o.goodsId+','+o.productId+',-1)"></i>'+
+            '<input class="num_text" value="'+o.num+'" readonly="readonly" type="text">'+
+            '<i class="add_num" onclick="changeNumList('+o.goodsId+','+o.productId+',1)"></i></span></div>'+
+          '<ins class="orange_text" style="">￥'+o.showSumPrice+'</ins>'+
+          '</section> <a href="javascript:removeGoodsList('+o.goodsId+','+o.productId+')" class="del_k"><img src="'+csspath+'/wap/images/icon/del.png"></a>  </li> </div>';
         });
         $("#cart_list").html(html);
         $("#tag1").html((data.weight/1000));
@@ -112,12 +111,11 @@ function showCartList(){
         });
         $("#ck").prop("checked",true);
       }else {
-        var s='<div style="padding-top: 5px;height: 300px;width: 100%;text-align: center;"><img src="'+csspath+'/pc/img/gouwu.jpg"></div>';
         $("#tag1").html('0');
         $("#tag2").html('0.00');
         $("#tag3").html('0.00');
         $("#tag4").html('0.00');
-        //$("#cart_list").html(s);
+        $("#cart_list").html("");
       }
     }
   });
