@@ -727,7 +727,7 @@ module.exports = {
         //1.生成订单号
         function (cb) {
           Shop_order.getOrderId(function (orderId) {
-            cb(null, orderId);
+            return cb(null, orderId);
           });
         },
         //2.获取商品信息、计算会员价、插入订单商品表
@@ -791,7 +791,7 @@ module.exports = {
                     });
                     i++;
                     if (i == list.length) {
-                      cb(null, {
+                      return cb(null, {
                         id: orderId,
                         memberId: member.memberId,
                         goodsAmount: allPrice,
@@ -827,7 +827,7 @@ module.exports = {
             }
           }
           order.freightAmount = yunMoney;
-          cb(null, order);
+          return cb(null, order);
         },
         //4.计算优惠券,和积分
         function (order, cb) {
@@ -846,7 +846,7 @@ module.exports = {
             }else {
               order.score=0;
             }
-            cb(null, order);
+            return cb(null, order);
           });
         },
         //5.获取收货地址
@@ -863,7 +863,7 @@ module.exports = {
             order.taxNo = fapiao.taxNo || '';
             order.taxTitle = fapiao.taxTitle || '';
             order.taxCentent = fapiao.taxCentent || '';
-            cb(null, order);
+            return cb(null, order);
           });
         }, function (order, cb) {
           order.memo = memo;
@@ -874,7 +874,7 @@ module.exports = {
           order.payType = payType;
           order.receivedTime=receivedTime;
           Shop_order.create(order).exec(function (e, o) {
-            cb(e, order);
+            return cb(e, order);
           });
         }], function (err, order) {
         sails.log.debug('saveOrder err::'+JSON.stringify(err));
