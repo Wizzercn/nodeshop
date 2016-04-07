@@ -184,6 +184,10 @@ module.exports = {
       },
       index:true
     },
+    //收货时间要求
+    receivedTime: {
+      type: 'integer'
+    },
     //收货状态   0  1
     receivedStatus:{
       type: 'integer',

@@ -718,6 +718,7 @@ module.exports = {
     var list = req.body.list || [];
     var addrId = req.body.addrId || '0';
     var payType = req.body.payType || '';
+    var receivedTime=req.body.receivedTime||'0';
     var couponId = req.body.couponId || '0';
     var memo = req.body.memo || '';
     var fapiao = req.body.fapiao || {};
@@ -864,6 +865,7 @@ module.exports = {
           order.status = 'active';//['active','dead','finish']
           order.payStatus = 0;
           order.payType = payType;
+          order.receivedTime=receivedTime;
           Shop_order.create(order).exec(function (e, o) {
             cb(e, order);
           });

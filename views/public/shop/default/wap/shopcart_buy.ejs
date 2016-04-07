@@ -19,15 +19,71 @@
       </div></a></div>
 </div>
 <%}%>
-<ul class="pro_list" id="cart_list" style="padding-bottom:7rem;">
-
+<ul class="w_list">
+  <li>
+    <div class="black_text">商品清单</div>
+    <ul class="count_pro">
+      <%
+      var sum=0;
+      cartGoods.list.forEach(function(o){
+        sum+=o.num;
+      %>
+      <li data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
+        <a><img src="<%=o.imgurl||''%>?type=s" class="pic_100" /><%=o.name||''%></a>
+        <div class="count_pro_r"><ins class="black_text">&yen;<span class="ins_num"><%=o.showPrice||'0.00'%></span></ins><div>&#120;<span class="buy_num"><%=o.num||'0'%></span></div></div>
+      </li>
+      <%});%>
+    </ul>
+    <div class="bottom_info black_text">共<span class="orange_num"><%=sum%></span>件商品<span class="ml_30">合计：<ins class="black_text">&yen;<span class="ins_num"><%=cartGoods.showAllprice||'0.00'%></span></ins></span></div>
+    <div class="wb black_text">运费<div class="text_r wbw">+<ins class="ml_30 black_text">&yen;<span class="ins_num" id="freightAmount"><%=cartGoods.showYunMoney||'0.00'%></span></ins></div></div>
+    <div class="wb black_text">优惠<div class="text_r wbw">-<ins class="ml_30 black_text">&yen;<span class="ins_num" id="discountAmount">0.00</span></ins></div></div>
+    <div class="wb black_text"><div class="text_r wbw"><a href="javascript:$('#div1').show();" class="r_arrow_a">使用优惠券</a></div></div>
+    <div class="quan"><textarea id="memo" maxlength="100" placeholder="补充说明，告诉卖家您的特殊要求…"></textarea></div>
+  </li>
 </ul>
+<div class="line_box">
+  <div class="black_text">收货时间</div><div class="wb">
+  <ul class="wbw li_2">
+  <li><span class="radio_sel">
+                <input type="radio" value="1" name="receivedTime" checked="checked" id="time-1"><label for="time-1">工作日、双休日或假日均可送货</label>
+            </span></li>
+  <li><span class="radio_sel">
+                <input type="radio" value="2" name="receivedTime" id="time-2"><label for="time-2">只工作日送货</label>
+            </span></li>
+  <li><span class="radio_sel">
+                <input type="radio" value="3" name="receivedTime" id="time-3"><label for="time-3">只双休日、假日送货</label>
+            </span></li>
+    </ul></div>
+</div>
+<div class="line_box">
+  <div class="black_text">支付方式</div>
+  <div class="wb"><ul class="wbw li_2"><li><span class="radio_sel"><input type="radio" checked="checked" id="pay-1" name="pay" /><label for="pay-1">支付宝</label></span></li><li><span class="radio_sel"><input type="radio" id="pay-2" name="pay" /><label for="pay-2">货到付款</label></span></li></ul></div>
+</div>
 <div class="heji cf2">
   <div class="heji_a"></div>
-  <div class="heji_b"><span>合计：<i id="tag4">0</i><em id="tag2">不含运费</em></span>
+  <div class="heji_b"><span>需支付：<i id="finishAmount">&yen;<%=cartGoods.showTotalMoney||'0.00'%></i></span>
 
   </div>
   <a href="javascript:save();" class="heji_d">提交订单</a>
+</div>
+<div class="popup" id="div1" style="display:none; ">
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="cancelCoupon()"></div>
+    <ul class="shopcars_f">
+      <li class="shopcars_a">优&nbsp;惠&nbsp;券:
+        <select id="youhuiquan" class="w_text">
+          <option value="">选择优惠劵</option>
+          <%couponList.forEach(function(y){%>
+          <option value="<%=y.id%>"><%=y.couponName%></option>
+          <%});%>
+        </select>
+      </li>
+    </ul>
+    <div class="shopcar_btn">
+      <a id="save" href="javascript:doCoupon();" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
 </div>
 <nav class="bnav">
   <a href="/wap/" class="home_bnav">首页</a>
@@ -36,5 +92,9 @@
   <a id="cartDiv" href="/wap/shopcart/list" class="on cart_bnav">购物车<i id="cartNum"></i></a>
   <a href="/wap/channel" class="more_bnav">更多</a>
 </nav>
+<script>
+  var totalMoney=<%=cartGoods.totalMoney%>;
+  var couponList=<%-JSON.stringify(couponList)%>;
+</script>
 <script src="/shop/default/green/wap/js/buy.js"></script>
 <% include common_buttom.ejs %>

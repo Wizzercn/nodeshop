@@ -147,7 +147,7 @@ function save(){
   $("#cart_list input[type=checkbox]").each(function(){
     var self=$(this);
     if(self.prop("checked")){
-      var u=self.closest('ul');
+      var u=self.closest('div');
       var obj={};
       obj.goodsId= u.attr("data-goodsid");
       obj.productId= u.attr("data-productid");

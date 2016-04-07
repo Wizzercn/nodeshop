@@ -217,6 +217,7 @@ function doOrder(){
       addrId:addId,
       payType:$("input[name='payType']:checked").val(),
       couponId:$("#youhuiquan").val(),
+      receivedTime:$("input[name='receivedTime']:checked").val(),
       fapiao:fapiao,
       memo:$("#memo").val()
     },
