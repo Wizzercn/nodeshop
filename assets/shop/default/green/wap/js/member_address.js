@@ -118,7 +118,11 @@ function setDefault(id){
     dataType : "json",
     success : function(data) {
       if(data.code==0){
-        window.location.href='/wap/shopcart/buy';
+        if(from=='buy') {
+          window.location.href = '/wap/shopcart/buy';
+        }else {
+          window.location.reload();
+        }
       }
     }
   });
@@ -151,6 +155,8 @@ function listAddr(){
           '<a href="javascript:edit('+ o.id+');" class="addr_edit white_btn public_bg">编辑&nbsp;</a>';
           if(from=='buy'){
             str+='<a href="javascript:setDefault('+ o.id+');" class="addr_edit white_btn public_bg">选择&nbsp;</a></span>';
+          }else {
+            str+='<a href="javascript:setDefault('+ o.id+');" class="addr_edit white_btn public_bg">默认&nbsp;</a></span>';
           }
           str+='</div>'+
           '</li>';

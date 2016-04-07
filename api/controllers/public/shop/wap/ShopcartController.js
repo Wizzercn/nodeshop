@@ -503,28 +503,10 @@ module.exports = {
   },
   //我的购物车-列表
   list: function (req, res) {
-    async.parallel({
-      //获取cms栏目分类
-      channelList: function (done) {
-        Cms_channel.getChannel(function (list) {
-          done(null, list);
-        });
-      },
-      //获取所有商品分类
-      allClassList: function (done) {
-        Shop_goods_class.getAllClass(function (list) {
-          done(null, list);
-        });
-      }
-    }, function (err, result) {
-      req.data.channelList = result.channelList || [];
-      req.data.allClassList = result.allClassList || [];
-      req.data.StringUtil = StringUtil;
-      req.data.moment = moment;
-      req.data.r = '/wap/shopcart/list';
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/shopcart_list', req.data);
-
-    });
+    req.data.StringUtil = StringUtil;
+    req.data.moment = moment;
+    req.data.r = '/wap/shopcart/list';
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/shopcart_list', req.data);
   },
   //我的购物车-保存购物车
   save: function (req, res) {
@@ -632,18 +614,6 @@ module.exports = {
     var member = req.session.member;
     if (member && member.memberId > 0) {
       async.parallel({
-        //获取cms栏目分类
-        channelList: function (done) {
-          Cms_channel.getChannel(function (list) {
-            done(null, list);
-          });
-        },
-        //获取所有商品分类
-        allClassList: function (done) {
-          Shop_goods_class.getAllClass(function (list) {
-            done(null, list);
-          });
-        },
         cartGoods: function (done) {
           Shop_member_cart.find({memberId: member.memberId, is_buy: true}).exec(function (err, list) {
             var allPrice = 0;
@@ -693,12 +663,16 @@ module.exports = {
           }).exec(function (e, l) {
             done(null, l);
           });
+        },
+        address: function (done) {
+          Shop_member_addr.findOne({memberId: member.memberId,is_default:true}).exec(function (e, o) {
+            done(null, o);
+          });
         }
       }, function (err, result) {
-        req.data.channelList = result.channelList || [];
-        req.data.allClassList = result.allClassList || [];
         req.data.couponList = result.couponList || [];
         req.data.cartGoods = result.cartGoods || {};
+        req.data.address = result.address || {};
         req.data.StringUtil = StringUtil;
         req.data.moment = moment;
         req.data.r = '/wap/shopcart/buy';

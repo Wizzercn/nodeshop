@@ -6,26 +6,19 @@
 
 </header>
 <nav class="step_nav"><div class="step_nav_box"><a href="javascript:;">我的购物车</a><a href="javascript:;" class="on">确认订单信息</a><a href="javascript:;">成功提交订单</a></div></nav>
-<div class="line_box">
-  <div style="display: none">
-  <div class="black_text">收货人信息</div>
-    <ul class="edit_list" >
-        <li><input type="text" placeholder="收货人" class="w_text" /></li>
-        <li><input type="number" placeholder="手机号码" class="w_text" /></li>
-        <li><input type="text" placeholder="邮编" class="w_text" /><span class="r_text">可选填</span></li>
-        <li class="site_sel">
-            <select name="Province" class="w_text"></select>
-            <select name="City" class="w_text"></select>
-            <select name="Area" class="w_text"></select>
-        </li>
-        <li><input type="text" placeholder="详细地址：" class="w_text" /></li>
-    </ul>
-  <div class="bottom_info_l"><a href="###" class="green_btn">保存</a></div>
-  </div>
-  <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl">
-    <a href="23adress.html"><div class="shop_sr"><p class="shop_sr1">选择收货地址</p>
+<%if(address){%>
+<div class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
+  <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl"><a><div class="shop_sr"><p class="shop_sr1"><span><%-address.name%></span>  ｜  <span><%-address.mobile%></span></p>
+        <p class="shop_sr2"><%-address.province%><%-address.city%><%-address.area%><br><%-address.addr%></p>
       </div></a></div>
 </div>
+<%}else{%>
+<div class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
+  <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl">
+    <a><div class="shop_sr"><p class="shop_sr1">选择收货地址</p>
+      </div></a></div>
+</div>
+<%}%>
 <ul class="pro_list" id="cart_list" style="padding-bottom:7rem;">
 
 </ul>

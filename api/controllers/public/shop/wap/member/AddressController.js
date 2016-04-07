@@ -9,33 +9,10 @@ module.exports = {
     if(!m|| m.memberId<1){
       return res.redirect('/wap/login');
     }
-    async.parallel({
-      //获取cms栏目分类
-      channelList: function (done) {
-        Cms_channel.getChannel(function (list) {
-          done(null, list);
-        });
-      },
-      //获取所有商品分类
-      allClassList: function (done) {
-        Shop_goods_class.getAllClass(function (list) {
-          done(null, list);
-        });
-      },
-      dbMember:function(done){
-        Shop_member.findOne(m.memberId).populate('lv_id').exec(function(e,o){
-          done(null,o);
-        });
-      }
-    }, function (err, result) {
-      req.data.channelList = result.channelList || [];
-      req.data.allClassList = result.allClassList || [];
-      req.data.dbMember=result.dbMember||{};
-      req.data.StringUtil = StringUtil;
-      req.data.moment = moment;
-      req.data.from=req.query.from||'';
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_address', req.data);
+    req.data.StringUtil = StringUtil;
+    req.data.moment = moment;
+    req.data.from=req.query.from||'';
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_address', req.data);
 
-    });
   }
 };
