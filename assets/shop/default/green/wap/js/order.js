@@ -80,6 +80,9 @@ function payOnline(){
     //$("#payForm").submit();
     document.forms['payForm'].submit();
   }
+  if(payType=='pay_wxpay'){
+    wxPay();
+  }
 }
 function aliPay(){
   $("#tip1").show();
@@ -95,51 +98,6 @@ function aliPay(){
       },'json'
     );
   },2345);
-}
-function wxPay(){
-  if(is_wxpay)
-  {
-    return false;
-  }
-  is_wxpay=true;
-  $.get(
-    "/public/shop/pc/shoppay/payWxpay/"+orderId,
-    function(result){
-      if(result.code==0){
-        $("#qrCode").html("");
-        $("#qrCode").qrcode({width: 200,height: 200,text: result.code_url});
-        timer_wxpay=setInterval(function(){
-          $.get(
-            "/public/shop/pc/shoppay/payStatus/"+orderId,
-            function(d){
-              if(d.code==0){
-                window.location.reload();
-              }
-            },'json'
-          );
-        },2345);
-      }else if(result.code==2){
-        $("#tip .oc_pro_a").html("订单异常，请重下下单或联系客服");
-        $("#tip").show();
-        $("#tip .oc_pro").on("click",function(){
-          window.location.reload();
-        });
-        $("#tip .oc_pro1").on("click",function(){
-          $("#tip").hide();
-        });
-      }else{
-        is_wxpay=false;
-        $("#tip .oc_pro_a").html("微信支付不可用，请使用其他支付方式");
-        $("#tip").show();
-        $("#tip .oc_pro").on("click",function(){
-          $("#tip").hide();
-        });
-        $("#tip .oc_pro1").on("click",function(){
-          $("#tip").hide();
-        });
-      }
-    },'json'
-  );
 }
 function binClick(){
   var payType=$('input[name=payType]:checked').val();

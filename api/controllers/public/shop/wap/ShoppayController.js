@@ -194,25 +194,29 @@ module.exports = {
   },
   payWxpay: function (req, res) {
     var id = req.params.id || '';
+    var member = req.session.member;
+    if (member && member.memberId <1) {
+      return res.json({code: 2, msg: ''});
+    }
     Shop_order.findOne(id).exec(function (e1, order) {
       WxpayService.init(function (err, wxpay) {
         if (err||e1) {
           return res.json({code: 1, msg: ''});
         } else {
-          wxpay.createUnifiedOrder({
+          wxpay.getBrandWCPayRequestParams({
+            openid:member.openid,
             body: '订单号:' + id,
             out_trade_no: id,
             total_fee: order.finishAmount,
             spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
             notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/pc/wxpay/order',
-            trade_type: 'NATIVE',
             product_id: id
           }, function (err, result) {
             sails.log.debug('result::'+JSON.stringify(result));
             if (err)
               return res.json({code: 1, msg: ''});
             if(result.code_url)
-              return res.json({code: 0, msg: '', code_url: result.code_url});
+              return res.json({code: 0, msg: '', payargs: result});
             return res.json({code: 2, msg: ''});
           });
         }

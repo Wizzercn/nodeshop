@@ -909,15 +909,40 @@ module.exports = {
     var id = req.params.id || '';
     var member = req.session.member;
     if (member && member.memberId > 0) {
+      sails.log.debug('wxpay member::'+JSON.stringify(member));
       async.parallel({
         order: function (done) {
-          Shop_order.findOne({id:id,memberId:member.memberId}).exec(function (e, o) {
-            done(null, o);
+          Shop_order.findOne({id:id,memberId:member.memberId}).exec(function (e, order) {
+            if(member.loginWx&& order.payType=='pay_wxpay'){
+              WxpayService.init(function (err, wxpay) {
+                if (wxpay){
+                  wxpay.getBrandWCPayRequestParams({
+                    openid:member.openid,
+                    body: '订单号:' + id,
+                    out_trade_no: id,
+                    total_fee: order.finishAmount,
+                    spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
+                    notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/pc/wxpay/order',
+                    product_id: id
+                  }, function (err, result) {
+                    sails.log.debug('wxpay result::'+JSON.stringify(result));
+                    order.wxpayInfo=result;
+                    done(null, order);
+                  });
+                }else {
+                  order.wxpayInfo={};
+                  done(null, order);
+                }
+              });
+            }else {
+              order.wxpayInfo={};
+              done(null, order);
+            }
           });
         },
         member: function (done) {
           Shop_member.findOne(member.memberId).exec(function (e, o) {
-            done(null, o);
+              done(null, o);
           });
         }
       }, function (err, result) {
