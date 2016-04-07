@@ -734,7 +734,7 @@ module.exports = {
                   goods.weight = o.weight;
                   goods.imgurl= o.goodsid.imgurl;
                   if(goods.num> o.stock){
-                    cb({code:3,msg:o.name},null);
+                    return cb({code:3,msg:o.name},null);
                   }
                   Shop_goods_lv_price.findOne({
                     lvid: mmb.lv_id,
@@ -759,17 +759,25 @@ module.exports = {
                     goods.amount = goods.num * goods.price;
                     goods.score = Math.floor(goods.amount / 100);
                     Shop_order_goods.create(goods).exec(function (err1, obj1) {
-
+                      if(err1)
+                       sails.log.debug(JSON.stringify(err1));
                     });
                     i++;
                     if (i == list.length) {
-                      cb(null, {
+                      return cb(null, {
                         id: orderId,
                         memberId: member.memberId,
                         goodsAmount: allPrice,
                         weight: weight
                       });
                     }
+                  });
+                }else{
+                  return cb(null, {
+                    id: orderId,
+                    memberId: member.memberId,
+                    goodsAmount: allPrice,
+                    weight: weight
                   });
                 }
               });
@@ -792,7 +800,7 @@ module.exports = {
             }
           }
           order.freightAmount = yunMoney;
-          cb(null, order);
+          return cb(null, order);
         },
         //4.计算优惠券,和积分
         function (order, cb) {
@@ -811,7 +819,7 @@ module.exports = {
             }else {
               order.score=0;
             }
-            cb(null, order);
+            return cb(null, order);
           });
         },
         //5.获取收货地址
@@ -828,7 +836,7 @@ module.exports = {
             order.taxNo = fapiao.taxNo || '';
             order.taxTitle = fapiao.taxTitle || '';
             order.taxCentent = fapiao.taxCentent || '';
-            cb(null, order);
+            return cb(null, order);
           });
         }, function (order, cb) {
           order.memo = memo;
@@ -839,7 +847,7 @@ module.exports = {
           order.payType = payType;
           order.receivedTime=receivedTime;
           Shop_order.create(order).exec(function (e, o) {
-            cb(e, order);
+            return cb(e, order);
           });
         }], function (err, order) {
         sails.log.debug('saveOrder err::'+JSON.stringify(err));

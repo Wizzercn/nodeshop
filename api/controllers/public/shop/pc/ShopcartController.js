@@ -799,6 +799,13 @@ module.exports = {
                       });
                     }
                   });
+                }else{
+                  return cb(null, {
+                    id: orderId,
+                    memberId: member.memberId,
+                    goodsAmount: allPrice,
+                    weight: weight
+                  });
                 }
               });
             });
