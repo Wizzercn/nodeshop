@@ -418,7 +418,7 @@ module.exports = {
       }
     }], function (err, cartObj) {
       //根据用户是否登录存储到不同位置
-      if (member && member.memberId > 0 && cartObj && cartObj.price>0) {
+      if (member && member.memberId > 0 && cartObj && cartObj.price) {
         Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb) {
 
           Shop_goods_lv_price.findOne({
@@ -468,7 +468,7 @@ module.exports = {
             });
           });
         });
-      } else if(cartObj && cartObj.price>0){
+      } else if(cartObj && cartObj.price){
         var cookieGoods = req.cookies['shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId];
         if (cookieGoods) {
           var obj = JSON.parse(cookieGoods);
