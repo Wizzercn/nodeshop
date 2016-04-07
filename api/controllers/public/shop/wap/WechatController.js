@@ -4,7 +4,7 @@
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 var OAuth = require('wechat-oauth');
-var emoji=require('emoji');
+var emoji = require('emoji');
 var api;
 module.exports = {
   oauth: function (req, res) {
@@ -36,11 +36,9 @@ module.exports = {
         Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr1, bind1) {
           if (bind1) {
             //如果存在微信商城帐号
-            Shop_member.findOne(bind1.memberId).exec(function (mmbErr, mmb) {
-              if (mmb) {
                 req.session.member = {
-                  memberId: mmb.id,
-                  nickname: mmb.nickname,
+                  memberId: bind1.memberId,
+                  nickname: bind1.bind_nickname,
                   login_name: openid,
                   loginIp: req.ip,
                   loginAt: moment().format('X'),
@@ -48,9 +46,7 @@ module.exports = {
                   binded: bind1.binded,
                   openid: openid
                 };
-              }
               return res.redirect(wechat_goto_url);
-            });
           } else {
             //如果不存在微信商城帐号，则新注册帐号(前提是微信支付和微信帐号、菜单都配置好)
             if (sails.config.system.ShopConfig.pay_wxpay) {
@@ -58,9 +54,9 @@ module.exports = {
                 function (done) {
                   Wx_config.findOne({appid: sails.config.system.ShopConfig.pay_wxpay_info.wxpay_appid}).exec(function (e, o) {
                     if (o) {
-                      done(null, o);
+                      return done(null, o);
                     }
-                    done('error', {id:0});
+                    return done('error', {id: 0});
                   });
                 },
                 function (conf, done) {
@@ -68,240 +64,129 @@ module.exports = {
                     if (!err && c > 0) {
                       //若微信表存在数据,则更新
                       WechatService.init_id(conf.id, function (api) {
-                        sails.log.debug('WechatService api::'+JSON.stringify(api));
-
                         api.getUser({openid: openid, lang: 'zh_CN'}, function (er, result) {
                           if (result) {
                             result.subscribe = 1;
-                            result.nickname=emoji.unifiedToHTML(result.nickname);
+                            result.nickname = emoji.unifiedToHTML(result.nickname);
                             Wx_user.update({openid: openid, wxid: conf.id}, result).exec(function (e3, o3) {
+                              return done(null, o3[0]);
                             });
-                            //是否开启自动创建商城帐号
-                            if(sails.config.system.ShopConfig.member_weixinreg_auto){
-                              Shop_member_bind.findOne({bind_openid:openid}).exec(function(bindErr,bind){
-                                if(!bind){
-                                  //如果帐号绑定表数据不存在，则创建
-                                  Shop_member.create({
-                                    nickname:result.nickname,
-                                    headimgurl:result.headimgurl||'',
-                                    sex:result.sex||0,
-                                    reg_ip:req.ip,
-                                    reg_time:moment().format('X'),
-                                    reg_source:'weixin'
-                                  }).exec(function(mmbErr,mmb){
-                                    if(mmb){
-                                      req.session.member = {
-                                        memberId: mmb.id,
-                                        nickname: mmb.nickname,
-                                        login_name: openid,
-                                        loginIp: req.ip,
-                                        loginAt: moment().format('X'),
-                                        loginWx: true,
-                                        binded: false,
-                                        openid: openid
-                                      };
-                                      Shop_member_bind.create({
-                                        memberId:mmb.id,
-                                        bind_type:'weixin',
-                                        bind_openid:openid,
-                                        bind_nickname:result.nickname,
-                                        disabled:false,
-                                        createdAt:moment().format('X')
-                                      }).exec(function(bcErr,bc){
-
-                                      });
-                                      //注册赠送积分
-                                      var member_weixinreg_score=sails.config.system.ShopConfig.member_weixinreg_score||0;
-                                      if(member_weixinreg_score>0){
-                                        Shop_member.update(mmb.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
-                                          if(mscore){
-                                            Shop_member_score_log.create({
-                                              memberId:mmb.id,
-                                              oldScore:mmb.score,
-                                              newScore:mmb.score+member_weixinreg_score,
-                                              diffScore:member_weixinreg_score,
-                                              note:'微信注册赠送',
-                                              createdBy:0,
-                                              createdAt:moment().format('X')
-                                            }).exec(function(logErr,log){
-
-                                            });
-                                          }
-                                        });
-                                      }
-                                      //注册赠送优惠券
-                                      if(sails.config.system.ShopConfig.member_weixinreg_coupon>0){
-                                        Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_weixinreg_coupon).exec(function(couponErr,coupon){
-                                          if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
-                                            Shop_member_coupon.create({
-                                              memberId:mmb.id,
-                                              couponId:coupon.id,
-                                              couponName:coupon.name,
-                                              couponPrice:coupon.price,
-                                              status:0,
-                                              createdAt:moment().format('X')
-                                            }).exec(function(mcErr,mc){
-                                              done(null, 0);
-                                            });
-                                          }else {
-                                            done(null, 0);
-                                          }
-                                        });
-                                      }else {
-                                        done(null, 0);
-                                      }
-                                    }else {
-                                      done(null, 0);
-                                    }
-                                  });
-                                }else {
-                                  Shop_member_bind.update({bind_openid:openid},{disabled:false}).exec(function(bcErr2,bc2){
-                                    if(bc2.length>0)
-                                      req.session.member = {
-                                        memberId: bc2[0].memberId,
-                                        nickname: bc2[0].bind_nickname,
-                                        login_name: bc2[0].bind_openid,
-                                        loginIp: req.ip,
-                                        loginAt: moment().format('X'),
-                                        loginWx: true,
-                                        binded: bc2[0].binded,
-                                        openid: bc2[0].bind_openid
-                                      };
-                                  });
-                                  done(null, 0);
-                                }
-                              });
-                            }else {
-                              done(null, 0);
-                            }
-
-                          }else {
-                            done(null, 0);
                           }
                         });
                       });
                     } else {
-                      //若微信表不存在数据,则创建
-                      Wx_user.create({openid: openid, wxid: conf.id,subscribe:1}).exec(function (e2, obj) {
-                        if (obj) {
-                          WechatService.init_id(conf.id, function (api) {
-                            api.getUser({openid: openid, lang: 'zh_CN'}, function (er, result) {
-                              if (result) {
-                                result.subscribe = 1;
-                                result.nickname=emoji.unifiedToHTML(result.nickname);
-                                Wx_user.update({openid: openid, wxid: conf.id}, result).exec(function (e3, o3) {
-                                });
-                                //是否开启自动创建商城帐号
-                                if(sails.config.system.ShopConfig.member_weixinreg_auto){
-                                  Shop_member_bind.findOne({bind_openid:openid}).exec(function(bindErr,bind){
-                                    if(!bind){
-                                      //如果帐号绑定表数据不存在，则创建
-                                      Shop_member.create({
-                                        nickname:result.nickname,
-                                        headimgurl:result.headimgurl||'',
-                                        sex:result.sex||0,
-                                        reg_ip:req.ip,
-                                        reg_time:moment().format('X'),
-                                        reg_source:'weixin'
-                                      }).exec(function(mmbErr,mmb){
-                                        if(mmb){
-                                          req.session.member = {
-                                            memberId: mmb.id,
-                                            nickname: mmb.nickname,
-                                            login_name: openid,
-                                            loginIp: req.ip,
-                                            loginAt: moment().format('X'),
-                                            loginWx: true,
-                                            binded: false,
-                                            openid: openid
-                                          };
-                                          Shop_member_bind.create({
-                                            memberId:mmb.id,
-                                            bind_type:'weixin',
-                                            bind_openid:openid,
-                                            bind_nickname:result.nickname,
-                                            disabled:false,
-                                            createdAt:moment().format('X')
-                                          }).exec(function(bcErr,bc){
-
-                                          });
-                                          //注册赠送积分
-                                          var member_weixinreg_score=sails.config.system.ShopConfig.member_weixinreg_score||0;
-                                          if(member_weixinreg_score>0){
-                                            Shop_member.update(mmb.id,{score:mmb.score+member_weixinreg_score}).exec(function(mscoreErr,mscore){
-                                              if(mscore){
-                                                Shop_member_score_log.create({
-                                                  memberId:mmb.id,
-                                                  oldScore:mmb.score,
-                                                  newScore:mmb.score+member_weixinreg_score,
-                                                  diffScore:member_weixinreg_score,
-                                                  note:'微信注册赠送',
-                                                  createdBy:0,
-                                                  createdAt:moment().format('X')
-                                                }).exec(function(logErr,log){
-
-                                                });
-                                              }
-                                            });
-                                          }
-                                          //注册赠送优惠券
-                                          if(sails.config.system.ShopConfig.member_weixinreg_coupon>0){
-                                            Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_weixinreg_coupon).exec(function(couponErr,coupon){
-                                              if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
-                                                Shop_member_coupon.create({
-                                                  memberId:mmb.id,
-                                                  couponId:coupon.id,
-                                                  couponName:coupon.name,
-                                                  couponPrice:coupon.price,
-                                                  status:0,
-                                                  createdAt:moment().format('X')
-                                                }).exec(function(mcErr,mc){
-                                                  done(null, 0);
-                                                });
-                                              }else {
-                                                done(null, 0);
-                                              }
-                                            });
-                                          }else {
-                                            done(null, 0);
-                                          }
-                                        }else {
-                                          done(null, 0);
-                                        }
-                                      });
-                                    }else {
-                                      Shop_member_bind.update({bind_openid:openid},{disabled:false}).exec(function(bcErr2,bc2){
-                                        if(bc2.length>0)
-                                          req.session.member = {
-                                            memberId: bc2[0].memberId,
-                                            nickname: bc2[0].bind_nickname,
-                                            login_name: bc2[0].bind_openid,
-                                            loginIp: req.ip,
-                                            loginAt: moment().format('X'),
-                                            loginWx: true,
-                                            binded: bc2[0].binded,
-                                            openid: bc2[0].bind_openid
-                                          };
-                                      });
-                                      done(null, 0);
-                                    }
-                                  });
-                                }else {
-                                  done(null, 0);
-                                }
-                              }else {
-                                done(null, 0);
-                              }
+                      WechatService.init_id(conf.id, function (api) {
+                        api.getUser({openid: openid, lang: 'zh_CN'}, function (er, result) {
+                          if (result) {
+                            result.wxid=conf.id;
+                            result.subscribe = 1;
+                            result.nickname = emoji.unifiedToHTML(result.nickname);
+                            Wx_user.create(result).exec(function (e3, o) {
+                              return done(null, o);
                             });
-                          });
-                        }else {
-                          done(null, 0);
-                        }
+                          }
+                        });
                       });
                     }
                   });
+                },
+                function (wxuser, done) {
+                  //是否开启自动创建商城帐号
+                  if (sails.config.system.ShopConfig.member_weixinreg_auto) {
+                    Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr, bind) {
+                      if (!bind) {
+                        //如果帐号绑定表数据不存在，则创建
+                        Shop_member.create({
+                          nickname: wxuser.nickname,
+                          headimgurl: wxuser.headimgurl || '',
+                          sex: wxuser.sex || 0,
+                          reg_ip: req.ip,
+                          reg_time: moment().format('X'),
+                          reg_source: 'weixin'
+                        }).exec(function (mmbErr, mmb) {
+                          Shop_member_bind.create({
+                            memberId: mmb.id,
+                            bind_type: 'weixin',
+                            bind_openid: openid,
+                            bind_nickname: wxuser.nickname,
+                            disabled: false,
+                            createdAt: moment().format('X')
+                          }).exec(function (bcErr, bc) {
+                            bc.jiSuan=true;
+                            return done(null, bc);
+                          });
+                        });
+                      } else {
+                        Shop_member_bind.update({bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                          //如果是取消关注重新关注的，则不进行积分优惠券计算
+                          bc.jiSuan=false;
+                          return done(null, bind);
+
+                        });
+                      }
+                    });
+                  } else {
+                    return done(null, 0);
+                  }
                 }
-              ], function (e, r) {
+                , function (bind, done) {
+                  if (bind.jiSuan == false)
+                    done(null, bind);
+                  Shop_member.findOne(bind.memberId).exec(function (errmmb, mmb) {
+                    var member_weixinreg_score = sails.config.system.ShopConfig.member_weixinreg_score || 0;
+                    if (member_weixinreg_score > 0) {
+                      Shop_member.update(mmb.id, {score: mmb.score + member_weixinreg_score}).exec(function (mscoreErr, mscore) {
+                        Shop_member_score_log.create({
+                          memberId: mmb.id,
+                          oldScore: mmb.score,
+                          newScore: mmb.score + member_weixinreg_score,
+                          diffScore: member_weixinreg_score,
+                          note: '微信注册赠送',
+                          createdBy: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (logErr, log) {
+                          return done(null, bind);
+                        });
+                      });
+                    } else
+                      return done(null, bind);
+                  });
+                }, function (bind, done) {
+                  if (bind.jiSuan == false)
+                    done(null, bind);
+                  //注册赠送优惠券
+                  if (sails.config.system.ShopConfig.member_weixinreg_coupon > 0) {
+                    Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_weixinreg_coupon).exec(function (couponErr, coupon) {
+                      if (coupon.disabled == false && coupon.maxNum > coupon.hasNum) {
+                        Shop_member_coupon.create({
+                          memberId: bind.memberId,
+                          couponId: coupon.id,
+                          couponName: coupon.name,
+                          couponPrice: coupon.price,
+                          status: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (mcErr, mc) {
+                          return done(null, bind);
+                        });
+                      } else {
+                        return done(null, bind);
+                      }
+                    });
+                  } else {
+                    return done(null, bind);
+                  }
+                }
+              ], function (e, bind) {
+                req.session.member = {
+                  memberId: bind.memberId,
+                  nickname: bind.bind_nickname,
+                  login_name: openid,
+                  loginIp: req.ip,
+                  loginAt: moment().format('X'),
+                  loginWx: true,
+                  binded: bind.binded,
+                  openid: openid
+                };
                 return res.redirect(wechat_goto_url);
               });
             } else {
