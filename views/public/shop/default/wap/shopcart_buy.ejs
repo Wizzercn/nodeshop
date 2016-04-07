@@ -7,13 +7,13 @@
 </header>
 <nav class="step_nav"><div class="step_nav_box"><a href="javascript:;">我的购物车</a><a href="javascript:;" class="on">确认订单信息</a><a href="javascript:;">成功提交订单</a></div></nav>
 <%if(address){%>
-<div class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
+<div data-id="<%=address.id%>" class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
   <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl"><a><div class="shop_sr"><p class="shop_sr1"><span><%-address.name%></span>  ｜  <span><%-address.mobile%></span></p>
         <p class="shop_sr2"><%-address.province%><%-address.city%><%-address.area%><br><%-address.addr%></p>
       </div></a></div>
 </div>
 <%}else{%>
-<div class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
+<div data-id="" class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
   <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl">
     <a><div class="shop_sr"><p class="shop_sr1">选择收货地址</p>
       </div></a></div>
@@ -22,7 +22,7 @@
 <ul class="w_list">
   <li>
     <div class="black_text">商品清单</div>
-    <ul class="count_pro">
+    <ul class="count_pro" id="buyGoods">
       <%
       var sum=0;
       cartGoods.list.forEach(function(o){
@@ -38,6 +38,9 @@
     <div class="wb black_text">运费<div class="text_r wbw">+<ins class="ml_30 black_text">&yen;<span class="ins_num" id="freightAmount"><%=cartGoods.showYunMoney||'0.00'%></span></ins></div></div>
     <div class="wb black_text">优惠<div class="text_r wbw">-<ins class="ml_30 black_text">&yen;<span class="ins_num" id="discountAmount">0.00</span></ins></div></div>
     <div class="wb black_text"><div class="text_r wbw"><a href="javascript:$('#div1').show();" class="r_arrow_a">使用优惠券</a></div></div>
+    <%if(ShopConfig.tax_disabled==false&&cartGoods.allPrice>=ShopConfig.tax_price*100){%>
+    <div class="wb black_text"><div class="text_r wbw"><a href="javascript:$('#div2').show();" class="r_arrow_a">开具发票</a></div></div>
+    <%}%>
     <div class="quan"><textarea id="memo" maxlength="100" placeholder="补充说明，告诉卖家您的特殊要求…"></textarea></div>
   </li>
 </ul>
@@ -57,14 +60,34 @@
 </div>
 <div class="line_box">
   <div class="black_text">支付方式</div>
-  <div class="wb"><ul class="wbw li_2"><li><span class="radio_sel"><input type="radio" checked="checked" id="pay-1" name="pay" /><label for="pay-1">支付宝</label></span></li><li><span class="radio_sel"><input type="radio" id="pay-2" name="pay" /><label for="pay-2">货到付款</label></span></li></ul></div>
+  <div class="wb">
+    <ul class="wbw li_2">
+      <%if(ShopConfig.pay_alipay&&!browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-1" value="pay_alipay" name="payType" /><label
+            for="pay-1">支付宝</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_wxpay&&browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-2" value="pay_wxpay" name="payType" /><label
+            for="pay-2">微信支付</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_cash){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-3" value="pay_cash" name="payType" /><label
+            for="pay-3">货到付款</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_money){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-4" value="pay_money" name="payType" /><label
+            for="pay-4">余额支付</label></span></li>
+      <%}%>
+    </ul>
+  </div>
 </div>
+<div style="height: 3rem;"></div>
 <div class="heji cf2">
   <div class="heji_a"></div>
   <div class="heji_b"><span>需支付：<i id="finishAmount">&yen;<%=cartGoods.showTotalMoney||'0.00'%></i></span>
 
   </div>
-  <a href="javascript:save();" class="heji_d">提交订单</a>
+  <a href="javascript:doOrder();" class="heji_d">提交订单</a>
 </div>
 <div class="popup" id="div1" style="display:none; ">
   <div class="popup_m">
@@ -82,6 +105,29 @@
     </ul>
     <div class="shopcar_btn">
       <a id="save" href="javascript:doCoupon();" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
+</div>
+<div class="popup" id="div2" style="display:none; ">
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="cancelFapiao()"></div>
+    <ul class="shopcars_f">
+      <li class="shopcars_a">
+        发票类型：<input name="taxType" type="radio" value="1">企业<input name="taxType" type="radio" value="2" checked>个人
+      </li>
+      <li class="shopcars_a">
+        <input placeholder="发票抬头" id="taxTitle" name="taxTitle" type="text" maxlength="100" class="w_text_fapiao">
+      </li>
+      <li class="shopcars_a">
+        <input placeholder="发票内容" id="taxCentent" name="taxTitle" type="text" maxlength="200" class="w_text_fapiao">
+      </li>
+      <li class="shopcars_a">
+        <input placeholder="发票税号(企业需填写)" id="taxNo" name="taxTitle" type="text" maxlength="50" class="w_text_fapiao">
+      </li>
+    </ul>
+    <div class="shopcar_btn">
+      <a id="save" href="javascript:doFapiao();" class="big_green_btn">确&nbsp;&nbsp;定</a>
     </div>
   </div>
 </div>

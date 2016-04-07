@@ -72,6 +72,14 @@ function clearCart(){
     }
   });
 }
+function clk(id){
+  if($("#g_"+id).find("input[type=checkbox]").prop("checked")){
+    $("#g_"+id).find("input[type=checkbox]").prop("checked",false);
+  }else {
+    $("#g_"+id).find("input[type=checkbox]").prop("checked",true);
+  }
+  readGoods();
+}
 function showCartList(){
   $.ajax({
     type : "POST",
@@ -86,9 +94,9 @@ function showCartList(){
         var html='';
         $.each(data.list,function(i,o){
 
-          html+='<div class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
+          html+='<div id="g_'+i+'" class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
             '<li class="wb"><input name="ids" type="checkbox" class="i_select" checked/>'+
-            '<img src="'+o.imgurl+'?type=s" class="pic_160">'+
+            '<img onclick="clk('+i+')" src="'+o.imgurl+'?type=s" class="pic_160">'+
             '<section class="wbw"><h3>'+o.name+'</h3>'+
             '<div class="num_item">数量：<span class="numbox">'+
             '<i class="reduce_num" onclick="changeNumList('+o.goodsId+','+o.productId+',-1)"></i>'+

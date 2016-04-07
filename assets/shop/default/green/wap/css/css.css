@@ -394,6 +394,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .edit_list .r_text{position: absolute; right: 1rem; top: 50%; margin-top: -1rem; color: #999;}
 
 .w_text{padding: 1rem; width: 100%; height: 4rem; line-height: 1.8rem; text-align: left; font-size: 1.2rem; color: #777; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; background-color: #fff; border: 1px solid #ddd; outline: 0; border-radius: .3rem; box-shadow: none;}
+.w_text_fapiao{padding: 1rem; width: 98%;  height: 3.2rem; line-height: 1.8rem; text-align: left; font-size: 1.2rem; color: #777; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; background-color: #fff; border: 1px solid #ddd; outline: 0; border-radius: .3rem; box-shadow: none;}
 .site_sel{display: flex; display: -webkit-box;}
 .site_sel select{margin-right: 1rem; padding-right: 2rem; display: block; flex: 1; -webkit-box-flex: 1; -webkit-appearance: none; background: url(../images/icon_public/select_down.png) 100% 50% no-repeat; background-size: 2.5rem 1rem;}
 .site_sel select:last-child{margin-right: 0;}
@@ -771,3 +772,11 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 .i_select{width:1.2rem;height:1.2rem;border:1px solid #999;background:none;border-radius:50%;margin-right:0.5rem;margin-left:-0.5rem;margin-top:3rem;}
 .i_selecton{background-image:url(../images/icon/i_selecta.png);background-size:1.2rem;border:none;background-repeat: no-repeat;background-position: center;}
+
+.pay_list{padding: 1rem 0; font-size: 1.2rem; color: #999;border:qpx solid #ddd;border-bottom:none;border-radius:0.5rem 0.5rem 0 0;margin:1rem 0;}
+
+.pay_list>li{margin:0 auto;}
+.pay_bg{border-bottom:1px solid #ddd;}
+
+.pay_list [class*="big_"]{margin: 0;}
+.pay_list .white_btn{padding: 0 2rem; height: 2.8rem; line-height: 2.8rem;}

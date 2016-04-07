@@ -1,0 +1,85 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<nav class="step_nav"><div class="step_nav_box"><a href="javascript:;">我的购物车</a><a href="javascript:;">确认订单信息</a><a href="javascript:;" class="on">成功提交订单</a></div></nav>
+<div class="notice_box">
+  <div><img src="<%=CssPath%>/wap/images/icon/02.png" alt="" class="notice_ico" /></div>
+  <div class="tit">您已成功提交订单！<%if(order.payType!='pay_cash'&&order.payStatus==0){%>
+    请支付 ！<%}%></div>
+  <div>
+    <p>订单号：<%=order.id%></p>
+    <p>支付金额：<span class="orange_text">&yen;<%=StringUtil.setPrice(order.finishAmount)||'0.00'%></span></p>
+    <%if(order.payType=='pay_cash'){%>
+    <p>
+    支付方式：<span>货到付款</span></p>
+    <%}%>
+    <%if(order.payStatus==1&&order.payType=='pay_money'){%>
+    <p>
+    支付方式：<span>余额支付</span></p>
+    <%}%>
+    <%if(order.payStatus==1&&order.payType=='pay_alipay'){%>
+    <p>
+    支付方式：<span>支付宝支付</span></p>
+    <%}%>
+    <%if(order.payStatus==1&&order.payType=='pay_wxpay'){%>
+    <p>
+    支付方式：<span>微信支付</span></p>
+    <%}%>
+  </div>
+  <%if(order.payStatus==1||order.payType=='pay_cash'){%>
+  <div class="btn_box"><a href="/wap/member/order" class="big_orange_btn">查看订单</a><a href="/wap/" class="big_green_btn">继续购物</a></div>
+  <%}%>
+</div>
+<%if(order.payType!='pay_cash'&&order.payStatus==0){%>
+<div class="line_box">
+  <div class="black_text">支付方式</div>
+  <div class="wb">
+    <ul class="wbw li_2">
+      <%if(ShopConfig.pay_alipay&&!browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" <%=order.payType=='pay_alipay'?'checked':''%> id="pay-1" value="pay_alipay" name="payType" /><label
+            for="pay-1">支付宝</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_wxpay&&browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" <%=order.payType=='pay_wxpay'?'checked':''%> id="pay-2" value="pay_wxpay" name="payType" /><label
+            for="pay-2">微信支付</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_cash){%>
+      <li><span class="radio_sel"><input type="radio" <%=order.payType=='pay_cash'?'checked':''%> id="pay-3" value="pay_cash" name="payType" /><label
+            for="pay-3">货到付款</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_money){%>
+      <li><span class="radio_sel"><input type="radio" <%=order.payType=='pay_money'?'checked':''%> id="pay-4" value="pay_money" name="payType" /><label
+            for="pay-4">余额支付</label></span>(余额:<span style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>)</li>
+      <%}%>
+    </ul>
+  </div>
+</div>
+<ul class="sign_list" id="sendMsg" style="display: <%=!browse_is_weixin&&order.payType=='pay_money'?'block':'none'%>">
+  <li class="sign_item sign_bg"><div class="wbw"><input id="smscode" maxlength="6" type="text" placeholder="手机效验码" class="captcha_sign sign_text" /></div><a href="javascript:getSmscode();" class="c_a">获取效验码&nbsp;</a><i id="smscode_tip" style="display: none" class="blue_notice"></i></li>
+
+</ul>
+<div style="height: 2rem;"></div>
+<div class="heji cf2">
+  <div class="heji_a"></div>
+  <div class="heji_b">
+  </div>
+  <a href="javascript:payOnline();" class="heji_d">立即支付</a>
+</div>
+<%}%>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="on cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script>
+  var orderId='<%=order.id%>';
+  var browse_is_weixin=<%=browse_is_weixin%>;
+</script>
+<script src="/shop/default/green/wap/js/order.js"></script>
+<% include common_buttom.ejs %>

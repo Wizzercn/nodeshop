@@ -910,18 +910,6 @@ module.exports = {
     var member = req.session.member;
     if (member && member.memberId > 0) {
       async.parallel({
-        //获取cms栏目分类
-        channelList: function (done) {
-          Cms_channel.getChannel(function (list) {
-            done(null, list);
-          });
-        },
-        //获取所有商品分类
-        allClassList: function (done) {
-          Shop_goods_class.getAllClass(function (list) {
-            done(null, list);
-          });
-        },
         order: function (done) {
           Shop_order.findOne({id:id,memberId:member.memberId}).exec(function (e, o) {
             done(null, o);
@@ -933,18 +921,15 @@ module.exports = {
           });
         }
       }, function (err, result) {
-        req.data.channelList = result.channelList || [];
-        req.data.allClassList = result.allClassList || [];
         req.data.order = result.order || {};
         req.data.dbMember = result.member || {};
         req.data.member = member;
         req.data.StringUtil = StringUtil;
         req.data.moment = moment;
-        req.data.siteTitle = '成功提交订单_' + req.data.siteTitle;
-        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/shopcart_order', req.data);
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/shopcart_order', req.data);
       });
     } else {
-      return res.redirect('/login?r=/shopcart/order/'+id);
+      return res.redirect('/wap/login?r=/wap/shopcart/order/'+id);
     }
   }
 
