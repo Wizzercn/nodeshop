@@ -119,7 +119,7 @@ function showCartList(){
       }else {
         $("#tag2").html('含运费0.00');
         $("#tag4").html('0.00');
-        $("#cart_list").html("");
+        $("#cart_list").html('<div class="order_n"><img src="'+csspath+'/wap/images/icon_public/order_k.png"><p>您还没有选购商品，去看看有哪些想买的</p><a href="/wap/">随便逛逛</a></div>');
       }
     }
   });
