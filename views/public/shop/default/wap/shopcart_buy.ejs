@@ -6,7 +6,7 @@
 
 </header>
 <nav class="step_nav"><div class="step_nav_box"><a href="javascript:;">我的购物车</a><a href="javascript:;" class="on">确认订单信息</a><a href="javascript:;">成功提交订单</a></div></nav>
-<%if(address){%>
+<%if(address&&address.id){%>
 <div data-id="<%=address.id%>" class="line_box" style="cursor: pointer" onclick="window.location.href='/wap/member/address?from=buy';">
   <div class="shop_s"><img src="<%=CssPath%>/wap/images/icon/shop_s.png" class="shop_sl"><a><div class="shop_sr"><p class="shop_sr1"><span><%-address.name%></span>  ｜  <span><%-address.mobile%></span></p>
         <p class="shop_sr2"><%-address.province%><%-address.city%><%-address.area%><br><%-address.addr%></p>
