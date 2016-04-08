@@ -37,6 +37,10 @@ module.exports.http = {
         //支付宝异步通知处理
         req.headers['content-type'] = 'application/x-www-form-urlencoded';
       }
+      if (req.url == '/public/shop/wap/alipay/order') {
+        //支付宝异步通知处理
+        req.headers['content-type'] = 'application/x-www-form-urlencoded';
+      }
       switch (req.headers['content-type']) {
         case 'text/xml':
           //微信回复消息处理
