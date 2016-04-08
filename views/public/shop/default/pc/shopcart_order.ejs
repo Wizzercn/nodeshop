@@ -147,11 +147,6 @@
     wxPay();
   });
   <%}%>
-  <%if(order.payStatus==0&&order.payType=='pay_alipay'){%>
-  $(function(){
-    aliPay();
-  });
-  <%}%>
 </script>
 <script src="/plugins/jquery.qrcode.min.js"></script>
 <script src="<%=CssPath%>/pc/js/order.js"></script>

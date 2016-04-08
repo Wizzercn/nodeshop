@@ -680,7 +680,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .jifen_sa{font-size:1.1rem;margin-top:0.5rem;}
 
 /*弹窗提示*/
-.tan{width:100%;height:100%;background:rgba(0,0,0,0.5);display:block;z-index:16;position:fixed;top:0px;left:0px;}
+.tan{width:100%;height:100%;background:rgba(0,0,0,0.5);display:block;z-index:106;position:fixed;top:0px;left:0px;}
 .tan_main{width:72%;height:auto;background:#fff;color:#333;position:absolute;top:50%;margin-top:-9rem;border-radius:0.3rem;left:14%;}
 .tan_main_first{height:3rem;line-height:3rem;font-size:1.4em;text-align:center;color:#ea535e;margin:0 1rem;}
 .tan_main_second{margin:0.5rem 1rem 1rem;line-height:2rem;color:#333;}

@@ -77,6 +77,29 @@ Alipay.prototype.create_direct_pay_by_user = function(data, res){
   return res.send(html_text);
 };
 
+Alipay.prototype.wap_create_direct_pay_by_user = function(data, res){
+  assert.ok(data.out_trade_no && data.subject && data.total_fee);
+
+  //建立请求
+  var alipaySubmit = new AlipaySubmit(this.alipay_config);
+
+  var parameter = {
+    service:'alipay.wap.create.direct.pay.by.user'
+    ,partner:this.alipay_config.partner
+    ,seller_id:this.alipay_config.partner
+    ,payment_type:'1' //支付类型
+    ,notify_url: url.resolve(this.alipay_config.host, this.alipay_config.create_direct_pay_by_user_notify_url)//服务器异步通知页面路径,必填，不能修改, 需http://格式的完整路径，不能加?id=123这类自定义参数
+    ,return_url: url.resolve(this.alipay_config.host , this.alipay_config.create_direct_pay_by_user_return_url)//页面跳转同步通知页面路径 需http://格式的完整路径，不能加?id=123这类自定义参数，不能写成http://localhost/
+    ,seller_email:this.alipay_config.seller_email //卖家支付宝帐户 必填
+    ,_input_charset:this.alipay_config['input_charset'].toLowerCase().trim()
+  };
+  for(var key in data){
+    parameter[key] = data[key];
+  }
+
+  var html_text = alipaySubmit.buildRequestForm(parameter,"get", "确认");
+  return res.send(html_text);
+};
 //即时到账批量退款有密接口
 /* 	data{
  refund_date:'',//退款当天日期, 必填，格式：年[4位]-月[2位]-日[2位] 小时[2位 24小时制]:分[2位]:秒[2位]，如：2007-10-01 13:13:13

@@ -81,17 +81,28 @@ function payOnline(){
   }
   if(payType=='pay_alipay'){
     $("#tip1").show();
-    //$("#payForm").submit();
-    document.forms['payForm'].submit();
+    aliPay();
   }
   if(payType=='pay_wxpay'){
     wxPay();
   }
 }
+function btnClick1(){
+  $("#tip1").hide();
+}
+function btnClick2(){
+  $.get(
+    "/public/shop/wap/shoppay/payStatus/"+orderId,
+    function(d){
+      if(d.code==0){
+        window.location.reload();
+      }
+      $("#tip1").hide();
+    },'json'
+  );
+}
 function aliPay(){
   $("#tip1").show();
-  //$("#payForm").submit();
-  document.forms['payForm'].submit();
   timer_alipay=setInterval(function(){
     $.get(
       "/public/shop/wap/shoppay/payStatus/"+orderId,
@@ -102,6 +113,7 @@ function aliPay(){
       },'json'
     );
   },2345);
+  document.forms['payForm'].submit();
 }
 function binClick(){
   is_pay=false;

@@ -77,10 +77,19 @@
   <a id="cartDiv" href="/wap/shopcart/list" class="on cart_bnav">购物车<i id="cartNum"></i></a>
   <a href="/wap/channel" class="more_bnav">更多</a>
 </nav>
+<form id="payForm" action="/public/shop/wap/shoppay/payAlipay" target="_blank" method="post">
+  <input type="hidden" name="id" value="<%=order.id%>">
+</form>
+<div id="tip1" class="tan" style="display: none;">
+  <ul class="tan_main"><li class="tan_main_first">提示</li>
+    <li class="tan_main_second">请您到新打开的支付页面上进行支付，支付完成前请不要关闭当前窗口！</li>
+    <li class="tan_main_third"><input type="button" value="支付遇到问题" onclick="btnClick1()"><input type="button" value="已完成支付" onclick="btnClick2()"></li>
+  </ul>
+</div>
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
   var orderId='<%=order.id%>';
-  var browse_is_weixin=<%=browse_is_weixin||''%>;
+  var browse_is_weixin=<%=browse_is_weixin||false%>;
   var timer_wxpay;
   <%if(browse_is_weixin&&order.payStatus==0){%>
   wx.config(<%-JSON.stringify(order.wxpayParam)||'{}'%>);

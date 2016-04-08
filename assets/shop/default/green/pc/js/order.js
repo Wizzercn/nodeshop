@@ -100,15 +100,11 @@ function payOnline(){
     );
   }
   if(payType=='pay_alipay'){
-    $("#tip1").show();
-    //$("#payForm").submit();
-    document.forms['payForm'].submit();
+    aliPay();
   }
 }
 function aliPay(){
   $("#tip1").show();
-  //$("#payForm").submit();
-  document.forms['payForm'].submit();
   timer_alipay=setInterval(function(){
     $.get(
       "/public/shop/pc/shoppay/payStatus/"+orderId,
@@ -119,6 +115,8 @@ function aliPay(){
       },'json'
     );
   },2345);
+  document.forms['payForm'].submit();
+
 }
 function wxPay(){
   if(is_wxpay)

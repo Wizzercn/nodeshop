@@ -9,10 +9,10 @@ module.exports = {
     var smscode = req.body.smscode || '';
     var member = req.session.member;
     if (member && member.memberId > 0) {
-      var loginWx=member.loginWx||false;
+      var loginWx = member.loginWx || false;
       Shop_member.findOne(member.memberId).exec(function (e2, m) {
         RedisService.get('sms_vercode_' + m.mobile, function (e, o) {
-          if ((o && smscode == o.toString())||loginWx) {
+          if ((o && smscode == o.toString()) || loginWx) {
             //Shop_order.query("START TRANSACTION;SAVEPOINT ORDER_PAY_"+id+";");
             Shop_order.findOne({id: id, memberId: member.memberId}).exec(function (e1, order) {
               if (order.payStatus != 0) {
@@ -94,7 +94,7 @@ module.exports = {
 
                         });
                         //积分日志
-                        if(order.score>0) {
+                        if (order.score > 0) {
                           Shop_member_score_log.create({
                             memberId: member.memberId,
                             orderId: order.id,
@@ -173,78 +173,79 @@ module.exports = {
       return res.json({code: 1, msg: ''});
     }
   },
-  payAlipay:function(req,res){
+  payAlipay: function (req, res) {
     var id = req.body.id || '';
     Shop_order.findOne(id).exec(function (e1, order) {
-      AlipayService.init(function (err, alipay) {
-        if (err||e1) {
+      AlipayService.init_wap(function (err, alipay) {
+        if (err || e1) {
           return res.serverError('支付宝接口异常');
         } else {
           var data = {
-            out_trade_no:id
-            ,subject:'订单号:' + id
-            ,total_fee:StringUtil.getFloat(StringUtil.setPrice(order.finishAmount))
-            ,body: '订单号:' + id
-            ,show_url:'http://'+sails.config.system.AppDomain+'/shopcart/order/'+id
+            out_trade_no: id
+            , subject: '订单号:' + id
+            , total_fee: StringUtil.getFloat(StringUtil.setPrice(order.finishAmount))
+            , body: '订单号:' + id
+            , show_url: 'http://' + sails.config.system.AppDomain + '/wap/shopcart/order/' + id
           };
-          return alipay.create_direct_pay_by_user(data, res);
+          return alipay.wap_create_direct_pay_by_user(data, res);
         }
       });
     });
   },
-  payStatus:function(req,res){
+  payStatus: function (req, res) {
     var id = req.params.id || '';
-    Shop_order.find({select:['id','payStatus'],where:{id:id}}).exec(function (e1, order) {
-      if(order.length>0&&order[0].payStatus==1){
+    Shop_order.find({select: ['id', 'payStatus'], where: {id: id}}).exec(function (e1, order) {
+      if (order.length > 0 && order[0].payStatus == 1) {
         return res.json({code: 0, msg: ''});
-      }else {
+      } else {
         return res.json({code: 1, msg: ''});
       }
     });
   },
-  payStatusAlipay:function(req,res){
-    AlipayService.init(function (err, alipay) {
+  payStatusAlipay: function (req, res) {
+    AlipayService.init_wap(function (err, alipay) {
       if (err) {
         return res.send("支付失败，请重新支付，或更换支付方式");
       } else {
-        alipay.create_direct_pay_by_user_return(req,function(verify_result){
-          if(verify_result&&req.query.seller_id==alipay.alipay_config.partner) {//验证成功
+        alipay.create_direct_pay_by_user_return(req, function (verify_result) {
+          if (verify_result && req.query.seller_id == alipay.alipay_config.partner) {//验证成功
             //商户订单号
-            var id = req.query.out_trade_no||'';
+            var id = req.query.out_trade_no || '';
             //支付宝交易号
-            var trade_no = req.query.trade_no||'';
+            var trade_no = req.query.trade_no || '';
             //交易状态
-            var trade_status = req.query.trade_status||'';
-            var buyer_email=req.query.buyer_email||'';
-            if(trade_status  == 'TRADE_FINISHED'){
-              //交易成功后一个月，支付宝通知finished
-              return res.send("支付成功，您可以关闭此页面~~");
-            }
-            else if(trade_status == 'TRADE_SUCCESS'){
+            var trade_status = req.query.trade_status || '';
+            var buyer_email = req.query.buyer_email || '';
+            if (trade_status == 'TRADE_FINISHED' || trade_status == 'TRADE_SUCCESS') {
               if ('余额充值' == req.query.body) {
                 var memberId = req.query.subject || 0;
-                Shop_member.findOne(memberId).exec(function (e_1, m) {
-                  if (e_1) {
-                    return res.send("支付失败，请重新支付，或更换支付方式");
+                Shop_member_money_log.findOne({trade_no: trade_no}).exec(function (e_tno, tno) {
+                  if (tno) {
+                    return res.send("success");
                   }
-                  Shop_member_money_log.findOne({memberId: m.id, trade_no: trade_no}).exec(function (e_2, mlog) {
-                    if (mlog) {
-                      return res.send("支付成功，您可以关闭此页面~~");
+                  Shop_member.findOne(memberId).exec(function (e_1, m) {
+                    if (e_1) {
+                      return res.send("支付失败，请重新支付，或更换支付方式");
                     }
-                    Shop_member.update(memberId, {money: m.money + StringUtil.getFloat(req.query.total_fee) * 100}).exec(function (e_3, m2) {
-                      //余额日志
-                      Shop_member_money_log.create({
-                        memberId: m.id,
-                        orderId: 0,
-                        oldMoney: m.money,
-                        newMoney: m.money + StringUtil.getFloat(req.query.total_fee) * 100,
-                        diffMoney: StringUtil.getFloat(req.query.total_fee) * 100,
-                        note: '余额充值(支付宝支付)',
-                        trade_no: trade_no,
-                        createdBy: 0,
-                        createdAt: moment().format('X')
-                      }).exec(function (em, om) {
+                    Shop_member_money_log.findOne({memberId: m.id, trade_no: trade_no}).exec(function (e_2, mlog) {
+                      if (mlog) {
                         return res.send("支付成功，您可以关闭此页面~~");
+                      }
+                      Shop_member.update(memberId, {money: m.money + StringUtil.getFloat(req.query.total_fee) * 100}).exec(function (e_3, m2) {
+                        //余额日志
+                        Shop_member_money_log.create({
+                          memberId: m.id,
+                          orderId: 0,
+                          oldMoney: m.money,
+                          newMoney: m.money + StringUtil.getFloat(req.query.total_fee) * 100,
+                          diffMoney: StringUtil.getFloat(req.query.total_fee) * 100,
+                          note: '余额充值(支付宝网页支付)',
+                          trade_no: trade_no,
+                          createdBy: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (em, om) {
+                          return res.send("支付成功，您可以关闭此页面~~");
+                        });
                       });
                     });
                   });
@@ -263,11 +264,11 @@ module.exports = {
                           memberId: order.memberId,
                           money: order.finishAmount,
                           payType: 'pay_alipay',
-                          payName: '支付宝支付',
+                          payName: '支付宝网页支付',
                           payAccount: buyer_email,
                           payIp: req.ip,
                           payAt: moment().format('X'),
-                          memo: '支付宝支付:￥' + StringUtil.setPrice(order.finishAmount),
+                          memo: '支付宝网页支付:￥' + StringUtil.setPrice(order.finishAmount),
                           finishAt: moment().format('X'),
                           disabled: false,
                           trade_no: trade_no
@@ -290,7 +291,7 @@ module.exports = {
                                  opResult:ok,fail
                                  */
                                 Shop_order_log.create({
-                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
+                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝网页支付', opType: 'member',
                                   opId: order.memberId,
                                   opNickname: m.nickname,
                                   opAt: moment().format('X'),
@@ -305,7 +306,7 @@ module.exports = {
                                  opResult:ok,fail
                                  */
                                 Shop_order_log.create({
-                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
+                                  orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝网页支付', opType: 'member',
                                   opId: order.memberId,
                                   opNickname: m.nickname,
                                   opAt: moment().format('X'),
