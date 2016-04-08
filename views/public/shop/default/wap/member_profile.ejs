@@ -33,7 +33,7 @@
 </ul>
 <ul id="div2" style="display: none" class="sign_list">
   <li class="sign_item sign_bg ">昵称：<input id="nickname" type="text" value="<%=dbMember.nickname||''%>"  class="sign_text" maxlength="20"/><i id="_nickname_tip" style="display: none" class="blue_notice"></i></li>
-  <li class="sign_item sign_bg mt5">手机号：<input type="text" value="<%=dbMember.mobile||''%>" readonly class="sign_text" /></li>
+  <li class="sign_item sign_bg mt5">手机号：<input type="text" value="<%=dbMember.mobile||''%>(不可修改)" readonly class="sign_text" /></li>
   <li class="sign_item sign_bg mt5">电子邮箱：<input id="email" type="text" value="<%=dbMember.email||''%>"   maxlength="120" class="sign_text" /><i id="_email_tip" style="display: none" class="blue_notice"></i></li>
   <li class="sign_item sign_bg mt5">真实姓名：<input id="realname" type="text" value="<%=dbMember.realname||''%>"   maxlength="20" class="sign_text" /><i id="_realname_tip" style="display: none" class="blue_notice"></i></li>
   <%
@@ -207,7 +207,7 @@ function save(){
   if(checkNickname()&&is_submit){
     $.ajax({
       type : "POST",
-      url : "/public/shop/pc/member/profile/save",
+      url : "/public/shop/wap/member/profile/save",
       data:{
         nickname:$("#nickname").val(),
         province:$("#_province").val(),
