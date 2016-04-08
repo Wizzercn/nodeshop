@@ -91,7 +91,7 @@
   var orderId='<%=order.id%>';
   var browse_is_weixin=<%=browse_is_weixin||false%>;
   var timer_wxpay;
-  <%if(browse_is_weixin&&order.payStatus==0){%>
+  <%if(ShopConfig.pay_wxpay&&browse_is_weixin&&order.payStatus==0){%>
   wx.config(<%-JSON.stringify(order.wxpayParam)||'{}'%>);
   function wxPayStatus(){
     tip("正在收款，请稍等...");
@@ -125,7 +125,7 @@
   }
 
   <%}%>
-  <%if(browse_is_weixin&&order.payType=='pay_wxpay'&&order.payStatus==0){%>
+  <%if(ShopConfig.pay_wxpay&&browse_is_weixin&&order.payType=='pay_wxpay'&&order.payStatus==0){%>
   wx.ready(function(){
     wxPay();
   });

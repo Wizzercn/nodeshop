@@ -1,0 +1,79 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<div class="money_f">本次充值:<ins>&yen;<%=StringUtil.setPrice(money)||'0.00'%></ins>
+</div>
+<div class="line_box">
+  <div class="black_text">支付方式</div>
+  <div class="wb">
+    <ul class="wbw li_2">
+      <%if(ShopConfig.pay_alipay&&!browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-1" value="pay_alipay" name="payType" /><label
+            for="pay-1">支付宝</label></span></li>
+      <%}%>
+      <%if(ShopConfig.pay_wxpay&&browse_is_weixin){%>
+      <li><span class="radio_sel"><input type="radio" id="pay-2" value="pay_wxpay" name="payType" /><label
+            for="pay-2">微信支付</label></span></li>
+      <%}%>
+    </ul>
+  </div>
+</div>
+<div class="heji cf2">
+  <div class="heji_a"></div>
+  <div class="heji_b">
+  </div>
+  <a href="javascript:payOnline();" class="heji_d">立即支付</a>
+</div>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<form id="payForm" action="/public/shop/wap/member/pay/payAlipay" target="_blank" method="post">
+  <input type="hidden" name="money" value="<%=StringUtil.setPrice(money)||'0.00'%>">
+</form>
+<div id="tip1" class="tan" style="display: none;">
+  <ul class="tan_main"><li class="tan_main_first">提示</li>
+    <li class="tan_main_second">请您到新打开的支付页面上进行支付，支付完成前请不要关闭当前窗口！</li>
+    <li class="tan_main_third"><input type="button" value="支付遇到问题" onclick="btnClick1()"><input type="button" value="已完成支付" onclick="btnClick2()"></li>
+  </ul>
+</div>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+  var browse_is_weixin=<%=browse_is_weixin||false%>;
+  <%if(browse_is_weixin&&ShopConfig.pay_wxpay){%>
+  wx.config(<%-JSON.stringify(wxpayParam)||'{}'%>);
+  function wxPayStatus(){
+    tip("正在收款，请稍等...");
+    window.location.href='/wap/member/money';
+  }
+  function wxPay(){
+    wx.chooseWXPay({
+      timestamp: <%=wxpayInfo.timeStamp%>, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+      nonceStr: '<%=wxpayInfo.nonceStr%>', // 支付签名随机串，不长于 32 位
+      package: '<%=wxpayInfo.package%>', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+      signType: '<%=wxpayInfo.signType%>', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+      paySign: '<%=wxpayInfo.paySign%>', // 支付签名
+      success: function (res) {
+        // 支付成功后的回调函数
+        wxPayStatus();
+      }
+    });
+    wx.error(function (res) {
+      tip("支付失败，请刷新页面重试");
+    });
+  }
+  wx.ready(function(){
+    wxPay();
+  });
+  <%}%>
+</script>
+<script src="/shop/default/green/wap/js/member_pay.js"></script>
+
+<% include common_buttom.ejs %>

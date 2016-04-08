@@ -40,7 +40,7 @@
 </nav>
 <nav class="usernav">
   <a href="/wap/member/money" class="ask_usernav">我的余额</a>
-  <a href="/wap/member/pay" class="ask_usernav">在线充值</a>
+  <a href="javascript:showPay();" class="ask_usernav">在线充值</a>
   <a href="/wap/member/coupon" class="asset_usernav">优惠券</a>
   <a href="/wap/member/score" class="coupon_usernav">积分明细</a>
   <a href="/wap/member/profile" class="jifeng_usernav">个人资料</a>
@@ -54,6 +54,20 @@
 <%}else {%>
 <a href="/public/shop/wap/account/logout" class="big_write_btn">安全退出</a>
 <%}%>
+<div id="payDiv" class="popup" style="display:none; ">
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="$('#payDiv').hide();"></div>
+    <ul class="shopcars_f">
+      <li class="shopcars_a">充值金额:
+        <input type="number" id="money" value="" class="w_text">
+      </li>
+    </ul>
+    <div class="shopcar_btn">
+      <a href="javascript:savePay();" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
+</div>
 <nav class="bnav">
   <a href="/wap/" class="home_bnav">首页</a>
   <a href="/wap/class" class="class_bnav">分类</a>
@@ -61,4 +75,18 @@
   <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
   <a href="/wap/channel" class="more_bnav">更多</a>
 </nav>
+<script type="text/javascript">
+  function showPay(){
+    $("#payDiv").show();
+    $("#money").focus();
+  }
+  function savePay(){
+    var exp = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+    if(!exp.test($("#money").val())||parseFloat($("#money").val())<=0){
+      tip("请填写正确的充值金额");
+      return false;
+    }
+    window.location.href='/wap/member/pay?money='+$("#money").val();
+  }
+</script>
 <% include common_buttom.ejs %>

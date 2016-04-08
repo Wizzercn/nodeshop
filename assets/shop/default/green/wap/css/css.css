@@ -32,7 +32,7 @@ body{background-color: #eee;}
 .has_bnav{padding-bottom: 6rem;}
 ::-webkit-scrollbar{display: none;}
 .f_pic{width: 100%; vertical-align: bottom;}
-ins{font-size: 1.2rem; color: #fe6000; text-decoration: none;}
+ins{font-size: 1.3rem; color: #fe6000; text-decoration: none;}
 .ins_num{margin-left: .2rem;}
 .wb{display: flex; display: -webkit-box;}
 .wbc{display: flex; display: -webkit-box; align-items: center; -webkit-box-align: center;}
@@ -669,6 +669,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .site_sel_a select{margin-right: 1rem; padding-right: 2rem; display: block; flex: 1; -webkit-box-flex: 1; -webkit-appearance: none; background:url(../images/icon_public/select_down.png) 100% 50% no-repeat; background-size: 2.5rem 1rem;background-color:#fff;}
 .site_sel_a select:last-child{margin-right: 0;}
 
+.money_f{line-height:3rem;height:3rem;display:block;padding:0.5rem;font-size:1.6rem;background:#fff;}
+.money_f ins{margin-left:1rem;font-size:1.6rem;}
 
 /*---积分管理---*/
 .jifen_f{text-align:center;display:block;padding:0.5rem;font-size:1.6rem;background:#fff;}

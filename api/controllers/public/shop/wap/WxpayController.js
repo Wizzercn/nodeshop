@@ -38,7 +38,7 @@ module.exports = {
                       oldMoney: m.money,
                       newMoney: m.money + StringUtil.getInt(msg.total_fee),
                       diffMoney: StringUtil.getInt(msg.total_fee),
-                      note: '余额充值(微信支付)',
+                      note: '余额充值(微信网页支付)',
                       trade_no: transaction_id,
                       createdBy: 0,
                       createdAt: moment().format('X')
