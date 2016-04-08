@@ -1,0 +1,40 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<nav class="step_nav_a">
+    <div class="step_nav_box_a">
+        <a data-id="all" href="/wap/member/order?orderType=all"  class="<%=orderType=='all'?'on_a':''%>">所有订单</a>
+        <a data-id="nopay" href="/wap/member/order?orderType=nopay"  class="<%=orderType=='nopay'?'on_a':''%>">未支付</a>
+        <a data-id="ship" href="/wap/member/order?orderType=ship"  class="<%=orderType=='ship'?'on_a':''%>">已发货</a>
+        <a data-id="finish" href="/wap/member/order?orderType=finish"  class="<%=orderType=='finish'?'on_a':''%>">已完成</a>
+        <a data-id="dead" href="/wap/member/order?orderType=dead"  class="<%=orderType=='dead'?'on_a':''%>">已取消</a>
+    </div>
+</nav>
+<ul id="list" class="w_list">
+</ul>
+<div id="pullUp">
+  <a id="pBtn1" href="javascript:ajaxpage();" class="big_cc_btn">查看更多</a>
+  <span id="pBtn2" class="big_gray_btn" style="color: #9fadbd;display: none;">加载中...</span>
+</div>
+<div id="tip1" class="tan" style="display: none;">
+  <ul class="tan_main"><li class="tan_main_first">提示</li>
+    <li class="tan_main_second"></li>
+    <li class="tan_main_third"><input id="btn1" type="button" value="确定"><input id="btn2" type="button" value="取消"></li>
+  </ul>
+</div>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script type="text/javascript">
+  var orderType='<%=orderType%>';
+</script>
+<script src="/shop/default/green/wap/js/member_order.js"></script>
+<% include common_buttom.ejs %>

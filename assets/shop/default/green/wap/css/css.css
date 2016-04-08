@@ -397,6 +397,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 .w_text{padding: 1rem; width: 100%; height: 4rem; line-height: 1.8rem; text-align: left; font-size: 1.2rem; color: #777; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; background-color: #fff; border: 1px solid #ddd; outline: 0; border-radius: .3rem; box-shadow: none;}
 .w_text_fapiao{padding: 1rem; width: 98%;  height: 3.2rem; line-height: 1.8rem; text-align: left; font-size: 1.2rem; color: #777; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; background-color: #fff; border: 1px solid #ddd; outline: 0; border-radius: .3rem; box-shadow: none;}
+.w_text_pj{padding: 1rem; width: 98%;  height: 8rem; line-height: 1.8rem; text-align: left; font-size: 1.2rem; color: #777; box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; background-color: #fff; border: 1px solid #ddd; outline: 0; border-radius: .3rem; box-shadow: none;}
 .site_sel{display: flex; display: -webkit-box;}
 .site_sel select{margin-right: 1rem; padding-right: 2rem; display: block; flex: 1; -webkit-box-flex: 1; -webkit-appearance: none; background: url(../images/icon_public/select_down.png) 100% 50% no-repeat; background-size: 2.5rem 1rem;}
 .site_sel select:last-child{margin-right: 0;}
@@ -756,7 +757,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .shopcars{padding:0 0.5rem 1rem;border-bottom:1px solid #ddd;}
 .shopcars_a{font-size:1.4rem;margin: 1rem 0;padding-left:1rem;padding-bottom:1rem;border-bottom:1px solid #ddd;}
 .shopcars_f{min-height:7rem;max-height: 20rem;overflow-x: auto;}
-.shopcars_f .error{}
+.shopcars_pj{min-height:3rem;max-height: 20rem;overflow-x: auto;}
+
 .close_btn{z-index:101;position:absolute;top:0.3rem;right:0.5rem;border:1px solid #ccc;padding:0.4rem;width:1.4rem;height:1.4rem;border-radius:50%;cursor:pointer;}
 
 .del_k{display:inline-block;width:1.8rem;bottom:0.8rem;right:1rem;}

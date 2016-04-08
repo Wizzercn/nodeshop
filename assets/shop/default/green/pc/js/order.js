@@ -141,7 +141,7 @@ function wxPay(){
           );
         },2345);
       }else if(result.code==2){
-        $("#tip .oc_pro_a").html("订单异常，请重下下单或联系客服");
+        $("#tip .oc_pro_a").html("订单异常，请重新下单或联系客服");
         $("#tip").show();
         $("#tip .oc_pro").on("click",function(){
           window.location.reload();

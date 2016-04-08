@@ -29,6 +29,10 @@ function getSmscode(){
 }
 function payOnline(){
   var payType=$('input[name=payType]:checked').val();
+  if(!payType){
+    tip("请选择支付方式");
+    return false;
+  }
   if(payType=='pay_money'){
     if(!browse_is_weixin&&$("#smscode").val().length!=6){
       $("#smscode_tip").html('请输入短信验证码');

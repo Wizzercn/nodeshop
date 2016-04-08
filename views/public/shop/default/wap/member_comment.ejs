@@ -1,0 +1,56 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<nav class="step_nav_a">
+  <div class="step_nav_box_a">
+    <a data-id="no" href="/wap/member/comment?type=no"  class="<%=type=='no'?'on_a':''%>">待评</a>
+    <a data-id="yes" href="/wap/member/comment?type=yes"  class="<%=type=='yes'?'on_a':''%>">已评</a>
+  </div>
+</nav>
+<ul id="list" class="w_list">
+</ul>
+<div id="pullUp">
+  <a id="pBtn1" href="javascript:ajaxpage();" class="big_cc_btn">查看更多</a>
+  <span id="pBtn2" class="big_gray_btn" style="color: #9fadbd;display: none;">加载中...</span>
+</div>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<div id="cDiv" class="popup" style="display:none; ">
+  <div class="popup_m">
+    <div class="shopcar_heads cf2">
+      <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="close_btn" onclick="$('#cDiv').hide();"></div>
+    <ul class="shopcars_pj">
+      <li class="shopcars_a"><span id="pjname"></span>
+      </li>
+    </ul>
+    <ul class="shopcars_pj">
+      <li class="shopcars_a">
+        <span ><input type="radio" name="pj" value="3" checked>很好</span>
+        <span ><input type="radio" name="pj" value="2">较好</span>
+        <span ><input type="radio" name="pj" value="1">一般</span>
+      </li>
+    </ul>
+    <ul class="shopcars_pj">
+      <li class="shopcars_a">
+        <textarea class="w_text_pj" maxlength="200" id="txt" cols="50" rows="5" placeholder="200字以内评论内容"></textarea>
+      </li>
+    </ul>
+    <div class="shopcar_btn">
+      <a href="javascript:;" id="save" class="big_green_btn">确&nbsp;&nbsp;定</a>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  var type='<%=type%>';
+</script>
+<script src="<%=CssPath%>/wap/js/member_comment.js"></script>
+<% include common_buttom.ejs %>
