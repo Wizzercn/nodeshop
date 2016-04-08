@@ -49,14 +49,14 @@
     tip('已切换为"手机动态密码"登录方式');
   }
   function getSmscode(){
-    $("#smscode_tip").hide();
-    if(is_send){
-      $("#smscode_tip").html('请勿重复获取');
-      $("#smscode_tip").show();
-      return false;
-    }
-    is_send=true;
     if(checkMobile()){
+      $("#smscode_tip").hide();
+      if(is_send){
+        $("#smscode_tip").html('请勿重复获取');
+        $("#smscode_tip").show();
+        return false;
+      }
+      is_send=true;
       $.post(
         "/public/shop/wap/account/getSmscode",
         {'mobile':$("#login_name").val(),type:'login'},
