@@ -20,6 +20,8 @@ i{font-style:normal;}
 .cf2:after {content: ""; display:block; height:0; clear:both;}
 .l{float:left;}
 .r{float:right;}
+.mt5{margin-top:0.5rem !important;}
+.mb5{margin-bottom:0.5rem !important;}
 .mt10{margin-top:1rem !important;}
 .mb10{margin-bottom:1rem !important;}
 .border_b{border-bottom:none !important;}

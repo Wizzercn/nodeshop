@@ -1,0 +1,235 @@
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<ul id="div1" class="sign_list">
+  <li class="sign_item sign_bg border_b">昵称：<input type="text" value="<%=dbMember.nickname||''%>" readonly class="sign_text" /></li>
+  <li class="sign_item sign_bg border_b">手机号：<input type="text" value="<%=dbMember.mobile||''%>" readonly class="sign_text" /></li>
+  <li class="sign_item sign_bg border_b">电子邮箱：<input type="text" value="<%=dbMember.email||''%>" readonly class="sign_text" /></li>
+  <li class="sign_item sign_bg border_b">真实姓名：<input type="text" value="<%=dbMember.realname||''%>" readonly class="sign_text" /></li>
+  <%
+  var wdate='';
+  if(dbMember.b_year>0&&dbMember.b_month>0&&dbMember.b_day>0){
+    wdate=moment(dbMember.b_year+'-'+dbMember.b_month+'-'+dbMember.b_day).format('YYYY-MM-DD');
+  }
+  %>
+  <li class="sign_item sign_bg border_b">出生日期：<input type="text" value="<%=wdate||''%>" readonly class="sign_text" /></li>
+  <%
+    var xb='';
+   if(dbMember.sex==0){
+     xb='未知';
+   }else if(dbMember.sex==1){
+     xb='男';
+   }else if(dbMember.sex==2){
+     xb='女';
+   }
+    %>
+  <li class="sign_item sign_bg border_b">性别：<label for="male"><%=xb%></label></li>
+  <li class="sign_item sign_bg border_b">所在地址：<input type="text" value="<%=dbMember.province||''%><%=dbMember.city||''%><%=dbMember.area||''%><%=dbMember.addr||''%>" readonly class="sign_text" /></li>
+  <li class="mt10"><a href="javascript:showEdit()" class="big_write_btn">编辑资料</a></li>
+</ul>
+<ul id="div2" style="display: none" class="sign_list">
+  <li class="sign_item sign_bg ">昵称：<input id="nickname" type="text" value="<%=dbMember.nickname||''%>"  class="sign_text" maxlength="20"/><i id="_nickname_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="sign_item sign_bg mt5">手机号：<input type="text" value="<%=dbMember.mobile||''%>" readonly class="sign_text" /></li>
+  <li class="sign_item sign_bg mt5">电子邮箱：<input id="email" type="text" value="<%=dbMember.email||''%>"   maxlength="120" class="sign_text" /><i id="_email_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="sign_item sign_bg mt5">真实姓名：<input id="realname" type="text" value="<%=dbMember.realname||''%>"   maxlength="20" class="sign_text" /><i id="_realname_tip" style="display: none" class="blue_notice"></i></li>
+  <%
+  var wdate='';
+  if(dbMember.b_year>0&&dbMember.b_month>0&&dbMember.b_day>0){
+    wdate=moment(dbMember.b_year+'-'+dbMember.b_month+'-'+dbMember.b_day).format('YYYY-MM-DD');
+  }
+  %>
+  <li class="sign_item sign_bg mt5">出生日期：<input id="wdate" type="date" value="<%=wdate||''%>"  class="sign_text" /></li>
+  <li class="sign_item mt5">性别：<span class="radio_sel"><input type="radio" id="male" name="sex" <%=dbMember.sex==1?'checked':''%>/><label
+        for="male">男</label></span><span class="radio_sel"><input type="radio" id="female"
+                                                                  name="sex" <%=dbMember.sex==2?'checked':''%>/><label for="female">女</label></span></li>
+  <li class="sign_item sign_bg mt5">所在区域：
+    <select name="province" id="_province" style="height: 2rem;">
+      <option value="">请选择省</option>
+      <%if(dbMember.province){%>
+      <option selected value="<%=dbMember.province%>"><%=dbMember.province%></option>
+      <%}%>
+    </select>
+    <select name="city" id="_city" style="height: 2rem;">
+      <option value="">请选择市</option>
+      <%if(dbMember.city){%>
+      <option selected value="<%=dbMember.city%>"><%=dbMember.city%></option>
+      <%}%>
+    </select>
+    <select name="county" id="_area" style="height: 2rem;">
+      <option value="">请选择区县</option>
+      <%if(dbMember.area){%>
+      <option selected value="<%=dbMember.area%>"><%=dbMember.area%></option>
+      <%}%>
+    </select>
+  </li>
+  <li class="sign_item sign_bg mt5">所在地址：<input id="addr" type="text" value="<%=dbMember.addr||''%>" maxlength="120" class="sign_text" /></li>
+  <li class="mt10"><a href="javascript:save()" class="big_green_btn">保存</a></li>
+</ul>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script type="text/javascript">
+function showEdit(){
+  $("#div1").hide();
+  loadProvince();
+  $("#div2").show();
+}
+function loadProvince(){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/wap/member/area/getArea",
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $.each(data.list,function(i,o){
+          $("#_province").append('<option value="'+ o.name+'">'+ o.name+'</option>');
+        });
+      }
+    }
+  });
+  $("#_province").on("change",function(){
+    if($(this).val()==''){
+      $("#_city").val('');
+      $("#_area").val('');
+      return false;
+    }
+    $.ajax({
+      type : "GET",
+      url : "/public/shop/wap/member/area/getArea?name="+$(this).val(),
+      dataType : "json",
+      success : function(data) {
+        if(data.code==0){
+          $("#_city").empty();
+          $("#_city").append('<option value="">请选择市</option>');
+          $.each(data.list,function(i,o){
+            $("#_city").append('<option value="'+ o.name+'">'+ o.name+'</option>');
+          });
+        }
+      }
+    });
+  });
+  $("#_city").on("change",function(){
+    if($(this).val()==''){
+      $("#_area").val('');
+      return false;
+    }
+    $.ajax({
+      type : "GET",
+      url : "/public/shop/wap/member/area/getArea?name="+$(this).val(),
+      dataType : "json",
+      success : function(data) {
+        if(data.code==0){
+          $("#_area").empty();
+          $("#_area").append('<option value="">请选择区县</option>');
+          $.each(data.list,function(i,o){
+            $("#_area").append('<option value="'+ o.name+'">'+ o.name+'</option>');
+          });
+        }
+      }
+    });
+  });
+}
+function checkNickname(){
+  $("#_nickname_tip").hide();
+  $("#_nickname_tip").html("");
+  if($("#nickname").val()==''){
+    $("#_nickname_tip").html("昵称不可为空");
+    $("#_nickname_tip").show();
+    return false;
+  }
+  return true;
+}
+function isChinaOrLett(s) {//判断是否是汉字、字母组成
+  var regu = "^[a-zA-Z\u4e00-\u9fa5]+$";
+  var re = new RegExp(regu);
+  if (re.test(s)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function checkRealName() {
+  var realName = $.trim($("#realname").val());
+  $("#_realname_tip").hide();
+  $("#_realname_tip").html("");
+  if (!isChinaOrLett(realName)) {
+    $("#_realname_tip").html("真实姓名只能输入中文、英文");
+    $("#_realname_tip").show();
+    return false;
+  }
+}
+function checkEMail(){
+  var email = $.trim($("#email").val());
+  $("#_email_tip").hide();
+  $("#_email_tip").html("");
+  if(email){
+    var reg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+    if(!reg.test(email)){
+      $("#_email_tip").html("请输入正确的Email");
+      $("#_email_tip").show();
+      return false;
+    }
+    $.post("/public/shop/wap/member/profile/checkEmail", {
+      email : email
+    }, function(data) {
+      if(data.code==2){
+        $("#_email_tip").html("邮箱已经存在");
+        $("#_email_tip").show();
+      }
+
+    });}
+}
+function save(){
+  var is_submit=true;
+  var male=$('#male').prop("checked");
+  var female=$('#female').prop("checked");
+  var sex=0;
+  if(male){
+    sex=1;
+  }else if(female){
+    sex=2;
+  }
+  $(".blue_notice").each(function(){
+    if($(this).html()!=""){
+      is_submit=false;
+      $(this).prev().find("input").focus();
+      return false;
+    }
+  });
+  if(checkNickname()&&is_submit){
+    $.ajax({
+      type : "POST",
+      url : "/public/shop/pc/member/profile/save",
+      data:{
+        nickname:$("#nickname").val(),
+        province:$("#_province").val(),
+        city:$("#_city").val(),
+        area:$("#_area").val(),
+        addr:$("#addr").val(),
+        sex:sex,
+        wdate:$("#wdate").val(),
+        realname:$("#realname").val(),
+        email:$("#email").val()
+      },
+      dataType : "json",
+      success : function(data) {
+        if(data.code==0){
+          tip("保存成功");
+          window.location.reload();
+        }else {
+          tip("保存失败");
+        }
+      }
+    });
+  }
+}
+</script>
+<% include common_buttom.ejs %>
