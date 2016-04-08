@@ -4,7 +4,6 @@
 var is_sendSMS=false;
 var is_pay=false;
 var is_wxpay=false;
-var timer_wxpay;
 var timer_alipay;
 function getSmscode(){
   if(is_sendSMS){
@@ -29,16 +28,16 @@ function getSmscode(){
   );
 }
 function payOnline(){
-  tip('提交中..');
   var payType=$('input[name=payType]:checked').val();
   if(payType=='pay_money'){
-    if(is_pay){
-      return false;
-    }
     if(!browse_is_weixin&&$("#smscode").val().length!=6){
       $("#smscode_tip").html('请输入短信验证码');
       $("#smscode_tip").show();
       $("#smscode").focus();
+      return false;
+    }
+    tip('提交中..');
+    if(is_pay){
       return false;
     }
     is_pay=true;
@@ -68,8 +67,13 @@ function payOnline(){
     );
   }
   if(payType=='pay_cash'){
+    tip('提交中..');
+    if(is_pay){
+      return false;
+    }
+    is_pay=true;
     $.get(
-      "/public/shop/pc/shoppay/payCash/"+orderId,
+      "/public/shop/wap/shoppay/payCash/"+orderId,
       function(result){
         window.location.reload();
       },'json'
@@ -90,7 +94,7 @@ function aliPay(){
   document.forms['payForm'].submit();
   timer_alipay=setInterval(function(){
     $.get(
-      "/public/shop/pc/shoppay/payStatus/"+orderId,
+      "/public/shop/wap/shoppay/payStatus/"+orderId,
       function(d){
         if(d.code==0){
           window.location.reload();
@@ -100,6 +104,7 @@ function aliPay(){
   },2345);
 }
 function binClick(){
+  is_pay=false;
   var payType=$('input[name=payType]:checked').val();
   if(timer_wxpay){
     clearInterval(timer_wxpay);
@@ -111,11 +116,11 @@ function binClick(){
     $('#sendMsg').hide();
   }else if(payType=='pay_wxpay'){
     $('#sendMsg').hide();
-    wxPay();
   }else if(payType=='pay_cash'){
     $('#sendMsg').hide();
   }else if(payType=='pay_money'){
-    $('#sendMsg').show();
+    if(!browse_is_weixin)
+      $('#sendMsg').show();
   }
 }
 $(function(){

@@ -923,28 +923,42 @@ module.exports = {
       async.parallel({
         order: function (done) {
           Shop_order.findOne({id:id,memberId:member.memberId}).exec(function (e, order) {
-            if(member.loginWx&& order.payType=='pay_wxpay'){
-              WxpayService.init(function (err, wxpay) {
-                if (wxpay){
-                  wxpay.getBrandWCPayRequestParams({
-                    openid:member.openid,
-                    body: '订单号:' + id,
-                    out_trade_no: id,
-                    total_fee: order.finishAmount,
-                    spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
-                    notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/pc/wxpay/order',
-                    product_id: id
-                  }, function (err, result) {
-                    sails.log.debug('wxpay result::'+JSON.stringify(result));
-                    order.wxpayInfo=result;
-                    done(null, order);
+            if(member.loginWx&& sails.config.system.ShopConfig.pay_wxpay){
+              WechatService.init_js_appid(sails.config.system.ShopConfig.pay_wxpay_info.wxpay_appid, function (api) {
+                var str = 'http://' + sails.config.system.AppDomain + '/wap/shopcart/order/' + id;
+                var param = {
+                  debug: false,
+                  jsApiList: ['chooseWXPay'],
+                  url: str
+                };
+                api.setOpts({timeout: 35000});
+                api.getJsConfig(param, function (e1, result) {
+                  sails.log.debug('wxpayParam::'+JSON.stringify(result));
+                  order.wxpayParam=result;
+                  WxpayService.init(function (err, wxpay) {
+                    if (wxpay){
+                      wxpay.getBrandWCPayRequestParams({
+                        openid:member.openid,
+                        body: '订单号:' + id,
+                        out_trade_no: id,
+                        total_fee: order.finishAmount,
+                        spbill_create_ip: sails.config.system.AppIp || '127.0.0.1',
+                        notify_url: 'http://' + sails.config.system.AppDomain + '/public/shop/wap/wxpay/order',
+                        product_id: id
+                      }, function (e2, result2) {
+                        sails.log.debug('wxpayInfo::'+JSON.stringify(result2));
+                        order.wxpayInfo=result2;
+                        done(null, order);
+                      });
+                    }else {
+                      order.wxpayInfo={};
+                      done(null, order);
+                    }
                   });
-                }else {
-                  order.wxpayInfo={};
-                  done(null, order);
-                }
+                });
               });
             }else {
+              order.wxpayParam={};
               order.wxpayInfo={};
               done(null, order);
             }
