@@ -222,7 +222,7 @@ module.exports = {
       enum: ['pc','wap','weixin'],
       size: 10
     },
-    //取消订单
+    //删除订单
     disabled: {
       type: 'boolean',
       defaultsTo: function () {
