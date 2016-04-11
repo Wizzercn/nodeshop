@@ -2,6 +2,7 @@
  * Created by root on 11/16/15.
  */
 var fs = require('fs-extra');
+var FileUtil = require('../../common/FileUtil');
 var moment = require("moment");
 module.exports = {
   index: function (req, res) {
@@ -27,6 +28,9 @@ module.exports = {
               if (config.imageAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
                 return res.json({state: sails.__('file.upload.err')});
               var file = fd.substring(fd.lastIndexOf('/'));
+              if('win32'==process.platform){
+                file = fd.substring(fd.lastIndexOf('\\'));
+              }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
 
               fs.copy(fd, sails.config.appPath + newPath, function (err) {
@@ -56,6 +60,9 @@ module.exports = {
               if (config.videoAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
                 return res.json({state: sails.__('file.upload.err')});
               var file = fd.substring(fd.lastIndexOf('/'));
+              if('win32'==process.platform){
+                file = fd.substring(fd.lastIndexOf('\\'));
+              }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/video/" + moment().format("YYYYMMDD") + file;
               fs.copy(fd, sails.config.appPath + newPath, function (err) {
                 if (err)return res.json({state: sails.__('file.upload.err')});
@@ -84,6 +91,9 @@ module.exports = {
               if (config.fileAllowFiles.indexOf(fd.substring(fd.lastIndexOf('.'))) < 0)
                 return res.json({state: sails.__('file.upload.err')});
               var file = fd.substring(fd.lastIndexOf('/'));
+              if('win32'==process.platform){
+                file = fd.substring(fd.lastIndexOf('\\'));
+              }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/file/" + moment().format("YYYYMMDD") + file;
               fs.copy(fd, sails.config.appPath + newPath, function (err) {
                 if (err)return res.json({state: sails.__('file.upload.err')});
@@ -100,92 +110,54 @@ module.exports = {
             });
             break;
           case 'listimage':
-            var size = parseInt(req.query.size) || config.imageManagerListSize;
-            var start = parseInt(req.query.start) || 0;
-            var items = [];
-            var i = 0;
-            fs.walk(sails.config.appPath + sails.config.system.UploadPath+'/image/')
-              .on('data', function (item) {
-                if (item.path.indexOf('.') > 0) {
-                  items.push({
-                    url: item.path.replace(sails.config.appPath, ''),
-                    mtime: parseInt(moment(item.stats.mtime).format('x'))
-                  });
-                }
-              })
-              .on('end', function () {
-                if (items.length > 0) {
-                  //文件按修改时间倒序排序
-                  items.sort(function (a, b) {
-                    return a.mtime < b.mtime ? 1 : -1;
-                  });
-                  var list = [];
-                  items.forEach(function (obj) {
-                    i++;
-                    //分页
-                    if (i > start && i <= start + size) {
-                      list.push(obj);
-                    }
-                  });
-                  return res.json({
-                    state: 'SUCCESS',
-                    list: items,
-                    start: start,
-                    total: i
-                  });
-                } else {
-                  return res.json({
-                    state: 'no match file',
-                    list: [],
-                    start: 0,
-                    total: 0
-                  });
-                }
-              });
+          //为了性能，去掉文件列表
+            return res.json({
+              state: 'no match file',
+              list: [],
+              start: 0,
+              total: 0
+            });
+            //var size = parseInt(req.query.size) || config.imageManagerListSize;
+            //var start = parseInt(req.query.start) || 0;
+            //var items = [];
+            //var i = 0;
+            //var items=FileUtil.geFileList(sails.config.appPath + sails.config.system.UploadPath+'/image/');
+            //sails.log.debug('items::'+JSON.stringify(items));
+            //    if (items.length > 0) {
+            //      //文件按修改时间倒序排序
+            //      items.sort(function (a, b) {
+            //        return a.mtime < b.mtime ? 1 : -1;
+            //      });
+            //      var list = [];
+            //      items.forEach(function (obj) {
+            //        i++;
+            //        //分页
+            //        if (i > start && i <= start + size) {
+            //          list.push(obj);
+            //        }
+            //      });
+            //      return res.json({
+            //        state: 'SUCCESS',
+            //        list: items,
+            //        start: start,
+            //        total: items.length
+            //      });
+            //    } else {
+            //      return res.json({
+            //        state: 'no match file',
+            //        list: [],
+            //        start: 0,
+            //        total: 0
+            //      });
+            //    }
             break;
           case 'listfile':
-            var size = parseInt(req.query.size) || config.fileManagerListSize;
-            var start = parseInt(req.query.start) || 0;
-            var items = [];
-            var i = 0;
-            fs.walk(sails.config.appPath + sails.config.system.UploadPath+'/file/')
-              .on('data', function (item) {
-                if (item.path.indexOf('.') > 0) {
-                  items.push({
-                    url: item.path.replace(sails.config.appPath, ''),
-                    mtime: parseInt(moment(item.stats.mtime).format('x'))
-                  });
-                }
-              })
-              .on('end', function () {
-                if (items.length > 0) {
-                  //文件按修改时间倒序排序
-                  items.sort(function (a, b) {
-                    return a.mtime < b.mtime ? 1 : -1;
-                  });
-                  var list = [];
-                  items.forEach(function (obj) {
-                    i++;
-                    //分页
-                    if (i > start && i <= start + size) {
-                      list.push(obj);
-                    }
-                  });
-                  return res.json({
-                    state: 'SUCCESS',
-                    list: items,
-                    start: start,
-                    total: i
-                  });
-                } else {
-                  return res.json({
-                    state: 'no match file',
-                    list: [],
-                    start: 0,
-                    total: 0
-                  });
-                }
-              });
+            return res.json({
+              state: 'no match file',
+              list: [],
+              start: 0,
+              total: 0
+            });
             break;
         }
       });

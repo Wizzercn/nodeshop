@@ -23,6 +23,7 @@ module.exports = {
         if (err) {
           return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
         } else {
+          sails.log.debug('uploadedFiles:::'+JSON.stringify(uploadedFiles));
           var type = uploadedFiles[0].type;
           var fd = uploadedFiles[0].fd;
           var filename = uploadedFiles[0].filename;
@@ -33,8 +34,12 @@ module.exports = {
 
           } else {
             var file = fd.substring(fd.lastIndexOf('/'));
+            if('win32'==process.platform){
+              file = fd.substring(fd.lastIndexOf('\\'));
+            }
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
-
+            sails.log.debug('appPath::'+sails.config.appPath);
+            sails.log.debug('newPath::'+newPath);
             fs.copy(fd, sails.config.appPath + newPath, function (err) {
               if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
               return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, path: newPath});
@@ -74,6 +79,9 @@ module.exports = {
 
           } else {
             var file = fd.substring(fd.lastIndexOf('/'));
+            if('win32'==process.platform){
+              file = fd.substring(fd.lastIndexOf('\\'));
+            }
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
             //fs.copy(fd, sails.config.appPath + newPath, function (err) {
             //  if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
@@ -145,6 +153,7 @@ module.exports = {
                     .resize(s_width, s_height, '!') //加('!')强行把图片缩放成对应尺寸150*150！
                     .autoOrient()
                     .write(sails.config.appPath+ s_src, function(err){
+                      sails.log.debug('dbimage err::'+err);
                       Img_image.update(imgId,{s_src:s_src}).exec(function (e, o) {
 
                       });
@@ -194,6 +203,9 @@ module.exports = {
           } else {
             sails.log.verbose('filename:' + filename + ' type:' + type);
             var file = fd.substring(fd.lastIndexOf('/'));
+            if('win32'==process.platform){
+              file = fd.substring(fd.lastIndexOf('\\'));
+            }
             var dirname = 'file';
             if (type.indexOf('audio') > -1) {
               dirname = 'audio';
@@ -201,7 +213,8 @@ module.exports = {
               dirname = 'video';
             }
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/" + dirname + "/" + moment().format("YYYYMMDD") + file;
-
+            sails.log.debug('appPath::'+sails.config.appPath);
+            sails.log.debug('newPath::'+newPath);
             fs.copy(fd, sails.config.appPath + newPath, function (err) {
               if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
               return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, path: newPath});
