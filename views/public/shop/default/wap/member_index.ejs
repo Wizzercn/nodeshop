@@ -53,7 +53,7 @@
 <%if(sessionMember.loginWx&&!sessionMember.binded){%>
 <a href="/public/shop/wap/account/change" class="big_write_btn">绑定其他帐号</a>
 
-<%}else {%>
+<%}else if(!sessionMember.loginWx){%>
 <a href="/public/shop/wap/account/logout" class="big_write_btn">安全退出</a>
 <%}%>
 <div id="payDiv" class="popup" style="display:none; ">

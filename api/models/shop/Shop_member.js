@@ -12,122 +12,122 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    lv_id:{
+    lv_id: {
       model: 'Shop_member_lv',
-      index:true
+      index: true
     },
-    nickname:{
+    nickname: {
       type: 'string',
-      size:100
+      size: 100
     },
-    realname:{
+    realname: {
       type: 'string',
-      size:50
+      size: 50
     },
-    headimgurl:{
+    headimgurl: {
       type: 'string',
-      size:255
+      size: 255
     },
-    province:{
-      type:'string',
-      size:20
-    },
-    city:{
-      type:'string',
-      size:20
-    },
-    area:{
-      type:'string',
-      size:20
-    },
-    addr:{
-      type:'string',
-      size:255
-    },
-    mobile:{
+    province: {
       type: 'string',
-      size:20
+      size: 20
     },
-    tel:{
+    city: {
       type: 'string',
-      size:20
+      size: 20
     },
-    email:{
+    area: {
       type: 'string',
-      size:255
+      size: 20
     },
-    order_num:{
+    addr: {
+      type: 'string',
+      size: 255
+    },
+    mobile: {
+      type: 'string',
+      size: 20
+    },
+    tel: {
+      type: 'string',
+      size: 20
+    },
+    email: {
+      type: 'string',
+      size: 255
+    },
+    order_num: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
-    b_year:{
+    b_year: {
       type: 'integer',
-      size:4,
+      size: 4,
       defaultsTo: function () {
         return 0;
       }
     },
-    b_month:{
+    b_month: {
       type: 'integer',
-      size:2,
+      size: 2,
       defaultsTo: function () {
         return 0;
       }
     },
-    b_day:{
+    b_day: {
       type: 'integer',
-      size:2,
+      size: 2,
       defaultsTo: function () {
         return 0;
       }
     },
-    sex:{
+    sex: {
       type: 'integer',
-      size:1,
+      size: 1,
       defaultsTo: function () {
         return 0;
       }
     },
     //预存款
-    money:{
+    money: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //当订单使用余额支付，并且订单未全部支付时冻结的金额
-    money_freeze:{
+    money_freeze: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //支付密码：充值时必须设置密码、重置支付密码功能
-    money_password:{
+    money_password: {
       type: 'string',
-      size:20
+      size: 20
     },
     //积分
-    score:{
+    score: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
-    reg_ip:{
+    reg_ip: {
       type: 'string'
     },
-    reg_time:{
+    reg_time: {
       type: 'integer',
       defaultsTo: function () {
         return moment().format('X');
       }
     },
-    reg_source:{
+    reg_source: {
       type: 'string',
-      size:10
+      size: 10
     },
     accounts: {
       collection: 'Shop_member_account',
@@ -136,33 +136,77 @@ module.exports = {
 
   },
   //会员积分变化后，根据会员等级规则，自动升级会员分组
-  afterUpdate:function(obj, next) {
-    Shop_member_lv.find({disabled:false,point:{'<=':obj.score}}).sort({point:'desc'}).limit(1).exec(function(lvErr,lv){
-      if(lv&&lv.length==1){
-        if(obj.lv_id!=lv[0].id){
-          Shop_member.update(obj.id,{lv_id:lv[0].id}).exec(function(e,o){
+  afterUpdate: function (obj, next) {
+    Shop_member_lv.find({
+      disabled: false,
+      point: {'<=': obj.score}
+    }).sort({point: 'desc'}).limit(1).exec(function (lvErr, lv) {
+      if (lv && lv.length == 1) {
+        if (obj.lv_id != lv[0].id) {
+          Shop_member.update(obj.id, {lv_id: lv[0].id}).exec(function (e, o) {
             next();
           });
-        }else {
+        } else {
           next();
         }
-      }else {
+      } else {
         next();
       }
     });
   },
-  syncDataToMember:function(oldId,newId,cb){
-    Shop_member_bind.update({weixin:'weixin',memberId:oldId},{memberId:newId}).exec(function(errBind,bind){
-    if(errBind){
-      return cb(false);
-    }
-    async.waterfall([function (cb) {
-      Shop_member.findOne(oldId).exec(function(oldErr,oldMember){
-        Shop_member.findOne(newId).exec(function(newErr,newMember){
-
-            Shop_member.update(newMember.id, {money: newMember.money + oldMember.money,score: newMember.score + oldMember.score}).exec(function (e_u1, m_u1) {
-              Shop_member.update(oldMember.id, {money: 0,score:0}).exec(function (e_u2, m_u2) {
-                if(oldMember.money>0){
+  syncDataToMember: function (oldId, newId, cb) {
+    //更换微信绑定的会员ID
+    Shop_member_bind.update({bind_type: 'weixin', memberId: oldId}, {memberId: newId,binded:true}).exec(function (errBind, bind) {
+      if (errBind) {
+        return cb(false);
+      }
+      async.waterfall([function (cb) {//同步积分和余额
+        Shop_member.findOne(oldId).exec(function (oldErr, oldMember) {
+          Shop_member.findOne(newId).exec(function (newErr, newMember) {
+            var newObj={
+              money: newMember.money + oldMember.money,
+              money_freeze: newMember.money_freeze + oldMember.money_freeze,
+              score: newMember.score + oldMember.score,
+              order_num:newMember.order_num + oldMember.order_num,
+              nickname:oldMember.nickname,
+              headimgurl:oldMember.headimgurl
+            };
+            if(!newMember.realname&&oldMember.realname){
+              newObj.realname=oldMember.realname;
+            }
+            if(!newMember.province&&oldMember.province){
+              newObj.province=oldMember.province;
+            }
+            if(!newMember.city&&oldMember.city){
+              newObj.city=oldMember.city;
+            }
+            if(!newMember.area&&oldMember.area){
+              newObj.area=oldMember.area;
+            }
+            if(!newMember.addr&&oldMember.addr){
+              newObj.addr=oldMember.addr;
+            }
+            if(!newMember.tel&&oldMember.tel){
+              newObj.tel=oldMember.tel;
+            }
+            if(!newMember.email&&oldMember.email){
+              newObj.email=oldMember.email;
+            }
+            if(0==newMember.b_year&&oldMember.b_year>0){
+              newObj.b_year=oldMember.b_year;
+            }
+            if(0==newMember.b_month&&oldMember.b_month>0){
+              newObj.b_month=oldMember.b_month;
+            }
+            if(0==newMember.b_day&&oldMember.b_day>0){
+              newObj.b_day=oldMember.b_day;
+            }
+            if(0==newMember.sex&&oldMember.sex>0){
+              newObj.sex=oldMember.sex;
+            }
+            Shop_member.update(newMember.id, newObj).exec(function (e_u1, m_u1) {
+              Shop_member.update(oldMember.id, {money: 0, score: 0, money_freeze: 0}).exec(function (e_u2, m_u2) {
+                if (oldMember.money > 0) {
                   Shop_member_money_log.create({
                     memberId: newMember.id,
                     orderId: 0,
@@ -188,7 +232,7 @@ module.exports = {
                   }).exec(function (em, om) {
                   });
                 }
-                if(oldMember.score>0){
+                if (oldMember.score > 0) {
                   Shop_member_score_log.create({
                     memberId: newMember.id,
                     orderId: 0,
@@ -214,11 +258,27 @@ module.exports = {
                 }
               });
             });
+            Shop_member_addr.update({memberId: oldId}, {memberId: newId}).exec(function (e, o) {});
+
+            return cb(oldErr || newErr, '');
+          });
         });
+      }, function (v, cb) {//同步优惠券
+        Shop_member_coupon.update({memberId: oldId, status: 0}, {memberId: newId}).exec(function (err, obj) {
+          return cb(err, '');
+        })
+      }, function (v, cb) {//同步订单
+        Shop_order.update({memberId: oldId}, {memberId: newId}).exec(function (err, obj) {
+          Shop_history_payments.update({memberId: oldId}, {memberId: newId}).exec(function (e, o) {});
+          Shop_history_refunds.update({memberId: oldId}, {memberId: newId}).exec(function (e, o) {});
+          Shop_order_log.update({opType:'member',opId: oldId}, {opId: newId}).exec(function (e, o) {});
+          return cb(err, '');
+        });
+      }], function (err, obj) {
+        if (err)
+          return cb(false);
+        return cb(true);
       });
-    }],function(err,obj){
-      return cb(true);
-    });
     });
   }
 };

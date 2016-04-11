@@ -388,15 +388,21 @@ module.exports = {
       if (obj && obj.disabled) {
         return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
       } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
-        if (obj.memberId) {
-          req.session.member = {
-            memberId: obj.memberId.id,
-            nickname: obj.memberId.nickname,
-            login_name: login_name,
-            loginIp: obj.loginIp,
-            loginAt: obj.loginAt
-          };
+        if(!obj.memberId){
+          return res.json({code: 4, msg: '绑定失败，请重试'});
         }
+        Shop_member.syncDataToMember(m.memberId,obj.memberId.id,function(val){
+            if(val){
+              m.memberId=obj.memberId.id;
+              m.binded=true;
+              req.session.member = m;
+              return res.json({code: 0, msg: '绑定成功'});
+            }else {
+              return res.json({code: 1, msg: '绑定失败'});
+            }
+          });
+
+
       } else {
         return res.json({code: 2, msg: '用户名或密码错误'});
       }
@@ -419,24 +425,18 @@ module.exports = {
           if (obj && obj.disabled) {
             return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
           } else if (obj) {
-            if (obj.memberId) {
-              req.session.member = {
-                memberId: obj.memberId.id,
-                nickname: obj.memberId.nickname,
-                login_name: mobile,
-                loginIp: obj.loginIp,
-                loginAt: obj.loginAt
-              };
+            if(!obj.memberId){
+              return res.json({code: 4, msg: '绑定失败，请重试'});
             }
-            //记录登录IP和时间
-            Shop_member_account.update(obj.id, {
-              loginIp: req.ip,
-              loginAt: moment().format('X')
-            }).exec(function (ep, op) {
-            });
-            //将cookies购物车数据同步到数据库
-            Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
-              return res.json({code: 0, msg: '绑定成功'});
+            Shop_member.syncDataToMember(m.memberId,obj.memberId.id,function(val){
+              if(val){
+                m.memberId=obj.memberId.id;
+                m.binded=true;
+                req.session.member = m;
+                return res.json({code: 0, msg: '绑定成功'});
+              }else {
+                return res.json({code: 1, msg: '绑定失败'});
+              }
             });
           } else {
             return res.json({code: 2, msg: '用户不存在'});

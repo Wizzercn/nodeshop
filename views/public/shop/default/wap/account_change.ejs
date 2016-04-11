@@ -20,7 +20,7 @@
   <li class="mt10">
     <span class="sign_che"><input id="agree" type="checkbox" /><label
         for="agree"></label>
-    </span>此操作将同步当前微信帐号的<span class="orange_text">订单(<%=orderNum||0%>)、账户余额(&yen;<%=StringUtil.setPrice(dbMember.money)||0.00%>)、可用积分(<%=dbMember.score||0%>)、未使用优惠券(<%=couponNum||0%>)</span>到新帐号，且只允许绑定一次，确定绑定？
+    </span>此操作将同步当前微信帐号的<span class="orange_text">订单(<%=orderNum||0%>)、账户余额(&yen;<%=StringUtil.setPrice(dbMember.money)||0.00%>)、可用积分(<%=dbMember.score||0%>)、未使用优惠券(<%=couponNum||0%>)</span>、昵称和头像等个人资料到新帐号，且只允许绑定一次，确定绑定？
     <i id="agree_tip" style="display: none" class="blue_notice"></i>
   </li>
   <li class="mt10"><a href="javascript:doLogin();" class="big_green_btn">绑定</a></li>
@@ -40,6 +40,7 @@
 <script type="text/javascript">
   var type='login';
   var is_send=false;
+  var is_save=false;
   function checkMobile(){
     var self=$("#login_name");
     var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
@@ -101,6 +102,11 @@
     $("#login_pass_tip").hide();
     if(type=='login'){
       if(checkLoginName()&&checkLoginPass()&&checkAgree()){
+        if(is_save){
+          tip("正在提交，请稍等...");
+          return false;
+        }
+        is_save=true;
         $.post(
           "/public/shop/wap/account/doChange",
           {'login_name':$("#login_name").val(),'login_pass':$("#login_pass").val()},
@@ -112,13 +118,19 @@
               },200);
             }else{
               tip(result.msg);
+              is_save=false;
             }
           },'json'
         );
       }
     }
     if(type=='mobile'){
-      if(checkMobile()&&checkSmscode()){
+      if(checkMobile()&&checkSmscode()&&checkAgree()){
+        if(is_save){
+          tip("正在提交，请稍等...");
+          return false;
+        }
+        is_save=true;
         $.post(
           "/public/shop/wap/account/doChangeMobile",
           {'mobile':$("#login_name").val(),'smscode':$("#smscode").val()},
@@ -133,8 +145,10 @@
               $("#smscode_tip").show();
               $("#smscode").val("");
               $("#smscode").focus();
+              is_save=false;
             }else{
               tip(result.msg);
+              is_save=false;
             }
           },'json'
         );

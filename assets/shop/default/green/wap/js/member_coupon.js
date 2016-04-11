@@ -38,7 +38,7 @@ function ajaxpage(){
                 '</a></li>';
             }
           });
-          $(".coupon_list").append(str);
+          $("#list").append(str);
         }
       }
     }
