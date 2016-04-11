@@ -766,8 +766,8 @@ a, a:hover {
 .member_clogoli{border-radius: 50%;overflow: hidden;height:50px;float:left;margin-left:20px;margin-top:20px;}
 .member_clogolf{width:150px;height:50px;float:left;margin-top:20px;}
 .member_clogoli img{width:50px;height:50px;}
-.member_clogolf span{line-height:25px;height:25px;display:block;display:block;width:150px;}
-.member_clogolf span a{color:#d9301d;}
+.member_clogolf div{line-height:25px;height:25px;display:block;display:block;width:150px;}
+.member_clogolf div a{color:#d9301d;}
 .member_quit{color:#ff9000 !important;margin-left:10px;}
 
 .member_cf{width:240px;height:40px;line-height:40px;text-indent:30px;border-bottom:1px solid #dddddd;}

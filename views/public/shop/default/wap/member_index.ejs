@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="/plugins/emoji/emoji.css">
+<script src="/plugins/emoji/emoji.js"></script>
 <header class="header">
   <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
 
@@ -11,7 +13,7 @@
       <%if(dbMember.headimgurl){%><img src="<%=dbMember.headimgurl%>" class="user_banner_pic" /><%}else {%><img src="<%=CssPath%>/wap/images/icon/02.png" class="user_banner_pic" /><%}%>
     </div>
     <div><span class="green_text">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</span></div>
-    <div>您好，<span class="orange_text"><%=member.nickname%></span></div>
+    <div>您好，<span class="orange_text" style="line-height: 1.8rem;"><%-member.nickname%></span></div>
     <div class="head_w">亲爱的小伙伴，欢迎光临 <%=sails.config.system.AppName||''%>！</div>
   </div>
 </div>

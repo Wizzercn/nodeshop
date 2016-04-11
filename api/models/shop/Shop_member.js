@@ -18,7 +18,7 @@ module.exports = {
     },
     nickname:{
       type: 'string',
-      size:50
+      size:100
     },
     realname:{
       type: 'string',
