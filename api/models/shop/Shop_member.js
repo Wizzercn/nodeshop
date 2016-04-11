@@ -150,5 +150,75 @@ module.exports = {
         next();
       }
     });
+  },
+  syncDataToMember:function(oldId,newId,cb){
+    Shop_member_bind.update({weixin:'weixin',memberId:oldId},{memberId:newId}).exec(function(errBind,bind){
+    if(errBind){
+      return cb(false);
+    }
+    async.waterfall([function (cb) {
+      Shop_member.findOne(oldId).exec(function(oldErr,oldMember){
+        Shop_member.findOne(newId).exec(function(newErr,newMember){
+
+            Shop_member.update(newMember.id, {money: newMember.money + oldMember.money,score: newMember.score + oldMember.score}).exec(function (e_u1, m_u1) {
+              Shop_member.update(oldMember.id, {money: 0,score:0}).exec(function (e_u2, m_u2) {
+                if(oldMember.money>0){
+                  Shop_member_money_log.create({
+                    memberId: newMember.id,
+                    orderId: 0,
+                    oldMoney: newMember.money,
+                    newMoney: newMember.money + oldMember.money,
+                    diffMoney: oldMember.money,
+                    note: '帐号绑定余额转入',
+                    trade_no: '',
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (em, om) {
+                  });
+                  Shop_member_money_log.create({
+                    memberId: oldMember.id,
+                    orderId: 0,
+                    oldMoney: oldMember.money,
+                    newMoney: 0,
+                    diffMoney: oldMember.money,
+                    note: '帐号绑定余额转出',
+                    trade_no: '',
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (em, om) {
+                  });
+                }
+                if(oldMember.score>0){
+                  Shop_member_score_log.create({
+                    memberId: newMember.id,
+                    orderId: 0,
+                    oldScore: newMember.score,
+                    newScore: newMember.score + oldMember.score,
+                    diffScore: oldMember.score,
+                    note: '帐号绑定积分转入',
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (es, os) {
+                  });
+                  Shop_member_score_log.create({
+                    memberId: oldMember.id,
+                    orderId: 0,
+                    oldScore: oldMember.score,
+                    newScore: 0,
+                    diffScore: oldMember.score,
+                    note: '帐号绑定积分转出',
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (es, os) {
+                  });
+                }
+              });
+            });
+        });
+      });
+    }],function(err,obj){
+      return cb(true);
+    });
+    });
   }
 };

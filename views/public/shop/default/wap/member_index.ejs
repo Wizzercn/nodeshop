@@ -13,7 +13,7 @@
       <%if(dbMember.headimgurl){%><img src="<%=dbMember.headimgurl%>" class="user_banner_pic" /><%}else {%><img src="<%=CssPath%>/wap/images/icon/02.png" class="user_banner_pic" /><%}%>
     </div>
     <div><span class="green_text">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</span></div>
-    <div>您好，<span class="orange_text" style="line-height: 1.8rem;"><%-member.nickname%></span></div>
+    <div>您好，<span class="orange_text" style="line-height: 1.8rem;"><%-dbMember.nickname%></span></div>
     <div class="head_w">亲爱的小伙伴，欢迎光临 <%=sails.config.system.AppName||''%>！</div>
   </div>
 </div>
@@ -51,7 +51,7 @@
   <%}%>
 </nav>
 <%if(sessionMember.loginWx&&!sessionMember.binded){%>
-<!--<a href="/public/shop/wap/account/change" class="big_write_btn">绑定其他帐号</a>-->
+<a href="/public/shop/wap/account/change" class="big_write_btn">绑定其他帐号</a>
 
 <%}else {%>
 <a href="/public/shop/wap/account/logout" class="big_write_btn">安全退出</a>

@@ -343,5 +343,108 @@ module.exports = {
     } else {
       res.redirect('/wap/');
     }
+  },
+  change: function (req, res) {
+    var m=req.session.member;
+    if(!m|| m.memberId<1){
+      return res.redirect('/wap/login');
+    }
+    async.parallel({
+      dbMember:function(done){
+        Shop_member.findOne(m.memberId).populate('lv_id').exec(function(e,o){
+          done(null,o);
+        });
+      },
+      couponNum:function(done){
+        Shop_member_coupon.count({memberId:m.memberId,status:0}).exec(function(e,o){
+          done(null,o);
+        });
+      },
+      orderNum:function(done){
+        Shop_order.count({memberId:m.memberId,disabled:false}).exec(function(e,o){
+          done(null,o);
+        });
+      }
+    }, function (err, result) {
+      req.data.dbMember=result.dbMember||{};
+      req.data.sessionMember=m||{};
+      req.data.couponNum=result.couponNum||0;
+      req.data.orderNum=result.orderNum||0;
+      req.data.StringUtil = StringUtil;
+      req.data.moment = moment;
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/account_change', req.data);
+    });
+    },
+  doChange: function (req, res) {
+    var m=req.session.member;
+    if(!m|| m.memberId<1){
+      return res.json({code: 4, msg: '登录失效，请刷新页面'});
+    }
+    var login_name = req.body.login_name || '';
+    var login_pass = req.body.login_pass || '';
+    Shop_member_account.findOne({
+      login_name: login_name
+    }).populate('memberId').exec(function (err, obj) {
+      if (obj && obj.disabled) {
+        return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
+      } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
+        if (obj.memberId) {
+          req.session.member = {
+            memberId: obj.memberId.id,
+            nickname: obj.memberId.nickname,
+            login_name: login_name,
+            loginIp: obj.loginIp,
+            loginAt: obj.loginAt
+          };
+        }
+      } else {
+        return res.json({code: 2, msg: '用户名或密码错误'});
+      }
+    });
+  },
+  doChangeMobile: function (req, res) {
+    var m=req.session.member;
+    if(!m|| m.memberId<1){
+      return res.json({code: 4, msg: '登录失效，请刷新页面'});
+    }
+    var mobile = req.body.mobile || '';
+    var smscode = req.body.smscode || '';
+    if (mobile.length != 11)
+      return res.json({code: 1, msg: '手机动态密码不正确'});
+    RedisService.get('sms_vercode_' + mobile, function (e, o) {
+      if (o && smscode == o.toString()) {
+        Shop_member_account.findOne({
+          login_name: mobile
+        }).populate('memberId').exec(function (err, obj) {
+          if (obj && obj.disabled) {
+            return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
+          } else if (obj) {
+            if (obj.memberId) {
+              req.session.member = {
+                memberId: obj.memberId.id,
+                nickname: obj.memberId.nickname,
+                login_name: mobile,
+                loginIp: obj.loginIp,
+                loginAt: obj.loginAt
+              };
+            }
+            //记录登录IP和时间
+            Shop_member_account.update(obj.id, {
+              loginIp: req.ip,
+              loginAt: moment().format('X')
+            }).exec(function (ep, op) {
+            });
+            //将cookies购物车数据同步到数据库
+            Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
+              return res.json({code: 0, msg: '绑定成功'});
+            });
+          } else {
+            return res.json({code: 2, msg: '用户不存在'});
+          }
+        });
+      } else {
+        return res.json({code: 1, msg: '手机动态密码不正确，请重新获取'});
+      }
+    });
   }
 };

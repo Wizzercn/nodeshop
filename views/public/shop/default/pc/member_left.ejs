@@ -4,7 +4,7 @@
   <li class="member_clogol">
     <div class="member_clogoli" style="border-radius: 50%;cursor: pointer;" onclick="window.location.href='/member'"><%if(dbMember.headimgurl){%><img src="<%=dbMember.headimgurl%>" /><%}else {%><img src="<%=CssPath%>/pc/img/hui_logol.jpg" /><%}%></div>
     <div class="member_clogolf">
-      <div style="font-size: 18px;text-align: center;" id="left_nickname"><%-member.nickname%></div>
+      <div style="font-size: 18px;text-align: center;" id="left_nickname"><%-dbMember.nickname%></div>
       <div style="text-align: center">[<%if(dbMember.lv_id){%><%=dbMember.lv_id.name%><%}else{%>默认会员分组<%}%>]</div>
     </div>
   </li>

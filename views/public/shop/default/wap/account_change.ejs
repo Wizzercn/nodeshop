@@ -1,0 +1,178 @@
+<link rel="stylesheet" href="/plugins/emoji/emoji.css">
+<script src="/plugins/emoji/emoji.js"></script>
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+
+  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<ul class="sign_list">
+  <li class="sign_item sign_bg">
+    <input id="login_name" type="text" value="" placeholder="用户名/手机号"
+           class="phone_sign sign_text"/>
+    <i id="login_name_tip" style="display: none" class="blue_notice"></i></li>
+  <li id="p1" class="sign_item sign_bg">
+    <input id="login_pass" type="password" value="" placeholder="输入密码" class="pw_sign sign_text"/>
+    <i id="login_pass_tip" style="display: none" class="blue_notice"></i>
+  </li>
+  <li id="p2" style="display: none" class="sign_item sign_bg"><div class="wbw"><input id="smscode" maxlength="6" type="text" placeholder="手机动态密码" class="captcha_sign sign_text" /></div><a href="javascript:getSmscode();" class="c_a">获取动态密码&nbsp;</a><i id="smscode_tip" style="display: none" class="blue_notice"></i></li>
+  <li class="mt10">
+    <span class="sign_che"><input id="agree" type="checkbox" /><label
+        for="agree"></label>
+    </span>此操作将同步当前微信帐号的<span class="orange_text">订单(<%=orderNum||0%>)、账户余额(&yen;<%=StringUtil.setPrice(dbMember.money)||0.00%>)、可用积分(<%=dbMember.score||0%>)、未使用优惠券(<%=couponNum||0%>)</span>到新帐号，且只允许绑定一次，确定绑定？
+    <i id="agree_tip" style="display: none" class="blue_notice"></i>
+  </li>
+  <li class="mt10"><a href="javascript:doLogin();" class="big_green_btn">绑定</a></li>
+  <li class="wbc mt10 mb10">
+
+    <div class="bottom_info wbw"><a href="javascript:forget();">忘记密码？</a></div>
+  </li>
+
+</ul>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="on my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+  <a href="/wap/channel" class="more_bnav">更多</a>
+</nav>
+<script type="text/javascript">
+  var type='login';
+  var is_send=false;
+  function checkMobile(){
+    var self=$("#login_name");
+    var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+    if(!myreg.test(self.val()))
+    {
+      $("#login_name").focus();
+      $("#login_name_tip").html('请输入有效的手机号码');
+      $("#login_name_tip").show();
+      self.focus();
+      return false;
+    }
+    return true;
+  }
+  function forget(){
+    $("#p1").hide();
+    $("#p2").show();
+    type='mobile';
+    tip('已切换为"手机动态密码"验证方式');
+  }
+  function getSmscode(){
+    if(checkMobile()){
+      $("#smscode_tip").hide();
+      if(is_send){
+        $("#smscode_tip").html('请勿重复获取');
+        $("#smscode_tip").show();
+        return false;
+      }
+      is_send=true;
+      $.post(
+        "/public/shop/wap/account/getSmscode",
+        {'mobile':$("#login_name").val(),type:'login'},
+        function(result){
+          if(result.code==0){
+            tip("短信发送成功，请在5分钟内完成登录");
+            $("#smscode").focus();
+          }else if(result.code==2){
+            tip("短信未发送成功，请重试");
+            is_send=false;
+          }else if(result.code==3){
+            tip("用户不存在，请先注册");
+            $("#mobile").focus();
+            is_send=false;
+          }
+        },'json'
+      );
+    }
+  }
+  function checkAgree(){
+    $("#agree_tip").hide();
+    if(!$("#agree").prop("checked")){
+      $("#agree_tip").html("请仔细阅读并同意操作协议");
+      $("#agree_tip").show();
+      return false;
+    }
+    return true;
+  }
+  function doLogin(){
+    $("#login_name_tip").hide();
+    $("#login_pass_tip").hide();
+    if(type=='login'){
+      if(checkLoginName()&&checkLoginPass()&&checkAgree()){
+        $.post(
+          "/public/shop/wap/account/doChange",
+          {'login_name':$("#login_name").val(),'login_pass':$("#login_pass").val()},
+          function(result){
+            if(result.code==0){
+              tip("绑定成功");
+              setTimeout(function(){
+                window.location.href=$("#r").val()||'/wap/member';
+              },200);
+            }else{
+              tip(result.msg);
+            }
+          },'json'
+        );
+      }
+    }
+    if(type=='mobile'){
+      if(checkMobile()&&checkSmscode()){
+        $.post(
+          "/public/shop/wap/account/doChangeMobile",
+          {'mobile':$("#login_name").val(),'smscode':$("#smscode").val()},
+          function(result){
+            if(result.code==0){
+              tip("绑定成功");
+              setTimeout(function(){
+                window.location.href=$("#r").val()||'/wap/member';
+              },1000);
+            }else if(result.code==1) {
+              $("#smscode_tip").html('手机动态密码不正确');
+              $("#smscode_tip").show();
+              $("#smscode").val("");
+              $("#smscode").focus();
+            }else{
+              tip(result.msg);
+            }
+          },'json'
+        );
+      }
+    }
+  }
+  function checkSmscode(){
+    var self=$("#smscode");
+    if(self.val().length!=6){
+      $("#smscode_tip").html('请输入手机动态密码');
+      $("#smscode_tip").show();
+      self.focus();
+      return false;
+    }
+    return true;
+  }
+  function checkLoginName(){
+    if($("#login_name").val()==""){
+      $("#login_name_tip").html('请输入用户名');
+      $("#login_name_tip").show();
+      $("#login_name").focus();
+      return false;
+    }
+    return true;
+  }
+  function checkLoginPass(){
+    if($("#login_pass").val()==""){
+      $("#login_pass_tip").html('请输入密码');
+      $("#login_pass_tip").show();
+      $("#login_pass").focus();
+      return false;
+    }
+    return true;
+  }
+  $(function(){
+    $("#smscode").on("keyup",function(){$("#smscode_tip").hide();});
+    $("#login_name").on("keyup",function(){$("#login_name_tip").hide();is_send=false;});
+    $("#login_pass").on("keyup",function(){$("#login_pass_tip").hide();});
+  });
+</script>
+<% include common_buttom.ejs %>
