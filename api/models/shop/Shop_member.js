@@ -259,6 +259,7 @@ module.exports = {
               });
             });
             Shop_member_addr.update({memberId: oldId}, {memberId: newId}).exec(function (e, o) {});
+            Shop_member_cart.update({memberId: oldId}, {memberId: newId}).exec(function (e, o) {});
 
             return cb(oldErr || newErr, '');
           });
