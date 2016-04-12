@@ -50,3 +50,4 @@
 Redis win64 下载地址：https://github.com/MSOpenTech/redis/releases
 ImageMagick(图片处理) 下载地址：http://www.imagemagick.org/script/binary-releases.php
 
+test
