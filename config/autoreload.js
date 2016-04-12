@@ -2,7 +2,7 @@
  * Created by root on 2/1/16.
  */
 module.exports.autoreload = {
-  active: true,
+  active: false,
   usePolling: false,
   dirs: [
     "api/common",
