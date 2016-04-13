@@ -530,6 +530,7 @@ module.exports = {
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
+    sort['id'] = 'desc';
     if(name){
       where.name={like:'%'+name+'%'};
     }
@@ -537,7 +538,7 @@ module.exports = {
       if (!err && count > 0) {
         Shop_goods.find({
             select: ['id','name','typeid','classid','disabled','location'],
-            sort: {location: 'desc',id:'asc'},
+            sort: sort,
             where:where
            })
           .populate('typeid')
