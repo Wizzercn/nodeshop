@@ -1,8 +1,8 @@
 var is_page=true;
 var sorce=new Array();
-sorce[1]='一般';
-sorce[2]='较好';
-sorce[3]='很好';
+sorce[1]='差评';
+sorce[2]='中评';
+sorce[3]='好评';
 function list(type,start){
   if(type=='no'){
     $(".member_crs a").each(function(){

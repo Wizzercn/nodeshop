@@ -138,11 +138,11 @@ function commentData(goodsId,start){
       if(obj){
         var str='';
         $.each(obj.data,function(i,o) {
-          var s='很好';
+          var s='好评';
           if(o.score==2){
-            s='较好';
+            s='中评';
           }else if(o.score==1){
-            s='一般';
+            s='差评';
           }
           str += '<div class="s_pinglunsl cf2">' +
             '<ul class="s_pinglunld">' +
