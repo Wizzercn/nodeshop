@@ -51,8 +51,8 @@ function addToCarData(goodsId,productId,num){
       if(data.code==0){
         showCartNum();
         tip("添加成功");
-      }else if(data.code==2){
-        tip("库存不足");
+      }else{
+        tip(data.msg);
       }
     }
   });

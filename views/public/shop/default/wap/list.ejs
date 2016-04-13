@@ -27,7 +27,7 @@
           <h3><%= hotgoods.name %></h3>
         </a>
         <div class="pro_item_bottom">
-          <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarData(<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
+          <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarData(<%= hotgoods.id %>,'',<%= hotgoods.buyMin||1 %>);" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
           <ins class="pro_item_ins">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.price) %></span></ins>
           <del class="pro_item_del">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.priceMarket) %></span>
           </del>

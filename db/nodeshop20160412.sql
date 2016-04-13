@@ -938,7 +938,7 @@ CREATE TABLE `shop_member_money_log` (
   KEY `orderId` (`orderId`)
 ) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
-to `shop_member_money_log`(`id`,`memberId`,`orderId`,`oldMoney`,`newMoney`,`diffMoney`,`trade_no`,`note`,`createdBy`,`createdAt`) values (33,47,'160410230653086',30000,26390,3610,NULL,'支付订单:160410230653086',0,1460354776);
+insert  into `shop_member_money_log`(`id`,`memberId`,`orderId`,`oldMoney`,`newMoney`,`diffMoney`,`trade_no`,`note`,`createdBy`,`createdAt`) values (33,47,'160410230653086',30000,26390,3610,NULL,'支付订单:160410230653086',0,1460354776);
 insert  into `shop_member_money_log`(`id`,`memberId`,`orderId`,`oldMoney`,`newMoney`,`diffMoney`,`trade_no`,`note`,`createdBy`,`createdAt`) values (34,1,'0',NULL,26390,26390,'','帐号绑定余额转入',0,1460355428);
 insert  into `shop_member_money_log`(`id`,`memberId`,`orderId`,`oldMoney`,`newMoney`,`diffMoney`,`trade_no`,`note`,`createdBy`,`createdAt`) values (35,47,'0',26390,0,26390,'','帐号绑定余额转出',0,1460355428);
 insert  into `shop_member_money_log`(`id`,`memberId`,`orderId`,`oldMoney`,`newMoney`,`diffMoney`,`trade_no`,`note`,`createdBy`,`createdAt`) values (36,1,'0',26390,28390,2000,'','帐号绑定余额转入',0,1460355859);

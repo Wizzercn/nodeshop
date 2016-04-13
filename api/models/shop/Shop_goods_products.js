@@ -89,7 +89,7 @@ module.exports = {
     buyMax:{
       type:'integer',
       defaultsTo: function () {
-        return 0;
+        return 100;
       }
     },
     //分类
