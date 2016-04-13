@@ -1,7 +1,9 @@
 <header class="header">
   <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
 
-  <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
+  <h1 class="head_tit">
+    <%=classObj.name||'商品列表'%>
+  </h1>
   <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
 
 </header>
@@ -27,7 +29,7 @@
           <h3><%= hotgoods.name %></h3>
         </a>
         <div class="pro_item_bottom">
-          <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarData(<%= hotgoods.id %>,'');" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
+          <%if(!hotgoods.is_spec&&ShopConfig.list_quick_buy){%><a href="javascript:addToCarData(<%= hotgoods.id %>,'',<%= hotgoods.buyMin||1 %>);" class="add_cart">&nbsp;&nbsp;&nbsp;</a><%}%>
           <ins class="pro_item_ins">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.price) %></span></ins>
           <del class="pro_item_del">&yen;<span class="ins_num"><%= StringUtil.setPrice(hotgoods.priceMarket) %></span>
           </del>

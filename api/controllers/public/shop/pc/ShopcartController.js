@@ -365,12 +365,14 @@ module.exports = {
     var num = StringUtil.getInt(req.body.num);
     if (num == 0)num = 1;
     var stock=0;
+    var buyMin=0;
+    var buyMax=0;
     var member = req.session.member;
 
     async.waterfall([function (cb) {
       if (productId > 0) {
         Shop_goods_products.find({
-          select: ['id', 'spec','name', 'price','stock','weight', 'goodsid'],
+          select: ['id', 'spec','name', 'price','stock','buyMin','buyMax','weight', 'goodsid'],
           where: {disabled: false, id: productId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -385,6 +387,8 @@ module.exports = {
             obj.goodsId = o[0].goodsid.id;
             obj.imgurl = o[0].goodsid.imgurl;
             stock=o[0].stock || 0;
+            buyMin=o[0].buyMin || 0;
+            buyMax=o[0].buyMax || 0;
           }
 
           cb(e, obj);
@@ -394,7 +398,7 @@ module.exports = {
           select: ['id', 'name', 'price', 'imgurl', 'weight'],
           where: {disabled: false, id: goodsId}
         }).populate('products', {
-          select: ['id', 'name', 'spec', 'price','stock','weight'],
+          select: ['id', 'name', 'spec', 'price','stock','buyMin','buyMax','weight'],
           sort: {location: 'asc'}
         }).exec(function (e, o) {
           var obj = {};
@@ -411,6 +415,8 @@ module.exports = {
               obj.weight = p[0].weight || 0;
               obj.productId = p[0].id;
               stock=p[0].stock || 0;
+              buyMin=p[0].buyMin || 0;
+              buyMax=p[0].buyMax || 0;
             }
           }
           cb(e, obj);
@@ -449,6 +455,12 @@ module.exports = {
                   if(cartObj.num>stock){
                     return res.json({code: 2, msg: '库存不足'});
                   }
+                  if(buyMin>0&&cartObj.num<buyMin){
+                    return res.json({code: 2, msg: '低于最小购买量('+buyMin+')'});
+                  }
+                  if(buyMax>0&&cartObj.num>buyMax){
+                    return res.json({code: 2, msg: '大于最大购买量('+buyMax+')'});
+                  }
                   Shop_member_cart.update(o.id, cartObj).exec(function (e1, o1) {
                     return res.json({code: 0, msg: ''});
                   });
@@ -458,6 +470,12 @@ module.exports = {
                   cartObj.price = hyprice;
                   if(cartObj.num>stock){
                     return res.json({code: 2, msg: '库存不足'});
+                  }
+                  if(buyMin>0&&cartObj.num<buyMin){
+                    return res.json({code: 2, msg: '低于最小购买量('+buyMin+')'});
+                  }
+                  if(buyMax>0&&cartObj.num>buyMax){
+                    return res.json({code: 2, msg: '大于最大购买量('+buyMax+')'});
                   }
                   Shop_member_cart.create(cartObj).exec(function (e2, o2) {
                     return res.json({code: 0, msg: ''});
@@ -476,6 +494,12 @@ module.exports = {
           if(cartObj.num>stock){
             return res.json({code: 2, msg: '库存不足'});
           }
+          if(buyMin>0&&cartObj.num<buyMin){
+            return res.json({code: 2, msg: '低于最小购买量('+buyMin+')'});
+          }
+          if(buyMax>0&&cartObj.num>buyMax){
+            return res.json({code: 2, msg: '大于最大购买量('+buyMax+')'});
+          }
           res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
             httpOnly: true,
@@ -487,6 +511,12 @@ module.exports = {
           cartObj.num = num;
           if(cartObj.num>stock){
             return res.json({code: 2, msg: '库存不足'});
+          }
+          if(buyMin>0&&cartObj.num<buyMin){
+            return res.json({code: 2, msg: '低于最小购买量('+buyMin+')'});
+          }
+          if(buyMax>0&&cartObj.num>buyMax){
+            return res.json({code: 2, msg: '大于最大购买量('+buyMax+')'});
           }
           res.cookie('shop_cart_goods_' + cartObj.goodsId + '_' + cartObj.productId, JSON.stringify(cartObj), {
             maxAge: 1000 * 60 * 60 * 24 * 30,
@@ -536,9 +566,9 @@ module.exports = {
     var num = StringUtil.getInt(req.query.num) || 1;
     var member = req.session.member;
     if (member && member.memberId > 0) {
-      if (goodsId && productId) {
+      if (goodsId && productId) {//立即购买
         Shop_goods_products.findOne({
-          select: ['id', 'name', 'spec', 'price', 'weight','stock', 'goodsid'],
+          select: ['id', 'name', 'spec', 'price', 'weight','stock','buyMin','buyMax', 'goodsid'],
           where: {disabled: false, id: productId, goodsid: goodsId}
         }).populate('goodsid', {
           select: ['id', 'imgurl']
@@ -556,6 +586,12 @@ module.exports = {
             obj.num = num;
             if(num>o.stock){
               return res.json({code: 3, msg: '库存不足'});
+            }
+            if(o.buyMin>0&&num<o.buyMin){
+              return res.json({code: 3, msg: '低于最小购买量('+o.buyMin+')'});
+            }
+            if(o.buyMax>0&&num>o.buyMax){
+              return res.json({code: 3, msg: '大于最大购买量('+o.buyMax+')'});
             }
             Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb) {
 
@@ -606,7 +642,7 @@ module.exports = {
             return res.json({code: 2, msg: ''});
           }
         });
-      } else {
+      } else {//购物车
         var list = req.body.list || [];
         //将购物车其他商品置为非购买状态
         Shop_member_cart.update({memberId: member.memberId}, {is_buy: false}).exec(function (e1, o1) {
@@ -744,7 +780,7 @@ module.exports = {
             var lv = {member_lv: olv || {}};
             list.forEach(function (obj) {
               Shop_goods_products.findOne({
-                select: ['id', 'name', 'gn', 'spec', 'price', 'stock','weight', 'goodsid'],
+                select: ['id', 'name', 'gn', 'spec', 'price', 'stock', 'buyMin', 'buyMax','weight', 'goodsid'],
                 where: {disabled: false, id: obj.productId, goodsid: obj.goodsId}
               }).populate('goodsid', {
                 select: ['id', 'imgurl']
@@ -765,6 +801,12 @@ module.exports = {
                   goods.imgurl= o.goodsid.imgurl;
                   if(goods.num> o.stock){
                     cb({code:3,msg:o.name},null);
+                  }
+                  if(o.buyMin>0&&goods.num< o.buyMin){
+                    cb({code:4,msg:o.name,num:o.buyMin},null);
+                  }
+                  if(o.buyMax>0&&goods.num> o.buyMax){
+                    cb({code:5,msg:o.name,num:o.buyMax},null);
                   }
                   Shop_goods_lv_price.findOne({
                     lvid: mmb.lv_id,
@@ -883,6 +925,12 @@ module.exports = {
         if (err) {
           if(err.code==3){
             return res.json({code: 3, msg:'商品:'+ err.msg+'<br>库存不足,请重新下单'});
+          }
+          if(err.code==4){
+            return res.json({code: 3, msg:'商品:'+ err.msg+'<br>低于最小购买量('+err.num+'),请重新下单'});
+          }
+          if(err.code==5){
+            return res.json({code: 3, msg:'商品:'+ err.msg+'<br>大于最大购买量('+err.num+'),请重新下单'});
           }
           /*订单日志表
            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel

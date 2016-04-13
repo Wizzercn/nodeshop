@@ -87,6 +87,9 @@ module.exports = {
         return false;
       }
     },
+    customMenus:{
+      type:'json'
+    },
     createdBy: {
       type: 'integer'
     },
