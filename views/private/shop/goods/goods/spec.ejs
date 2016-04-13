@@ -37,6 +37,8 @@
                 <th>货号</th>
                 <th class="numeric">上架</th>
                 <th class="numeric">库存</th>
+                <th class="numeric">最小购买</th>
+                <th class="numeric">最大购买</th>
                 <th class="numeric">销售价</th>
                 <th class="numeric" style="display: none">成本价</th>
                 <th class="numeric">市场价</th>
@@ -231,6 +233,8 @@
       var i=0;
       var pbn=$("#pbn").val();
       var price=$("#price").val();
+      var buyMin=$("#buyMin").val()||'1';
+      var buyMax=$("#buyMax").val()||'100';
       var priceMarket=$("#priceMarket").val();
       var priceCost=$("#priceCost").val();
       var weight=$("#weight").val();
@@ -245,6 +249,8 @@
         str+="<td><input name='pbn[]' type='text' class='form-control'  value='"+bn+"' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
         str+="<td><input name='up[]' type='checkbox' checked></td>";
         str+="<td><input name='stock[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='buyMin[]' value='"+buyMin+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+        str+="<td><input name='buyMax[]' value='"+buyMax+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
         str+="<td style='text-align: left;width: 150px;'><div style='float: left'><input name='price[]' type='text' value='"+price+"' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></div><div style='float: left'>" +
           "<input name='lvprice[]' type='hidden' value='[]'><a class='member' href='javascript:;' style='color: #428bca'>会员价</a></div></td>";
         str+="<td><input name='priceMarket[]' value='"+priceMarket+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
@@ -314,13 +320,15 @@
           var gn=self.find("input[name='pbn[]']").val();
           var disabled=self.find("input[name='up[]']").prop("checked")==false;
           var stock=self.find("input[name='stock[]']").val();
+          var buyMin=self.find("input[name='buyMin[]']").val();
+          var buyMax=self.find("input[name='buyMax[]']").val();
           var price=self.find("input[name='price[]']").val();
           var lvprice=self.find("input[name='lvprice[]']").val();
           var priceMarket=self.find("input[name='priceMarket[]']").val();
           var priceCost=self.find("input[name='priceCost[]']").val();
           var weight=self.find("input[name='weight[]']").val();
           var is_default=self.find("input[name='is_default[]']").prop("checked")==true;
-          specs.push({'spec':spec,'gn':gn,'disabled':disabled,'stock':stock,'price':price,
+          specs.push({'spec':spec,'gn':gn,'disabled':disabled,'stock':stock,'buyMin':buyMin,'buyMax':buyMax,'price':price,
           'lvprice':JSON.parse(lvprice),'priceMarket':priceMarket,'priceCost':priceCost,'weight':weight,'is_default':is_default});
         });
         $("#is_spec").val("true");

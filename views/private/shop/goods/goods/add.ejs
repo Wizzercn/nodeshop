@@ -197,7 +197,21 @@
 
                     </div>
                   </div>
+                  <div class="form-group">
+                    <label for="buyMin" class="col-sm-2 control-label">最小购买量</label>
 
+                    <div class="col-sm-8">
+                      <input type="text" id="buyMin" class="form-control" style="width: 120px;" value="1" name="buyMin[]" placeholder="默认为1">
+
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="buyMax" class="col-sm-2 control-label">最大购买量</label>
+
+                    <div class="col-sm-8">
+                      <input type="text" id="buyMax" class="form-control" style="width: 120px;" value="100"  name="buyMax[]" placeholder="默认为100">
+                    </div>
+                  </div>
                   <div class="form-group" id="gg" style="display: none">
                     <label for="gg" class="col-sm-2 control-label">规格</label>
 
@@ -559,6 +573,8 @@
         var gn = self.find("input[name='pbn[]']").val();
         var disabled = false;
         var stock = self.find("input[name='stock[]']").val();
+        var buyMin = self.find("input[name='buyMin[]']").val();
+        var buyMax = self.find("input[name='buyMax[]']").val();
         var price = self.find("input[name='price[]']").val();
         var lvprice = self.find("input[name='lvprice[]']").val()||[];
         var priceMarket = self.find("input[name='priceMarket[]']").val();
@@ -570,6 +586,8 @@
           'gn': gn,
           'disabled': disabled,
           'stock': stock,
+          'buyMin': buyMin,
+          'buyMax': buyMax,
           'price': price,
           'lvprice': JSON.parse(lvprice),
           'priceMarket': priceMarket,
