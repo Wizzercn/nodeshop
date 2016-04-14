@@ -43,6 +43,13 @@
     </div>
   </div>
 </div>
+<div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+    </div>
+  </div>
+</div>
 <script language="JavaScript">
   var datatable;
   function initDatatable() {
@@ -129,13 +136,13 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">会员信息</a></li>' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">订单</a></li>' +
+              '<li><a href="/private/shop/member/member/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">会员信息</a></li>' +
+              '<li><a href="javascript:;" onclick="order(' + row.id + ')">订单</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">预存款</a></li>' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">积分</a></li>' +
+              '<li><a href="javascript:;" onclick="money(' + row.id + ')">预存款</a></li>' +
+              '<li><a href="javascript:;" onclick="score(' + row.id + ')">积分</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>修改</a></li>' +
+              '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },

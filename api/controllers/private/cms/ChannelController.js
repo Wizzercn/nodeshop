@@ -155,7 +155,7 @@ module.exports = {
   delete: function (req, res) {
     var id = req.params.id;
     Cms_channel.findOne(id).exec(function (e, menu) {
-      Cms_channel.destroy({id: id}).exec(function (err) {
+      Cms_channel.destroy({path: {like:menu.path+'%'}}).exec(function (err) {
         if (err) {
           return res.json({code: 1, msg: sails.__('delete.fail')});
         } else {

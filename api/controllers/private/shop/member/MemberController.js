@@ -91,5 +91,15 @@ module.exports = {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
       return res.json({code: 0, msg: sails.__('update.ok')});
     });
+  },
+  detail: function (req, res) {
+    Shop_member.findOne(req.params.id)
+      .populate('lv_id')
+      .populate('accounts')
+      .populate('binds')
+      .exec(function (err, obj) {
+        req.data.obj=obj||{};
+        return res.view('private/shop/member/member/detail', req.data);
+      });
   }
 };

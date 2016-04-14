@@ -36,6 +36,7 @@ module.exports = {
             var file = fd.substring(fd.lastIndexOf('/'));
             if('win32'==process.platform){
               file = fd.substring(fd.lastIndexOf('\\'));
+              file=file.replace('\\','/');
             }
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
             sails.log.debug('appPath::'+sails.config.appPath);
@@ -81,6 +82,7 @@ module.exports = {
             var file = fd.substring(fd.lastIndexOf('/'));
             if('win32'==process.platform){
               file = fd.substring(fd.lastIndexOf('\\'));
+              file=file.replace('\\','/');
             }
             var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
             //fs.copy(fd, sails.config.appPath + newPath, function (err) {
@@ -205,6 +207,7 @@ module.exports = {
             var file = fd.substring(fd.lastIndexOf('/'));
             if('win32'==process.platform){
               file = fd.substring(fd.lastIndexOf('\\'));
+              file=file.replace('\\','/');
             }
             var dirname = 'file';
             if (type.indexOf('audio') > -1) {
