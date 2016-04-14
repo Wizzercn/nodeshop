@@ -132,8 +132,11 @@ module.exports = {
     accounts: {
       collection: 'Shop_member_account',
       via: 'memberId'
+    },
+    binds: {
+      collection: 'Shop_member_bind',
+      via: 'memberId'
     }
-
   },
   //会员积分变化后，根据会员等级规则，自动升级会员分组
   afterUpdate: function (obj, next) {
