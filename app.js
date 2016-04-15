@@ -21,7 +21,10 @@
 // Ensure we're in the project directory, so relative paths work as expected
 // no matter where we actually lift from.
 process.chdir(__dirname);
-process.env.LOG_QUERIES = 'true';
+if(process.env.NODE_ENV=='development'){
+  process.env.LOG_QUERIES = 'true';
+  //打印SQL语句
+}
 // Ensure a "sails" can be located:
 (function() {
   var sails;
