@@ -7,24 +7,66 @@
             <a href="javascript:;" class="h4 show no-m pt5">会员信息</a>
           </div>
         </header>
-        <div class="list-group">
-          <a href="javascript:;" class="list-group-item" title="昵称">
-            <i class="ti-comment mr10 text-muted"></i><%=obj.nickname||''%>
-          </a>
-          <a href="javascript:;" class="list-group-item" title="手机号码">
-            <i class="ti-mobile mr10 text-muted"></i><%=obj.mobile||''%>
-          </a>
-          <a href="javascript:;" class="list-group-item" title="Email">
-            <i class="ti-home mr10 text-muted"></i><%=obj.email||''%>
-          </a>
-          <a href="javascript:;" class="list-group-item" title="固定电话">
-            <i class="ti-tablet mr10 text-muted"></i><%=obj.tel||''%>
-          </a>
-          <a href="javascript:;" class="list-group-item" title="录入时间">
-            <i class="ti-time mr10 text-muted"></i><%=obj.createdAt?moment(obj.createdAt*1000).format("YYYY-MM-DD HH:mm:ss"):''%>
-          </a>
+        <div class="list-group" style="text-align: center;padding-top: 10px;">
+          <table width="80%" style="padding: 10px;">
+            <tr>
+              <td width="20%" align="right">登录帐号：</td>
+              <td width="30%" align="left"><%if(obj.accounts){obj.accounts.forEach(function(o){
+                %><%=o.login_name%><br>
+                <%
+                });}%>
+              </td>
+              <td width="20%" align="right">信任登录：</td>
+              <td width="30%" align="left"><%if(obj.binds){obj.binds.forEach(function(o){
+                %><%=o.bind_type=='weixin'?'微信绑定':''%>:<%-o.bind_nickname%><br>
+                <%
+                });}%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">昵称：</td>
+              <td width="30%" align="left"><%- obj.nickname||'' %></td>
+              <td width="20%" align="right">手机号码：</td>
+              <td width="30%" align="left"><%- obj.mobile||'' %></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">预存款：</td>
+              <td width="30%" align="left" style="color: red">&yen;<%= StringUtil.setPrice(obj.money)||'0.00' %></td>
+              <td width="20%" align="right">积分：</td>
+              <td width="30%" align="left"><%=obj.score||'0'%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">Email：</td>
+              <td width="30%" align="left" colspan="3"><%-obj.email||''%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">姓名：</td>
+              <td width="30%" align="left"><%=obj.realname||''%></td>
+              <td width="20%" align="right">性别：</td>
+              <td width="30%" align="left"><%=obj.sex==0?'未知':''%><%=obj.sex==1?'男':''%><%=obj.sex==2?'女':''%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">生日：</td>
+              <td width="30%" align="left"><%if(obj.b_year>0){
+                  var wdate=moment(obj.b_year+'-'+obj.b_month+'-'+obj.b_day).format("YYYY-MM-DD");
+                  %><%=wdate%><%
+                }%></td>
+              <td width="20%" align="right">地区：</td>
+              <td width="30%" align="left"><%=obj.province||''%><%=obj.city||''%><%=obj.area||''%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">地址：</td>
+              <td width="30%" align="left" colspan="3"><%-obj.addr||''%></td>
+            </tr>
+            <tr>
+              <td width="20%" align="right">注册IP：</td>
+              <td width="30%" align="left"><%- obj.reg_ip||'' %></td>
+              <td width="20%" align="right">注册时间：</td>
+              <td width="30%" align="left"><%=obj.reg_time?moment(obj.reg_time*1000).format("YYYY-MM-DD HH:mm:ss"):''%></td>
+            </tr>
+          </table>
         </div>
       </section>
+
     </div>
   </div>
 </div>

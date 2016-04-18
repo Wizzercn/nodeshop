@@ -75,7 +75,7 @@
         "data": function (d) {
         }
       },
-      "order": [[7, "desc"]],
+      "order": [[6, "desc"]],
       "columns": [
         {"data": "nickname", "bSortable": true},
         {"data": "lv_id", "bSortable": true},
@@ -101,7 +101,7 @@
             if(row.accounts&&row.accounts.length>0)
             {
               $.each(row.accounts,function(i,o){
-                s+='用户名:'+ o.login_name;
+                s+=o.login_name;
               });
             }
             if(row.binds&&row.binds.length>0)
@@ -205,5 +205,8 @@
   }
   $(function () {
     initDatatable();
+    $("#dialogDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
   });
 </script>

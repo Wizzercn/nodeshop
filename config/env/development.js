@@ -20,5 +20,8 @@ module.exports = {
   models: {
     connection: 'someMysqlServer'
   },
-  port: 80
+  port: 80,
+  log: {
+    level: 'verbose'
+  }
 };
