@@ -12,7 +12,7 @@
       <tr>
         <th>会员昵称</th>
         <th>会员等级</th>
-        <th>登录帐号</th>
+        <th>用户名</th>
         <th>手机号码</th>
         <th>预存款</th>
         <th>积分</th>
@@ -104,18 +104,6 @@
                 s+=o.login_name;
               });
             }
-            if(row.binds&&row.binds.length>0)
-            {
-              $.each(row.binds,function(i,o){
-                if(o.bind_type=='weixin'){
-                  s+='<br>微信绑定:'+ o.bind_nickname;
-                }else if(o.bind_type=='qq'){
-                  s+='<br>QQ绑定:'+ o.bind_nickname;
-                }else if(o.bind_type=='weibo'){
-                  s+='<br>微博绑定:'+ o.bind_nickname;
-                }
-              });
-            }
             return s;
           },
           "targets": 2
@@ -139,8 +127,8 @@
               '<li><a href="/private/shop/member/member/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">会员信息</a></li>' +
               '<li><a href="javascript:;" onclick="order(' + row.id + ')">订单</a></li>' +
               '<li class="divider"></li>' +
-              '<li><a href="javascript:;" onclick="money(' + row.id + ')">预存款</a></li>' +
-              '<li><a href="javascript:;" onclick="score(' + row.id + ')">积分</a></li>' +
+              '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
+              '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +

@@ -43,6 +43,34 @@
                 </select>
               </div>
             </div>
+            <%if(obj.accounts&&obj.accounts.length>0){%>
+            <div class="form-group">
+              <label for="mm" class="col-sm-2 control-label"></label>
+
+              <div class="col-sm-8">
+                <input type="checkbox" id="mm" name="mm" >修改密码
+              </div>
+            </div>
+            <div id="div" style="display: none">
+            <div class="form-group">
+              <label for="name" class="col-sm-2 control-label">用户名</label>
+
+              <div class="col-sm-8">
+                <%obj.accounts.forEach(function(o){
+                %><%=o.login_name%><br>
+                <%
+                });%>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="pass1" class="col-sm-2 control-label">输入新密码</label>
+
+              <div class="col-sm-8">
+                <input type="password" id="pass1" name="pass" class="form-control"  data-parsley-minlength="6" data-parsley-maxlength="20"/>
+              </div>
+            </div>
+            </div>
+            <%}%>
           </div>
         </div>
         <div class="col-lg-3"></div>
@@ -62,6 +90,11 @@
 </div>
 <script language="JavaScript">
   $(document).ready(function () {
+    $("#mm").on("click",function(){
+      if($(this).prop("checked")){
+        $("#div").show();
+      }else $("#div").hide();
+    });
     $('#addForm').ajaxForm({
       dataType: 'json',
       beforeSubmit: function (arr, form, options) {
