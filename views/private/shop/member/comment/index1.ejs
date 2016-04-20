@@ -1,0 +1,135 @@
+<div class=panel-body style="padding-top: 10px;">
+  <div class="table-responsive no-border">
+    <input id="unitid" type="hidden">
+    <table class="table table-bordered table-striped mg-t datatable">
+      <thead>
+      <tr>
+        <th>会员昵称</th>
+        <th>商品名称</th>
+        <th>评价</th>
+        <th>评价内容</th>
+        <th>评论时间</th>
+        <th>前台显示</th>
+        <th>操作</th>
+    </table>
+  </div>
+</div>
+<script language="JavaScript">
+  var datatable;
+  function initDatatable() {
+    datatable = $('.datatable').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching": false,
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "preDrawCallback": function () {
+        sublime.showLoadingbar($(".main-content"));
+      },
+      "drawCallback": function () {
+        sublime.closeLoadingbar($(".main-content"));
+      },
+      "ajax": {
+        "url": "/private/shop/member/comment/data",
+        "type": "post",
+        "data": function (d) {
+        }
+      },
+      "order": [[4, "desc"]],
+      "columns": [
+        {"data": "memberNickname", "bSortable": true},
+        {"data": "goodsId", "bSortable": true},
+        {"data": "score", "bSortable": true},
+        {"data": "comment", "bSortable": true},
+        {"data": "createdAt", "bSortable": true},
+        {"data": "disabled", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if(row.goodsId)
+              return '<a href="/goods/'+row.goodsId.id+'" target="_blank" style="color: #3367ac;">'+row.goodsId.name+'</a>';
+            return '';
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            if(row.comment){
+              var len=row.comment.length;
+              if(len>30){
+                return row.comment.substring(0,30)+'..';
+              }
+              return row.comment;
+            }
+            return '';
+          },
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            return new Date(data*1000).Format("yyyy-MM-dd hh:mm:ss");
+          },
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
+            if (!data) {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+            }
+          },
+          "targets": 5
+        },
+        {
+          "render": function (data, type, row) {
+            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+              '<li><a href="javascript:;" onclick="showIt('+row.id+')">显示</a></li>' +
+              '<li><a href="javascript:;" onclick="hideIt('+row.id+')">隐藏</a></li>' +
+              '</ul></div>';
+          },
+          "targets": 6
+        }
+      ]
+    });
+    datatable.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
+    });
+  }
+  function showIt(id) {
+    $.post("/private/shop/member/comment/enable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
+  function hideIt(id) {
+    $.post("/private/shop/member/comment/disable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
+  $(function () {
+    initDatatable();
+    $("#dialogDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
+    $("#dialogOrder").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
+  });
+</script>
