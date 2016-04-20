@@ -25,6 +25,13 @@ Date.prototype.Format = function (fmt) {
     if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
   return fmt;
 };
+function removeHTMLTag(str) {
+  str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+  str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+  str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+  str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+  return str;
+}
 function setPrice(str){
   if (typeof str == 'string' && str.length > 2) {
     return str.substring(0, str.length - 2) + '.' + str.substring(str.length - 2);
