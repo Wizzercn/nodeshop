@@ -30,6 +30,7 @@ module.exports = {
               var file = fd.substring(fd.lastIndexOf('/'));
               if('win32'==process.platform){
                 file = fd.substring(fd.lastIndexOf('\\'));
+                file=file.replace('\\','/');
               }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/image/" + moment().format("YYYYMMDD") + file;
 
@@ -62,6 +63,7 @@ module.exports = {
               var file = fd.substring(fd.lastIndexOf('/'));
               if('win32'==process.platform){
                 file = fd.substring(fd.lastIndexOf('\\'));
+                file=file.replace('\\','/');
               }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/video/" + moment().format("YYYYMMDD") + file;
               fs.copy(fd, sails.config.appPath + newPath, function (err) {
@@ -93,6 +95,7 @@ module.exports = {
               var file = fd.substring(fd.lastIndexOf('/'));
               if('win32'==process.platform){
                 file = fd.substring(fd.lastIndexOf('\\'));
+                file=file.replace('\\','/');
               }
               var newPath = sails.config.system.AppBase + sails.config.system.UploadPath + "/file/" + moment().format("YYYYMMDD") + file;
               fs.copy(fd, sails.config.appPath + newPath, function (err) {

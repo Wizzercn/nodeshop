@@ -49,5 +49,6 @@ module.exports.bootstrap = function(cb) {
       sails.config.system.SiteConfig=o;
     }
   });
+  console.log('bootstrap finish!!');
   cb();
 };

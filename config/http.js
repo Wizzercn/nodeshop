@@ -76,9 +76,9 @@ module.exports.http = {
      ****************************************************************************/
 
     myRequestLogger: function (req, res, next) {
-      console.log("Requested :: ", req.method, req.url);
+      sails.log.debug("Requested :: ", req.method, req.url);
       return next();
-    },
+    }
 
 
     /***************************************************************************
@@ -91,7 +91,7 @@ module.exports.http = {
      ***************************************************************************/
 
     //bodyParser: require('skipper')
-  },
+  }
 
   /***************************************************************************
    *                                                                          *

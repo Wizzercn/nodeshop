@@ -45,16 +45,15 @@ module.exports = {
       size:100
     },
     goodsId: {
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      model: 'Shop_goods',
+      index:true
     },
     productId: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
+
     },
     orderId: {
       type: 'string',

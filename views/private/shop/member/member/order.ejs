@@ -1,0 +1,111 @@
+<section class="content-wrap bg-white">
+  <div class=panel-body style="padding-top: 10px;">
+    <div class="table-responsive no-border">
+      <table id="datatable_select" class="table table-bordered table-striped mg-t datatable">
+        <thead>
+        <tr>
+          <th>订单号</th>
+          <th>订单状态</th>
+          <th>支付状态</th>
+          <th>发货状态</th>
+          <th>总金额</th>
+          <th>下单时间</th>
+      </table>
+    </div>
+  </div>
+</section>
+<script language="JavaScript">
+  var enumPayStatus= [];
+  enumPayStatus[0]='未支付';
+  enumPayStatus[1]='已支付';
+  enumPayStatus[2]='已付款至到担保方';
+  enumPayStatus[3]='部分付款';
+  enumPayStatus[4]='部分退款';
+  enumPayStatus[5]='全额退款';
+  var enumStatus= [];
+  enumStatus['active']='活动订单';
+  enumStatus['dead']='已作废';
+  enumStatus['finish']='已完成';
+  var enumPayType= [];
+  enumPayType['pay_cash']='货到付款';
+  enumPayType['pay_money']='余额支付';
+  enumPayType['pay_alipay']='支付宝支付';
+  enumPayType['pay_wxpay']='微信支付';
+  var enumShipStatus= [];
+  enumShipStatus[0]='未发货';
+  enumShipStatus[1]='已发货';
+  enumShipStatus[2]='部分发货';
+  var datatable_select;
+  function initdatatable_select() {
+    datatable_select = $('#datatable_select').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching":false,
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "ajax": {
+        "url": "/private/shop/member/member/orderData/<%=id%>",
+        "type": "post",
+        "data": function (d) {
+
+        }
+      },
+      "order": [[0, "desc"]],
+      "columns": [
+        {"data": "id", "bSortable": true},
+        {"data": "status", "bSortable": true},
+        {"data": "payStatus", "bSortable": true},
+        {"data": "shipStatus", "bSortable": true},
+        {"data": "finishAmount", "bSortable": true},
+        {"data": "createdAt", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            return '<a style="color: #3367ac;" href="/private/shop/order/detail/'+data+'" target="_blank">'+data+'</a>';
+          },
+          "targets": 0
+        },
+        {
+          "render": function (data, type, row) {
+            return enumStatus[data];
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            return enumPayStatus[data];
+          },
+          "targets": 2
+        },
+        {
+          "render": function (data, type, row) {
+            return enumShipStatus[data];
+          },
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            return setPrice(data);
+          },
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
+            return new Date(data*1000).Format("yyyy-MM-dd hh:mm:ss");
+          },
+          "targets": 5
+        }
+      ]
+    });
+
+  }
+  $(document).ready(function () {
+    initdatatable_select();
+  });
+
+</script>

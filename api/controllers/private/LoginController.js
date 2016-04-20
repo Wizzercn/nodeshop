@@ -13,7 +13,6 @@ module.exports = {
    */
   lang: function (req, res) {
     req.setLocale(req.params.lang);
-    console.log('lang::' + req.getLocale());
     var url = req.headers['referer'] || '/';
     res.redirect(url);
   },

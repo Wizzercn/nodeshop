@@ -103,9 +103,9 @@ module.exports = {
   commentCount:function(req,res){
     var id=req.params.id||0;
     var obj={};
-    Shop_member_comment.count({goodsId:id,score:3}).exec(function(e3,c3){
-      Shop_member_comment.count({goodsId:id,score:2}).exec(function(e3,c2){
-        Shop_member_comment.count({goodsId:id,score:1}).exec(function(e3,c1){
+    Shop_member_comment.count({type:1,goodsId:id,score:3}).exec(function(e3,c3){
+      Shop_member_comment.count({type:1,goodsId:id,score:2}).exec(function(e3,c2){
+        Shop_member_comment.count({type:1,goodsId:id,score:1}).exec(function(e3,c1){
           var allCount=c3+c2+c1;
           var goodRate=Math.round((c3+c2)/allCount*100);
           obj.c3=c3;

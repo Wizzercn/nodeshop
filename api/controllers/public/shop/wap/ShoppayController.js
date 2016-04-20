@@ -35,7 +35,8 @@ module.exports = {
                   //更新会员信息 余额 积分
                   Shop_member.update(member.memberId, {
                     money: m.money - order.finishAmount,
-                    score: m.score + order.score
+                    score: m.score + order.score,
+                    order_num: m.order_num + 1
                   }).exec(function (e4, o4) {
                     //更新订单
                     Shop_order.update(id, {
@@ -275,7 +276,8 @@ module.exports = {
                         }).exec(function (e3, o3) {
                           //更新会员信息 余额 积分
                           Shop_member.update(order.memberId, {
-                            score: m.score + order.score
+                            score: m.score + order.score,
+                            order_num: m.order_num + 1
                           }).exec(function (e4, o4) {
                             //更新订单
                             Shop_order.update(id, {

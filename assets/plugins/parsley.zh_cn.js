@@ -1,6 +1,7 @@
 // ParsleyConfig definition if not already set
 window.ParsleyConfig = window.ParsleyConfig || {};
 window.ParsleyConfig.i18n = window.ParsleyConfig.i18n || {};
+window.ParsleyConfig.validators = window.ParsleyConfig.validators || {};
 // Define then the messages
 window.ParsleyConfig.i18n.zh_cn = $.extend(window.ParsleyConfig.i18n.zh_cn || {}, {
   defaultMessage: "不正确的值",
@@ -24,12 +25,29 @@ window.ParsleyConfig.i18n.zh_cn = $.extend(window.ParsleyConfig.i18n.zh_cn || {}
   mincheck:       "请至少选择 %s 个选项",
   maxcheck:       "请选择不超过 %s 个选项",
   check:          "请选择 %s 到 %s 个选项",
-  equalto:        "输入值不同"
+  equalto:        "输入值不同",
+  dateiso: "请输入正确格式的日期 (YYYY-MM-DD)"
 });
-window.ParsleyConfig.i18n.zh_cn = $.extend(window.ParsleyConfig.i18n.zh_cn || {}, {
-	  dateiso: "请输入正确格式的日期 (YYYY-MM-DD)."
-	});
 // If file is loaded after Parsley main file, auto-load locale
-if ('undefined' !== typeof window.ParsleyValidator)
-  window.ParsleyValidator.addCatalog('zh_cn', window.ParsleyConfig.i18n.zh_cn, true);
-
+if ('undefined' !== typeof window.Parsley)
+  window.Parsley.addCatalog('zh_cn', window.ParsleyConfig.i18n.zh_cn, true);
+$(function(){
+  window.Parsley.addValidator('phone', {
+    validateString: function(value) {
+      var phone = /^1[3|4|5|7|8][0-9]\d{8}$/;
+      return (phone.test(value));
+    },
+    messages: {
+      zh_cn:'请填写正确的手机号码'
+    }
+  });
+  window.Parsley.addValidator('email', {
+    validateString: function(value) {
+      var email = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))){2,6}$/i;
+      return (email.test(value));
+    },
+    messages: {
+      zh_cn:'请填写正确的电子邮箱'
+    }
+  });
+});

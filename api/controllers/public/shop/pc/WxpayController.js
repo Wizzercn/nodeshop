@@ -14,14 +14,14 @@ module.exports = {
         return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
       } else {
         util.parseXML(body, function (e, msg) {
-          sails.log.debug('weixin-pay:::'+JSON.stringify(msg));
+          sails.log.debug('weixin-pay:::' + JSON.stringify(msg));
           if (e)
             return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
           if (msg.result_code == 'SUCCESS') {
             var id = msg.out_trade_no;
             var transaction_id = msg.transaction_id;
-            if (msg.attach&&msg.attach.indexOf('余额充值,会员ID:')>-1) {
-              var memberId = msg.attach.substring(msg.attach.indexOf(':')+1);
+            if (msg.attach && msg.attach.indexOf('余额充值,会员ID:') > -1) {
+              var memberId = msg.attach.substring(msg.attach.indexOf(':') + 1);
               Shop_member.findOne(memberId).exec(function (e_1, m) {
                 if (e_1) {
                   return res.end(util.buildXML({xml: {return_code: 'FAIL'}}));
@@ -107,11 +107,12 @@ module.exports = {
                             }).exec(function (el1, ol1) {
 
                             });
-                            if (order.score > 0) {
-                              //更新会员信息 余额 积分
-                              Shop_member.update(order.memberId, {
-                                score: m.score + order.score
-                              }).exec(function (e4, o4) {
+                            //更新会员信息 余额 积分
+                            Shop_member.update(order.memberId, {
+                              score: m.score + order.score,
+                              order_num: m.order_num + 1
+                            }).exec(function (e4, o4) {
+                              if (order.score > 0) {
                                 //积分日志
                                 Shop_member_score_log.create({
                                   memberId: order.memberId,
@@ -124,8 +125,9 @@ module.exports = {
                                   createdAt: moment().format('X')
                                 }).exec(function (es, os) {
                                 });
-                              });
-                            }
+                              }
+                            });
+
                             return res.end(util.buildXML({xml: {return_code: 'SUCCESS'}}));
                           }
                         });
