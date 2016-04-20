@@ -77,8 +77,8 @@
           "render": function (data, type, row) {
             if(row.comment){
               var len=row.comment.length;
-              if(len>30){
-                return removeHTMLTag(row.comment.substring(0,30))+'..';
+              if(len>25){
+                return removeHTMLTag(row.comment.substring(0,25))+'..';
               }
               return removeHTMLTag(row.comment);
             }
@@ -114,7 +114,7 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/shop/member/comment/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">回复</a></li>' +
+              '<li><a href="/private/shop/member/comment/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">详情</a></li>' +
               '<li><a href="javascript:;" onclick="showIt('+row.id+')">显示</a></li>' +
               '<li><a href="javascript:;" onclick="hideIt('+row.id+')">隐藏</a></li>' +
               '</ul></div>';

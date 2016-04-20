@@ -82,7 +82,7 @@ module.exports = {
       req.data.obj=obj||{};
       req.data.moment=moment;
       req.data.StringUtil=StringUtil;
-      return res.view('private/shop/member/comment/detail', req.data);
+      return res.view('private/shop/member/comment/detail'+obj.type, req.data);
     });
   },
   save: function (req, res) {
