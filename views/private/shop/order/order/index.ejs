@@ -18,8 +18,8 @@
         <th>市</th>
         <th>区</th>
         <th>地址</th>
-        <th>注册时间</th>
         <th>用户</th>
+        <th>操作</th>
     </table>
   </div>
 </div>
@@ -118,7 +118,7 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/shop/member/member/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">会员信息</a></li>' +
+              '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>' +
               '<li><a href="javascript:;" onclick="order(' + row.id + ')">订单</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
