@@ -102,7 +102,6 @@ module.exports = {
     var id=req.body.id||'';
     var mm=req.body.mm=='on';
     var pass=req.body.pass||'';
-    console.log('body::'+JSON.stringify(req.body));
     async.waterfall([function (cb) {
       if(oldMobile!=mobile&&mobile){
         Shop_member.findOne({mobile: mobile}).exec(function (errM, objM) {
@@ -238,6 +237,49 @@ module.exports = {
         Shop_member_comment.destroy({memberId:ids}).exec(function(e){});
         Shop_member_cart.destroy({memberId:ids}).exec(function(e){});
         return res.json({code: 0, msg: sails.__('delete.ok')});
+      }
+    });
+  },
+  order: function (req, res) {
+    var id=req.params.id||'';
+    req.data.moment = moment;
+    req.data.StringUtil = StringUtil;
+    req.data.id = id;
+    return res.view('private/shop/member/member/order', req.data);
+  },
+  orderData: function (req, res) {
+    var id=req.params.id||'';
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var order = req.body.order || [];
+    var columns = req.body.columns || [];
+    var sort = {};
+    var where = {memberId:id,disabled:false};
+    if (order.length > 0) {
+      sort[columns[order[0].column].data] = order[0].dir;
+    }
+    Shop_order.count(where).exec(function (err, count) {
+      if (!err && count > 0) {
+        Shop_order.find(where)
+          .sort(sort)
+          .paginate({page: page, limit: pageSize})
+          .exec(function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
       }
     });
   }

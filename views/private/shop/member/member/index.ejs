@@ -43,9 +43,16 @@
     </div>
   </div>
 </div>
-<div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+
+    </div>
+  </div>
+</div>
+<div id="dialogOrder" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="width: 800px;">
+    <div class="modal-content" style="width: 800px;">
 
     </div>
   </div>
@@ -125,7 +132,7 @@
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
               '<li><a href="/private/shop/member/member/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">会员信息</a></li>' +
-              '<li><a href="javascript:;" onclick="order(' + row.id + ')">订单</a></li>' +
+              '<li><a href="/private/shop/member/member/order/' + row.id + '" data-toggle="modal" data-target="#dialogOrder">订单</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
               '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
@@ -194,6 +201,9 @@
   $(function () {
     initDatatable();
     $("#dialogDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
+    $("#dialogOrder").on("hidden.bs.modal", function() {
       $(this).removeData("bs.modal");
     });
   });
