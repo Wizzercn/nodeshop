@@ -884,7 +884,10 @@ module.exports = {
           });
         }, function (order, cb) {
           order.memo = memo;
-          order.source = 'pc';
+          order.source = 'wap';
+          if(req.data.browse_is_weixin){
+            order.source = 'weixin';
+          }
           order.createdIp = req.ip;
           order.status = 'active';//['active','dead','finish']
           order.payStatus = 0;
