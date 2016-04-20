@@ -1,0 +1,41 @@
+<div class="modal-body no-p">
+  <div class="row">
+    <div class="col-xs-12">
+      <section class="panel panel-primary no-b">
+        <header class="panel-heading clearfix brtl brtr">
+          <div class="overflow-hidden">
+            <a href="javascript:;" class="h4 show no-m pt5">商品评价</a>
+          </div>
+        </header>
+        <div class="list-group" style="text-align: center;padding-top: 10px;">
+          <table width="80%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="30%" align="right">会员昵称：</td>
+              <td width="70%" align="left"><%=obj.memberNickname||''%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">商品名称：</td>
+              <td width="70%" align="left"><%if(obj.goodsId){%><%=obj.goodsId.name%><%}%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">评价：</td>
+              <td width="70%" align="left"><%=obj.score==1?'差评':''%><%=obj.score==2?'中评':''%><%=obj.score==3?'好评':''%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">评价内容：</td>
+              <td width="70%" align="left"><%=obj.comment||''%>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">知道了</button>
+</div>

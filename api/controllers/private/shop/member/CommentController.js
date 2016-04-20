@@ -10,7 +10,7 @@ module.exports = {
     return res.view('private/shop/member/comment/index'+type, req.data);
   },
   data: function (req, res) {
-    var type=req.params.type||1;
+    var type=req.params.id||1;
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -74,6 +74,24 @@ module.exports = {
       } else {
         return res.json({code: 0, msg: sails.__('update.ok')});
       }
+    });
+  },
+  detail: function (req, res) {
+    var id = req.params.id;
+    Shop_member_comment.findOne(id).populate('goodsId',{select:['id','name']}).exec(function (err, obj) {
+      req.data.obj=obj||{};
+      req.data.moment=moment;
+      req.data.StringUtil=StringUtil;
+      return res.view('private/shop/member/comment/detail'+obj.type, req.data);
+    });
+  },
+  save: function (req, res) {
+    var id = req.body.id;
+    var txt = req.body.txt||'';
+    var ck = req.body.ck=='1';
+    Shop_member_comment.update(id,{disabled:ck,replyId:req.session.user.id,replyNickname:req.session.user.nickname,replyNote:txt,replyAt:moment().format('X')}).exec(function (err, obj) {
+      if (err)res.json({code: 1, msg: sails.__('update.fail')});
+      return res.json({code: 0, msg: sails.__('update.ok')});
     });
   }
 };

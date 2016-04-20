@@ -1,0 +1,78 @@
+<div class="modal-body no-p">
+  <div class="row">
+    <div class="col-xs-12">
+      <section class="panel panel-primary no-b">
+        <header class="panel-heading clearfix brtl brtr">
+          <div class="overflow-hidden">
+            <a href="javascript:;" class="h4 show no-m pt5">商品咨询</a>
+          </div>
+        </header>
+        <div class="list-group" style="text-align: center;padding-top: 10px;">
+          <table width="80%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="30%" align="right">会员昵称：</td>
+              <td width="70%" align="left"><%=obj.memberNickname||''%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">联系方式：</td>
+              <td width="70%" align="left"><%=obj.contact||''%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">商品名称：</td>
+              <td width="70%" align="left"><%if(obj.goodsId){%><%=obj.goodsId.name%><%}%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">咨询内容：</td>
+              <td width="70%" align="left"><%=obj.comment||''%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">回复内容：</td>
+              <td width="70%" align="left">
+                <textarea id="txt" name="txt" placeholder="200字以内" class="form-control" rows="3" maxlength="200"><%=obj.replyNote||''%></textarea>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right">是否显示：</td>
+              <td width="70%" align="left">
+                <input type="radio" name="ck" value="1" <%=obj.disabled==true?'checked':''%>>不显示
+                <input type="radio" name="ck" value="0" <%=obj.disabled==false?'checked':''%>>显示
+              </td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+  <button onclick="save()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+</div>
+<script type="text/javascript">
+  function save(){
+    if($("#txt").val()==""){
+      Toast.error("回复内容不可为空");
+      return false;
+    }
+    var btn = $("#ok");
+    var dialog = $("#dialogDetail");
+    btn.button("loading");
+    $.post("/private/shop/member/comment/save", {id: <%=obj.id%>,txt:$("#txt").val(),ck:$("input[name=ck]:checked").val()}, function (data) {
+      if (data.code == 0) {
+        Toast.success("回复成功");
+        dialog.modal("hide");
+        datatable.ajax.reload();
+      } else {
+        Toast.error(data.msg);
+      }
+      btn.button("reset");
+
+    }, "json");
+  }
+</script>
