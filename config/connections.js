@@ -18,7 +18,7 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
-var mysqlConfig = require("./custom/mysql");
+
 module.exports.connections = {
 
   /***************************************************************************
@@ -42,13 +42,13 @@ module.exports.connections = {
   ***************************************************************************/
   someMysqlServer: {
     adapter: 'sails-mysql',
-    host:mysqlConfig.mysql.host,
-    user:mysqlConfig.mysql.user,
-    password: mysqlConfig.mysql.password,
-    database:mysqlConfig.mysql.database,
-    pool: mysqlConfig.mysql.pool,
-    connectionLimit: mysqlConfig.mysql.connectionLimit,
-    waitForConnections: mysqlConfig.mysql.waitForConnections
+    host: '127.0.0.1',
+    user: 'root',
+    password: 'root',
+    database: 'nodeshop',
+    pool: true,
+    connectionLimit: 50,
+    waitForConnections: true
   },
 
   /***************************************************************************
@@ -62,7 +62,7 @@ module.exports.connections = {
   someMongodbServer: {
     adapter: 'sails-mongo',
     host: 'localhost',
-    port: 27017
+    port: 27017,
     // user: 'username',
     // password: 'password',
     // database: 'your_mongo_db_name_here'
