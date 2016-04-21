@@ -55,11 +55,14 @@
                     <td width="70%" align="left">
                       <select id="type" class="control-group">
                         <option value="db">数据库备份(MySQL)</option>
-                        <option value="file">数据文件备份</option>
+                        <option value="file">文件备份</option>
                       </select>
                     </td>
                   </tr>
                 </table>
+              </div>
+              <div style="width: 400px;margin-left: 100px;" class="alert alert-warning alert-dismissable">
+                <strong>注意：</strong>&nbsp;备份成功后，请将备份文件下载到本地保存！
               </div>
             </section>
 
@@ -68,7 +71,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button onclick="doBackup()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+        <button onclick="doBackup()" id="okBackup" type="button" class="btn btn-primary" data-loading-text="正在备份...">确 定</button>
       </div>
     </div>
   </div>
@@ -98,13 +101,34 @@
         "data": function (d) {
         }
       },
-      "order": [[2, "asc"]],
+      "order": [[2, "desc"]],
       "columns": [
         {"data": "type", "bSortable": true},
         {"data": "name", "bSortable": true},
         {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if(data=='db'){
+              return '数据库备份';
+            }
+            return '文件备份';
+          },
+          "targets": 0
+        },
+        {
+          "render": function (data, type, row) {
+              return '<a href="/private/sys/backup/down/'+data+'" target="_blank" style="color: #3367ac;">'+data+'</a>';
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            return new Date(data*1000).Format("yyyy-MM-dd hh:mm:ss");
+          },
+          "targets": 2
+        },
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
@@ -121,7 +145,7 @@
     });
   }
   function doBackup(){
-    var btn = $("#ok");
+    var btn = $("#okBackup");
     var dialog = $("#dialogDetail");
     btn.button("loading");
     $.post("/private/sys/backup/bak", {type:$("#type").val()}, function (data) {
@@ -133,7 +157,6 @@
         Toast.error(data.msg);
       }
       btn.button("reset");
-
     }, "json");
   }
   function del(id) {
