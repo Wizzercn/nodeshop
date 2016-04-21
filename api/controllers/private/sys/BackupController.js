@@ -46,24 +46,33 @@ module.exports = {
   bak: function (req, res) {
     var body = req.body;
     var type = body.type;
-    if(type=='db'){
-      var name=moment().format('YYYYMMDDHHmmss')+'.sql';
-      var dir=sails.config.appPath+'/backup/db/';
-      var path=dir+name;
-      fs.ensureDir(dir, function(err) {
-        if(err)
-          return res.json({code:1,msg:JSON.stringify(err)});
+    if (type == 'db') {
+      var name = moment().format('YYYYMMDDHHmmss') + '.sql';
+      var dir = sails.config.appPath + '/backup/db/';
+      if ('win32' == process.platform) {
+        dir = sails.config.appPath + '\\backup\\db\\';
+      }
+      var path = dir + name;
+      fs.ensureDir(dir, function (err) {
+        if (err)
+          return res.json({code: 1, msg: JSON.stringify(err)});
         mysqldump({
           host: sails.config.mysql.host,
           user: sails.config.mysql.user,
-          password:sails.config.mysql.password,
-          database:sails.config.mysql.database,
-          dest:path // destination file
-        },function(err){
-          if(err)
-            return res.json({code:1,msg:JSON.stringify(err)});
-          Sys_backup.create({type:type,path:path,name:name,createdBy:req.session.user.id,createdAt:moment().format('X')}).exec(function(e,o){
-            return res.json({code:0,msg:'备份成功'});
+          password: sails.config.mysql.password,
+          database: sails.config.mysql.database,
+          dest: path // destination file
+        }, function (err) {
+          if (err)
+            return res.json({code: 1, msg: JSON.stringify(err)});
+          Sys_backup.create({
+            type: type,
+            path: path,
+            name: name,
+            createdBy: req.session.user.id,
+            createdAt: moment().format('X')
+          }).exec(function (e, o) {
+            return res.json({code: 0, msg: '备份成功'});
           });
         });
       });
@@ -72,20 +81,25 @@ module.exports = {
   },
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Sys_backup.destroy({id: ids}).exec(function (err) {
-      if (err)
-        return res.json({code: 1, msg: sails.__('delete.fail')});
-      return res.json({code: 0, msg: sails.__('delete.ok')});
-
+    Sys_backup.findOne({id: ids}).exec(function (e, o) {
+      Sys_backup.destroy({id: ids}).exec(function (err) {
+        if (err)
+          return res.json({code: 1, msg: sails.__('delete.fail')});
+        try {
+          fs.removeSync(o.path);
+        } catch (e) {
+        }
+        return res.json({code: 0, msg: sails.__('delete.ok')});
+      });
     });
   },
-  down:function(req,res){
-    var name=req.params.id||'';
-    Sys_backup.findOne({name:name}).exec(function(err,obj){
-      if(obj){
+  down: function (req, res) {
+    var name = req.params.id || '';
+    Sys_backup.findOne({name: name}).exec(function (err, obj) {
+      if (obj) {
         return res.status(200).sendfile(obj.path);
-      }else{
-        return res.send(404,'not exist');
+      } else {
+        return res.send(404, 'not exist');
       }
     });
   }
