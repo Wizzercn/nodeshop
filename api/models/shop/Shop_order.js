@@ -230,7 +230,7 @@ module.exports = {
       },
       index:true
     },
-    //收款单
+    //订单商品表
     goods: {
       collection: 'Shop_order_goods',
       via: 'orderId'

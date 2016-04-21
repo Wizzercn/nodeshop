@@ -22,13 +22,9 @@ module.exports = {
     Shop_order.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Shop_order.find(where)
-          .sort('createdAt')
+          .sort('createdAt desc')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
-            console.log('list is :');
-            console.warn(list);
-            console.warn(err);
-            console.log('list end');
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,
@@ -49,12 +45,37 @@ module.exports = {
   detail: function (req, res) {
     Shop_order.findOne(req.params.id)
       .populate('memberId')
+      .populate('goods')
       .exec(function (err, obj) {
         req.data.obj = obj || {};
         req.data.moment = moment;
         req.data.StringUtil = StringUtil;
-        console.log(req.data);
+        sails.log.debug(obj);
         return res.view('private/shop/order/order/detail', req.data);
       });
   },
+  send: function (req, res) {
+    Shop_order.findOne(req.params.id)
+      .populate('memberId')
+      .populate('goods')
+      .exec(function (err, obj) {
+        req.data.obj = obj || {};
+        req.data.moment = moment;
+        req.data.StringUtil = StringUtil;
+        sails.log.debug(obj);
+        return res.view('private/shop/order/order/send', req.data);
+      });
+  },
+  doSend: function(req,res){
+    Shop_order.findOne(req.params.id)
+      .populate('memberId')
+      .populate('goods')
+      .exec(function (err, obj) {
+        req.data.obj = obj || {};
+        req.data.moment = moment;
+        req.data.StringUtil = StringUtil;
+        sails.log.debug(obj);
+        return res.view('private/shop/order/order/index', req.data);
+      });
+  }
 }

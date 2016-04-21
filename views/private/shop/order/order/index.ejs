@@ -5,20 +5,35 @@
     <!-- <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button> -->
   </div>
 </header>
-<div class=panel-body style="padding-top: 50px;">
+
+<div class=panel-body style="padding-top: 55px;">
+  <ul class="nav nav-tabs" style="padding-top: 0px;margin-bottom: -5px">
+            <li class="active"><a href="#shop_base" data-toggle="tab">待发货</a>
+            </li>
+            <li><a href="#shop_member" data-toggle="tab">已发货</a>
+            </li>
+            <li><a href="#shop_list" data-toggle="tab">待支付</a>
+            </li>
+            <li><a href="#shop_yf" data-toggle="tab">已支付</a>
+            </li>
+            <li><a href="#shop_fp" data-toggle="tab">货到付款</a>
+            </li>
+            <li><a href="#shop_pay" data-toggle="tab">已完成</a>
+            </li>
+          </ul>
   <div class="table-responsive no-border">
     <input id="unitid" type="hidden">
-    <table class="table table-bordered table-striped mg-t datatable">
+    <table class="table table-bordered table-striped mg-t datatable" style="background: #fff;">
       <thead>
       <tr>
         <th>订单号</th>
-        <th>状态</th>
+        <th>订单状态</th>
         <th>金额</th>
-        <th>省</th>
-        <th>市</th>
-        <th>区</th>
-        <th>地址</th>
-        <th>用户</th>
+        <th>收货地址</th>
+        <th>收货人</th>
+        <th>联系电话</th>
+        <th>创建时间</th>
+        <th>支付状态</th>
         <th>操作</th>
     </table>
   </div>
@@ -82,17 +97,21 @@
         {"data": "status", "bSortable": true},
         {"data": "finishAmount", "bSortable": true},
         {"data": "addrProvince", "bSortable": true},
-        {"data": "addrCity", "bSortable": true},
-        {"data": "addrArea", "bSortable": true},
-        {"data": "addrAddr", "bSortable": true},
-        {"data": "addrName", "bSortable": true}
+        {"data": "addrName", "bSortable": true},
+        {"data": "addrMobile", "bSortable": true},
+        {"data": "createdAt", "bSortable": true},
+        {"data": "payStatus", "bSortable": true}
       ],
       "columnDefs": [
         {
           "render": function (data, type, row) {
-            if(row.lv_id)
-              return row.lv_id.name;
-            return row.status;
+            switch (data) {
+              case 'active':
+                return '活动';
+                break;
+              default:
+
+            }
           },
           "targets": 1
         },
@@ -104,22 +123,35 @@
         },
         {
           "render": function (data, type, row) {
-            return data;
+            let addr = row.addrProvince+row.addrCity+row.addrArea+row.addrAddr;
+            return addr;
           },
-          "targets": 4
+          "targets": 3
         },
         {
           "render": function (data, type, row) {
-            return data;
+            return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
+          },
+          "targets": 6
+        },
+        {
+          "render": function (data, type, row) {
+            if (data==1) {
+              return '已支付';
+            } else {
+              return '未支付';
+            }
           },
           "targets": 7
         },
+
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
               '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>' +
-              '<li><a href="javascript:;" onclick="order(' + row.id + ')">订单</a></li>' +
+              '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">发货</a></li>' +
+              '<li><a href="javascript:;" onclick="order(' + row.id + ')">发货</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
               '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
