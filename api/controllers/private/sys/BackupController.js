@@ -69,7 +69,6 @@ module.exports = {
       });
 
     }
-
   },
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
@@ -78,6 +77,16 @@ module.exports = {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       return res.json({code: 0, msg: sails.__('delete.ok')});
 
+    });
+  },
+  down:function(req,res){
+    var name=req.params.id||'';
+    Sys_backup.findOne({name:name}).exec(function(err,obj){
+      if(obj){
+        return res.status(200).sendfile(obj.path);
+      }else{
+        return res.send(404,'not exist');
+      }
     });
   }
 };

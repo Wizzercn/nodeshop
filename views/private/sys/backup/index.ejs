@@ -68,7 +68,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button onclick="doBackup()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在备份...">确 定</button>
+        <button onclick="doBackup()" id="okBackup" type="button" class="btn btn-primary" data-loading-text="正在备份...">确 定</button>
       </div>
     </div>
   </div>
@@ -107,6 +107,12 @@
       "columnDefs": [
         {
           "render": function (data, type, row) {
+              return '<a href="/private/sys/backup/down/'+data+'" target="_blank" style="color: #3367ac;">'+data+'</a>';
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
@@ -121,7 +127,7 @@
     });
   }
   function doBackup(){
-    var btn = $("#ok");
+    var btn = $("#okBackup");
     var dialog = $("#dialogDetail");
     btn.button("loading");
     $.post("/private/sys/backup/bak", {type:$("#type").val()}, function (data) {
