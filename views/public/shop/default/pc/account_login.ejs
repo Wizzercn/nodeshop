@@ -4,40 +4,59 @@ if(bannerLink&&bannerLink.links>0){
   imgurl=bannerLink.links[0].imgurl;
 }
 %>
-<div class="login" style="background:url('<%=imgurl%>') no-repeat center center;">
+<div class="login cf2">
+  <div class="deng"><img src="<%=CssPath%>/pc/img/hui_p.jpg"/>请登录</div>
+  <div class="login_p">
   <div class="land-add"><a id="t1" href="javascript:;" class="land-addr">普通登录</a><a id="t2" href="javascript:;" class="land-addl land-addon">动态短信登录</a></div>
 
   <ul class="login-main  login-mains">
-    <li class="login-list">用户名<i>*</i></li>
-    <li class="login-ent"><input id="login_name" tabindex="1" value="<%=saveLoginname||''%>"  maxlength="100" type="text" placeholder="请输入用户名" class="login-phone"></li>
+    <li class="login-ent"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_per.png"/></span><input id="login_name" tabindex="1" value="<%=saveLoginname||''%>"  maxlength="100" type="text" placeholder="请输入用户名" class="login-phone"></li>
     <li class="error" style="display: none" id="login_name_tip"></li>
-    <li class="login-list">密码<i>*</i><a href="javascript:$('#t2').trigger('click')" class="login-list-r" style="font-size: 12px;">忘记密码？</a></li>
-    <li class="login-ent"><input id="login_pass" tabindex="2"  maxlength="20" type="password" placeholder="请输入密码" class="login-phone"></li>
+    <li class="login-enta"><div class="fot_m cf2"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_s.png"/></span>
+        <input id="login_pass" tabindex="2"  maxlength="20" type="password" placeholder="请输入密码" class="login-phonea">
+      </div><a href="javascript:$('#t2').trigger('click')" class="fortm" style="font-size: 12px;">忘记密码？</a>
+    </li>
     <li class="error" style="display: none" id="login_pass_tip"></li>
-    <li class="login-list">验证码<i>*</i></li>
-    <li class="login-ent"><input id="vercode" tabindex="3" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl"><img id="vercode_img" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
+    <li class="login-entm">
+      <div class="logol_mb"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_y.png"/></span>
+      <input id="vercode" tabindex="3" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl">
+      </div>
+      <img id="vercode_img" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
       <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
     <li class="error" style="display: none" id="vercode_tip"></li>
-    <li class="login-ent" style="line-height:35px;"><input id="saveLoginname" <%if(saveLoginname){%>checked<%}%> tabindex="4" type="checkbox"><span>记住用户名</span></li>
+    <li class="login-entk" style="line-height:35px;"><input id="saveLoginname" <%if(saveLoginname){%>checked<%}%> tabindex="4" type="checkbox"><span>记住用户名</span></li>
     <li class="login-btn">
       <input id="doLogin" type="button" value="登录">
+    </li>
+    <li class="coor" style="display:none"><span class="coor_a">合作网站账号登陆</span><span class="coor_b"><a href="#"><img src="<%=CssPath%>/pc/img/coor_a.jpg"/></a>
+    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_b.jpg"/></a>
+    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_c.jpg"/></a>
+    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_d.jpg"/></a></span>
+      <span class="coor_c"><a href="#">更多</a></span>
     </li>
     <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
 
   </ul>
   <ul class="login-main c_hide login-mainf">
 
-   <li class="login-list">手机号码<i>*</i></li>
-    <li class="login-ent"><input id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
+    <li class="login-ent">
+      <span class="login_ma"><img src="<%=CssPath%>/pc/img/iphone4.png"/></span>
+      <input id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
     <li class="error" style="display: none" id="mobile_tip"></li>
 
-    <li class="login-list">验证码<i>*</i></li>
-    <li class="login-ent"><input id="vercode_mobile" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl"><img id="vercode_img_mobile" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
+    <li class="login-entm">
+      <div class="logol_mb"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_y.png"/></span>
+      <input id="vercode_mobile" maxlength="4" placeholder="请输入验证码" type="text" class="login-verl">
+      </div>
+      <img id="vercode_img_mobile" style="width:90px" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verl" onclick="javascript:loadimage(this);">
       <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
     <li class="error" style="display: none" id="vercode_mobile_tip"></li>
 
-    <li class="login-list">手机号码<i>*</i></li>
-    <li class="login-ent"><input id="smscode" type="text" maxlength="6" placeholder="请输入手机动态密码" class="login-phone-l"><input id="getSmscode" type="button" value="获取动态密码" class="login-phone-r"></li>
+    <li class="login-entn">
+      <div class="act_ent"><span class="login_ma"><img src="<%=CssPath%>/pc/img/dial.png"/></span>
+      <input id="smscode" type="text" maxlength="6" placeholder="请输入手机动态密码" class="login-phone-l">
+      </div>
+        <input id="getSmscode" type="button" value="获取动态密码" class="login-phone-r"></li>
     <li class="error" style="display: none" id="smscode_tip"></li>
 
     <li class="login-btn">
@@ -46,6 +65,8 @@ if(bannerLink&&bannerLink.links>0){
     <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
 
   </ul>
+  </div>
+  <div class="deng_r"><img src="<%=CssPath%>/pc/img/lodim.jpg" /></div>
 </div>
 <input id="r" type="hidden" value="<%=r%>">
 <div id="tip" style="display: none">

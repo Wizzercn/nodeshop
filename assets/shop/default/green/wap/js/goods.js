@@ -97,6 +97,69 @@ function ajaxpage(){
     }
   });
 }
+
+var totalPages=1;
+var pages=0;
+var pageSizes=5;
+function con_ajaxpage(){
+  var start=pages*pageSizes;
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/wap/goods/consultAjax/"+goodsid+"?start="+start,
+    dataType : "json",
+    success : function(data) {
+      var obj=data.data;
+      if(obj){
+        pages=obj.page;
+        totalPages=obj.totalPage;
+        if(totalPages==pages){
+          $("#pBtn3").hide();
+          $("#pBtn4").hide();
+        }else {
+          $("#pBtn3").show();
+          $("#pBtn4").hide();
+        }
+        var str='';
+        $.each(obj.data,function(i,o) {
+          var note = o.replyNote || '';
+          str += '<li><dl class="ask_item que_dl"><dt>咨询内容：</dt><dd class="wbw">' +
+            o.comment + '</dd></dl><dl class="ans_item que_dl"><dt>回复内容：</dt><dd class="wbw">' +
+            note + '</dd></dl></li>';
+        });
+        $("#zx_list").append(str);
+        try{
+          var bd = document.getElementById("tabBox-bd");
+          bd.parentNode.style.height = bd.children[1].children[0].offsetHeight+"px";
+        }catch(e) {}
+      }
+    }
+  });
+}
+
+function createConsult(goodsId){
+  var c_content = $('#c_content').val();
+  var c_connect = $('#c_contact').val();
+  if(c_content != ''){
+    $.ajax({
+      type : "POST",
+      url : "/public/shop/wap/goods/createConsult",
+      dataType : "json",
+      data : {
+        goodsId : goodsId,
+        content : c_content.substring(0,400),
+        contact : c_connect.substring(0,40)
+      },
+      success : function(data) {
+        $('#c_content,#c_contact').val('');
+        $('#conshow').hide();
+        tip(data.msg);
+      }
+    });
+  }else{
+    $('#c_content').focus();
+  }
+}
+
 function buyNow(){
   $.ajax({
     type : "POST",
@@ -137,6 +200,7 @@ $(function(){
   view(goodsid);
   commentCount(goodsid);
   ajaxpage();
+  con_ajaxpage();
   $("#pj").find("a").each(function(){
     var self=$(this);
     self.on("click",function(){
@@ -149,4 +213,13 @@ $(function(){
       ajaxpage();
     });
   });
+
+  $('#conClose').on('click',function(){
+    $('#c_content,#c_contact').val('');
+    $('#conshow').hide();
+  });
+
+  $('#goCon').on('click',function(){
+    $('#conshow').show();
+  })
 });

@@ -1,33 +1,22 @@
 <header class="header">
   <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
   <h1 class="head_tit">
-    更多
+  <%-channelName%>
   </h1>
   <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
 
 </header>
 <section class="main">
-  <ul class="more_pg cf2" id="nav">
-    <%channelList.forEach(function(channel1){
-    if(channel1.parentId==0){
-    %>
+  <ul class="more_pg_add cf2" id="nav">
     <li>
-      <%if(channel1.hasChildren){%>
-      <a href="javascript:;"  onclick="DoMenu('m_<%=channel1.id%>')"><%=channel1.name%></a>
-      <ul id="m_<%=channel1.id%>" class="collapsed">
+      <ul class="collapsed" style="display:block">
         <%channelList.forEach(function(channel2){
-        if(channel2.parentId==channel1.id){
         %>
         <li><a href="/wap/channel/<%=channel2.id%>"><%=channel2.name%></a></li>
-        <%}
+        <%
         });%>
       </ul>
-      <%}else {%>
-      <a href="/wap/channel/<%=channel1.id%>"><%=channel1.name%></a>
-      <%}%>
     </li>
-    <%}
-    });%>
   </ul>
   <ul class="hot_tel">客服热线：<a href='tel:<%=sails.config.system.SiteConfig.site_tel||''%>'><em><%=sails.config.system.SiteConfig.site_tel||''%></em></a></ul>
 </section>
@@ -36,6 +25,5 @@
   <a href="/wap/class" class="class_bnav">分类</a>
   <a href="/wap/member" class="my_bnav">我的</a>
   <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
-  <a href="/wap/channel" class="on more_bnav">更多</a>
 </nav>
 <% include common_buttom.ejs %>
