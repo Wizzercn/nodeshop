@@ -51,6 +51,35 @@ function picLunbo(){
     slider.sliderInde();
   });
 }
+function createConsult(goodsId){
+  var c_content = $('#c_content').val();
+  var c_connect = $('#c_contact').val();
+  if(c_content != ''){
+    $.ajax({
+      type : "POST",
+      url : "/public/shop/pc/goods/createConsult",
+      dataType : "json",
+      data : {
+        goodsId : goodsId,
+        content : c_content.substring(0,400),
+        contact : c_connect.substring(0,40)
+      },
+      success : function(data) {
+        $('#showCon').hide();
+        $('#c_content,#c_contact').val('');
+        $('.oc_pro_a').html(data.msg);
+        $('.oc_pro_cl').hide();
+        $('#tip').show();
+        setTimeout("tipClose()",2000);
+      }
+    });
+  }
+}
+function tipClose(){
+  $('.oc_pro_a').html('');
+  $('.oc_pro_cl').show();
+  $('#tip').hide();
+}
 function quickBuy(){
   if($(".top-float-menu-placeholder").length<1)return false;
   var cart_btn = $("#cart-btn");
@@ -157,7 +186,7 @@ function commentData(goodsId,start){
         $("#pj_list").html(str);
         if(is_page){
           is_page=false;
-          $(".tcdPageCode").createPage({
+          $("#page1").createPage({
             pageCount:obj.totalPage,
             current:obj.page,
             backFn:function(p){
@@ -169,10 +198,57 @@ function commentData(goodsId,start){
     }
   });
 }
+var is_pages=true;
+function consultData(goodsId,start){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/goods/consultAjax/"+goodsId+"?start="+start,
+    dataType : "json",
+    success : function(data) {
+      var obj=data.data;
+      if(obj){
+        var str='';
+        $.each(obj.data,function(i,o) {
+          if(o.comment){
+            var note = o.replyNote || '';
+            str += '<li class="zixun1 cf clear"><div class="zixun1a"><img src="' + imgPath2 + '"><i>咨询内容</i><span>' +
+              o.comment + '</span></div>';
+            str += '<div class="zixun1s"><img src="' + imgPath3 + '"><i>回复内容</i><span>' +
+              note + '</span></div></li>';
+          }
+        });
+        $("#zx_list").html(str);
+        if(is_pages){
+          is_pages=false;
+          $("#page2").createPage({
+            pageCount:obj.totalPage,
+            current:obj.page,
+            backFn:function(p){
+              consultLoad(goodsId,(p-1)*10);
+            }
+          });
+        }
+      }
+    }
+  });
+}
+
+
 function commentLoad(goodsId,start){
   $("#pj_list").html('<img src="'+csspath+'/pc/img/pj_loading.gif"/>');
   setTimeout("commentData("+goodsId+","+start+")",300);
 }
+function consultLoad(goodsId,start){
+  $("#zx_list").html('<img src="'+csspath+'/pc/img/pj_loading.gif"/>');
+  setTimeout("consultData("+goodsId+","+start+")",300);
+}
+function LimitTextArea(field){
+  $('#nww').html(field.value.length);
+  var maxlimit = 400;
+  if(field.value.length > maxlimit){
+    field.value = field.value.substring(0, maxlimit);
+  }
+};
 $(function(){
   $("#cart-btn").on("click",function(){
     $.ajax({
@@ -201,17 +277,34 @@ $(function(){
     });
   });
   $("#tab1").on("click",function(){
-    $("#tab2").removeClass("s_detaila");
+    $("#tab2,#tab3").removeClass("s_detaila");
     $("#tab1").addClass("s_detaila");
     $("#xq").show();
-    $("#pj").hide();
+    $("#pj,#zx").hide();
   });
   $("#tab2").on("click",function(){
-    $("#tab1").removeClass("s_detaila");
+    $("#tab1,#tab3").removeClass("s_detaila");
     $("#tab2").addClass("s_detaila");
     $("#pj").show();
-    $("#xq").hide();
+    $("#xq,#zx").hide();
   });
+  $("#tab3").on("click",function(){
+    $("#tab2,#tab1").removeClass("s_detaila");
+    $("#tab3").addClass("s_detaila");
+    $("#zx").show();
+    $("#xq,#pj").hide();
+  });
+
+  $('#goCon').click(
+    function(){
+      if($('#showCon').css('display') == 'none'){
+        $('#showCon').show();
+      }else{
+        $('#showCon').hide();
+      }
+
+    }
+  );
   $("#pj .tab3").find("a").each(function(){
     var self=$(this);
     self.on("click",function(){
@@ -228,6 +321,7 @@ $(function(){
   view(goodsid);
   commentCount(goodsid);
   commentLoad(goodsid,0);
+  consultLoad(goodsid,0);
   console.log("%c%s","color: red; background: yellow; font-size: 24px; font-weight: bold;","\u5b89\u5168\u8b66\u544a!");
   console.log("%c%s","color: black; font-size: 18px;","\u8bf7\u52ff\u5728\u6b64\u63a7\u5236\u53f0\u8f93\u5165\u6216\u7c98\u8d34\u4f60\u4e0d\u660e\u767d\u7684\u4ee3\u7801\uff0c\u4ee5\u907f\u514d\u653b\u51fb\u8005\u7a83\u53d6\u4f60\u7684\u4fe1\u606f\u6765\u5192\u5145\u4f60\u3002");
 

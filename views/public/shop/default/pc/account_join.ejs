@@ -4,35 +4,46 @@ if(bannerLink&&bannerLink.links>0){
   imgurl=bannerLink.links[0].imgurl;
 }
 %>
-<div class="login" style="background:url('<%=imgurl%>') no-repeat center center;">
+<div class="login cf2">
+<div class="deng"><span class="login-titlel"><img src="<%=CssPath%>/pc/img/hui_p.jpg"/>注册</span><span class="login-titler">您已经是<i class="login-titleb">商城会员</i>？<a href="/login" class="login-titlec">请立即登录</a></span></div>
+  <div class="login_p">
   <ul class="login-main">
-    <li class="login-title"><span  class="login-titlel">注册</span><span class="login-titler">您已经是<i  class="login-titleb">商城会员</i>？<a href="/login"  class="login-titlec">请立即登录</a></span></li>
-    <li class="login-list">手机号码<i>*</i></li>
-    <li class="login-ent"><input tabindex="1" id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
+    <li class="login-ent" style="margin-top:10px;">
+    <span class="login_ma"><img src="<%=CssPath%>/pc/img/iphone4.png"/></span>
+    <input tabindex="1" id="mobile" maxlength="11" type="text" placeholder="请输入手机号码" class="login-phone"></li>
     <li class="error" style="display: none" id="mobile_tip"></li>
 
-    <li class="login-list">验证码<i>*</i></li>
-    <li class="login-ent"><input tabindex="2" id="vercode" maxlength="4" type="text" placeholder="请输入验证码" class="login-verl">
+    <li class="login-entm">
+    <div class="logol_mb"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_y.png"/></span>
+    <input tabindex="2" id="vercode" maxlength="4" type="text" placeholder="请输入验证码" class="login-verl">
+    </div>
       <img id="vercode_img" src="/public/shop/pc/account/captcha?<%=moment().format('x')%>" class="login-verc" onclick="javascript:loadimage(this);">
       <input type="button" value="换一张" class="login-verr" onclick="javascript:loadimage(this);"></li>
     <li class="error" style="display: none" id="vercode_tip"></li>
 
-    <li class="login-list">手机效验码<i>*</i></li>
-    <li class="login-ent"><input tabindex="3" id="smscode" maxlength="6" type="text" placeholder="手机校验码" class="login-phone-l">
+    <li class="login-entn">
+    <div class="act_ent"><span class="login_ma"><img src="<%=CssPath%>/pc/img/dial.png"/></span>
+    <input tabindex="3" id="smscode" maxlength="6" type="text" placeholder="手机校验码" class="login-phone-l">
+    </div>
       <input id="getSmscode" type="button" value="获取校验码" class="login-phone-r"></li>
     <li class="error" style="display: none" id="smscode_tip"></li>
 
-    <li class="login-list">设置密码<i>*</i></li>
-    <li class="login-ent"><input tabindex="4" id="pass1" maxlength="20" type="password" placeholder="请设置六位数以上的密码" class="login-phone"></li>
+    <li class="login-ent">
+    <span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_s.png"/></span>
+    <input tabindex="4" id="pass1" maxlength="20" type="password" placeholder="请设置六位数以上的密码" class="login-phone"></li>
     <li class="error" style="display: none" id="pass1_tip"></li>
-    <li class="login-list">确认密码<i>*</i></li>
-    <li class="login-ent"><input tabindex="5" id="pass2" maxlength="20" type="password" placeholder="请再次输入密码" class="login-phone"></li>
+
+    <li class="login-ent">
+    <span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_s.png"/></span>
+    <input tabindex="5" id="pass2" maxlength="20" type="password" placeholder="请再次输入密码" class="login-phone"></li>
     <li class="error" style="display: none" id="pass2_tip"></li>
     <li class="u-agreement"><a href="/channel/user" target="_blank">《用户协议》</a></li>
     <li class="login-btn">
       <input id="dojoin" type="button" value="同意协议并注册">
     </li>
   </ul>
+  </div>
+  <div class="deng_i"><img src="<%=CssPath%>/pc/img/lodim.jpg"/></div>
 </div>
 <input id="r" type="hidden" value="<%=r%>">
 <div id="tip" style="display: none">

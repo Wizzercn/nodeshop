@@ -138,6 +138,9 @@
         <a id="tab2" href="javascript:void(0);" class="s_details">
           <li>评价</li>
         </a>
+        <a id="tab3" href="javascript:void(0);" class="s_details">
+          <li>咨询</li>
+        </a>
       </ul>
     </div>
 
@@ -169,7 +172,31 @@
 
 
         </div>
-        <div class="s_page cf clear tcdPageCode"></div>
+        <div id="page1" class="s_page cf clear tcdPageCode"></div>
+      </div>
+      <div id="zx" class="cf clear" style="display: none">
+        <div>
+          <ul class="zixun">
+            <li class="z_zixun">
+              <span class="z_zixuna">
+                <input type="button" value="我要咨询" id="goCon">
+              </span>
+            </li>
+            <li class="z_zixunf" style="display:none" id="showCon">
+            <span class="z_zixunf1">我要咨询</span>
+            <span class="z_zixunf3" style="margin-top: 1rem">
+              <textarea placeholder="欢迎发表咨询，最多400字" id="c_content" maxlength="400" onKeyDown="LimitTextArea(this)" onKeyUp="LimitTextArea(this)" onkeypress="LimitTextArea(this)"></textarea>
+              <span id="nww">0</span>/400
+            </span>
+            <span class="z_zixunf4">联系方式：<input type="text" id="c_contact" maxlength="40"><i>可以是电话、email、qq等</i></span>
+            <span class="z_zixunf5"><a href="javascript:;" onclick="createConsult('<%=goods.id%>')">提交咨询</a></span>
+            </li>
+          </ul>
+        </div>
+        <div id="zx_list" style="text-align: center">
+
+        </div>
+        <div id="page2" class="s_page cf clear tcdPageCode"></div>
       </div>
     </div>
   </div>
@@ -179,12 +206,14 @@
   <div class="oc_pro_m">
     <span class="oc_pro_b">提示</span>
     <span class="oc_pro_a"></span>
-    <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+    <span class="oc_pro_cl"><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
 <script>
   var goodsid=<%=goods.id%>;
   var productid=<%=goods.products[0].id%>;
+  var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
+  var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
 </script>
 <script src="<%=CssPath%>/pc/js/goods.js"></script>
 <% include common_buttom.ejs %>

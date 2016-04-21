@@ -20,6 +20,24 @@ module.exports = {
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
     });
   },
+  channelOne:function (req, res) {
+    var id=req.query.id;
+    var channelName=req.query.name || '';
+    async.parallel({
+      //获取单个cms栏目分类
+      channelList: function (done) {
+        Cms_channel.getChannelById(id, function (list) {
+          done(null, list);
+        });
+      }
+    }, function (err, result) {
+      req.data.channelList = result.channelList || [];
+      req.data.channelName = channelName;
+      req.data.StringUtil = StringUtil;
+      req.data.moment = moment;
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
+    });
+  },
   one: function (req, res) {
     var id = req.params.id || '';
     var start = StringUtil.getInt(req.query.start);

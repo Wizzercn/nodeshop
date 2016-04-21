@@ -108,5 +108,38 @@ module.exports = {
     Shop_member_comment.getPageList(5,start,where,sort,function(l){
       return res.json({code:0,msg:'',data:l});
     });
+  },
+  createConsult:function(req,res){
+    var goodsId=req.body.goodsId;
+    var consultContent = req.body.content;
+    var contact = req.body.contact;
+    var member = req.session.member;
+    var ip = req.ip;
+    if (!member){memberId = 0}else{memberId = member.memberId}
+    var pushData = {memberId:memberId,
+      contact:contact,
+      comment:consultContent,
+      goodsId:goodsId,
+      type:2,
+      createIp:ip,
+      createAt:moment().format('X'),
+      disabled:true
+    };
+    Shop_member_comment.create(pushData).exec(function(err,obj){
+      if(obj){
+        return res.json({code:1,msg:'成功提交咨询'});
+      }else{
+        return res.json({code:0,msg:'提交失败，请稍后再提交咨询'});
+      }
+    });
+  },
+  consultAjax:function(req,res){
+    var id=StringUtil.getInt(req.params.id);
+    var start=StringUtil.getInt(req.query.start);
+    var sort={createdAt:'desc'};
+    var where={disabled:false,type:2,goodsId:id};
+    Shop_member_comment.getPageList(5,start,where,sort,function(l){
+      return res.json({code:0,msg:'',data:l});
+    });
   }
 };

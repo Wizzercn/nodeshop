@@ -19,6 +19,12 @@ module.exports = {
           done(null, list);
         });
       },
+      //获取CMS主栏目
+      mainChannel: function(done){
+        Cms_channel.find({select:['id','name'],where:{parentId:0}}).exec(function(err,list){
+          done(null,list);
+        });
+      },
       //获取热卖商品
       hotGoodsList: function (done) {
         Shop_goods.getHotGoods(4, function (list) {
@@ -83,6 +89,7 @@ module.exports = {
       req.data.bannerLink = result.bannerLink || {};
       req.data.centerChannel = result.centerChannel || [];
       req.data.buttomChannel = result.buttomChannel || [];
+      req.data.mainChannel = result.mainChannel || [];
       req.data.StringUtil = StringUtil;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/index', req.data);
     });

@@ -97,5 +97,10 @@ module.exports = {
     Cms_channel.findOne({select:['id','parentId','path','name','hasChildren'],where:{name:name,disabled:false}}).populate('articles', {where:{disabled:false},limit:num,sort: {createdAt: 'desc'}}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
     });
+  },
+  getChannelById: function (id,cb) {
+    Cms_channel.find({select:['id','parentId','path','name','hasChildren'],where:{parentId:id,disabled:false}}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
   }
 };
