@@ -20,11 +20,6 @@ module.exports = {
       size: 10,
       index:true
     },
-    //下载路径
-    url:{
-      type:'string',
-      size:255
-    },
     //物理路径
     path:{
       type:'string',
