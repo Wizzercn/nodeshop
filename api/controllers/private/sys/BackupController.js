@@ -3,6 +3,8 @@
  */
 var moment = require('moment');
 var mysqldump = require('mysqldump');
+var StringUtil = require('../../../common/StringUtil');
+var ZipUtil = require('../../../common/ZipUtil');
 var fs = require('fs-extra');
 module.exports = {
   index: function (req, res) {
@@ -47,12 +49,12 @@ module.exports = {
     var body = req.body;
     var type = body.type;
     if (type == 'db') {
-      var name = moment().format('YYYYMMDDHHmmss') + '.sql';
+      var name = moment().format('YYYYMMDDHHmmss');
       var dir = sails.config.appPath + '/backup/db/';
       if ('win32' == process.platform) {
         dir = sails.config.appPath + '\\backup\\db\\';
       }
-      var path = dir + name;
+      var path = dir + name + '.sql';
       fs.ensureDir(dir, function (err) {
         if (err)
           return res.json({code: 1, msg: JSON.stringify(err)});
@@ -65,18 +67,37 @@ module.exports = {
         }, function (err) {
           if (err)
             return res.json({code: 1, msg: JSON.stringify(err)});
-          Sys_backup.create({
-            type: type,
-            path: path,
-            name: name,
-            createdBy: req.session.user.id,
-            createdAt: moment().format('X')
-          }).exec(function (e, o) {
-            return res.json({code: 0, msg: '备份成功'});
-          });
+          var zip = new ZipUtil();
+          zip.zipFile(path, function (e) {
+            if (e)
+              return res.json({code: 1, msg: JSON.stringify(e)});
+            zip.writeToFile(dir + name + '.zip', function (ew) {
+              if (ew) {
+                return res.json({code: 1, msg: JSON.stringify(ew)});
+              }
+              Sys_backup.create({
+                type: type,
+                path: dir + name + '.zip',
+                name: name + '.zip',
+                createdBy: req.session.user.id,
+                createdAt: moment().format('X')
+              }).exec(function (e, o) {
+                return res.json({code: 0, msg: '备份成功'});
+              });
+            });
+            fs.removeSync(dir + name + '.sql');
+          }, {rootFolder: name});
         });
       });
 
+    } else {
+      var nameFile = moment().format('YYYYMMDDHHmmss');
+      var dirFile = sails.config.appPath + '/backup/file/';
+      if ('win32' == process.platform) {
+        dirFile = sails.config.appPath + '\\backup\\file\\';
+      }
+      var pathFile = dirFile + nameFile + '.zip';
+      return res.json({code: 1, msg: '备份失败'});
     }
   },
   delete: function (req, res) {
