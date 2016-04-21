@@ -68,7 +68,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button onclick="doBackup()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+        <button onclick="doBackup()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在备份...">确 定</button>
       </div>
     </div>
   </div>
@@ -133,7 +133,6 @@
         Toast.error(data.msg);
       }
       btn.button("reset");
-
     }, "json");
   }
   function del(id) {

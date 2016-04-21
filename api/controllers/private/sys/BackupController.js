@@ -2,6 +2,8 @@
  * Created by wizzer on 20/4/16.
  */
 var moment = require('moment');
+var mysqldump = require('mysqldump');
+var fs = require('fs-extra');
 module.exports = {
   index: function (req, res) {
     return res.view('private/sys/backup/index', req.data);
@@ -45,6 +47,26 @@ module.exports = {
     var body = req.body;
     var type = body.type;
     if(type=='db'){
+      var name=moment().format('YYYYMMDDHHmmss')+'.sql';
+      var dir=sails.config.appPath+'/backup/db/';
+      var path=dir+name;
+      fs.ensureDir(dir, function(err) {
+        if(err)
+          return res.json({code:1,msg:JSON.stringify(err)});
+        mysqldump({
+          host: sails.config.mysql.host,
+          user: sails.config.mysql.user,
+          password:sails.config.mysql.password,
+          database:sails.config.mysql.database,
+          dest:path // destination file
+        },function(err){
+          if(err)
+            return res.json({code:1,msg:JSON.stringify(err)});
+          Sys_backup.create({type:type,path:path,name:name,createdBy:req.session.user.id,createdAt:moment().format('X')}).exec(function(e,o){
+            return res.json({code:0,msg:'备份成功'});
+          });
+        });
+      });
 
     }
 
