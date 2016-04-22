@@ -98,6 +98,35 @@
     <li class="schedule_hd5m cf clear">
       <div class="guige_add"><span class="jia_ge">计量单位：</span><%=goods.unit||''%></div>
     </li>
+
+    <li class="song cf2">
+      <span class="song_l">配送范围：</span>
+      <div class="song_r"><span class="song_ra">查看具体范围<img src="<%=CssPath%>/pc/img/icon/song_x.jpg" class="song_i"/><img src="<%=CssPath%>/pc/img/icon/song_s.jpg" class="c_hide song_i"/></span>
+        <div class="slideTxtBox c_hide">
+          <div class="hd">
+
+
+            <span class="arrow"><a class="next"></a><a class="prev"></a></span>
+
+            <ul>
+              <li id="s_province">查看省</li>
+              <li id="s_city">查看市</li>
+              <li id="s_county">查看区/县</li>
+            </ul>
+          </div>
+          <div class="bd">
+            <ul class="song_bot" id="s_province_s">
+            </ul>
+            <ul class="song_bot" id="s_city_s">
+              <h3>请先选择省份</h3>
+            </ul>
+            <ul class="song_bot" id="s_county_s">
+              <h3>请先选择市</h3>
+            </ul>
+          </div>
+        </div></div>
+    </li>
+
     <li class="schedulehd4">
       <div class="schedulehd4_h">选择数量:</div>
       <div class="schedulehd4z"><a id="buy_sub" href="javascript:void(0);" title="减1" class="schedulehd4_a">—</a>
@@ -215,5 +244,6 @@
   var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
   var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
 </script>
+<script type="text/javascript">jQuery(".slideTxtBox").slide();</script>
 <script src="<%=CssPath%>/pc/js/goods.js"></script>
 <% include common_buttom.ejs %>
