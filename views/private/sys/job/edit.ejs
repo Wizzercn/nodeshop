@@ -15,19 +15,25 @@
                 <%=obj.name||''%>
               </td>
             </tr>
-            <tr style="height: 30px;">
+            <tr style="height: 40px;">
               <td width="30%" align="right">任务名称：</td>
               <td width="70%" align="left">
                 <input name="note" id="note" maxlength="50" class="form-control" value="<%=obj.note||''%>"/>
               </td>
             </tr>
-            <tr style="height: 30px;">
+            <tr style="height: 40px;">
               <td width="30%" align="right">定时策略(cron)：</td>
               <td width="70%" align="left">
                 <input name="cron" id="cron" maxlength="20" class="form-control"  value="<%=obj.cron||''%>"/>
               </td>
             </tr>
           </table>
+        </div>
+        <div style="width: 400px;margin-left: 100px;" class="alert alert-warning alert-dismissable">
+          <strong>Cron示例：</strong>前后不要有空格<br>
+          &nbsp;10 2 * * *  每天2点10分<br>
+          &nbsp;*/1 * * * *  每隔1分钟<br>
+          &nbsp;0 */2 * * *  每两个小时<br>
         </div>
       </section>
 
