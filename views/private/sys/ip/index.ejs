@@ -1,13 +1,17 @@
-<div class=panel-body style="padding-top: 10px;">
+<header class="header navbar bg-white shadow">
+  <div class="btn-group tool-button">
+    <a class="btn btn-primary navbar-btn" href="/private/sys/ip/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i>新增IP策略</a>
+  </div>
+</header>
+<div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
-        <th>任务名</th>
-        <th>定时策略</th>
+        <th>IP地址</th>
         <th>启用状态</th>
-        <th>最近执行时间</th>
-        <th>执行状态</th>
+        <th>创建人</th>
+        <th>创建时间</th>
         <th>操作</th>
     </table>
   </div>
@@ -38,18 +42,16 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/sys/job/data",
+        "url": "/private/sys/ip/data",
         "type": "post",
         "data": function (d) {
         }
       },
       "order": [[0, "asc"]],
       "columns": [
-        {"data": "note", "bSortable": true},
-        {"data": "cron", "bSortable": true},
+        {"data": "ip", "bSortable": true},
         {"data": "disabled", "bSortable": true},
-        {"data": "updateAt", "bSortable": true},
-        {"data": "updateStatus", "bSortable": true}
+        {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
         {
@@ -59,6 +61,14 @@
             } else {
               return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
             }
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            if(row.createdBy&&row.createdBy.nickname)
+              return row.createdBy.nickname;
+            return '';
           },
           "targets": 2
         },
@@ -72,25 +82,17 @@
         },
         {
           "render": function (data, type, row) {
-            if(data==true)
-              return '成功';
-            if(data==false)
-              return '<a href="javascript:;" style="color:#428bca" onclick="Toast.error(\''+row.updateTxt+'\');">失败</a>';
-            return '';
-          },
-          "targets": 4
-        },
-        {
-          "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/sys/job/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
+              '<li><a href="/private/sys/ip/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="javascript:;" onclick="enable('+row.id+')">启用</a></li>' +
               '<li><a href="javascript:;" onclick="disable('+row.id+')">禁用</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="javascript:;" onclick="del('+row.id+')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 5
+          "targets": 4
         }
       ]
     });
@@ -98,8 +100,17 @@
       $(this).toggleClass('selected');
     });
   }
+  function del(id) {
+    $.post("/private/sys/ip/delete/" + id, {}, function (data) {
+      if (data.code == 0) {
+        datatable.ajax.reload();
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
   function enable(id) {
-    $.post("/private/sys/job/enable/" + id, {}, function (data) {
+    $.post("/private/sys/ip/enable/" + id, {}, function (data) {
       if (data.code == 0) {
         $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
       } else {
@@ -108,7 +119,7 @@
     }, "json");
   }
   function disable(id) {
-    $.post("/private/sys/job/disable/" + id, {}, function (data) {
+    $.post("/private/sys/ip/disable/" + id, {}, function (data) {
       if (data.code == 0) {
         $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
       } else {

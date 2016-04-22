@@ -31,15 +31,20 @@ module.exports = {
         return false;
       }
     },
-    createdBy: {
-      model: 'Sys_user',
-      index:true
+    updateTxt: {
+      type:'string',
+      size:255
     },
-    createdAt:{
+    updateStatus: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    updateAt:{
       type:'integer',
-      index: true,
       defaultsTo:function(){
-        return moment().format('X');
+        return 0;
       }
     }
   }

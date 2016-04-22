@@ -21,11 +21,12 @@ module.exports = {
     if(!disabled){
       job=schedule.scheduleJob(name, cron, function() {
         if(name=='backupDb'){
-          sails.log.info('JobService.backupDb::start!');
           self.backupDb(0,function(err){
-            if(err)
-              sails.log.info('JobService.backupDb::err:'+JSON.stringify(err));
-            sails.log.info('JobService.backupDb::end!');
+            if(err){
+              Sys_job.update({name:'backupDb'},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
+            }else{
+              Sys_job.update({name:'backupDb'},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
+            }
           });
         }
       });
