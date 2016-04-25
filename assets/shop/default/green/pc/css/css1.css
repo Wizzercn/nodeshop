@@ -1933,3 +1933,26 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .mo-del{display:inline-block;background:#eee;width:65px;height:28px;border:1px solid #ddd;line-height:26px;border-radius:3px;}
 /**新增**/
 
+.song{height:50px;position:relative;line-height:36px;top:-5px;}
+.song_l{display:inline-block;width:80px;float:left;font-size:14px;}
+.song_r{width:200px;float: left;display: inline-block;height:40px;cursor: pointer;}
+.song_ra{position:relative;z-index:2;width:180px;display: inline-block;font-size:14px;color:#666;border:1px solid #ddd;height:36px;text-indent:20px;background:#fff;}
+.slideTxtBox{display:inline-block;width:450px;position:absolute;top:35px;left:80px;border:1px solid #ddd;background:#fff;padding:0 0 20px 0px;line-height: 24px;;}
+.slideTxtBox .song_top{height:30px; line-height:30px; background:#f4f4f4; padding:0 10px 0 20px;   border-bottom:1px solid #ddd;  position:relative; }
+.song_i{position:absolute;top:10px;right:10px;}
+/*.border_color{border-bottom-color: #fff;}*/
+.song_m{display:inline-block;float:left;color:#666;width:300px;}
+.song_m font{font-size:16px;padding-right:10px;padding-left:10px;color:#000;}
+
+
+
+.slideTxtBox{ width:400px; border:1px solid #ddd; text-align:left;z-index:2;  }
+.slideTxtBox .hd{ height:30px; line-height:30px; background:#f4f4f4; padding:0 10px 0 0px;   border-bottom:1px solid #ddd;  position:relative; }
+.slideTxtBox .hd ul{ float:left;  position:absolute; left:20px; top:-1px; height:32px;   }
+.slideTxtBox .hd ul li{ float:left; padding:0 15px; cursor:pointer;  }
+.slideTxtBox .hd ul li.on{ height:31px;  background:#fff; border:1px solid #ddd; border-bottom:2px solid #fff; }
+.slideTxtBox .bd ul{ padding:15px;  zoom:1;  }
+.song_bot li{float: left;display: inline-block;*display: inline;zoom: 1;min-width:66px;margin-left:10px;margin-right:10px;text-align: center;}
+.song_bot li:hover a,.song_on a{background:#00aa3a;color:#fff;padding:4px 10px;}
+.song_co{background:#00aa3a;color:#fff;}
+.song_no{background:#fff;color:#333;}

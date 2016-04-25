@@ -249,7 +249,81 @@ function LimitTextArea(field){
     field.value = field.value.substring(0, maxlimit);
   }
 };
+
+function loadProvince(){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/member/area/getArea",
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $.each(data.list,function(i,o){
+          $("#s_province_s").append('<li><a href="javascript:;" class="s_province_s" onclick="getCity(name)" data-check="1" name="'+ o.name+'">'+ o.name+'</a></li>');
+        });
+      }
+    }
+  });
+};
+
+function getCity(name){
+  if($("a[name='" + name + "']").data('check') == 1) {
+    $("a[name='" + name + "']").addClass('song_co').data('check', '2');
+    $("a[name='" + name + "']").parent('li').addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co').data('check', '1');
+    $.ajax({
+      type: "GET",
+      url: "/public/shop/pc/member/area/getArea?name=" + name,
+      dataType: "json",
+      success: function (data) {
+        if (data.code == 0) {
+          $("#s_city_s").empty();
+          var cityHtml = '';
+          $.each(data.list, function (i, o) {
+            cityHtml += '<li><a href="javascript:;" class="s_city_s" onclick="getArea(name)" name="' + o.name + '">' + o.name + '</a></li>';
+          });
+          $("#s_city_s").html(cityHtml);
+          $("#s_county_s").html("<h3>请先选择市</h3>");
+        }
+      }
+    });
+  }
+};
+
+function getArea(name){
+  $("a[name='"+name+"']").addClass('song_co');
+  $("a[name='"+name+"']").parent().addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co');
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/pc/member/area/getArea?name="+name,
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $("#s_county_s").empty();
+        var countyHtml = '';
+        $.each(data.list,function(i,o){
+          countyHtml += '<li><a href="javascript:;" class="s_county_s" >'+ o.name+'</a></li>';
+        });
+        $("#s_county_s").html(countyHtml);
+      }
+    }
+  });
+};
+
+
+
 $(function(){
+  $(".song_r").hover(
+    function(){
+      $(".slideTxtBox").removeClass("c_hide");
+      $(this).find(".song_ra").addClass("border_color")
+      $(this).find(".song_i").toggleClass("c_hide")
+    },
+    function(){
+      $(".slideTxtBox").addClass("c_hide");
+      $(this).find(".song_ra").removeClass("border_color")
+      $(this).find(".song_i").toggleClass("c_hide")
+    }
+  );
+
   $("#cart-btn").on("click",function(){
     $.ajax({
       type : "POST",
@@ -319,6 +393,7 @@ $(function(){
   buyNum();
   quickBuy();
   view(goodsid);
+  loadProvince();
   commentCount(goodsid);
   commentLoad(goodsid,0);
   consultLoad(goodsid,0);
