@@ -4,7 +4,7 @@
       <section class="panel panel-primary no-b">
         <header class="panel-heading clearfix brtl brtr">
           <div class="overflow-hidden">
-            <a href="javascript:;" class="h4 show no-m pt5">订单详情</a>
+            <a href="javascript:;" class="h4 show no-m pt5">会员信息</a>
           </div>
         </header>
         <div class="list-group" style="text-align: center;padding-top: 10px;">
@@ -16,47 +16,50 @@
               </td>
               <td width="20%" align="right">订单总额：</td>
               <td width="30%" align="left">
-                &yen;<%=StringUtil.setPrice(obj.finishAmount)||'0.00'%>
+                <%=obj.finishAmount%>
               </td>
             </tr>
             <tr style="height: 30px;">
-              <td width="20%" align="right">会员昵称：</td>
-              <td width="30%" align="left"><%- obj.memberId.nickname||'' %></td>
+              <td width="20%" align="right">昵称：</td>
+              <td width="30%" align="left"><%- obj.nickname||'' %></td>
               <td width="20%" align="right">手机号码：</td>
-              <td width="30%" align="left"><%- obj.memberId.mobile||'' %></td>
+              <td width="30%" align="left"><%- obj.mobile||'' %></td>
             </tr>
             <tr style="height: 30px;">
-              <td width="20%" align="right">收货人：</td>
-              <td width="30%" align="left"><%= obj.addrName%></td>
-              <td width="20%" align="right">联系电话：</td>
-              <td width="30%" align="left"><%=obj.addrMobile||'0'%></td>
+              <td width="20%" align="right">预存款：</td>
+              <td width="30%" align="left" style="color: red">&yen;<%= StringUtil.setPrice(obj.money)||'0.00' %></td>
+              <td width="20%" align="right">积分：</td>
+              <td width="30%" align="left"><%=obj.score||'0'%></td>
             </tr>
             <tr style="height: 30px;">
-              <td width="20%" align="right">收货地址：</td>
-              <td width="80%" align="left" colspan="3">
-                <%-obj.addrProvince+obj.addrCity+obj.addrArea+obj.addrAddr%>
-              </td>
+              <td width="20%" align="right">Email：</td>
+              <td width="30%" align="left" colspan="3"><%-obj.email||''%></td>
             </tr>
-          </table>
-          <table width="80%" style="padding: 10px;margin-left: 25px;">
-            <thead>
-              <tr>
-                <td width="50%" align="left">商品名称</td>
-                <td width="10%" align="right">数量</td>
-                <td width="20%" align="right">单价</td>
-                <td width="20%" align="right">小计</td>
-              </tr>
-            </thead>
-            <tbody>
-              <%if(obj.goods){obj.goods.forEach(function(o){%>
-                <tr>
-                  <td width="50%" align="left"><%=o.name||''%></td>
-                  <td width="10%" align="right"><%=o.num||''%></td>
-                  <td width="20%" align="right">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
-                  <td width="20%" align="right">&yen;<%=StringUtil.setPrice(o.amount)||'0.00'%></td>
-                </tr>
-              <%});}%>
-            </tbody>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">姓名：</td>
+              <td width="30%" align="left"><%=obj.realname||''%></td>
+              <td width="20%" align="right">性别：</td>
+              <td width="30%" align="left"><%=obj.sex==0?'未知':''%><%=obj.sex==1?'男':''%><%=obj.sex==2?'女':''%></td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">出生日期：</td>
+              <td width="30%" align="left"><%if(obj.b_year>0){
+                  var wdate=moment(obj.b_year+'-'+obj.b_month+'-'+obj.b_day).format("YYYY-MM-DD");
+                  %><%=wdate%><%
+                }%></td>
+              <td width="20%" align="right">所属地区：</td>
+              <td width="30%" align="left"><%=obj.province||''%><%=obj.city||''%><%=obj.area||''%></td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">详细地址：</td>
+              <td width="30%" align="left" colspan="3"><%-obj.addr||''%></td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">注册IP：</td>
+              <td width="30%" align="left"><%- obj.reg_ip||'' %></td>
+              <td width="20%" align="right">注册时间：</td>
+              <td width="30%" align="left"><%=obj.reg_time?moment(obj.reg_time*1000).format("YYYY-MM-DD HH:mm:ss"):''%></td>
+            </tr>
           </table>
         </div>
       </section>
