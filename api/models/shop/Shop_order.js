@@ -97,10 +97,8 @@ module.exports = {
     },
     //配送方式id
     shiptypeId:{
-      type: 'integer',
-      defaultsTo: function () {
-        return 0;
-      }
+      model: 'Shop_order_ship',
+      index: true
     },
     //配送方式
     shiptypeName:{
@@ -230,7 +228,7 @@ module.exports = {
       },
       index:true
     },
-    //收款单
+    //订单商品表
     goods: {
       collection: 'Shop_order_goods',
       via: 'orderId'
