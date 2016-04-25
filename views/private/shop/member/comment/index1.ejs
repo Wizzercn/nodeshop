@@ -83,11 +83,11 @@
         {
           "render": function (data, type, row) {
             if(row.comment){
-              var len=row.comment.length;
+              var len=removeHTMLTag(row.comment).length;
               if(len>25){
-                return row.comment.substring(0,25)+'..';
+                return removeHTMLTag(row.comment).substring(0,25)+'..';
               }
-              return row.comment;
+              return removeHTMLTag(row.comment);
             }
             return '';
           },
