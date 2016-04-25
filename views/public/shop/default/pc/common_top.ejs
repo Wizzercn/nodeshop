@@ -4,12 +4,23 @@
         <li class="k_logolf">
           <div class="fl logol_img"><a href="/"><img src="<%=SiteConfig.site_logo||''%>"></a></div>
         </li>
-        <li class="z_resarch">
+        <li class="head_r">
+          <div class="z_resa">
+          <%if(member&&member.memberId>0){%>
+            <span class="z_resml radius3"><a href="/member" class="z_resb">会员中心</a></span>
+          <span class="z_resml radius3"><a href="/public/shop/pc/account/logout" class="z_resb">退出登录</a></span>
+          <%}else{%>
+            <span class="z_resml radius3"><a href="/login<%if(r){%>?r=<%=r%><%}%>" class="z_resb">登录</a></span>
+          <span class="z_resml radius3"><a href="/join" class="z_resb">注册</a></span>
+          <%}%>
+          </div>
+        <div class="z_resarch">
           <div class="z_resarch1"><input id="search_name" value="<%=typeof search_name!='undefined'?search_name||'':''%>" type="text" placeholder="请输入商品名称…">
           </div>
           <div class="z_resarch2"><input id="search" type="button"></div>
-        </li>
-        <li class="k_logolfi"><img src="<%=CssPath%>/pc/img/public/telp.png">免费客服热线：<span><%=SiteConfig.site_tel||''%></span></li>
+        </div>
+        <div class="k_logolfi"><img src="<%=CssPath%>/pc/img/public/telp.png">免费客服热线：<span><%=SiteConfig.site_tel||''%></span></div>
+    </li>
       </ul>
     </div>
   </div>

@@ -76,7 +76,7 @@
   <a href="/wap/info/<%=aobj.id%>"><img src="<%=aobj.picurl||''%>" title="<%=centerChannel.name||''%>" alt="<%=centerChannel.name||''%>" class="pic_210"/></a>
   <section class="wbw">
     <h3><%=aobj.title||''%></h3>
-    <p><%=len2>70?aobj.info.substring(0,70)+'...':aobj.info%></p>
+    <p class="pinfo"><%=len2>45?aobj.info.substring(0,45)+'...':aobj.info%></p>
     <div><a href="/wap/info/<%=aobj.id%>" class="green_btn">查看详细</a></div>
   </section>
 </div>
@@ -87,21 +87,25 @@
     var len3=0;
     if (bobj.info)len3 =bobj.info.length;
   %>
-  <li><a href="/wap/info/<%=bobj.id%>" class="wb">
-      <img src="<%=bobj.picurl||''%>" title="<%=bobj.title||''%>" alt="<%=bobj.title||''%>" class="pic_120"/>
+  <li class="k_scut_list"><a href="/wap/info/<%=bobj.id%>" class="wb">
+
       <section class="wbw">
         <h3><%=bobj.title||''%></h3>
-        <div><%=len3>45?bobj.info.substring(0,45)+'...':bobj.info%></div>
+
       </section>
     </a></li>
   <%});%>
   <%}%>
 </ul>
+<div class="k_nav cf2">
+  <%mainChannel.forEach(function(channel){%>
+  <a href="/wap/channel/channelOne?id=<%-channel.id%>&name=<%-channel.name%>"><span><%-channel.name%></span></a>
+  <%});%>
+</div>
 <nav class="bnav">
   <a href="/wap/" class="on home_bnav">首页</a>
   <a href="/wap/class" class="class_bnav">分类</a>
   <a href="/wap/member" class="my_bnav">我的</a>
   <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
-  <a href="/wap/channel" class="more_bnav">更多</a>
 </nav>
 <% include common_buttom.ejs %>

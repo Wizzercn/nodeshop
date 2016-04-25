@@ -49,6 +49,13 @@ module.exports.bootstrap = function(cb) {
       sails.config.system.SiteConfig=o;
     }
   });
+  Sys_job.find({disabled:false}).exec(function(e,l){
+    if(l&& l.length>0){
+      l.forEach(function(o){
+        JobService.init(o.name, o.cron,false);
+      });
+    }
+  });
   console.log('bootstrap finish!!');
   cb();
 };

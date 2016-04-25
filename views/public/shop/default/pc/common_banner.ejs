@@ -41,13 +41,7 @@
           <a href="/channel/about">关于我们</a>
         </li>
         <li class="z_shop">
-          <%if(member&&member.memberId>0){%>
-            <a href="/member" class="z_shopa">会员中心</a>
-            <a href="/public/shop/pc/account/logout" class="z_shopa">退出登录</a>
-          <%}else{%>
-          <a href="/login<%if(r){%>?r=<%=r%><%}%>" class="z_shopa">登录</a>
-          <a href="/join" class="z_shopa">注册</a>
-          <%}%>
+
 
             <span id="cartDiv" class="z_shopm">
               <a href="/shopcart/list" class="z_shops"><img src="<%=CssPath%>/pc/img/public/z_shop.png">购物车<span id="cartNum">0</span>件</a>
