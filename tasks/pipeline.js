@@ -66,6 +66,7 @@ var jsFilesToInject = [
   'plugins/emoji/emoji.js',
   'plugins/sorttable/Sortable.min.js',
   'plugins/jquery.qrcode.min.js',
+  'plugins/jquery.sparkline.js',
   'plugins/x-editable/bootstrap-editable.js',
   'js/form.js',
   'js/offscreen.js',
