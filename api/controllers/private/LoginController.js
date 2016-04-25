@@ -145,7 +145,7 @@ module.exports = {
             disabled: false,
             sort: {location: 'asc'}
           }).exec(function (err, role) {
-
+            //用户权限菜单
             if (role) {
               var firstMenus = [], secondMenus = {}, permission = [];
               role.forEach(function (m) {
@@ -172,9 +172,23 @@ module.exports = {
               req.session.secondMenus = secondMenus;
               req.session.permission = permission;
             }
-
-            req.session.save();
-            return res.json({code: 0, msg: sails.__('private.login.success')});
+            //用户常用菜单
+            var myMenus=[];
+            Sys_menu.find({id:user.customMenus}).sort({location:'asc'}).exec(function(err,list) {
+              if (list && list.length > 0) {
+                list.forEach(function (obj) {
+                  var menu = {};
+                  menu.id = obj.id;
+                  menu.name = obj.name;
+                  menu.url = obj.url;
+                  menu.target = obj.target;
+                  myMenus.push(menu);
+                });
+              }
+              req.session.myMenus = myMenus;
+              req.session.save();
+              return res.json({code: 0, msg: sails.__('private.login.success')});
+            });
           });
         } else {
           return res.json({code: 0, msg: sails.__('private.login.success')});
