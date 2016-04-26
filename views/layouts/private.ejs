@@ -287,7 +287,7 @@
               <%myMenus.forEach(function(o){%>
 
               <li class="active">
-                <a href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}else{ %>href="javascript:;"<%}%>>
+                <a <%if(o.url){%>href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
                   <span><%=o.name%></span>
                 </a>
               </li>
