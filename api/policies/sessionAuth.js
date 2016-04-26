@@ -25,6 +25,7 @@ module.exports = function (req, res, next) {
             user: req.session.user,
             firstMenus: req.session.firstMenus,
             secondMenus: req.session.secondMenus,
+            myMenus:req.session.myMenus,
             path: path
           };
           //非PJAX请求的ajax网页请求,加载空的布局文件(treetable等非json的js控件)

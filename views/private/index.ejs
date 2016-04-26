@@ -47,17 +47,17 @@
             <div class="row">
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">已上架商品</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#3c8dbc">5434</a></b>
+                <div class="h4 no-m"><b><a href="/private/shop/goods/goods?disabled=false" data-pjax style="color:#3c8dbc" id="numUp">0</a></b>
                 </div>
               </div>
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">未上架商品</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#3c8dbc">894</a></b>
+                <div class="h4 no-m"><b><a href="/private/shop/goods/goods?disabled=true"  data-pjax style="color:#3c8dbc" id="numDwon">0</a></b>
                 </div>
               </div>
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">库存预警商品</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#FF0000">8</a></b>
+                <div class="h4 no-m"><b><a href="/private/shop/goods/goods?stock=<%=sails.config.system.ShopConfig.shop_stock||10%>"  data-pjax style="color:#FF0000" id="numStock">0</a></b>
                 </div>
               </div>
             </div>
@@ -75,17 +75,17 @@
             <div class="row">
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">总会员</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#3c8dbc">10000</a></b>
+                <div class="h4 no-m"><b><a href="/private/shop/member/member" data-pjax style="color:#3c8dbc" id="mm_numAll">0</a></b>
                 </div>
               </div>
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">昨日新增</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#3c8dbc">100</a></b>
+                <div class="h4 no-m"><b><span style="color:#3c8dbc" id="mm_numDay1">0</span></b>
                 </div>
               </div>
               <div class="col-xs-4">
                 <div class="small show text-uppercase text-muted">今日新增</div>
-                <div class="h4 no-m"><b><a href="javascript:;" style="color:#FF0000">2</a></b>
+                <div class="h4 no-m"><b><span style="color:#FF0000" id="mm_numDay">0</span></b>
                 </div>
               </div>
             </div>
@@ -114,6 +114,15 @@
         spotRadius: '2'
       });
     }, "json");
-
+    $.post("/private/home/goodsData", {}, function (data) {
+      $("#numUp").html(data.numUp);
+      $("#numDwon").html(data.numDwon);
+      $("#numStock").html(data.numStock);
+    }, "json");
+    $.post("/private/home/memberData", {}, function (data) {
+      $("#mm_numAll").html(data.numAll);
+      $("#mm_numDay1").html(data.numDay1);
+      $("#mm_numDay").html(data.numDay);
+    }, "json");
   });
 </script>
