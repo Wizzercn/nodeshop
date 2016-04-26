@@ -280,9 +280,9 @@ a, a:hover {
 
 .k_logol{width:1200px;height:120px;display:block;margin:0 auto;}
 .k_logolf{width:590px;height:120px;float:left;}
-.logol_img{height:120px;background:#ffffff;}
+.logol_img{height:120px;background:#ffffff;line-height:80px;}
 /*添加.logol_img img*/
-.logol_img img{margin-top:25px;}
+.logol_img img{margin-top:25px;vertical-align: middle;}
 .k_logols{width:100px;height:80px;line-height:25px;text-indent:5px;display:block;float:left;margin-top:30px;color:#666666;font-size:16px;display:block;margin-left:25px;}
 .k_logols a{font-size:14px;color:#999999;}
 

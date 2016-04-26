@@ -300,7 +300,7 @@ function getArea(name){
         $("#s_county_s").empty();
         var countyHtml = '';
         $.each(data.list,function(i,o){
-          countyHtml += '<li><a href="javascript:;" class="s_county_s" >'+ o.name+'</a></li>';
+          countyHtml += '<li><a href="javascript:;" class="s_county_s" onclick="getAreaNext(name)" name="' + o.name + '">'+ o.name+'</a></li>';
         });
         $("#s_county_s").html(countyHtml);
       }
@@ -308,7 +308,10 @@ function getArea(name){
   });
 };
 
-
+function getAreaNext(name){
+  $("a[name='"+name+"']").addClass('song_co');
+  $("a[name='"+name+"']").parent().addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co');
+}
 
 $(function(){
   $(".song_r").hover(
