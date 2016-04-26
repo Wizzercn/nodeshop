@@ -84,7 +84,7 @@
         <div></div>
         <div></div>
       </a>
-    </div><%= user.loginScroll == true %>
+    </div>
     <div class="options-container">
       <h6><%= sails.__('private.index.layout') %></h6>
       <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
@@ -108,7 +108,7 @@
       <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-      <a href="/sysadmin/home" class="navbar-brand">
+      <a href="/sysadmin/home"  class="navbar-brand">
         <img src="/img/logo.png" alt="">
                 <span class="heading-font">
                 <%= sails.config.system.AppName %>
@@ -128,7 +128,7 @@
     </ul>
       <ul class="nav navbar-nav">
         <li>
-          <a href="/sysadmin/home">
+          <a href="/sysadmin/home" data-pjax>
             <i class="ti-home"></i>
             <span>首页</span>
           </a>
@@ -244,7 +244,8 @@
         </a>
         <ul class="dropdown-menu animated fadeInLeft">
           <li>
-            <a href="#"><%= sails.__('private.index.usersetting') %></a>
+            <a href="/private/sys/user/custom" data-toggle="modal"
+               data-target="#homeDetail"><%= sails.__('private.index.usersetting') %></a>
           </li>
 
           <li class="dropdown hidden-xs">
@@ -253,8 +254,8 @@
             </a>
           </li>
           <li>
-            <a href="#" data-toggle="modal"
-               data-target="#homeChangePassword"><%= sails.__('private.index.userpassword') %></a>
+            <a href="/private/sys/user/pass" data-toggle="modal"
+               data-target="#homeDetail"><%= sails.__('private.index.userpassword') %></a>
           </li>
         </ul>
       </li>
@@ -273,7 +274,28 @@
            data-wheel-step="10">
         <!--<p class="nav-title">MENU</p>-->
         <ul class="nav">
+          <li class="open">
+            <a href="javascript:;">
+              <%if(myMenus&&myMenus.length>0){%>
+              <i class="toggle-accordion"></i>
+              <%}%>
+              <i class="ti-heart"></i>
+              <span>常用菜单</span>
+            </a>
+            <%if(myMenus&&myMenus.length>0){%>
+            <ul class="sub-menu">
+              <%myMenus.forEach(function(o){%>
 
+              <li class="active">
+                <a href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}else{ %>href="javascript:;"<%}%>>
+                  <span><%=o.name%></span>
+                </a>
+              </li>
+
+              <%});%>
+            </ul>
+            <%}%>
+          </li>
           <% if(path.length > 8 && secondMenus[path.substring(0, path.length - 8)]){ %>
           <% secondMenus[path.substring(0, path.length - 8)].forEach(function(firstMenu){ %>
           <li <% if(path == firstMenu.path){ %>class="active"
@@ -316,20 +338,7 @@
             <% } %>
           </li>
           <% });}else{ %>
-          <li class="open">
-            <a href="javascript:;">
-              <!--<i class="toggle-accordion"></i>-->
-              <i class="ti-heart"></i>
-              <span>常用菜单</span>
-            </a>
-            <!--<ul class="sub-menu">-->
-              <!--<li class="active">-->
-                <!--<a href="forms.html">-->
-                  <!--<span>订单管理</span>-->
-                <!--</a>-->
-              <!--</li>-->
-            <!--</ul>-->
-          </li>
+
           <% } %>
 
         </ul>
@@ -342,63 +351,12 @@
 
 
 </div>
-<form id="passForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
-      action="/private/sys/user/doChangePassword" method="post">
-  <div id="homeChangePassword" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 class="modal-title"><%= sails.__('private.index.userpassword') %></h4>
-        </div>
-        <div class="modal-body">
-
-          <div class="row" style="padding-top: 10px;">
-            <div class="col-lg-12">
-              <div class="form">
-                <label for="password" class="col-sm-2 control-label">原密码</label>
-
-                <div class="col-sm-8">
-                  <input id="oldPassword" tabindex="1" type="password" class="form-control" name="oldPassword"
-                         data-parsley-required="true" placeholder="原密码">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="padding-top: 10px;">
-            <div class="col-lg-12">
-              <div class="form">
-                <label for="password" class="col-sm-2 control-label">新密码</label>
-                <div class="col-sm-8">
-                  <input id="newPassword" tabindex="2" type="password" class="form-control" name="newPassword"
-                         data-parsley-required="true" data-parsley-minlength="6" data-parsley-maxlength="20"  placeholder="新密码">
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row" style="padding-top: 10px;">
-            <div class="col-lg-12">
-              <div class="form">
-                <label for="passwordAgain" class="col-sm-2 control-label">确认密码</label>
-
-                <div class="col-sm-8">
-                  <input id="passwordAgain" type="password" tabindex="6" class="form-control"
-                         data-parsley-equalto="#newPassword"
-                         data-parsley-required="true" name="eqPassword" placeholder="请再输入一次密码">
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-          <button type="submit" class="btn btn-primary">确 认</button>
-        </div>
-      </div>
+<div id="homeDetail" class="modal fade bs-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
     </div>
   </div>
-</form>
+</div>
 <!--script-->
 <% if (sails.config.environment === 'production') { %>
 <script src="/min/production.min.js"></script>
@@ -440,6 +398,7 @@
 <script src="/plugins/emoji/emoji.js"></script>
 <script src="/plugins/sorttable/Sortable.min.js"></script>
 <script src="/plugins/jquery.qrcode.min.js"></script>
+<script src="/plugins/jquery.sparkline.js"></script>
 <script src="/plugins/x-editable/bootstrap-editable.js"></script>
 <script src="/js/form.js"></script>
 <script src="/js/offscreen.js"></script>
@@ -467,28 +426,8 @@
       $(".gallery-loader").fadeOut();
     } catch (e) {
     }
-    $('#homeChangePassword').on('hidden.bs.modal',function(){
-      $("#passForm")[0].reset();
-    });
-    $("#passForm").ajaxForm({
-      dataType: 'json',
-      beforeSubmit: function (arr, form, options) {
-        form.find("button:submit").text("提交...");
-        form.find("button:submit").attr("disabled", "disabled");
-      },
-      success: function (data, statusText, xhr, form) {
-        if (data.code == 0) {
-          $('#homeChangePassword').modal('hide');
-          Toast.success(data.msg);
-          form.find("button:submit").text("确 认");
-          $("#passForm")[0].reset();
-        } else {
-          form.find("button:submit").text("确 认");
-          form.find("button:submit").removeAttr("disabled");
-          Toast.error(data.msg);
-        }
-
-      }
+    $('#homeDetail').on('hidden.bs.modal',function(){
+      $(this).removeData("bs.modal");
     });
     if (console)
       console.log("%c^_^ Wizzer.cn","color:red;font-size:14px;");

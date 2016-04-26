@@ -27,6 +27,31 @@
         <label for="name">商品名称</label>
         <input type="text" id="name" name="name" onclick="this.value=''" class="form-control" placeholder="商品名称">
       </div>
+      <div class="form-group">
+        <label for="stock_type">库存</label>
+        <select id="stock_type" name="stock_type" class="form-control" style="margin-bottom: 5px;">
+          <option value="than">小于</option>
+          <option value="lthan">小于等于</option>
+          <option value="bthan">大于</option>
+          <option value="gthan">大于等于</option>
+        </select>
+        <input type="text" id="stock" name="stock" value="<%=stock>0?stock:''%>" onclick="this.value=''" class="form-control" placeholder="库存">
+      </div>
+      <div class="form-group">
+        <label for="price_type">销售价</label>
+        <select id="price_type" name="price_type" class="form-control" style="margin-bottom: 5px;">
+          <option value="than">小于</option>
+          <option value="lthan">小于等于</option>
+          <option value="bthan">大于</option>
+          <option value="gthan">大于等于</option>
+        </select>
+        <input type="text" id="price" name="price" onclick="this.value=''" class="form-control" placeholder="销售价">
+      </div>
+      <div class="form-group">
+        <label for="disabled">上架</label>
+        <input type="radio" name="disabled" value="false" <%=disabled=='false'?'checked':''%>>是
+        <input type="radio" name="disabled" value="true" <%=disabled=='true'?'checked':''%>>否
+      </div>
       <button id="searchBtn" type="button" class="btn btn-default">查询</button>
     </div>
   </div>
@@ -115,6 +140,11 @@
         "type": "post",
         "data": function (d) {
           d.name = $('#name').val();
+          d.stock_type = $('#stock_type').val();
+          d.stock = $('#stock').val();
+          d.price_type = $('#price_type').val();
+          d.price = $('#price').val();
+          d.disabled = $('input[name=disabled]:checked').val();
         }
       },
       "order": [[4, "desc"]],
@@ -160,7 +190,7 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/shop/goods/goods/edit/' + row.id + '" data-pjax>编辑</a></li>' +
+              '<li><a href="/private/shop/goods/goods/edit/' + row.id + '" target="_blank">编辑</a></li>' +
               '<li class="divider"></li>'+
               '<li><a href="javascript:;" onclick="up(' + row.id + ')">上架</a></li>' +
               '<li><a href="javascript:;" onclick="down(' + row.id + ')">下架</a></li>' +

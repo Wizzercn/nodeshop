@@ -250,5 +250,31 @@ module.exports = {
         });
       }
     });
+  },
+  homeData: function (cb) {
+    async.parallel({
+      numUp:function(cb){
+        Shop_goods.count({disabled:false}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDwon:function(cb){
+        Shop_goods.count({disabled:true}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numStock:function(cb){
+        var stock=sails.config.system.ShopConfig.shop_stock||10;
+        Shop_goods_products.query('select count(distinct goodsid)as num from Shop_goods_products where stock<?',[stock],function (pe, pc) {
+          cb(null,pc[0].num);
+        });
+      }
+    }, function (err, result) {
+      return cb({
+        numUp:result.numUp,
+        numDwon:result.numDwon,
+        numStock:result.numStock
+      });
+    });
   }
 };
