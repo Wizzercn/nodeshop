@@ -9,6 +9,11 @@ module.exports = {
     var data=req.data;
     data.myMenus=req.session.myMenus||[];
     return res.view('private/index.ejs',data);
+  },
+  orderData:function(req,res){
+    Shop_order.homeData(function(obj){
+      return res.json(obj);
+    });
   }
 };
 
