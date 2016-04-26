@@ -159,7 +159,7 @@ $(function(){
   $("#tip input[type=button]").on("click",function(){$("#tip").hide();});
   $(".land-add a").click(
     function () {
-      $(this).removeClass("land-addon").siblings().addClass("land-addon");
+      $(this).addClass("land-addon").siblings().removeClass("land-addon");
     });
 
   $(".land-addr").click(

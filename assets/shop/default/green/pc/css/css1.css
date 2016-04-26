@@ -280,9 +280,9 @@ a, a:hover {
 
 .k_logol{width:1200px;height:120px;display:block;margin:0 auto;}
 .k_logolf{width:590px;height:120px;float:left;}
-.logol_img{height:120px;background:#ffffff;}
+.logol_img{height:120px;background:#ffffff;line-height:80px;}
 /*添加.logol_img img*/
-.logol_img img{margin-top:25px;}
+.logol_img img{margin-top:25px;vertical-align: middle;}
 .k_logols{width:100px;height:80px;line-height:25px;text-indent:5px;display:block;float:left;margin-top:30px;color:#666666;font-size:16px;display:block;margin-left:25px;}
 .k_logols a{font-size:14px;color:#999999;}
 
@@ -1660,18 +1660,18 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .login-list{height:30px;line-height:30px;margin-top:10px;font-size:14px;color:#666;}
 .login-list i{color:#9e1634;vertical-align: top;font-size:12px;}
 .login-ent{height:35px;}
-.login-phone{width:250px;border:none;background:#fff;text-indent:10px;font-size:14px;}
-.login-verl{display:inline-block;float:left;width:100px;height:32px;border:none;background:#fff;text-indent:10px;}
+.login-phone{width:317px;height:33px;border:none;background:#fff;text-indent:10px;font-size:14px;float:left;line-height:33px;}
+.login-verl{display:inline-block;float:left;width:167px;height:32px;border:none;background:#fff;text-indent:10px;}
 .login-verc{display:inline-block;float:left;height:35px;width:80px;margin-left:5px;margin-right:5px;}
 .login-verr{display:inline-block;float:left;width:60px;height:35px;line-height:35px;color:#fe6000;border:none;background:#fff;}
-.login-phone-l{float:left;display:inline-block;width:137px;height:35px;border:none;background:#fff;text-indent:10px;font-size:14px;}
+.login-phone-l{float:left;display:inline-block;width:207px;height:35px;border:none;background:#fff;text-indent:10px;font-size:14px;}
 .login-phone-r{width:100px;height:35px;background:#faf4ea;border:1px solid #ddd;margin-left:10px;font-size:14px;}
 .u-agreement{height:30px;line-height:30px;padding-top:5px;}
 .u-agreement a{color:#fe6000;font-size:14px;}
-.login-btn{width:352px;margin-top:10px;height:40px;}
+.login-btn{width:352px;margin-top:20px;height:40px;}
 .login-btn input{display:inline-block;width:352px;height:35px;border:none;background:#00aa3a;color:#fff;text-align:center;font-size:14px;}
 .land-add{width:400px;padding:0 20px;margin:0 auto;height:45px;}
-.land-add a{display:inline-block;float:left;position:relative;top:4px;width:176px;height:40px;line-height:35px;font-size:16px;text-align:center;border:1px solid #ddd;background:#fff;}
+.land-add a{display:inline-block;float:left;position:relative;top:4px;width:176px;height:40px;line-height:40px;font-size:16px;text-align:center;background:#eee;}
 .land-addon{background:#00aa3a !important;color:#fff;border:none !important; }
 .land-addon:hover{color:#fff;}
 .login-list-r{float:right;color:#fe6000;}
@@ -1698,7 +1698,7 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .login_p{width:430px;float:left;margin-left:40px;margin-top:30px;}
 .login-enta{width:352px;height:35px;background:#fff;font-size:14px;line-height:35px;margin-top:20px;}
 
-.login-phonea{width:173px;border:none;background:#fff;text-indent:10px;font-size:14px;}
+.login-phonea{float:left;width:249px;height:32px;border:none;background:#fff;text-indent:10px;font-size:14px;line-height:32px;}
 .login_ma{display:inline-block;width:30px;float:left;text-align:center;height:30px;line-height: 30px;}
 .login_ma img{vertical-align: middle;display:inline-block;}
 .login-ent{width:350px;height:35px;border:1px solid #ddd;background:#fff;font-size:14px;line-height:35px;margin-top:20px;}
@@ -1709,6 +1709,8 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .login-entn{width:352px;height:35px;background:#fff;font-size:14px;line-height:35px;margin-top:20px;}
 .deng{width:905px;height:40px;line-height:40px;font-size:16px;margin:0 auto;border-bottom: 1px solid #ddd;margin-top:15px;}
 .deng img{padding-right: 10px;vertical-align: middle;}
+.login-phonev{float:left;width:238px;height:32px;border:none;background:#fff;text-indent:10px;font-size:14px;line-height:32px;}
+
 
 
 

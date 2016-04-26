@@ -7,13 +7,13 @@ if(bannerLink&&bannerLink.links>0){
 <div class="login cf2">
   <div class="deng"><img src="<%=CssPath%>/pc/img/hui_p.jpg"/>请登录</div>
   <div class="login_p">
-  <div class="land-add"><a id="t1" href="javascript:;" class="land-addr">普通登录</a><a id="t2" href="javascript:;" class="land-addl land-addon">动态短信登录</a></div>
+  <div class="land-add"><a id="t1" href="javascript:;" class="land-addr land-addon">普通登录</a><a id="t2" href="javascript:;" class="land-addl">动态短信登录</a></div>
 
   <ul class="login-main  login-mains">
     <li class="login-ent"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_per.png"/></span><input id="login_name" tabindex="1" value="<%=saveLoginname||''%>"  maxlength="100" type="text" placeholder="请输入用户名" class="login-phone"></li>
     <li class="error" style="display: none" id="login_name_tip"></li>
     <li class="login-enta"><div class="fot_m cf2"><span class="login_ma"><img src="<%=CssPath%>/pc/img/deng_s.png"/></span>
-        <input id="login_pass" tabindex="2"  maxlength="20" type="password" placeholder="请输入密码" class="login-phonea">
+        <input id="login_pass" tabindex="2"  maxlength="20" type="password" placeholder="请输入密码" class="login-phonev">
       </div><a href="javascript:$('#t2').trigger('click')" class="fortm" style="font-size: 12px;">忘记密码？</a>
     </li>
     <li class="error" style="display: none" id="login_pass_tip"></li>
