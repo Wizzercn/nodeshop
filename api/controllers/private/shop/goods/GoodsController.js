@@ -525,10 +525,13 @@ module.exports = {
     var name = req.body.name || '';
     var stock = StringUtil.getInt(req.body.stock);
     var stock_type = req.body.stock_type || '';
+    var price = StringUtil.getInt(req.body.price) * 100;
+    var price_type = req.body.price_type || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
+    var p_where = {};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
@@ -537,28 +540,44 @@ module.exports = {
       where.name = {like: '%' + name + '%'};
     }
     async.waterfall([function (cb) {
-      var goodsids=[];
+      var goodsids = [];
       if (stock > 0) {
-        var p_where = {};
         if (stock_type == 'lthan') {
           p_where.stock = {'<=': stock};
         } else if (stock_type == 'gthan') {
           p_where.stock = {'>=': stock};
+        } else if (stock_type == 'than') {
+          p_where.stock = {'<': stock};
+        } else if (stock_type == 'bthan') {
+          p_where.stock = {'>': stock};
         }
-        Shop_goods_products.find({select:['goodsid'],where:p_where}).exec(function (pe, pc) {
-          if(pc&&pc.length>0){
-            pc.forEach(function(go){
+      }
+      if (price > 0) {
+        if (price_type == 'lthan') {
+          p_where.price = {'<=': price};
+        } else if (price_type == 'gthan') {
+          p_where.price = {'>=': price};
+        } else if (price_type == 'than') {
+          p_where.price = {'<': price};
+        } else if (price_type == 'bthan') {
+          p_where.price = {'>': price};
+        }
+      }
+      if (JSON.stringify(p_where) != '{}') {
+        Shop_goods_products.find({select: ['goodsid'], where: p_where}).exec(function (pe, pc) {
+          if (pc && pc.length > 0) {
+            pc.forEach(function (go) {
               goodsids.push(go.goodsid);
             });
-            cb(null,goodsids);
-          }else cb(null,goodsids);
+            cb(null, goodsids);
+          } else cb(null, goodsids);
         });
-      }else cb(null,goodsids);
-    },function(goodsids,cb){
-      if(stock>0&&goodsids.length>0){
-        where.id=goodsids;
-      }else if(stock>0){
-        where.id=0;
+      } else cb(null, goodsids);
+    }, function (goodsids, cb) {
+      if (JSON.stringify(p_where) != '{}' && goodsids.length > 0) {
+        where.id = goodsids;
+      } else if (JSON.stringify(p_where) != '{}') {
+        where.id = 0;
       }
       cb(null);
     }
