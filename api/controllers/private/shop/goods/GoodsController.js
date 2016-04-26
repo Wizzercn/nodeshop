@@ -5,6 +5,8 @@ var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
+    req.data.stock=req.query.stock||0;
+    req.data.disabled=req.query.disabled||'';
     return res.view('private/shop/goods/goods/index', req.data);
   },
   add: function (req, res) {
@@ -527,6 +529,7 @@ module.exports = {
     var stock_type = req.body.stock_type || '';
     var price = StringUtil.getInt(req.body.price) * 100;
     var price_type = req.body.price_type || '';
+    var disabled = req.body.disabled || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
@@ -538,6 +541,12 @@ module.exports = {
     sort['id'] = 'desc';
     if (name) {
       where.name = {like: '%' + name + '%'};
+    }
+    if(disabled=='true'){
+      where.disabled=true;
+    }
+    if(disabled=='false'){
+      where.disabled=false;
     }
     async.waterfall([function (cb) {
       var goodsids = [];

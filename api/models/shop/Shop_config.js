@@ -19,6 +19,12 @@ module.exports = {
       type:'string',
       size:20
     },
+    shop_stock:{
+      type:'integer',
+      defaultsTo: function () {
+        return 10;
+      }
+    },
     list_load_type:{
       type:'string',
       size:20
