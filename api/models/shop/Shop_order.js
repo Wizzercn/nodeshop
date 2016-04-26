@@ -10,7 +10,7 @@ module.exports = {
   attributes: {
     id: {
       type: 'string',
-      size:20,
+      size: 20,
       primaryKey: true
     },
     cityId: {
@@ -20,161 +20,161 @@ module.exports = {
       }
     },
     //订单状态
-    status:{
+    status: {
       type: 'string',
-      enum: ['active','dead','finish'],
+      enum: ['active', 'dead', 'finish'],
       size: 10,
-      index:true
+      index: true
     },
     //订单重量
-    weight:{
+    weight: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
-    score:{
+    score: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //商品总额
-    goodsAmount:{
+    goodsAmount: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //运费
-    freightAmount:{
+    freightAmount: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //优惠金额
-    discountAmount:{
+    discountAmount: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //订单总额
-    finishAmount:{
+    finishAmount: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //支付金额 会发生部分支付的情况，如：余额支付
-    payAmount:{
+    payAmount: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //付款状态 0 待付款 1已付款 2申请退款 3已退款
-    payStatus:{
+    payStatus: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       },
-      index:true
+      index: true
     },
     //支付方式
-    payType:{
+    payType: {
       type: 'string',
-      size:100
+      size: 100
     },
     //发货状态 0未发货 1已发货 2部分发货
-    shipStatus:{
+    shipStatus: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       },
-      index:true
+      index: true
     },
     //配送方式id
-    shiptypeId:{
+    shiptypeId: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //配送方式
-    shiptypeName:{
+    shiptypeName: {
       type: 'string',
-      size:100
+      size: 100
     },
     //物流单号
-    shiptypeNo:{
+    shiptypeNo: {
       type: 'string',
-      size:100
+      size: 100
     },
-    addrId:{
+    addrId: {
       model: 'Shop_member_addr'
     },
     //收货地区
-    addrProvince:{
+    addrProvince: {
       type: 'string',
-      size:30
+      size: 30
     },
     //收货地区
-    addrCity:{
+    addrCity: {
       type: 'string',
-      size:30
+      size: 30
     },
     //收货地区
-    addrArea:{
+    addrArea: {
       type: 'string',
-      size:30
+      size: 30
     },
     //收货地址
-    addrAddr:{
+    addrAddr: {
       type: 'string',
-      size:255
+      size: 255
     },
     //收货人
-    addrName:{
+    addrName: {
       type: 'string',
-      size:100
+      size: 100
     },
     //收货人电话
-    addrMobile:{
+    addrMobile: {
       type: 'string',
-      size:20
+      size: 20
     },
     //配送时间
-    addrTime:{
+    addrTime: {
       type: 'string',
-      size:100
+      size: 100
     },
     //0  1企业 2个人
-    taxType:{
+    taxType: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       }
     },
     //企业税务号
-    taxNo:{
+    taxNo: {
       type: 'string',
-      size:100
+      size: 100
     },
     //发票抬头
-    taxTitle:{
+    taxTitle: {
       type: 'string',
-      size:100
+      size: 100
     },
     //发票内容
-    taxCentent:{
+    taxCentent: {
       type: 'string',
-      size:255
+      size: 255
     },
-    createdIp:{
+    createdIp: {
       type: 'string',
-      size:100
+      size: 100
     },
     //创建时间
     createdAt: {
@@ -182,44 +182,44 @@ module.exports = {
       defaultsTo: function () {
         return moment().format('X');
       },
-      index:true
+      index: true
     },
     //收货时间要求
     receivedTime: {
       type: 'integer'
     },
     //收货状态   0  1
-    receivedStatus:{
+    receivedStatus: {
       type: 'integer',
       defaultsTo: function () {
         return 0;
       },
-      index:true
+      index: true
     },
     //收货时间
     receivedAt: {
       type: 'integer',
-      index:true
+      index: true
     },
     //状态更新时间
     updateAt: {
       type: 'integer',
-      index:true
+      index: true
     },
     //会员ID
     memberId: {
       model: 'Shop_member',
-      index:true
+      index: true
     },
     //订单备注
-    memo:{
-      type:'string',
-      size:500
+    memo: {
+      type: 'string',
+      size: 500
     },
     //订单来源
-    source:{
+    source: {
       type: 'string',
-      enum: ['pc','wap','weixin'],
+      enum: ['pc', 'wap', 'weixin'],
       size: 10
     },
     //删除订单
@@ -228,7 +228,7 @@ module.exports = {
       defaultsTo: function () {
         return false;
       },
-      index:true
+      index: true
     },
     //收款单
     goods: {
@@ -246,16 +246,16 @@ module.exports = {
       via: 'orderId'
     }
   },
-  getOrderId:function(cb){
-    var s=moment().format('YYMMDDHHmm');
-    var n=StringUtil.getUuid(5,10);
-    var sn=s+n;
-    Shop_order.findOne(sn).exec(function(e,o){
-      if(o){
-        Shop_order.getOrderId(function(ss){
+  getOrderId: function (cb) {
+    var s = moment().format('YYMMDDHHmm');
+    var n = StringUtil.getUuid(5, 10);
+    var sn = s + n;
+    Shop_order.findOne(sn).exec(function (e, o) {
+      if (o) {
+        Shop_order.getOrderId(function (ss) {
           return cb(ss);
         });
-      }else{
+      } else {
         return cb(sn);
       }
     });
@@ -271,9 +271,9 @@ module.exports = {
           totalPage++;
         }
         Shop_order.find({
-            sort: sort,
-            where: where
-          })
+          sort: sort,
+          where: where
+        })
           .populate('goods', {sort: {productId: 'asc'}})
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
@@ -298,30 +298,114 @@ module.exports = {
       }
     });
   },
-  enumStatus:function(s){
-    var arr= new Array();
-    arr['active']='活动订单';
-    arr['dead']='已作废';
-    arr['finish']='已完成';
+  homeData: function (cb) {
+    var day = moment().format('YYYY-MM-DD 00:00:00');
+    var day_1 = moment(day).add(-6, 'days').format('X');
+    var day_2 = moment(day).add(-5, 'days').format('X');
+    var day_3 = moment(day).add(-4, 'days').format('X');
+    var day_4 = moment(day).add(-3, 'days').format('X');
+    var day_5 = moment(day).add(-2, 'days').format('X');
+    var day_6 = moment(day).add(-1, 'days').format('X');
+    var day_7 = moment(day).format('X');
+    async.parallel({
+      finishAmount: function (cb) {//统计一周内卖出(已支付)
+        Shop_order.find({disabled: false, status: {'!': 'dead'}, payStatus: 1})
+          .sum('finishAmount').then(function (results) {
+            cb(null, StringUtil.setPrice(results[0].finishAmount));
+          });
+      },
+      numDay_1:function(cb){//统计七天前订单数(不论是否支付)
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_1,'<':day_2}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_2:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_2,'<':day_3}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_3:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_3,'<':day_4}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_4:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_4,'<':day_5}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_5:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_5,'<':day_6}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_6:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_6,'<':day_7}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay_7:function(cb){
+        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_7}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numAll:function(cb){//总订单数
+        Shop_order.count({disabled: false,status:{'!':'dead'}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDf:function(cb){//待发
+        Shop_order.count({disabled: false,status:'active',shipStatus:0,or:[{payStatus:1,payType:{'!':'pay_cash'}},{payStatus:0,payType:'pay_cash'}]}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDs:function(cb){//待收
+        Shop_order.count({disabled: false,status:'active',shipStatus:[1,2],receivedStatus:0}).exec(function(e,o){
+          cb(null,o);
+        });
+      }
+    }, function (err, result) {
+      var numDay=[];
+      numDay.push(result.numDay_1);
+      numDay.push(result.numDay_2);
+      numDay.push(result.numDay_3);
+      numDay.push(result.numDay_4);
+      numDay.push(result.numDay_5);
+      numDay.push(result.numDay_6);
+      numDay.push(result.numDay_7);
+      return cb({
+        finishAmount:result.finishAmount,
+        numDay:numDay,
+        numAll:result.numAll,
+        numDf:result.numDf,
+        numDs:result.numDs
+      });
+    });
+  },
+  enumStatus: function (s) {
+    var arr = [];
+    arr['active'] = '活动订单';
+    arr['dead'] = '已作废';
+    arr['finish'] = '已完成';
     return arr[s];
   },
-  enumPayStatus:function(s){
-    var arr= new Array();
-    arr[0]='未支付';
-    arr[1]='已支付';
-    arr[2]='已付款至到担保方';
-    arr[3]='部分付款';
-    arr[4]='部分退款';
-    arr[5]='全额退款';
+  enumPayStatus: function (s) {
+    var arr = [];
+    arr[0] = '未支付';
+    arr[1] = '已支付';
+    arr[2] = '已付款至到担保方';
+    arr[3] = '部分付款';
+    arr[4] = '部分退款';
+    arr[5] = '全额退款';
     return arr[s];
   },
-  enumShipStatus:function(s){
-    var arr= new Array();
-    arr[0]='未发货';
-    arr[1]='已发货';
-    arr[2]='部分发货';
-    arr[3]='部分退货';
-    arr[4]='已退货';
+  enumShipStatus: function (s) {
+    var arr = [];
+    arr[0] = '未发货';
+    arr[1] = '已发货';
+    arr[2] = '部分发货';
+    arr[3] = '部分退货';
+    arr[4] = '已退货';
     return arr[s];
   }
 

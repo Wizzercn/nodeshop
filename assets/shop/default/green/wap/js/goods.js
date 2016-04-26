@@ -195,9 +195,77 @@ function add(){
     addNow();
   });
 }
+
+function loadProvince(){
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/wap/member/area/getArea",
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $.each(data.list,function(i,o){
+          $("#s_province_s").append('<a href="javascript:;" class="s_province_s" onclick="getCity(name)" name="'+ o.name+'">'+ o.name+'</a>');
+        });
+      }
+    }
+  });
+};
+
+function getCity(name){
+  $("a[name='"+name+"']").addClass("add_auto_on").siblings().removeClass("add_auto_on");
+  $(".add_autoa").addClass("trans");
+  $(".add_autoa").removeClass("width_n");
+  $.ajax({
+      type: "GET",
+      url: "/public/shop/wap/member/area/getArea?name=" + name,
+      dataType: "json",
+      success: function (data) {
+        if (data.code == 0) {
+          $("#s_city_s").empty();
+          var cityHtml = '';
+          $.each(data.list, function (i, o) {
+            cityHtml += '<a href="javascript:;" class="s_city_s" onclick="getArea(name)" name="' + o.name + '">' + o.name + '</a>';
+          });
+          $("#s_city_s").html(cityHtml);
+          $("#s_county_s").html("<h3>请先选择市</h3>");
+        }
+      }
+    });
+};
+
+function getArea(name){
+  $("a[name='"+name+"']").addClass("add_auto_on").siblings().removeClass("add_auto_on");
+  $(".add_autob").addClass("trans");
+  $(".add_autob").removeClass("width_n");
+  $(".add_autoa").addClass("width_n");
+  $.ajax({
+    type : "GET",
+    url : "/public/shop/wap/member/area/getArea?name="+name,
+    dataType : "json",
+    success : function(data) {
+      if(data.code==0){
+        $("#s_county_s").empty();
+        var countyHtml = '';
+        $.each(data.list,function(i,o){
+          countyHtml += '<a href="javascript:;" class="s_county_s" onclick="getAreaNext(name)" name="' + o.name + '">'+ o.name+'</a>';
+        });
+        $("#s_county_s").html(countyHtml);
+      }
+    }
+  });
+};
+
+function getAreaNext(name){
+  $("a[name='"+name+"']").addClass("add_auto_on").siblings().removeClass("add_auto_on");
+  $(".add_tan").removeClass("trans");
+  $(".add_tan").addClass("width_n");
+  $(".add_autob").addClass("width_n");
+};
+
 $(function(){
   buyNum();
   view(goodsid);
+  loadProvince();
   commentCount(goodsid);
   ajaxpage();
   con_ajaxpage();
@@ -221,5 +289,17 @@ $(function(){
 
   $('#goCon').on('click',function(){
     $('#conshow').show();
-  })
+  });
+
+  $(".d_adress").click(function(){
+    $(".add_tan").addClass("trans");
+    $(".add_tan").removeClass("width_n")
+  });
+  $(".add_tana .popup_head img").click(function(){
+    $(".add_tan").removeClass("trans");
+    $(".add_tan").addClass("width_n");
+    $(".add_autoa").addClass("width_n");
+    $(".add_autob").addClass("width_n");
+  });
+
 });

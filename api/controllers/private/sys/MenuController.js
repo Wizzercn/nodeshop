@@ -87,20 +87,20 @@ module.exports = {
   addDo: function (req, res) {
     var body = req.body;
     var parentId = 0;
-    if(body.parentId){
-      parentId=parseInt(body.parentId);
+    if (body.parentId) {
+      parentId = parseInt(body.parentId);
     }
     Sys_menu.findOne({id: parentId}).exec(function (err, unit) {
       var path = '';
       if (unit)path = unit.path || '';
       Sys_menu.find().where({parentId: parentId}).sort({path: 'desc'}).limit(1).exec(function (ferr, objs) {
-        if (objs&&objs.length > 0) {
+        if (objs && objs.length > 0) {
           var num = parseInt(objs[0].path) + 1;
           path = StringUtil.getPath(num, objs[0].path.length);
         } else {
           path = path + '0001';
         }
-        body.parentId=parentId;
+        body.parentId = parentId;
         body.path = path;
         body.location = 0;
         body.createdBy = req.session.user.id;
@@ -155,7 +155,7 @@ module.exports = {
   delete: function (req, res) {
     var id = req.params.id;
     Sys_menu.findOne(id).exec(function (e, menu) {
-      Sys_menu.destroy({path: {like:menu.path+'%'}}).exec(function (err) {
+      Sys_menu.destroy({path: {like: menu.path + '%'}}).exec(function (err) {
         if (err) {
           return res.json({code: 1, msg: sails.__('delete.fail')});
         } else {
@@ -193,12 +193,14 @@ module.exports = {
    */
   disable: function (req, res) {
     var id = req.params.id;
-    Sys_menu.update({id: id}, {disabled: true}).exec(function (err, obj) {
-      if (err) {
-        return res.json({code: 1, msg: sails.__('update.fail')});
-      } else {
-        return res.json({code: 0, msg: sails.__('update.ok')});
-      }
+    Sys_menu.findOne(id).exec(function (e, menu) {
+      Sys_menu.update({path: {like: menu.path + '%'}}, {disabled: true}).exec(function (err, obj) {
+        if (err) {
+          return res.json({code: 1, msg: sails.__('update.fail')});
+        } else {
+          return res.json({code: 0, msg: sails.__('update.ok')});
+        }
+      });
     });
   },
   sort: function (req, res) {

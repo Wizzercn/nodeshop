@@ -284,5 +284,33 @@ module.exports = {
         return cb(true);
       });
     });
+  },
+  homeData: function (cb) {
+    var day = moment().format('YYYY-MM-DD 00:00:00');
+    var day1 = moment(day).add(-1, 'days').format('X');
+    var day0 = moment(day).format('X');
+    async.parallel({
+      numAll:function(cb){
+        Shop_member.count().exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay1:function(cb){
+        Shop_member.count({reg_time:{'>=':day1,'<':day0}}).exec(function(e,o){
+          cb(null,o);
+        });
+      },
+      numDay:function(cb){
+        Shop_member.count({reg_time:{'>=':day0}}).exec(function(e,o){
+          cb(null,o);
+        });
+      }
+    }, function (err, result) {
+      return cb({
+        numAll:result.numAll,
+        numDay1:result.numDay1,
+        numDay:result.numDay
+      });
+    });
   }
 };
