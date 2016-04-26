@@ -139,7 +139,7 @@ module.exports = {
         p.gn = sobj.gn;
         p.spec = sobj.spec;
         p.lvprice = sobj.lvprice;
-        p.is_default=sobj.is_default;
+        p.is_default = sobj.is_default;
         if (!p.gn) {
           p.gn = pn;
         }
@@ -161,7 +161,7 @@ module.exports = {
           p.name = body.name;
           p.gn = sobj.gn;
           p.spec = sobj.spec;
-          p.is_default=sobj.is_default;
+          p.is_default = sobj.is_default;
           p.lvprice = sobj.lvprice;
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
@@ -174,8 +174,8 @@ module.exports = {
           }
           products.push(p);
         });
-        if(products.length>1){
-          goods.is_spec=true;
+        if (products.length > 1) {
+          goods.is_spec = true;
         }
       }
       //console.log('goods:::'+JSON.stringify(goods));
@@ -294,15 +294,15 @@ module.exports = {
         });
       }
     }, function (error, result) {
-      if(error){
+      if (error) {
         return res.notFound('没有此商品');
-      }else {
+      } else {
         req.data.goods = result.goods || {};
         req.data.brandlist = result.brandlist || [];
         req.data.typelist = result.typelist || [];
         req.data.lvlist = result.lvlist || [];
         req.data.lvpricelist = result.lvpricelist || [];
-        req.data.StringUtil=StringUtil;
+        req.data.StringUtil = StringUtil;
         return res.view('private/shop/goods/goods/edit', req.data);
       }
 
@@ -358,7 +358,7 @@ module.exports = {
         k++;
       });
       goods.imgurl = imgurl;
-      goods.is_spec=false;
+      goods.is_spec = false;
       if (!is_spec) {
         var sobj = specs[0];
         goods.price = StringUtil.getPrice(sobj.price);
@@ -383,7 +383,7 @@ module.exports = {
         p.name = body.name;
         p.gn = sobj.gn;
         p.spec = sobj.spec;
-        p.is_default=sobj.is_default;
+        p.is_default = sobj.is_default;
         p.lvprice = sobj.lvprice;
         products.push(p);
       } else {
@@ -404,7 +404,7 @@ module.exports = {
           p.gn = sobj.gn;
           p.spec = sobj.spec;
           p.lvprice = sobj.lvprice;
-          p.is_default=sobj.is_default;
+          p.is_default = sobj.is_default;
 
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
@@ -417,8 +417,8 @@ module.exports = {
           }
           products.push(p);
         });
-        if(products.length>1){
-          goods.is_spec=true;
+        if (products.length > 1) {
+          goods.is_spec = true;
         }
       }
       Shop_goods.update(id, goods).exec(function (e1, o1) {
@@ -518,11 +518,13 @@ module.exports = {
     });
   },
   data: function (req, res) {
-    var pageSize = parseInt(req.body.length);
-    var start = parseInt(req.body.start);
+    var pageSize = StringUtil.getInt(req.body.length);
+    var start = StringUtil.getInt(req.body.start);
     var page = start / pageSize + 1;
-    var draw = parseInt(req.body.draw);
+    var draw = StringUtil.getInt(req.body.draw);
     var name = req.body.name || '';
+    var stock = StringUtil.getInt(req.body.stock);
+    var stock_type = req.body.stock_type || '';
     var order = req.body.order || [];
     var columns = req.body.columns || [];
     var sort = {};
@@ -531,69 +533,97 @@ module.exports = {
       sort[columns[order[0].column].data] = order[0].dir;
     }
     sort['id'] = 'desc';
-    if(name){
-      where.name={like:'%'+name+'%'};
+    if (name) {
+      where.name = {like: '%' + name + '%'};
     }
-    Shop_goods.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        Shop_goods.find({
-            select: ['id','name','typeid','classid','disabled','location'],
-            sort: sort,
-            where:where
-           })
-          .populate('typeid')
-          .populate('classid')
-          .paginate({page: page, limit: pageSize})
-          .exec(function (err, list) {
-            return res.json({
-              "draw": draw,
-              "recordsTotal": pageSize,
-              "recordsFiltered": count,
-              "data": list
+    async.waterfall([function (cb) {
+      var goodsids=[];
+      if (stock > 0) {
+        var p_where = {};
+        if (stock_type == 'lthan') {
+          p_where.stock = {'<=': stock};
+        } else if (stock_type == 'gthan') {
+          p_where.stock = {'>=': stock};
+        }
+        Shop_goods_products.find({select:['goodsid'],where:p_where}).exec(function (pe, pc) {
+          if(pc&&pc.length>0){
+            pc.forEach(function(go){
+              goodsids.push(go.goodsid);
             });
-          });
-      } else {
-        return res.json({
-          "draw": draw,
-          "recordsTotal": pageSize,
-          "recordsFiltered": 0,
-          "data": []
+            cb(null,goodsids);
+          }else cb(null,goodsids);
         });
+      }else cb(null,goodsids);
+    },function(goodsids,cb){
+      if(stock>0&&goodsids.length>0){
+        where.id=goodsids;
+      }else if(stock>0){
+        where.id=0;
       }
+      cb(null);
+    }
+    ], function (aserr, asres) {
+      Shop_goods.count(where).exec(function (err, count) {
+        if (!err && count > 0) {
+          Shop_goods.find({
+            select: ['id', 'name', 'typeid', 'classid', 'disabled', 'location'],
+            sort: sort,
+            where: where
+          })
+            .populate('typeid')
+            .populate('classid')
+            .paginate({page: page, limit: pageSize})
+            .exec(function (err, list) {
+              return res.json({
+                "draw": draw,
+                "recordsTotal": pageSize,
+                "recordsFiltered": count,
+                "data": list
+              });
+            });
+        } else {
+          return res.json({
+            "draw": draw,
+            "recordsTotal": pageSize,
+            "recordsFiltered": 0,
+            "data": []
+          });
+        }
+      });
     });
   },
-  location:function(req,res){
-    var id=req.body.pk||'0';
-    var value=req.body.value||'0';
-    var name=req.body.name||'';
-    Shop_goods.update(id,{location:StringUtil.getInt(value)}).exec(function(err,obj){
-      return res.json({name:name,pk:id,value:value});
+  location: function (req, res) {
+    var id = req.body.pk || '0';
+    var value = req.body.value || '0';
+    var name = req.body.name || '';
+    Shop_goods.update(id, {location: StringUtil.getInt(value)}).exec(function (err, obj) {
+      return res.json({name: name, pk: id, value: value});
 
     });
   },
-  up:function(req,res){
+  up: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Shop_goods.update({id:ids},{disabled:false,upAt:moment().format('X')}).exec(function(err,obj){
-      return res.json({code:0,msg:'操作成功'});
+    Shop_goods.update({id: ids}, {disabled: false, upAt: moment().format('X')}).exec(function (err, obj) {
+      return res.json({code: 0, msg: '操作成功'});
 
     });
   },
-  down:function(req,res){
+  down: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Shop_goods.update({id:ids},{disabled:true,downAt:moment().format('X')}).exec(function(err,obj){
-      return res.json({code:0,msg:'操作成功'});
+    Shop_goods.update({id: ids}, {disabled: true, downAt: moment().format('X')}).exec(function (err, obj) {
+      return res.json({code: 0, msg: '操作成功'});
 
     });
   },
-  delete:function(req,res){
+  delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
     Shop_images.destroy({goodsid: ids}).exec(function (de1) {
       Shop_goods_products.destroy({goodsid: ids}).exec(function (de2) {
         Shop_goods_lv_price.destroy({goodsid: ids}).exec(function (de3) {
           Shop_goods.destroy({id: ids}).exec(function (de4) {
-            if(de1||de2||de3||de4){
+            if (de1 || de2 || de3 || de4) {
               return res.json({code: 1, msg: sails.__('delete.fail')});
-            }else {
+            } else {
               return res.json({code: 0, msg: sails.__('delete.ok')});
             }
           });
