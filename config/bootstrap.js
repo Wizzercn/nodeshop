@@ -14,7 +14,7 @@ module.exports.bootstrap = function(cb) {
   // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
   //加载数据库里的x配置项
   Sys_config.find().exec(function(e,o){
-    if(e)sails.log.warn('bootstrap.sys_config.err::'+JSON.stringify(e));
+    if(e)sails.log.warn(e);
     if(o){
       o.forEach(function(c){
         if('system.AppName'== c.config_key){
@@ -32,19 +32,19 @@ module.exports.bootstrap = function(cb) {
     }
   });
   Shop_config.findOne(1).exec(function(e,o){
-    if(e)sails.log.warn('bootstrap.shop_config.err::'+JSON.stringify(e));
+    if(e)sails.log.warn(e);
     if(o){
       sails.config.system.ShopConfig=o;
     }
   });
   Sms_config.findOne(1).exec(function(e,o){
-    if(e)sails.log.warn('bootstrap.sms_config.err::'+JSON.stringify(e));
+    if(e)sails.log.warn(e);
     if(o){
       sails.config.system.SmsConfig=o;
     }
   });
   Cms_site.findOne(1).exec(function(e,o){
-    if(e)sails.log.warn('bootstrap.site_config.err::'+JSON.stringify(e));
+    if(e)sails.log.warn(e);
     if(o){
       sails.config.system.SiteConfig=o;
     }
