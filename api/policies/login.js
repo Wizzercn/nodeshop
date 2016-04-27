@@ -13,7 +13,7 @@ module.exports = function (req, res, next) {
           if(ip== o.ip)
             passed=true;
         }else{
-          if(ip== '::ffff:'+o.ip||ip== '::ffff:127.0.0.1')
+          if(ip== '::ffff:'+o.ip||ip== '::ffff:127.0.0.1'||ip== o.ip)
             passed=true;
         }
       });
