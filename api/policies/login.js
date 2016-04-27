@@ -3,7 +3,7 @@
  */
 var StringUtil = require('../common/StringUtil');
 module.exports = function (req, res, next) {
-  var ip=req.ip;
+  var ip=StringUtil.getIp(req);
   var passed=false;
   sails.log.debug('ip::'+ip);
   Sys_ip.find({disabled:false}).exec(function(e,l){

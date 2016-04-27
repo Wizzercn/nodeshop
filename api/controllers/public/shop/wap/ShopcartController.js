@@ -888,7 +888,7 @@ module.exports = {
           if(req.data.browse_is_weixin){
             order.source = 'weixin';
           }
-          order.createdIp = req.ip;
+          order.createdIp = StringUtil.getIp(req);
           order.status = 'active';//['active','dead','finish']
           order.payStatus = 0;
           order.payType = payType;

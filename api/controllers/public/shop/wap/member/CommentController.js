@@ -139,7 +139,7 @@ module.exports = {
           goodsId:goods.goodsId,
           productId:goods.productId,
           orderId:goods.orderId,
-          createIp:req.ip,
+          createIp:StringUtil.getIp(req),
           createdAt:moment().format('X'),
           disabled:true
         }).exec(function(cErr,c){

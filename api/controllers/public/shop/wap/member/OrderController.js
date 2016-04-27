@@ -155,7 +155,7 @@ module.exports = {
                     payType: 'pay_money',
                     payName: '余额支付',
                     payAccount: member.nickname,
-                    payIp: req.ip,
+                    payIp: StringUtil.getIp(req),
                     payAt: moment().format('X'),
                     memo: '退款到账户余额:￥' + StringUtil.setPrice(order.finishAmount),
                     finishAt: moment().format('X'),

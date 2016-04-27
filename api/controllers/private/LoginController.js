@@ -71,7 +71,7 @@ module.exports = {
     if (user) {
       Sys_log.create({
         type: 'system', url: req.url, note: sails.__('private.login.logout'),
-        createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
+        createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getIp(req)
       }).exec(function (err, log) {
 
       });
@@ -129,7 +129,7 @@ module.exports = {
         req.session.roleCodes = roleCodes;
         Sys_user.update(user.id, {
           online: true,
-          lastIp: req.ip,
+          lastIp: StringUtil.getIp(req),
           loginAt: moment().format('X'),
           loginCount: user.loginCount + 1
         }, function (err) {
@@ -137,7 +137,7 @@ module.exports = {
         //登陆日志
         Sys_log.create({
           type: 'system', url: req.url, note: sails.__('private.login.success'),
-          createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
+          createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getIp(req)
         }).exec(function (err) {
         });
         if (roleIds.length > 0) {

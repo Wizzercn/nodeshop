@@ -37,7 +37,7 @@ module.exports = {
             };
           }
           //记录登录IP和时间
-          Shop_member_account.update(obj.id, {loginIp: req.ip, loginAt: moment().format('X')}).exec(function (ep, op) {
+          Shop_member_account.update(obj.id, {loginIp: StringUtil.getIp(req), loginAt: moment().format('X')}).exec(function (ep, op) {
           });
           if (saveLoginname) {
             res.cookie('saveLoginname', login_name, {
@@ -83,7 +83,7 @@ module.exports = {
             }
             //记录登录IP和时间
             Shop_member_account.update(obj.id, {
-              loginIp: req.ip,
+              loginIp: StringUtil.getIp(req),
               loginAt: moment().format('X')
             }).exec(function (ep, op) {
             });
@@ -124,7 +124,7 @@ module.exports = {
             lv_id: 0,
             nickname: mobile.substring(0, 3) + '****' + mobile.substring(7),
             mobile: mobile,
-            reg_ip: req.ip,
+            reg_ip: StringUtil.getIp(req),
             reg_source: 'pc'
           }).exec(function (err, member) {
             if (member) {

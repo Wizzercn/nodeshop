@@ -40,7 +40,7 @@ module.exports = {
                   memberId: bind1.memberId,
                   nickname: bind1.bind_nickname,
                   login_name: openid,
-                  loginIp: req.ip,
+                  loginIp: StringUtil.getIp(req),
                   loginAt: moment().format('X'),
                   loginWx: true,
                   binded: bind1.binded,
@@ -100,7 +100,7 @@ module.exports = {
                           nickname: wxuser.nickname,
                           headimgurl: wxuser.headimgurl || '',
                           sex: wxuser.sex || 0,
-                          reg_ip: req.ip,
+                          reg_ip: StringUtil.getIp(req),
                           reg_time: moment().format('X'),
                           reg_source: 'weixin'
                         }).exec(function (mmbErr, mmb) {
@@ -181,7 +181,7 @@ module.exports = {
                   memberId: bind.memberId,
                   nickname: bind.bind_nickname,
                   login_name: openid,
-                  loginIp: req.ip,
+                  loginIp: StringUtil.getIp(req),
                   loginAt: moment().format('X'),
                   loginWx: true,
                   binded: bind.binded,

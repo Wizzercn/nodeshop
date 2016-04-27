@@ -912,7 +912,7 @@ module.exports = {
         }, function (order, cb) {
           order.memo = memo;
           order.source = 'pc';
-          order.createdIp = req.ip;
+          order.createdIp = StringUtil.getIp(req);
           order.status = 'active';//['active','dead','finish']
           order.payStatus = 0;
           order.payType = payType;

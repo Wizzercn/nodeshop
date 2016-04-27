@@ -136,7 +136,7 @@ module.exports = {
     var consultContent = req.body.content;
     var contact = req.body.contact;
     var member = req.session.member;
-    var ip = req.ip;
+    var ip = StringUtil.getIp(req);
     if (!member){memberId = 0}else{memberId = member.memberId}
     var pushData = {memberId:memberId,
       contact:contact,

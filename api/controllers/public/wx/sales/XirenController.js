@@ -20,7 +20,7 @@ module.exports = {
         return res.view('public/wx/sales/xiren/index', req.data);
       } else {
         req.data.sales = sales;
-        Wx_sales_log.create({wxid: sales.wxid, salesid: sales.id, ip: req.ip}).exec(function (e, log) {
+        Wx_sales_log.create({wxid: sales.wxid, salesid: sales.id, ip: StringUtil.getIp(req)}).exec(function (e, log) {
           if (code) {
             Wx_config.findOne(sales.wxid).exec(function (ec, oc) {
               var api = new OAuth(oc.appid, oc.appsecret);
@@ -139,7 +139,7 @@ module.exports = {
     data.salesid = salesid;
     data.logid = logid;
     data.wxid = wxid;
-    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: StringUtil.getIp(req)}).exec(function (e, log) {
 
     });
     WechatService.init_js(req, res, function (api) {
@@ -207,7 +207,7 @@ module.exports = {
     data.logid = logid;
     data.wxid = wxid;
     data.my = my;
-    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: StringUtil.getIp(req)}).exec(function (e, log) {
 
     });
     Wx_config.findOne({id: wxid}).exec(function (ec, config) {
@@ -289,7 +289,7 @@ module.exports = {
     data.logid = logid;
     data.wxid = wxid;
     data.my = my;
-    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: req.ip}).exec(function (e, log) {
+    Wx_sales_log.create({wxid: wxid, salesid: salesid, ip: StringUtil.getIp(req)}).exec(function (e, log) {
 
     });
     Wx_config.findOne({id: wxid}).exec(function (ec, config) {
