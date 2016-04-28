@@ -28,9 +28,31 @@ module.exports = {
               Sys_job.update({name:'backupDb'},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
             }
           });
+        }else if(name=='deleteLog'){
+          self.deleteLog(-3,function(err){
+            if(err){
+              Sys_job.update({name:'deleteLog'},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
+            }else{
+              Sys_job.update({name:'deleteLog'},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
+            }
+          });
         }
       });
     }
+  },
+  /**
+   * 定时删除日志
+   * @param month
+   * @param cb
+   */
+  deleteLog:function(month,cb){
+    var day = moment().format('YYYY-MM-DD 00:00:00');
+    var day_month = moment(day).add(month, 'months').format('X');
+    Sys_log.destroy({createdAt:{'<':day_month}}).exec(function (err) {
+      if (err)
+        return cb(err);
+      return cb(null);
+    });
   },
   /**
    * 数据库备份
