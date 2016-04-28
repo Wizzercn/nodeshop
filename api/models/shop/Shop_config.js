@@ -134,6 +134,27 @@ module.exports = {
       defaultsTo: function () {
         return 0;
       }
+    },
+    oauth_open:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    oauth_weixin:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    oauth_qq:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    oauth_qq_info:{
+      type:'json'
     }
   }
 };

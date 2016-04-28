@@ -27,6 +27,8 @@
           </li>
           <li><a href="#shop_pay" data-toggle="tab">支付方式配置</a>
           </li>
+          <li><a href="#shop_login" data-toggle="tab">信任登录</a>
+          </li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade active in" id="shop_base">
@@ -233,6 +235,37 @@
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="shop_login">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_open" value="1" <%if(obj.oauth_open){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_open" value="0" <%if(!obj.oauth_open){%>checked<%}%>>禁用
+
+                </div>
+              </div>
+              <div id="div_oauth" style="display: <%=obj.oauth_open==true?'block':'none'%>">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">微信信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_weixin" value="1" <%if(obj.oauth_weixin){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_weixin" value="0" <%if(!obj.oauth_weixin){%>checked<%}%>>禁用
+                  注意：必须启用并配置微信支付才可启用
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">QQ信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_qq" value="1" <%if(obj.oauth_qq){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_qq" value="0" <%if(!obj.oauth_qq){%>checked<%}%>>禁用
+                  <button class="btn btn-info" type="button" id="btnOauth_qq" data-toggle="modal" data-target="#dialogOauth_qq"> 配置</button>
+                  <input name="oauth_qq_info" id="oauth_qq_info" type="hidden" value="<%-JSON.stringify(obj.oauth_qq_info)||{}%>">
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -341,6 +374,39 @@
     </div>
   </div>
 </div>
+<div id="dialogOauth_qq" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">QQ信任登录配置</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppId</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appid" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appid||''%><%}%>">
+
+            </div>
+          </div>
+        </div><div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppKey</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appkey" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appkey||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnQq" type="button" class="btn btn-default" data-dismiss="modal">清 除</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-loading-text="确定...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script language="JavaScript">
   $(document).ready(function () {
     $("input[name=member_weixinreg_auto]").on("click",function(){
@@ -352,8 +418,20 @@
         $("#div_wx_2").hide();
       }
     });
+    $("input[name=oauth_open]").on("click",function(){
+      if($(this).val()=='1'){
+        $("#div_oauth").show();
+      }else {
+        $("#div_oauth").hide();
+      }
+    });
     $("#btnWx").on("click",function(){
       $("#dialogWxpay input[type=text]").each(function(){
+        $(this).val("");
+      });
+    });
+    $("#btnQq").on("click",function(){
+      $("#dialogOauth_qq input[type=text]").each(function(){
         $(this).val("");
       });
     });
@@ -374,6 +452,10 @@
       wxpay.wxpay_key=$("#wxpay_key").val();
       wxpay.wxpay_appsecret=$("#wxpay_appsecret").val();
       $("#pay_wxpay_info").val(JSON.stringify(wxpay));
+      var qq={};
+      qq.qq_appid=$("#qq_appid").val();
+      qq.qq_appkey=$("#qq_appkey").val();
+      $("#oauth_qq_info").val(JSON.stringify(qq));
       $('#addForm').submit();
     });
       $('#addForm').ajaxForm({

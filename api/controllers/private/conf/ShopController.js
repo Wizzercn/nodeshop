@@ -20,6 +20,9 @@ module.exports = {
     body.pay_money=body.pay_money=='1';
     body.pay_alipay=body.pay_alipay=='1';
     body.pay_wxpay=body.pay_wxpay=='1';
+    body.oauth_open=body.oauth_open=='1';
+    body.oauth_weixin=body.oauth_weixin=='1';
+    body.oauth_qq=body.oauth_qq=='1';
     body.member_weixinreg_auto=body.member_weixinreg_auto=='1';
     body.pay_alipay_info=JSON.parse(body.pay_alipay_info)||{};
     body.pay_wxpay_info=JSON.parse(body.pay_wxpay_info)||{};

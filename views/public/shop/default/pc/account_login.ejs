@@ -28,12 +28,15 @@ if(bannerLink&&bannerLink.links>0){
     <li class="login-btn">
       <input id="doLogin" type="button" value="登录">
     </li>
-    <li class="coor" style="display:none"><span class="coor_a">合作网站账号登陆</span><span class="coor_b"><a href="#"><img src="<%=CssPath%>/pc/img/coor_a.jpg"/></a>
-    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_b.jpg"/></a>
-    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_c.jpg"/></a>
-    	<a href="#"><img src="<%=CssPath%>/pc/img/coor_d.jpg"/></a></span>
-      <span class="coor_c"><a href="#">更多</a></span>
+    <%if(sails.config.system.ShopConfig.oauth_open){%>
+    <li class="coor" >
+      <span class="coor_b">
+        <%if(sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_weixin){%>
+    	  <a href="javascript:loginWx()"><img src="<%=CssPath%>/pc/img/coor_d.jpg"/></a>
+        <%}%>
+      </span>
     </li>
+    <%}%>
     <li class="u-agreement">还不是商城会员，请立即<a href="/join">注册</a></li>
 
   </ul>
@@ -77,6 +80,18 @@ if(bannerLink&&bannerLink.links>0){
     <span><input value="确认" type="button" class="oc_pro" /><input type="button" value="取消" class="oc_pro1" /></span>
   </div>
 </div>
+<div id="wx" style="display:none ">
+  <div class="oc_pro_bg"></div>
+  <div class="oc_pro_m">
+    <span class="oc_pro_b">请使用微信扫描二维码</span>
+    <span class="oc_pro_a"><div id="qrCode"></div></span>
+    <span><input value="确认" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1" /></span>
+  </div>
+</div>
+<script type="text/javascript">
+  var domain="<%=sails.config.system.AppDomain%>";
+</script>
+<script src="/plugins/jquery.qrcode.min.js"></script>
 <script src="<%=CssPath%>/pc/js/login.js"></script>
 
 <%include common_buttom.ejs%>

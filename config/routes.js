@@ -52,6 +52,7 @@ module.exports.routes = {
   '/member/comment': 'public/shop/pc/member/CommentController.index',
   '/member/consult': 'public/shop/pc/member/ConsultController.index',
   '/member/password': 'public/shop/pc/member/PasswordController.index',
+  '/member/mobile': 'public/shop/pc/member/MobileController.index',
   '/member/pay': 'public/shop/pc/member/PayController.index',
   '/member/profile': 'public/shop/pc/member/ProfileController.index',
   '/member/score': 'public/shop/pc/member/ScoreController.index',

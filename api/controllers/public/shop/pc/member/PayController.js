@@ -34,6 +34,9 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.siteTitle='在线充值_'+req.data.siteTitle;
+      if(result.dbMember&&!result.dbMember.mobile){
+        return res.redirect('/member/mobile');
+      }
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/member_pay', req.data);
 
     });

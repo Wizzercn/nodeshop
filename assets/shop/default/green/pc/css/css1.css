@@ -1682,7 +1682,7 @@ a.down_btn_s:hover{ color:#fff; text-decoration:none; border:1px solid #ff3300;}
 .login-btna input{display:inline-block;width:340px;height:35px;border:none;background:#00aa3a;color:#fff;text-align:center;font-size:14px;}
 .coor{height:45px;padding-top:10px;line-height:25px;border-bottom:1px solid #ddd;width:340px}
 .coor_a{display:inline-block;float:left;height:40px;width:100px;}
-.coor_b{display:inline-block;width:180px;float:left;text-align:center;}
+.coor_b{display:inline-block;float:left;text-align:center;}
 .coor_b img{margin:0 2px;}
 .coor_c{display:inline-block;height:25px;width:44px;background:url(more.jpg) no-repeat center right;}
 .coor_c a{display:inline-block;width:100%;}

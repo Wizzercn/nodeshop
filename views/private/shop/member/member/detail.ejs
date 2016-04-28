@@ -58,8 +58,8 @@
               <td width="30%" align="left" colspan="3"><%-obj.addr||''%></td>
             </tr>
             <tr style="height: 30px;">
-              <td width="20%" align="right">注册IP：</td>
-              <td width="30%" align="left"><%- obj.reg_ip||'' %></td>
+              <td width="20%" align="right">注册来源：</td>
+              <td width="30%" align="left"><%- obj.reg_source||'' %></td>
               <td width="20%" align="right">注册时间：</td>
               <td width="30%" align="left"><%=obj.reg_time?moment(obj.reg_time*1000).format("YYYY-MM-DD HH:mm:ss"):''%></td>
             </tr>

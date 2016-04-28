@@ -5,6 +5,8 @@
 var captchapng = require('captchapng');
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
+var api;
+var OAuth = require('wechat-oauth');
 module.exports = {
   join: function (req, res) {
     req.data.StringUtil = StringUtil;
@@ -21,42 +23,45 @@ module.exports = {
     var login_name = req.body.login_name || '';
     var login_pass = req.body.login_pass || '';
     var saveLoginname = req.body.saveLoginname == 'true';
-      Shop_member_account.findOne({
-        login_name: login_name
-      }).populate('memberId').exec(function (err, obj) {
-        if (obj && obj.disabled) {
-          return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
-        } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
-          if (obj.memberId) {
-            req.session.member = {
-              memberId: obj.memberId.id,
-              nickname: obj.memberId.nickname,
-              login_name: login_name,
-              loginIp: obj.loginIp,
-              loginAt: obj.loginAt
-            };
-          }
-          //记录登录IP和时间
-          Shop_member_account.update(obj.id, {loginIp: StringUtil.getIp(req), loginAt: moment().format('X')}).exec(function (ep, op) {
-          });
-          if (saveLoginname) {
-            res.cookie('saveLoginname', login_name, {
-              maxAge: 1000 * 60 * 60 * 24 * 30,
-              httpOnly: true,
-              path: '/',
-              secure: false
-            });
-          } else {
-            res.cookie('saveLoginname', 'null', {maxAge: 0});
-          }
-          //将cookies购物车数据同步到数据库
-          Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
-            return res.json({code: 0, msg: '登录成功'});
+    Shop_member_account.findOne({
+      login_name: login_name
+    }).populate('memberId').exec(function (err, obj) {
+      if (obj && obj.disabled) {
+        return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
+      } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
+        if (obj.memberId) {
+          req.session.member = {
+            memberId: obj.memberId.id,
+            nickname: obj.memberId.nickname,
+            login_name: login_name,
+            loginIp: obj.loginIp,
+            loginAt: obj.loginAt
+          };
+        }
+        //记录登录IP和时间
+        Shop_member_account.update(obj.id, {
+          loginIp: StringUtil.getIp(req),
+          loginAt: moment().format('X')
+        }).exec(function (ep, op) {
+        });
+        if (saveLoginname) {
+          res.cookie('saveLoginname', login_name, {
+            maxAge: 1000 * 60 * 60 * 24 * 30,
+            httpOnly: true,
+            path: '/',
+            secure: false
           });
         } else {
-          return res.json({code: 2, msg: '用户名或密码错误'});
+          res.cookie('saveLoginname', 'null', {maxAge: 0});
         }
-      });
+        //将cookies购物车数据同步到数据库
+        Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
+          return res.json({code: 0, msg: '登录成功'});
+        });
+      } else {
+        return res.json({code: 2, msg: '用户名或密码错误'});
+      }
+    });
   },
   doLoginMobile: function (req, res) {
     var mobile = req.body.mobile || '';
@@ -345,39 +350,39 @@ module.exports = {
     }
   },
   change: function (req, res) {
-    var m=req.session.member;
-    if(!m|| m.memberId<1){
+    var m = req.session.member;
+    if (!m || m.memberId < 1) {
       return res.redirect('/wap/login');
     }
     async.parallel({
-      dbMember:function(done){
-        Shop_member.findOne(m.memberId).populate('lv_id').exec(function(e,o){
-          done(null,o);
+      dbMember: function (done) {
+        Shop_member.findOne(m.memberId).populate('lv_id').exec(function (e, o) {
+          done(null, o);
         });
       },
-      couponNum:function(done){
-        Shop_member_coupon.count({memberId:m.memberId,status:0}).exec(function(e,o){
-          done(null,o);
+      couponNum: function (done) {
+        Shop_member_coupon.count({memberId: m.memberId, status: 0}).exec(function (e, o) {
+          done(null, o);
         });
       },
-      orderNum:function(done){
-        Shop_order.count({memberId:m.memberId,disabled:false}).exec(function(e,o){
-          done(null,o);
+      orderNum: function (done) {
+        Shop_order.count({memberId: m.memberId, disabled: false}).exec(function (e, o) {
+          done(null, o);
         });
       }
     }, function (err, result) {
-      req.data.dbMember=result.dbMember||{};
-      req.data.sessionMember=m||{};
-      req.data.couponNum=result.couponNum||0;
-      req.data.orderNum=result.orderNum||0;
+      req.data.dbMember = result.dbMember || {};
+      req.data.sessionMember = m || {};
+      req.data.couponNum = result.couponNum || 0;
+      req.data.orderNum = result.orderNum || 0;
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/account_change', req.data);
     });
-    },
+  },
   doChange: function (req, res) {
-    var m=req.session.member;
-    if(!m|| m.memberId<1){
+    var m = req.session.member;
+    if (!m || m.memberId < 1) {
       return res.json({code: 4, msg: '登录失效，请刷新页面'});
     }
     var login_name = req.body.login_name || '';
@@ -388,19 +393,19 @@ module.exports = {
       if (obj && obj.disabled) {
         return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
       } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
-        if(!obj.memberId){
+        if (!obj.memberId) {
           return res.json({code: 4, msg: '绑定失败，请重试'});
         }
-        Shop_member.syncDataToMember(m.memberId,obj.memberId.id,function(val){
-            if(val){
-              m.memberId=obj.memberId.id;
-              m.binded=true;
-              req.session.member = m;
-              return res.json({code: 0, msg: '绑定成功'});
-            }else {
-              return res.json({code: 1, msg: '绑定失败'});
-            }
-          });
+        Shop_member.syncDataToMember(m.memberId, obj.memberId.id, function (val) {
+          if (val) {
+            m.memberId = obj.memberId.id;
+            m.binded = true;
+            req.session.member = m;
+            return res.json({code: 0, msg: '绑定成功'});
+          } else {
+            return res.json({code: 1, msg: '绑定失败'});
+          }
+        });
 
 
       } else {
@@ -409,8 +414,8 @@ module.exports = {
     });
   },
   doChangeMobile: function (req, res) {
-    var m=req.session.member;
-    if(!m|| m.memberId<1){
+    var m = req.session.member;
+    if (!m || m.memberId < 1) {
       return res.json({code: 4, msg: '登录失效，请刷新页面'});
     }
     var mobile = req.body.mobile || '';
@@ -425,16 +430,16 @@ module.exports = {
           if (obj && obj.disabled) {
             return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
           } else if (obj) {
-            if(!obj.memberId){
+            if (!obj.memberId) {
               return res.json({code: 4, msg: '绑定失败，请重试'});
             }
-            Shop_member.syncDataToMember(m.memberId,obj.memberId.id,function(val){
-              if(val){
-                m.memberId=obj.memberId.id;
-                m.binded=true;
+            Shop_member.syncDataToMember(m.memberId, obj.memberId.id, function (val) {
+              if (val) {
+                m.memberId = obj.memberId.id;
+                m.binded = true;
                 req.session.member = m;
                 return res.json({code: 0, msg: '绑定成功'});
-              }else {
+              } else {
                 return res.json({code: 1, msg: '绑定失败'});
               }
             });
@@ -444,6 +449,43 @@ module.exports = {
         });
       } else {
         return res.json({code: 1, msg: '手机动态密码不正确，请重新获取'});
+      }
+    });
+  },
+  oauthWeixinSend: function (req, res) {
+    var sn = req.params.id;
+    if (sails.config.system.ShopConfig.pay_wxpay) {
+      var obj = sails.config.system.ShopConfig.pay_wxpay_info;
+      var back_url = 'http://' + sails.config.system.AppDomain + '/public/shop/wap/account/oauthWeixinBack';
+      var redirect_uri = encodeURIComponent(back_url);
+      var state = sn;
+      var scope = 'snsapi_userinfo';
+      var oauth_url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + obj.wxpay_appid + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=' + scope + '&state=' + state + '#wechat_redirect';
+      return res.redirect(oauth_url);
+    } else {
+      return res.end();
+    }
+  },
+  oauthWeixinBack: function (req, res) {
+    var code = req.query.code;
+    var sn = req.query.state;
+    if (!api && sails.config.system.ShopConfig.pay_wxpay) {
+      var obj = sails.config.system.ShopConfig.pay_wxpay_info;
+      api = new OAuth(obj.wxpay_appid, obj.wxpay_appsecret);
+      api.setOpts({timeout: 35000});
+    }
+    api.getAccessToken(code, function (ew, ow) {
+      if (ow && ow.data) {
+        var openid = ow.data.openid;
+        api.getUser(openid, function (err, result) {
+          if(err)
+            return res.send('<span style="font-size: 3rem;">验证失败,请关闭此页面.</span>');
+          var userInfo = result||{};
+          userInfo.loginStatus = true;
+          RedisService.set('oauthWeixin_' + sn, JSON.stringify(userInfo), 10 * 60, function (err, reply) {
+            return res.send('<span style="font-size: 3rem;">验证成功,请关闭此页面.</span>');
+          });
+        });
       }
     });
   }
