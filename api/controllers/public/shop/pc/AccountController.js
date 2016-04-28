@@ -468,7 +468,11 @@ module.exports = {
             binded: bind1.binded,
             openid: openid
           };
-          return res.json({code: 0});
+          Shop_member.findOne(bind1.memberId).exec(function (findErr, findObj) {
+            Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+              return res.json({code: 0});
+            });
+          });
         } else {
           //如果不存在微信商城帐号，则新注册帐号(前提是微信支付和微信帐号、菜单都配置好)
           if (sails.config.system.ShopConfig.pay_wxpay) {
@@ -593,7 +597,11 @@ module.exports = {
                 binded: bind.binded,
                 openid: openid
               };
-              return res.json({code: 0});
+              Shop_member.findOne(bind.memberId).exec(function (findErr, findObj) {
+                Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+                  return res.json({code: 0});
+                });
+              });
             });
           } else {
             return res.json({code: 1});
