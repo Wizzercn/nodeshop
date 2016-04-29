@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/shop/order/order/add" data-pjax><i class="ti-plus"></i> 新建订单</a>
+    <!-- <a class="btn btn-primary navbar-btn" href="/private/shop/order/order/add" data-pjax><i class="ti-plus"></i> 新建订单</a> -->
 
     <!-- <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button> -->
   </div>
@@ -41,12 +41,12 @@
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h4 class="modal-title">删除</h4>
+            <h4 class="modal-title">取消订单</h4>
           </div>
           <div class="modal-body">
             <div class="row">
               <div class="col-xs-12">
-                删除后无法恢复，确定删除吗？ <br/>
+                确定取消该订单吗？ <br/>
               </div>
             </div>
           </div>
@@ -164,7 +164,7 @@
                   }
                   editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">退货</a></li>';
                 }
-                editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">取消</a></li>';
+                editMenu += '<li><a href="javascript:;" onclick="del(' + row.id + ')">取消</a></li>';
               }
 
               editMenu+='</ul></div>';
@@ -193,7 +193,7 @@
               datatable.ajax.reload();
             });
           }
-          function del(id) {
+          function cancel(id) {
             var dialog = $("#dialogDelete");
             dialog.modal("show");
             dialog.find("#ok").unbind("click");

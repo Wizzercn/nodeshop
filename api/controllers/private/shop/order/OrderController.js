@@ -121,39 +121,42 @@ module.exports = {
     var orderList = req.body.orderlist;
     var i = 0;
     orderList.forEach(function(orderId){
-      var ssql = 'update Shop_order o,Shop_order_goods og';
-      ssql = ssql+' set o.shipStatus=1,o.shiptypeId='+req.body.shiptypeId;
+      var ssql = 'update Shop_order o,Shop_order_goods og ';
+      ssql = ssql+'set o.shipStatus=1,o.shiptypeId='+req.body.shiptypeId;
       ssql = ssql+',o.shiptypeNo='+req.body.shiptypeNo;
       ssql = ssql+',og.sendNum = og.num where o.id = og.orderId and o.id = '+ orderId;
-      console.warn(ssql);
       Shop_order_goods.query(ssql,function(){
-          if(orderList.length==++i){
-            console.warn(i);
-            return res.view('private/shop/order/order/index', req.data);
-          }
-        });
+        if(orderList.length==++i){
+          return res.view('private/shop/order/order/index', req.data);
+        }
       });
-    },
-    pay: function (req,res){
-        Shop_order.findOne(req.params.id)
-        .populate('memberId')
-        .populate('goods')
-        .exec(function (err, obj) {
-          req.data.obj = obj || {};
-          req.data.moment = moment;
-          req.data.StringUtil = StringUtil;
-          return res.view('private/shop/order/order/pay', req.data);
-        });
-      },
-    doPay: function(req,res){
-      console.log(req.body);
-      var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
-      Shop_order.query(ssql,function(err,list){
-         res.json({code: 0});
-          // return res.view('private/shop/order/order/index', req.data);
-      });
-    },
-      addOrder: function (req,res) {
-
+    });
+  },
+  pay: function (req,res){
+    Shop_order.findOne(req.params.id)
+    .populate('memberId')
+    .populate('goods')
+    .exec(function (err, obj) {
+      req.data.obj = obj || {};
+      req.data.moment = moment;
+      req.data.StringUtil = StringUtil;
+      return res.view('private/shop/order/order/pay', req.data);
+    });
+  },
+  doPay: function(req,res){
+    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
+    Shop_order.query(ssql,function(err,list){
+      res.json({code: 0});
+      // return res.view('private/shop/order/order/index', req.data);
+    });
+  },
+  cancel: function (req,res) {
+    Shop_order.findOne(req.params.id)
+    .exec(function (err,obj) {
+      if(err) res.json({msg:订单不存在});
+      if (obj.payStatus == 0) {
+        
       }
-    }
+    });
+  }
+}
