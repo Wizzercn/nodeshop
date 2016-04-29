@@ -7,7 +7,7 @@ module.exports = {
       req.data.obj = obj||{};
       Shop_sales_coupon.find({disabled:false}).exec(function(couponErr,couponList){
         req.data.couponList = couponList||[];
-        return res.view('private/sales/register/index', req.data);
+        return res.view('private/shop/sales/register/index', req.data);
       });
     });
   },
