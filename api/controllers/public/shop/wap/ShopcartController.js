@@ -858,10 +858,14 @@ module.exports = {
             if(order.finishAmount<1){
               order.finishAmount=1;
             }
-            if(order.finishAmount-order.freightAmount-discountAmount>0){
-              order.score=Math.floor((order.finishAmount-order.freightAmount-discountAmount) / 100);
-            }else {
-              order.score=0;
+            if (ShopConfig.member_sorce_open) {//如果启用积分
+              if (order.finishAmount - order.freightAmount - discountAmount > 0) {//如果可积分则计算机房，向下求整
+                order.score = Math.floor((order.finishAmount - order.freightAmount - discountAmount) / 100);
+              } else {
+                order.score = 0;
+              }
+            } else {
+              order.score = 0;
             }
             return cb(null, order);
           });

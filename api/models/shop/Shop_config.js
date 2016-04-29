@@ -105,6 +105,12 @@ module.exports = {
     pay_wxpay_info:{
       type:'json'
     },
+    member_sorce_open:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     member_reg_coupon:{
       type:'integer',
       defaultsTo: function () {
