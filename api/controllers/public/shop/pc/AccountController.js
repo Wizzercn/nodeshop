@@ -442,6 +442,139 @@ module.exports = {
       res.redirect('/');
     }
   },
+  oauthQqStatus:function(req, res){
+    var oInfo=req.body.oInfo||{};
+    if(oInfo.openid){
+      Shop_member_bind.findOne({bind_type:'qq',bind_openid: openid}).exec(function (bindErr1, bind1) {
+        if (bind1) {
+          //如果存在微信商城帐号
+          req.session.member = {
+            memberId: bind1.memberId,
+            nickname: bind1.bind_nickname,
+            login_name: openid,
+            loginIp: StringUtil.getIp(req),
+            loginAt: moment().format('X'),
+            loginQq: true,
+            binded: bind1.binded,
+            openid: openid
+          };
+          Shop_member.findOne(bind1.memberId).exec(function (findErr, findObj) {
+            Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+              return res.json({code: 0});
+            });
+          });
+        } else {
+          //如果不存在微信商城帐号，则新注册帐号(前提是微信支付和微信帐号、菜单都配置好)
+            async.waterfall([
+              function (done) {
+                //是否开启自动创建商城帐号
+                Shop_member_bind.findOne({bind_type:'qq',bind_openid: openid}).exec(function (bindErr, bind) {
+                  if (!bind) {
+                    //如果帐号绑定表数据不存在，则创建
+                    var sex=0;
+                    if(oInfo.gender=='男'){
+                      sex=1;
+                    }else if(oInfo.gender=='女'){
+                      sex=2;
+                    }
+                    Shop_member.create({
+                      nickname: oInfo.nickname,
+                      headimgurl: oInfo.figureurl_1 || '',
+                      sex: sex,
+                      reg_ip: StringUtil.getIp(req),
+                      reg_time: moment().format('X'),
+                      reg_source: 'oauth_qq'
+                    }).exec(function (mmbErr, mmb) {
+                      Shop_member_bind.create({
+                        memberId: mmb.id,
+                        bind_type: 'qq',
+                        bind_openid: openid,
+                        bind_nickname: oInfo.nickname,
+                        disabled: false,
+                        createdAt: moment().format('X')
+                      }).exec(function (bcErr, bc) {
+                        bc.jiSuan = true;
+                        return done(null, bc);
+                      });
+                    });
+                  } else {
+                    Shop_member_bind.update({bind_type:'qq',bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                      //如果是取消关注重新关注的，则不进行积分优惠券计算
+                      bind.jiSuan = false;
+                      return done(null, bind);
+                    });
+                  }
+                });
+              }
+              , function (bind, done) {
+                if (bind.jiSuan == false)
+                  return done(null, bind);
+                Shop_member.findOne(bind.memberId).exec(function (errmmb, mmb) {
+                  var member_reg_score = sails.config.system.ShopConfig.member_reg_score || 0;
+                  if (member_reg_score > 0) {
+                    Shop_member.update(mmb.id, {score: mmb.score + member_reg_score}).exec(function (mscoreErr, mscore) {
+                      Shop_member_score_log.create({
+                        memberId: mmb.id,
+                        oldScore: mmb.score,
+                        newScore: mmb.score + member_reg_score,
+                        diffScore: member_reg_score,
+                        note: 'QQ信任登录注册赠送',
+                        createdBy: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (logErr, log) {
+                        return done(null, bind);
+                      });
+                    });
+                  } else
+                    return done(null, bind);
+                });
+              }, function (bind, done) {
+                if (bind.jiSuan == false)
+                  return done(null, bind);
+                //注册赠送优惠券
+                if (sails.config.system.ShopConfig.member_reg_coupon > 0) {
+                  Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function (couponErr, coupon) {
+                    if (coupon.disabled == false && coupon.maxNum > coupon.hasNum) {
+                      Shop_member_coupon.create({
+                        memberId: bind.memberId,
+                        couponId: coupon.id,
+                        couponName: coupon.name,
+                        couponPrice: coupon.price,
+                        status: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (mcErr, mc) {
+                        return done(null, bind);
+                      });
+                    } else {
+                      return done(null, bind);
+                    }
+                  });
+                } else {
+                  return done(null, bind);
+                }
+              }
+            ], function (e, bind) {
+              req.session.member = {
+                memberId: bind.memberId,
+                nickname: bind.bind_nickname,
+                login_name: openid,
+                loginIp: StringUtil.getIp(req),
+                loginAt: moment().format('X'),
+                loginQq: true,
+                binded: bind.binded,
+                openid: openid
+              };
+              Shop_member.findOne(bind.memberId).exec(function (findErr, findObj) {
+                Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+                  return res.json({code: 0});
+                });
+              });
+            });
+          }
+      });
+
+    }
+  },
   oauthWeixin: function (req, res) {
     var sn = StringUtil.getUuid(6, 10);
     RedisService.set('oauthWeixin_' + sn, JSON.stringify({loginStatus: false}), 10 * 60, function (err, reply) {
@@ -455,7 +588,7 @@ module.exports = {
       var user = JSON.parse(o);
       if (!user.loginStatus)return res.json({code: 1});
       var openid = user.openid;
-      Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr1, bind1) {
+      Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr1, bind1) {
         if (bind1) {
           //如果存在微信商城帐号
           req.session.member = {
@@ -506,7 +639,7 @@ module.exports = {
               },
               function (wxuser, done) {
                 //是否开启自动创建商城帐号
-                Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr, bind) {
+                Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr, bind) {
                   if (!bind) {
                     //如果帐号绑定表数据不存在，则创建
                     Shop_member.create({
@@ -530,9 +663,9 @@ module.exports = {
                       });
                     });
                   } else {
-                    Shop_member_bind.update({bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                    Shop_member_bind.update({bind_type:'weixin',bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
                       //如果是取消关注重新关注的，则不进行积分优惠券计算
-                      bc.jiSuan = false;
+                      bind.jiSuan = false;
                       return done(null, bind);
 
                     });

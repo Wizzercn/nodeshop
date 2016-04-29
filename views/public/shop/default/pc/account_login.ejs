@@ -34,6 +34,9 @@ if(bannerLink&&bannerLink.links>0){
         <%if(sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_weixin){%>
     	  <a href="javascript:loginWx()"><img src="<%=CssPath%>/pc/img/coor_d.jpg"/></a>
         <%}%>
+        <%if(sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_qq){%>
+        <span id="qqLoginBtn"></span>
+        <%}%>
       </span>
     </li>
     <%}%>
@@ -88,10 +91,43 @@ if(bannerLink&&bannerLink.links>0){
     <span><input value="确认" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1" /></span>
   </div>
 </div>
+
 <script type="text/javascript">
   var domain="<%=sails.config.system.AppDomain%>";
 </script>
+<%if(sails.config.system.ShopConfig.oauth_open&&sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_weixin){%>
 <script src="/plugins/jquery.qrcode.min.js"></script>
+<%}%>
+<%if(sails.config.system.ShopConfig.oauth_open&&sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_qq){
+var qq_appid='';
+  if(sails.config.system.ShopConfig.oauth_qq_info){
+    qq_appid=sails.config.system.ShopConfig.oauth_qq_info.qq_appid;
+}
+%>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="<%=qq_appid||''%>" data-redirecturi="http://<%=sails.config.system.AppDomain%>/login" charset="utf-8" data-callback="true"></script>
+<script type="text/javascript">
+  QC.Login({
+    btnId:"qqLoginBtn",    //插入按钮的节点id
+    scope: "get_user_info"
+  },function(oInfo, oOpts){
+    if(QC.Login.check()){
+      QC.Login.getMe(function(openId, accessToken){
+        oInfo.openid=openId;
+        $.post(
+          "/public/shop/pc/account/oauthQqStatus",
+          oInfo,
+          function(result){
+            if(result.code==0){
+              window.location.href=$("#r").val()||'/member';
+            }else{
+              $("#tip .oc_pro_a").html('登录失败');
+              $("#tip").show();
+            }
+          },'json'
+        );
+      });
+    }
+  });</script>
+<%}%>
 <script src="<%=CssPath%>/pc/js/login.js"></script>
-
 <%include common_buttom.ejs%>
