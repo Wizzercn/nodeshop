@@ -1,3 +1,8 @@
+<style>
+  .order-item-select {
+    border-color: #6AABE0 !important;
+  }
+</style>
 <form action="/private/shop/order/order/doSend" method="post">
 <div class="modal-body no-p">
   <div class="row">
@@ -53,8 +58,10 @@
             </tr>
           </table>
           <%if(obj.orderList){obj.orderList.forEach(function(obj){%>
-        <div>
-          <%=obj.id%><input type="checkbox" name="orderlist[]" value="<%=obj.id%>" checked="checked">
+        <div class="order-item" style="border: solid 1px #CCC;margin: 5px 25px;padding: 5px;">
+          <div style="float:left">
+          <input type="checkbox" class='order-chk' name="orderlist[]" style="display:none" value="<%=obj.id%>"><%=obj.id%>
+        </div>
           <table width="80%" style="padding: 10px;margin-left: 25px;">
             <thead>
               <tr>
@@ -88,3 +95,11 @@
     <button type="submit" class="btn btn-primary btn-block" data-dismiss="">发货</button>
   </div>
     </form>
+<script>
+$('.order-chk').bind('change',function(e){
+  $(this).parent().parent().toggleClass('order-item-select');
+});
+$('.order-item').bind('click',function(e){
+  $(this).find('.order-chk').click();
+});
+</script>

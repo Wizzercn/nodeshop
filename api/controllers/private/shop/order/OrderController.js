@@ -19,22 +19,22 @@ module.exports = {
     var orderStatus = req.body.orderStatus||'0';
     switch (orderStatus) {
       case '0':
-        where = {shipStatus:0};
-        break;
+      where = {shipStatus:0};
+      break;
       case '1':
-        where = {shipStatus:1};
-        break;
+      where = {shipStatus:1};
+      break;
       case '2':
-        where = {payStatus:0};
-        break;
+      where = {payStatus:0};
+      break;
       case '3':
-        where = {payStatus:1};
-        break;
+      where = {payStatus:1};
+      break;
       case 'all':
-        where = {};
-        break;
+      where = {};
+      break;
       default:
-        where = {shipStatus:0};
+      where = {shipStatus:0};
 
     }
     // var where = {shipStatus:orderStatus};
@@ -69,7 +69,6 @@ module.exports = {
     .populate('memberId')
     .populate('goods')
     .exec(function (err, obj) {
-      sails.log.debug(obj);
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
@@ -84,6 +83,15 @@ module.exports = {
     .exec(function (err, obj) {
       orderObj = obj||{};
       Shop_order_ship.find().exec(function (err,obj) {
+        var where = {
+          shipStatus:0,
+          addrCity:orderObj.addrCity,
+          addrArea:orderObj.addrArea,
+          addrAddr:orderObj.addrAddr,
+          addrName:orderObj.addrName,
+          addrMobile:orderObj.addrMobile,
+          payStatus:orderObj.payStatus,
+        }
         orderObj['ship'] = obj;
         //查找可合并发货订单
         Shop_order.find({
@@ -92,12 +100,13 @@ module.exports = {
           addrArea:orderObj.addrArea,
           addrAddr:orderObj.addrAddr,
           addrName:orderObj.addrName,
-          addrMobile:orderObj.addrMobile
+          addrMobile:orderObj.addrMobile,
+          payStatus:orderObj.payStatus,
+
         })
         .populate('goods')
         .exec(function (orderlisterr, orderlistobj) {
           orderObj['orderList'] = orderlistobj||{};
-          sails.log.debug(orderObj);
           req.data.moment = moment;
           req.data.StringUtil = StringUtil;
           req.data.obj = orderObj;
@@ -110,35 +119,41 @@ module.exports = {
 
   doSend: function(req,res){
     var orderList = req.body.orderlist;
-
-        Shop_order.update(
-          {id:1},
-          {
-            shipStatus:'1',
-            shiptypeId:req.body.shiptypeId,
-            shiptypeNo:req.body.shiptypeNo
-          }
-        ).exec(function (err, list) {
-          Shop_order_goods.query('UPDATE Shop_order_goods SET sendNum=num where orderId='+orderid,function(){
+    var i = 0;
+    orderList.forEach(function(orderId){
+      var ssql = 'update Shop_order o,Shop_order_goods og';
+      ssql = ssql+' set o.shipStatus=1,o.shiptypeId='+req.body.shiptypeId;
+      ssql = ssql+',o.shiptypeNo='+req.body.shiptypeNo;
+      ssql = ssql+',og.sendNum = og.num where o.id = og.orderId and o.id = '+ orderId;
+      console.warn(ssql);
+      Shop_order_goods.query(ssql,function(){
+          if(orderList.length==++i){
+            console.warn(i);
             return res.view('private/shop/order/order/index', req.data);
-          });
+          }
         });
-  },
+      });
+    },
+    pay: function (req,res){
+        Shop_order.findOne(req.params.id)
+        .populate('memberId')
+        .populate('goods')
+        .exec(function (err, obj) {
+          req.data.obj = obj || {};
+          req.data.moment = moment;
+          req.data.StringUtil = StringUtil;
+          return res.view('private/shop/order/order/pay', req.data);
+        });
+      },
+    doPay: function(req,res){
+      console.log(req.body);
+      var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
+      Shop_order.query(ssql,function(err,list){
+         res.json({code: 0});
+          // return res.view('private/shop/order/order/index', req.data);
+      });
+    },
+      addOrder: function (req,res) {
 
-
-  pay: function (req,res){
-    Shop_order.findOne(req.params.id)
-    .populate('memberId')
-    .populate('goods')
-    .exec(function (err, obj) {
-      sails.log.debug(obj);
-      req.data.obj = obj || {};
-      req.data.moment = moment;
-      req.data.StringUtil = StringUtil;
-      return res.view('private/shop/order/order/pay', req.data);
-    });
-  },
-  addOrder: function (req,res) {
-
-  }
-}
+      }
+    }
