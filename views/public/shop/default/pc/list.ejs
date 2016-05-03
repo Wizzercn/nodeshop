@@ -6,11 +6,12 @@
 <div id="schedule">
   <div class="schedule_h">
     <span class="schedule_hf">当前位置:</span>
-    <div class="schedule_hs"><a href="/">首页</a>  <%if(classObj&&classObj.parentId>0){%>/ <a href="/list/<%=classObj.parentClass.id||0%>"><%=classObj.parentClass.name||'没有此分类'%></a> <%}%>/ <a href="/list/<%=classObj.id||0%>" class="color_y"><%=classObj.name||'没有此分类'%></a></div>
+    <div class="schedule_hs"><a href="/">首页</a>  <%if(classObj&&classObj.parentId>0){%>> <a href="/list/<%=classObj.parentClass.id||0%>"><%=classObj.parentClass.name||'没有此分类'%></a> <%}%>> <a href="/list/<%=classObj.id||0%>" class="color_y"><%=classObj.name||'没有此分类'%></a></div>
   </div>
 </div>
 <%if(bannerLink&&bannerLink.links&&bannerLink.links.length>0){
-var link=bannerLink.links[0];
+  var link = bannerLink.links[0];
+
 %>
 
 <div class="p_classify cf clear">
@@ -18,15 +19,40 @@ var link=bannerLink.links[0];
 </div>
 <%}%>
 
+<%
+sort_type == 'asc'?'desc':'asc';
+
+var sortObj = {
+  'default': ['默认排序', '/list/' + id],
+  'buy': ['销量', '/list/' + id + '?sort_name=buy&sort_type=' + sort_type],
+  'price': ['价格', '/list/' + id + '?sort_name=price&sort_type=' + sort_type]
+}
+
+%>
+
 <div class="wrap">
-  <ul class="mall_rf">
-    <li ><a href="/list/<%=id%>" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
-    <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="/list/<%=id%>?sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
-    <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="/list/<%=id%>?sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
-    <%classChildren.forEach(function(l){%>
-    <li><a href="/list/<%=l.id%>"><%=l.name%></a></li>
+  <ul class="m_classfic">
+    <%classNext.forEach(function(l){%>
+    <li><a href="/list/<%=l.id%>" class="round_s<%if(l.id == id){%> m_classficon<%}%>"><%=l.name%></a></li>
     <%});%>
   </ul>
+  <div class="pai_m">
+    <div class="pai_w">
+      <i><%=sortObj[sort_name][0]%></i><img src="<%=CssPath%>/pc/img/paix.png" class="paix_ka"/><img src="<%=CssPath%>/pc/img/paix_a.png" class="paix_kb c_hide"/>
+      <ul class="mall_rf pai_a c_hide">
+        <%if(sort_name != 'default'){%>
+        <li><a href="/list/<%=id%>">默认排序</a></li>
+        <%}%>
+        <%if(sort_name != 'buy'){%>
+        <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="/list/<%=id%>?sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+        <%}%>
+        <%if(sort_name != 'price'){%>
+        <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="/list/<%=id%>?sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+        <%}%>
+      </ul>
+    </div>
+
+  </div>
 
   <div class="k_hotcfg">
     <%goodsData.data.forEach(function(hotgoods){
@@ -56,5 +82,15 @@ var link=bannerLink.links[0];
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
+<script>
+  $(".pai_w").mouseover(function(){
+    $(".pai_a").removeClass("c_hide");
+    $(".paix_ka").addClass("c_hide");
+    $(".paix_kb").removeClass("c_hide");});
+  $(".pai_w").mouseout(function(){
+    $(".pai_a").addClass("c_hide");
+    $(".paix_ka").removeClass("c_hide");
+    $(".paix_kb").addClass("c_hide");});
+</script>
 <%include common_buttom.ejs%>
 

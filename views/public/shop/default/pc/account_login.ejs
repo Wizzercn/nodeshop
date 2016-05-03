@@ -2,6 +2,8 @@
 <%var imgurl=CssPath+'/pc/img/logins-bg.jpg';
 if(bannerLink&&bannerLink.links>0){
   imgurl=bannerLink.links[0].imgurl;
+}else{
+  imgurl= CssPath + "/pc/img/lodim.jpg";
 }
 %>
 <div class="login cf2">
@@ -66,7 +68,7 @@ if(bannerLink&&bannerLink.links>0){
 
   </ul>
   </div>
-  <div class="deng_r"><img src="<%=CssPath%>/pc/img/lodim.jpg" /></div>
+  <div class="deng_r"><img src="<%=imgurl%>" /></div>
 </div>
 <input id="r" type="hidden" value="<%=r%>">
 <div id="tip" style="display: none">
