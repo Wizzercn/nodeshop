@@ -24,7 +24,7 @@ module.exports = {
     body.pay_wxpay_info=JSON.parse(body.pay_wxpay_info)||{};
     Shop_config.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: '保存失败'});
-      sails.config.system.ShopConfig=body;
+      sails.config.system.ShopConfig=obj[0];
       return res.json({code: 0, msg: '保存成功'});
     });
   }

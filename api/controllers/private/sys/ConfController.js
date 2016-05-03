@@ -70,16 +70,16 @@ module.exports = {
     var c = req.body;
     Sys_config.update({id: c.id}, c).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
-      if ('system.AppName' == c.config_key) {
-        sails.config.system.AppName = c.config_val || '';
-      } else if ('system.AppShrotName' == c.config_key) {
-        sails.config.system.AppShrotName = c.config_val || '';
-      } else if ('system.AppDomain' == c.config_key) {
-        sails.config.system.AppDomain = c.config_val || '';
-      } else if ('system.AppCopyright' == c.config_key) {
-        sails.config.system.AppCopyright = c.config_val || '';
+      if ('system.AppName' == obj[0].config_key) {
+        sails.config.system.AppName = obj[0].config_val || '';
+      } else if ('system.AppShrotName' == obj[0].config_key) {
+        sails.config.system.AppShrotName = obj[0].config_val || '';
+      } else if ('system.AppDomain' == obj[0].config_key) {
+        sails.config.system.AppDomain = obj[0].config_val || '';
+      } else if ('system.AppCopyright' == obj[0].config_key) {
+        sails.config.system.AppCopyright = obj[0].config_val || '';
       } else {
-        sails.config.system.MyConfig[c.config_key] = c.config_val || '';
+        sails.config.system.MyConfig[obj[0].config_key] = obj[0].config_val || '';
       }
       return res.json({code: 0, msg: sails.__('update.ok')});
     });

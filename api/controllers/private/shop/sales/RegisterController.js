@@ -17,7 +17,7 @@ module.exports = {
     body.member_sorce_open=body.member_sorce_open=='1';
     Shop_config.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: '保存失败'});
-      sails.config.system.ShopConfig=body;
+      sails.config.system.ShopConfig=obj[0];
       return res.json({code: 0, msg: '保存成功'});
     });
   }
