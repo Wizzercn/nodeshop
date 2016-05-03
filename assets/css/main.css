@@ -7000,3 +7000,6 @@ td.no-b {
   font: 12px Arial, Helvetica, sans-serif;
   text-align: center;
 }
+.order-dialog-table-tr{
+  margin-top: 2px;
+}

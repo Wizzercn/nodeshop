@@ -17,7 +17,7 @@ module.exports = {
     },
     bind_type:{
       type:'string',
-      size:10
+      size:20
     },
     bind_openid:{
       type:'string',
