@@ -71,5 +71,21 @@ module.exports = {
         return res.json({code: 0, msg: sails.__('update.ok')});
       }
     });
+  },
+  delete: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    if(ids==sails.config.system.ShopConfig.member_reg_coupon||ids==sails.config.system.ShopConfig.member_weixinreg_coupon
+      ||ids.indexOf(sails.config.system.ShopConfig.member_reg_coupon+'')>-1
+      ||ids.indexOf(sails.config.system.ShopConfig.member_weixinreg_coupon+'')>-1
+    ){
+      return res.json({code: 1, msg: '请先到“注册营销”中解绑优惠券'});
+    }
+    Shop_sales_coupon.destroy({id: ids}).exec(function (err) {
+      if (err)
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      Shop_member_coupon.update({couponId:ids},{status:2}).exec(function(e,o){});
+      return res.json({code: 0, msg: sails.__('delete.ok')});
+
+    });
   }
 };

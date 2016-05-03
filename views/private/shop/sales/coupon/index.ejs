@@ -31,7 +31,7 @@
       <div class="modal-body">
         <div class="row">
           <div class="col-xs-12">
-            删除后无法恢复，确定删除吗？ <br/>
+            删除后无法恢复，并且<span style="color: red">会员已兑换的优惠券将变更为“已过期”状态</span>，确定删除吗？ <br/>
           </div>
         </div>
       </div>
@@ -123,14 +123,11 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/shop/member/member/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">会员信息</a></li>' +
-              '<li><a href="/private/shop/member/member/order/' + row.id + '" data-toggle="modal" data-target="#dialogOrder">订单</a></li>' +
-              '<li class="divider"></li>' +
-              '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
-              '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
-              '<li class="divider"></li>' +
-              '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
+              '<li><a href="/private/shop/member/level/edit/' + row.id + '" data-pjax>修改</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
+              '<li class="divider"></li>' +
+              '<li><a href="javascript:;" onclick="enable(' + row.id + ')">启用</a></li>' +
+              '<li><a href="javascript:;" onclick="disable(' + row.id + ')">禁用</a></li>' +
               '</ul></div>';
           },
           "targets": 7
@@ -144,6 +141,24 @@
       datatable.ajax.reload();
     });
   }
+  function enable(id) {
+    $.post("/private/shop/sales/coupon/enable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
+  function disable(id) {
+    $.post("/private/shop/sales/coupon/disable/" + id, {}, function (data) {
+      if (data.code == 0) {
+        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+  }
   function del(id) {
     var dialog = $("#dialogDelete");
     dialog.modal("show");
@@ -151,9 +166,10 @@
     dialog.find("#ok").bind("click", function (event) {
       var btn = $(this);
       btn.button("loading");
-      $.post("/private/shop/member/member/delete/" + id, {}, function (data) {
+      $.post("/private/shop/sales/coupon/delete/" + id, {}, function (data) {
         if (data.code == 0) {
           datatable.ajax.reload(null,false);
+          Toast.success(data.msg);
         } else {
           Toast.error(data.msg);
         }
@@ -176,9 +192,10 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/shop/member/member/delete", {ids: ids}, function (data) {
+        $.post("/private/shop/sales/coupon/delete", {ids: ids}, function (data) {
           if (data.code == 0) {
             datatable.ajax.reload(null,false);
+            Toast.success(data.msg);
           } else {
             Toast.error(data.msg);
           }
