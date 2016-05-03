@@ -34,8 +34,8 @@ module.exports = {
       if (obj) {
         return res.json({code: 1, msg: sails.__('private.sys.user.loginname')});
       } else {
-        var at=moment().format('X');
-        var pass=StringUtil.password(body.password,loginname,at);
+        var at = moment().format('X');
+        var pass = StringUtil.password(body.password, loginname, at);
         body.createdAt = at;
         body.password = pass;
         body.createdBy = req.session.user.id;
@@ -285,8 +285,8 @@ module.exports = {
   resetPwd: function (req, res) {
     var id = req.params.id;
     var password = StringUtil.randomString(6);
-    Sys_user.findOne(id).exec(function(e,o){
-      var pass=StringUtil.password(password, o.loginname, o.createdAt);
+    Sys_user.findOne(id).exec(function (e, o) {
+      var pass = StringUtil.password(password, o.loginname, o.createdAt);
       Sys_user.update({id: id}, {password: pass}).exec(function (err, obj) {
         if (err) {
           return res.json({code: 1, msg: sails.__('update.fail')});
@@ -306,10 +306,10 @@ module.exports = {
     var oldPassword = req.body.oldPassword;
     var newPassword = req.body.newPassword;
     var user = req.session.user;
-    var pass=StringUtil.password(oldPassword, user.loginname, user.createdAt);
+    var pass = StringUtil.password(oldPassword, user.loginname, user.createdAt);
 
-    if (pass==user.password) {
-      var newPass=StringUtil.password(newPassword, user.loginname, user.createdAt);
+    if (pass == user.password) {
+      var newPass = StringUtil.password(newPassword, user.loginname, user.createdAt);
       Sys_user.update({id: user.id}, {password: newPass}).exec(function (err, obj) {
         if (err) {
           return res.json({code: 2, msg: sails.__('update.fail')});
@@ -320,5 +320,71 @@ module.exports = {
     } else {
       return res.json({code: 1, msg: sails.__('private.login.errorpassword')});
     }
+  },
+  pass: function (req, res) {
+    return res.view('private/sys/user/pass', req.data);
+  },
+  custom: function (req, res) {
+    var roles = req.session.user.roles||[];
+    var customMenus = req.session.user.customMenus||[];
+    var ids = [];
+    roles.forEach(function (o) {
+      ids.push(o.id);
+    });
+    var data = req.data;
+    Sys_role.find({id: ids}).populate('menus',{
+      disabled: false,
+      sort: {location: 'asc'}
+    }).sort({id: 'desc'}).exec(function (err, role) {
+      if (err)res.end();
+      var firstMenus = [], secondMenus = {};
+      role.forEach(function (m) {
+        m.menus.forEach(function (obj) {
+          if (obj.path.length == 4) {
+            if (JSON.stringify(firstMenus).indexOf(JSON.stringify(obj)) < 0) {
+              firstMenus.push(obj);
+            }
+          } else {
+            var s = secondMenus[obj.path.substring(0, obj.path.length - 4)] || [];
+            if (JSON.stringify(s).indexOf(JSON.stringify(obj)) < 0) {
+              s.push(obj);
+            }
+            secondMenus[obj.path.substring(0, obj.path.length - 4)] = s;
+          }
+        });
+      });
+      data.firstMenus = firstMenus;
+      data.secondMenus = secondMenus;
+      data.customMenus=customMenus;
+      return res.view('private/sys/user/custom', req.data);
+    });
+  },
+  customDo: function (req, res) {
+    var ids=req.body.ids;
+    var uid=req.session.user.id;
+    Sys_user.update(uid,{customMenus:ids}).exec(function(e,o){
+      if(!e){
+        var myMenus=[];
+        Sys_menu.find({id:ids}).sort({location:'asc'}).exec(function(err,list){
+          if(list&&list.length>0){
+            list.forEach(function(obj){
+              var menu={};
+              menu.id=obj.id;
+              menu.name=obj.name;
+              menu.url=obj.url;
+              menu.target=obj.target;
+              myMenus.push(menu);
+            });
+          }
+          var user=req.session.user;
+          user.customMenus=ids;
+          req.session.user=user;
+          req.session.myMenus = myMenus;
+          req.session.save();
+          return res.json({code:0,msg:'保存成功'});
+        });
+      }else
+        return res.json({code:0,msg:'保存失败'});
+    });
   }
 };

@@ -8,6 +8,7 @@ module.exports = {
   index: function (req, res) {
     var data=req.data;
     sails.log.debug('data::'+JSON.stringify(data));
+    data.myMenus=req.session.myMenus||[];
     return res.view('private/index.ejs',data);
 
   }
