@@ -8,13 +8,13 @@
 
 <div class=panel-body style="padding-top: 55px;">
   <ul id="orderTab" class="nav nav-tabs" style="padding-top: 0px;margin-bottom: -5px">
-    <li class="active"><a href="javascript:;" data-toggle="tab" data-id="0">待发货</a>
+    <li class="active"><a href="javascript:;" data-toggle="tab" data-id="unship">待发货</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="1">已发货</a>
+    <li><a href="javascript:;" data-toggle="tab" data-id="shiped">已发货</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="2">待支付</a>
+    <li><a href="javascript:;" data-toggle="tab" data-id="unpay">待支付</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="3">已支付</a>
+    <li><a href="javascript:;" data-toggle="tab" data-id="payed">已支付</a>
     </li>
     <li><a href="javascript:;" data-toggle="tab" data-id="all">全部</a>
     </li>
@@ -46,12 +46,12 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-xs-12">
-                确定取消该订单吗？ <br/>
+                确定要取消该订单吗？ <br/>
               </div>
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">放 弃</button>
             <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
           </div>
         </div>
@@ -164,7 +164,7 @@
                   }
                   editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">退货</a></li>';
                 }
-                editMenu += '<li><a href="javascript:;" onclick="del(' + row.id + ')">取消</a></li>';
+                editMenu += '<li><a href="javascript:;" onclick="cancel(' + row.id + ')">取消</a></li>';
               }
 
               editMenu+='</ul></div>';
@@ -200,7 +200,7 @@
             dialog.find("#ok").bind("click", function (event) {
               var btn = $(this);
               btn.button("loading");
-              $.post("/private/shop/member/member/delete/" + id, {}, function (data) {
+              $.post("/private/shop/order/order/cancel/" + id, {}, function (data) {
                 if (data.code == 0) {
                   datatable.ajax.reload(null,false);
                 } else {

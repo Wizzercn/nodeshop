@@ -3,6 +3,8 @@
 */
 var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
+// var util = require('weixin-pay/lib/util');
+// var WXPay = require('weixin-pay');
 module.exports = {
   index: function (req, res) {
     return res.view('private/shop/order/order/index', req.data);
@@ -18,23 +20,23 @@ module.exports = {
     var where = {};
     var orderStatus = req.body.orderStatus||'0';
     switch (orderStatus) {
-      case '0':
-      where = {shipStatus:0};
+      case 'unship':
+      where = {shipStatus:0,status:'active'};
       break;
-      case '1':
-      where = {shipStatus:1};
+      case 'shiped':
+      where = {shipStatus:1,status:'active'};
       break;
-      case '2':
-      where = {payStatus:0};
+      case 'unpay':
+      where = {payStatus:0,status:'active'};
       break;
-      case '3':
-      where = {payStatus:1};
+      case 'payed':
+      where = {payStatus:1,status:'active'};
       break;
       case 'all':
       where = {};
       break;
       default:
-      where = {shipStatus:0};
+      where = {shipStatus:0,status:'active'};
 
     }
     // var where = {shipStatus:orderStatus};
@@ -146,17 +148,182 @@ module.exports = {
   doPay: function(req,res){
     var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
     Shop_order.query(ssql,function(err,list){
-      res.json({code: 0});
+      return res.json({code: 0});
       // return res.view('private/shop/order/order/index', req.data);
     });
   },
   cancel: function (req,res) {
+    var id = req.params.id;
     Shop_order.findOne(req.params.id)
-    .exec(function (err,obj) {
-      if(err) res.json({msg:订单不存在});
-      if (obj.payStatus == 0) {
-        
-      }
+    .populate('memberId')
+    .exec(function (err,order) {
+      console.log(order);
+      if(err) {res.json({msg:'订单不存在'});}
+      var member = order.memberId;
+      Shop_order.update({id: req.params.id}, {
+        status: 'dead',
+        updateAt: moment().format('X')
+      }).exec(function (e, o) {
+        if (e) {
+          /*订单日志表
+          opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+          opType:admin,member
+          opResult:ok,fail
+          */
+          Shop_order_log.create({
+            orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
+            opId: 'admin',
+            opNickname: '管理员',
+            opAt: moment().format('X'),
+            opResult: 'fail'
+          }).exec(function (el1, ol1) {
+            return res.json({code: 3, msg: '系统异常'});
+          });
+        } else {
+          //退库存
+          Shop_order_goods.find({orderId: id}).exec(function(orderErr,orderGoogs){
+            orderGoogs.forEach(function(goodsObj){
+              Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock+? WHERE goodsId=? and id=?',[StringUtil.getInt(goodsObj.num),goodsObj.goodsId,goodsObj.productId],function(gErr,g){
+              });
+            });
+          });
+          if (order.payStatus == 1) {
+            /*订单日志表
+            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+            opType:admin,member
+            opResult:ok,fail
+            */
+            Shop_order_log.create({
+              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
+              opId: member.id,
+              opNickname: member.nickname,
+              opAt: moment().format('X'),
+              opResult: 'ok'
+            }).exec(function (el1, ol1) {
+            });
+            //已支付的订单分别处理
+            if (order.payType == 'pay_cash') {
+              //货到付款，此时没有结算积分，所以不用处理
+              // Shop_member.update()
+              Shop_member.update(member.id, {
+                score: member.score - order.score
+              }).exec(function (e4, o4) {
+
+                if (order.score > 0) {
+                  Shop_member_score_log.create({
+                    memberId: member.id,
+                    orderId: order.id,
+                    oldScore: member.score,
+                    newScore: member.score - order.score,
+                    diffScore: order.score,
+                    note: '取消订单:' + id,
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (es, os) {
+
+                  });
+                }
+                return res.json({code: 0, msg: ''});
+              });
+              // return res.json({code: 0, msg: ''});
+            }
+            else if (order.payType == 'pay_money') {
+              //余额支付，退回支付金额，减去积分
+              Shop_member.update(member.id, {
+                money: member.money + order.finishAmount,
+                score: member.score - order.score
+              }).exec(function (e4, o4) {
+
+                if (order.score > 0) {
+                  Shop_member_score_log.create({
+                    memberId: member.id,
+                    orderId: order.id,
+                    oldScore: member.score,
+                    newScore: member.score - order.score,
+                    diffScore: order.score,
+                    note: '取消订单:' + id,
+                    createdBy: 0,
+                    createdAt: moment().format('X')
+                  }).exec(function (es, os) {
+
+                  });
+                }
+                //余额日志
+                Shop_member_money_log.create({
+                  memberId: member.id,
+                  orderId: order.id,
+                  oldMoney: member.money,
+                  newMoney: member.money + order.finishAmount,
+                  diffMoney: order.finishAmount,
+                  note: '取消订单:' + id,
+                  createdBy: 0,
+                  createdAt: moment().format('X')
+                }).exec(function (em, om) {
+
+                });
+                Shop_history_refunds.create({
+                  orderId: order.id,
+                  memberId: member.id,
+                  money: order.finishAmount,
+                  payType: 'pay_money',
+                  payName: '余额支付',
+                  payAccount: member.nickname,
+                  payIp: req.ip,
+                  payAt: moment().format('X'),
+                  memo: '退款到账户余额:￥' + StringUtil.setPrice(order.finishAmount),
+                  finishAt: moment().format('X'),
+                  disabled: false
+                }).exec(function (e3, o3) {
+
+                });
+                return res.json({code: 0, msg: ''});
+              });
+            } else {
+              //如果是微信支付、支付宝支付
+              if (order.payType == 'pay_wxpay') {
+                Shop_history_payments.findOne({orderId:id})
+                .exec(function(err,payHistory){
+                  WxpayService.init(function (err, wxpay) {
+                    if (err) {
+                      return res.json({code: 1, msg: ''});
+                    } else {
+                      var params = {
+                        appid: wxpay.appid,
+                        mch_id: wxpay.mch_id,
+                        op_user_id:  wxpay.mch_id,
+                        out_refund_no: id,
+                        total_fee: payHistory.money, //原支付金额
+                        refund_fee: payHistory.money, //退款金额
+                        transaction_id: payHistory.trade_no
+                      };
+                      wxpay.refund(params, function(err, result){
+                        console.log('wx_result'+result);
+                        console.log('wx_err'+err);
+                        return res.json({code: 0, msg: ''});
+                      });
+                    }
+                  });
+                });
+              }
+            }
+          } else {
+            /*订单日志表
+            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+            opType:admin,member
+            opResult:ok,fail
+            */
+            Shop_order_log.create({
+              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
+              opId: 'admin',
+              opNickname: '管理员操作',
+              opAt: moment().format('X'),
+              opResult: 'ok'
+            }).exec(function (el1, ol1) {
+              return res.json({code: 0, msg: ''});
+            });
+          }
+        }
+      });
     });
   }
 }
