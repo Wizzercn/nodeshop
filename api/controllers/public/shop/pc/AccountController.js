@@ -442,12 +442,16 @@ module.exports = {
       res.redirect('/');
     }
   },
-  oauthQq:function(){
-
+  oauthQq:function(req,res){
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/account_qq', req.data);
+  },
+  oauthQqLogout:function(req,res){
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/account_qq_logout', req.data);
   },
   oauthQqStatus:function(req, res){
-    var oInfo=req.body.oInfo||{};
-    if(oInfo.openid){
+    var oInfo=req.body||{};
+    var openid=oInfo.openid;
+    if(openid){
       Shop_member_bind.findOne({bind_type:'qq',bind_openid: openid}).exec(function (bindErr1, bind1) {
         if (bind1) {
           //如果存在微信商城帐号
@@ -482,7 +486,7 @@ module.exports = {
                     }
                     Shop_member.create({
                       nickname: oInfo.nickname,
-                      headimgurl: oInfo.figureurl_1 || '',
+                      headimgurl: oInfo.headimgurl || '',
                       sex: sex,
                       reg_ip: StringUtil.getIp(req),
                       reg_time: moment().format('X'),
@@ -576,7 +580,7 @@ module.exports = {
           }
       });
 
-    }
+    }else return res.json({code: 1});
   },
   oauthWeixin: function (req, res) {
     var sn = StringUtil.getUuid(6, 10);
