@@ -442,6 +442,9 @@ module.exports = {
       res.redirect('/');
     }
   },
+  oauthQq:function(){
+
+  },
   oauthQqStatus:function(req, res){
     var oInfo=req.body.oInfo||{};
     if(oInfo.openid){

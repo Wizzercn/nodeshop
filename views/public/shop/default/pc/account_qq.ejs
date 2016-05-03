@@ -1,0 +1,40 @@
+
+<%if(sails.config.system.ShopConfig.oauth_open&&sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_qq){
+var qq_appid='';
+  if(sails.config.system.ShopConfig.oauth_qq_info){
+    qq_appid=sails.config.system.ShopConfig.oauth_qq_info.qq_appid;
+}
+%>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+<script type="text/javascript">
+  QC.Login({
+    btnId:"qqLoginBtn",    //插入按钮的节点id
+    scope: "get_user_info"
+  },function(oInfo, oOpts){
+    //登陆成功执行
+    var nickname=QC.String.escHTML(oInfo.nickname);//获取QQ会员名
+    var info={
+      nickname:nickname,
+      gender:oInfo.gender,
+      figureurl_1:reqData.figureurl_qq_1 //头像100X100
+    };
+    if(QC.Login.check()){
+      QC.Login.getMe(function(openId, accessToken){
+        info.openid=openId;
+        $.post(
+          "/public/shop/pc/account/oauthQqStatus",
+          info,
+          function(result){
+            if(result.code==0){
+              window.location.href=$("#r").val()||'/member';
+            }else{
+              $("#tip .oc_pro_a").html('登录失败');
+              $("#tip").show();
+            }
+          },'json'
+        );
+      });
+    }
+  });</script>
+<%}%>
+<script src="<%=CssPath%>/pc/js/login.js"></script>

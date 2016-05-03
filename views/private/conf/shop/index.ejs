@@ -336,11 +336,21 @@
 
             </div>
           </div>
-        </div><div class="row">
+        </div>
+        <div class="row">
           <div class="form-group">
             <label class="col-sm-3 control-label">AppKey</label>
             <div class="col-sm-7" style="padding-bottom: 5px;">
               <input id="qq_appkey" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appkey||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">验证content</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appcontent" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appcontent||''%><%}%>">
 
             </div>
           </div>
@@ -401,6 +411,7 @@
       var qq={};
       qq.qq_appid=$("#qq_appid").val();
       qq.qq_appkey=$("#qq_appkey").val();
+      qq.qq_appcontent=$("#qq_appcontent").val();
       $("#oauth_qq_info").val(JSON.stringify(qq));
       $('#addForm').submit();
     });
