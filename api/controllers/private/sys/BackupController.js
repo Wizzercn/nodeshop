@@ -3,6 +3,7 @@
  */
 var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
+var fs = require("fs-extra");
 module.exports = {
   index: function (req, res) {
     return res.view('private/sys/backup/index', req.data);
@@ -64,6 +65,7 @@ module.exports = {
         try {
           fs.removeSync(o.path);
         } catch (e) {
+          sails.log.debug(e);
         }
         return res.json({code: 0, msg: sails.__('delete.ok')});
       });

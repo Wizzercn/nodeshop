@@ -84,7 +84,7 @@
         <div></div>
         <div></div>
       </a>
-    </div><%= user.loginScroll == true %>
+    </div>
     <div class="options-container">
       <h6><%= sails.__('private.index.layout') %></h6>
       <a class="pg-val toggle-sidebar toggle-active <% if(user.loginSidebar){ %>active<% } %>" href="javascript:;">
@@ -108,7 +108,7 @@
       <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-      <a href="/sysadmin/home" class="navbar-brand">
+      <a href="/sysadmin/home"  class="navbar-brand">
         <img src="/img/logo.png" alt="">
                 <span class="heading-font">
                 <%= sails.config.system.AppName %>
@@ -128,7 +128,7 @@
     </ul>
       <ul class="nav navbar-nav">
         <li>
-          <a href="/sysadmin/home">
+          <a href="/sysadmin/home" data-pjax>
             <i class="ti-home"></i>
             <span>首页</span>
           </a>
@@ -274,7 +274,28 @@
            data-wheel-step="10">
         <!--<p class="nav-title">MENU</p>-->
         <ul class="nav">
+          <li class="open">
+            <a href="javascript:;">
+              <%if(myMenus&&myMenus.length>0){%>
+              <i class="toggle-accordion"></i>
+              <%}%>
+              <i class="ti-heart"></i>
+              <span>常用菜单</span>
+            </a>
+            <%if(myMenus&&myMenus.length>0){%>
+            <ul class="sub-menu">
+              <%myMenus.forEach(function(o){%>
 
+              <li class="active">
+                <a <%if(o.url){%>href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
+                  <span><%=o.name%></span>
+                </a>
+              </li>
+
+              <%});%>
+            </ul>
+            <%}%>
+          </li>
           <% if(path.length > 8 && secondMenus[path.substring(0, path.length - 8)]){ %>
           <% secondMenus[path.substring(0, path.length - 8)].forEach(function(firstMenu){ %>
           <li <% if(path == firstMenu.path){ %>class="active"
@@ -317,22 +338,7 @@
             <% } %>
           </li>
           <% });}else{ %>
-          <li class="open">
-            <a href="javascript:;">
-              <!--<i class="toggle-accordion"></i>-->
-              <i class="ti-heart"></i>
-              <span>常用菜单</span>
-            </a>
-            <%if(myMenus){myMenus.forEach(function(o){%>
-            <ul class="sub-menu">
-              <li class="active">
-                <a href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}else{ %>href="javascript:;"<%}%>>
-                  <span><%=o.name%></span>
-                </a>
-              </li>
-            </ul>
-            <%});}%>
-          </li>
+
           <% } %>
 
         </ul>
