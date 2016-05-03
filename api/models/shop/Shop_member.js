@@ -127,7 +127,7 @@ module.exports = {
     },
     reg_source: {
       type: 'string',
-      size: 10
+      size: 20
     },
     accounts: {
       collection: 'Shop_member_account',
