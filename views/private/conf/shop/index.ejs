@@ -312,6 +312,14 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">扫码支付回调地址</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              http://<%=sails.config.system.AppDomain%>/public/shop/pc/wxpay/order
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button id="btnWx" type="button" class="btn btn-default" data-dismiss="modal">清 除</button>
@@ -352,6 +360,18 @@
             <div class="col-sm-7" style="padding-bottom: 5px;">
               <input id="qq_appcontent" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appcontent||''%><%}%>">
 
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">请在QQ互联后台添加回调地址</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+
+              http://<%=sails.config.system.AppDomain%>/public/shop/pc/account/oauthQq
+              <%if(sails.config.system.AppDomain.indexOf('www')>-1){%><br>
+              http://<%=sails.config.system.AppDomain.replace('www.','')%>/public/shop/pc/account/oauthQq
+              <%}%>
             </div>
           </div>
         </div>

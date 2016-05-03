@@ -18,7 +18,7 @@
               </td>
               <td width="20%" align="right">信任登录：</td>
               <td width="30%" align="left"><%if(obj.binds){obj.binds.forEach(function(o){
-                %><%=o.bind_type=='weixin'?'微信绑定':''%>:<%-o.bind_nickname%><br>
+                %><%=o.bind_type=='weixin'?'微信绑定':''%><%=o.bind_type=='qq'?'QQ绑定':''%>:<%-o.bind_nickname%><br>
                 <%
                 });}%></td>
             </tr>

@@ -104,14 +104,12 @@ var qq_appid='';
     qq_appid=sails.config.system.ShopConfig.oauth_qq_info.qq_appid;
 }
 %>
-<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="<%=qq_appid||''%>" data-redirecturi="http://<%=sails.config.system.AppDomain%>/public/shop/pc/account/oauthQq" charset="utf-8" ></script>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="<%=qq_appid||''%>" data-redirecturi="<%=req.baseUrl%>/public/shop/pc/account/oauthQq" charset="utf-8" ></script>
 <script type="text/javascript">
   QC.Login({
     btnId:"qqLoginBtn",    //插入按钮的节点id
     scope: "get_user_info"
   },function(oInfo, oOpts){
-    console.log(oInfo);
-    console.log(QC.Login.check());
     //登陆成功执行
     var nickname=QC.String.escHTML(oInfo.nickname);//获取QQ会员名
     var info={
@@ -122,7 +120,6 @@ var qq_appid='';
     if(QC.Login.check()){
       QC.Login.getMe(function(openId, accessToken){
         info.openid=openId;
-        console.log(info);
         $.post(
           "/public/shop/pc/account/oauthQqStatus",
           info,
