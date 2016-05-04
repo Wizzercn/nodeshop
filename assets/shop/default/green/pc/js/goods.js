@@ -266,9 +266,6 @@ function loadProvince(){
 };
 
 function getCity(name){
-  if($("a[name='" + name + "']").data('check') == 1) {
-    $("a[name='" + name + "']").addClass('song_co').data('check', '2');
-    $("a[name='" + name + "']").parent('li').addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co').data('check', '1');
     $.ajax({
       type: "GET",
       url: "/public/shop/pc/member/area/getArea?name=" + name,
@@ -280,17 +277,16 @@ function getCity(name){
           $.each(data.list, function (i, o) {
             cityHtml += '<li><a href="javascript:;" class="s_city_s" onclick="getArea(name)" name="' + o.name + '">' + o.name + '</a></li>';
           });
-          $("#s_city_s").html(cityHtml);
+          $("#s_city_s").html(cityHtml).show().siblings().hide();
           $("#s_county_s").html("<h3>请先选择市</h3>");
+          $("#province_chose").html(name + '<i id="provinceClose" onclick="provinceClose()">X</i>').show().siblings().html('').hide();
         }
       }
     });
-  }
 };
 
+
 function getArea(name){
-  $("a[name='"+name+"']").addClass('song_co');
-  $("a[name='"+name+"']").parent().addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co');
   $.ajax({
     type : "GET",
     url : "/public/shop/pc/member/area/getArea?name="+name,
@@ -302,7 +298,9 @@ function getArea(name){
         $.each(data.list,function(i,o){
           countyHtml += '<li><a href="javascript:;" class="s_county_s" onclick="getAreaNext(name)" name="' + o.name + '">'+ o.name+'</a></li>';
         });
-        $("#s_county_s").html(countyHtml);
+        $("#s_county_s").html(countyHtml).show().siblings().hide();
+        $("#city_chose").html(name + '<i id="cityClose" onclick="cityClose()">X</i>').show();
+        $("#county_chose").html('').hide();
       }
     }
   });
@@ -311,19 +309,43 @@ function getArea(name){
 function getAreaNext(name){
   $("a[name='"+name+"']").addClass('song_co');
   $("a[name='"+name+"']").parent().addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co');
+  $("#county_chose").html(name + '<i id="countyClose" onclick="countyClose()">X</i>').show();
+};
+
+function provinceClose(){
+  $('#city_chose,#county_chose,#province_chose').html('').hide();
+  $('#s_province_s').find('li').removeClass('song_co');
+  $('#s_province_s').find('a').removeClass('song_co');
+  $('#s_province_s').show().siblings().hide();
+
+};
+
+function cityClose(){
+  $('#city_chose,#county_chose').html('').hide();
+  $('#s_city_s').find('li').removeClass('song_co');
+  $('#s_city_s').find('a').removeClass('song_co');
+  $('#s_city_s').show().siblings().hide();
+};
+
+function countyClose(){
+  $('#county_chose').html('').hide();
+  $('#s_county_s').find('li').removeClass('song_co');
+  $('#s_county_s').find('a').removeClass('song_co');
+  $('#s_county_s').show().siblings().hide();
 }
 
 $(function(){
+
   $(".song_r").hover(
     function(){
       $(".slideTxtBox").removeClass("c_hide");
       $(this).find(".song_ra").addClass("border_color")
-      $(this).find(".song_i").toggleClass("c_hide")
+      $('.song_ra').css('border-bottom','none');
     },
     function(){
       $(".slideTxtBox").addClass("c_hide");
       $(this).find(".song_ra").removeClass("border_color")
-      $(this).find(".song_i").toggleClass("c_hide")
+      $('.song_ra').css('border-bottom','1px solid #ddd');
     }
   );
 
@@ -392,6 +414,7 @@ $(function(){
       commentLoad(goodsid,0);
     });
   });
+
   picLunbo();
   buyNum();
   quickBuy();

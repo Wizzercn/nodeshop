@@ -1935,7 +1935,7 @@ margin-left:12px;
 
 
 .slideTxtBox{ width:400px; border:1px solid #ddd; text-align:left;z-index:2;  }
-.slideTxtBox .hd{ height:30px; line-height:30px; background:#f4f4f4; padding:0 10px 0 0px;   border-bottom:1px solid #ddd;  position:relative; }
+.slideTxtBox .hd{line-height:30px; background:#f4f4f4; padding:0px 10px 10px 0px;   border-bottom:1px solid #ddd;  position:relative; }
 .slideTxtBox .hd ul{ float:left;  position:absolute; left:20px; top:-1px; height:32px;   }
 .slideTxtBox .hd ul li{ float:left; padding:0 15px; cursor:pointer;  }
 .slideTxtBox .hd ul li.on{ height:31px;  background:#fff; border:1px solid #ddd; border-bottom:2px solid #fff; }
@@ -2000,3 +2000,11 @@ margin-left:12px;
 .radio li{margin-bottom:20px !important; }
 .lat_adr{height:20px;position:relative;top:-10px;line-height:20px;}
 .moren_c{padding-left:10px;}
+
+
+
+
+    .addr_add_c span{position:relative;margin-left:14px;margin-top:10px;float:left;border:1px solid #ddd;height:26px;line-height:26px;position:relative;background:#fff;padding:0 10px;color:#00aa3a;}
+    .addr_add_c span img{position:absolute;top:-7px;right:-6px;}
+.addr_add_c span i{position:absolute;top:-7px;right:-6px;display:inline-block;width:16px;height:16px;border:1px solid #ddd;background:#fff;border-radius: 8px;text-align:center;line-height:14px;font-size:10px;}
+
