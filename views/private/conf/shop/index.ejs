@@ -17,8 +17,6 @@
         <ul class="nav nav-tabs">
           <li class="active"><a href="#shop_base" data-toggle="tab">基本设置</a>
           </li>
-          <li><a href="#shop_member" data-toggle="tab">会员注册设置</a>
-          </li>
           <li><a href="#shop_list" data-toggle="tab">商品列表页设置</a>
           </li>
           <li><a href="#shop_yf" data-toggle="tab">运费设置</a>
@@ -26,6 +24,8 @@
           <li><a href="#shop_fp" data-toggle="tab">发票设置</a>
           </li>
           <li><a href="#shop_pay" data-toggle="tab">支付方式配置</a>
+          </li>
+          <li><a href="#shop_login" data-toggle="tab">信任登录</a>
           </li>
         </ul>
         <div class="tab-content">
@@ -55,58 +55,6 @@
                 <div class="col-sm-8">
                   <input class="form-control" name="shop_stock" value="<%=obj.shop_stock||0%>">
 
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-pane fade" id="shop_member">
-            <div class="col-lg-12">
-              <div class="form-group">
-                <label class="col-sm-2 control-label">网页注册赠送优惠券</label>
-                <div class="col-sm-8" style="padding-top: 5px;">
-                  <select class="form-control" name="member_reg_coupon">
-                    <option value="0">无</option>
-                    <%couponList.forEach(function(o){
-                    if(o.maxNum> o.hasNum){
-                    %>
-                    <option value="<%=o.id%>" <%=obj.member_reg_coupon==o.id?'selected':''%>><%=o.name%></option>
-
-                    <%}});%>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">网页注册赠送积分</label>
-                <div class="col-sm-8" style="padding-top: 5px;">
-                  <input class="form-control" name="member_reg_score" value="<%=obj.member_reg_score||0%>">
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label class="col-sm-2 control-label">微信关注自动创建帐号</label>
-                <div class="col-sm-8" style="padding-top: 5px;">
-                  <input type="radio" name="member_weixinreg_auto" value="1" <%if(obj.member_weixinreg_auto){%>checked<%}%>>开启
-                  <input type="radio" name="member_weixinreg_auto" value="0" <%if(!obj.member_weixinreg_auto){%>checked<%}%>>关闭
-                </div>
-              </div>
-              <div id="div_wx_1" style="display: <%=obj.member_weixinreg_auto==true?'block':'none'%>" class="form-group">
-                <label class="col-sm-2 control-label">微信关注赠送优惠券</label>
-                <div class="col-sm-8" style="padding-top: 5px;">
-                  <select class="form-control" name="member_weixinreg_coupon">
-                    <option value="0">无</option>
-                    <%couponList.forEach(function(o){
-                    if(o.maxNum> o.hasNum){
-                    %>
-                    <option value="<%=o.id%>" <%=obj.member_weixinreg_coupon==o.id?'selected':''%>><%=o.name%></option>
-
-                    <%}});%>
-                  </select>
-                </div>
-              </div>
-              <div id="div_wx_2" style="display: <%=obj.member_weixinreg_auto==true?'block':'none'%>" class="form-group">
-                <label class="col-sm-2 control-label">微信关注赠送积分</label>
-                <div class="col-sm-8" style="padding-top: 5px;">
-                  <input class="form-control" name="member_weixinreg_score" value="<%=obj.member_weixinreg_score||0%>">
                 </div>
               </div>
             </div>
@@ -233,6 +181,37 @@
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="shop_login">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_open" value="1" <%if(obj.oauth_open){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_open" value="0" <%if(!obj.oauth_open){%>checked<%}%>>禁用
+
+                </div>
+              </div>
+              <div id="div_oauth" style="display: <%=obj.oauth_open==true?'block':'none'%>">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">微信信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_weixin" value="1" <%if(obj.oauth_weixin){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_weixin" value="0" <%if(!obj.oauth_weixin){%>checked<%}%>>禁用
+                  注意：必须启用并配置微信支付才可启用
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">QQ信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_qq" value="1" <%if(obj.oauth_qq){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_qq" value="0" <%if(!obj.oauth_qq){%>checked<%}%>>禁用
+                  <button class="btn btn-info" type="button" id="btnOauth_qq" data-toggle="modal" data-target="#dialogOauth_qq"> 配置</button>
+                  <input name="oauth_qq_info" id="oauth_qq_info" type="hidden" value="<%-JSON.stringify(obj.oauth_qq_info)||{}%>">
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -333,9 +312,72 @@
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">扫码支付回调地址</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              http://<%=sails.config.system.AppDomain%>/public/shop/pc/wxpay/order
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button id="btnWx" type="button" class="btn btn-default" data-dismiss="modal">清 除</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-loading-text="确定...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dialogOauth_qq" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">QQ信任登录配置</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppId</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appid" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appid||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppKey</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appkey" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appkey||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">验证content</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="qq_appcontent" type="text" class="form-control" value="<%if(obj.oauth_qq_info){%><%=obj.oauth_qq_info.qq_appcontent||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">请在QQ互联后台添加回调地址</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+
+              http://<%=sails.config.system.AppDomain%>/public/shop/pc/account/oauthQq
+              <%if(sails.config.system.AppDomain.indexOf('www')>-1){%><br>
+              http://<%=sails.config.system.AppDomain.replace('www.','')%>/public/shop/pc/account/oauthQq
+              <%}%>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnQq" type="button" class="btn btn-default" data-dismiss="modal">清 除</button>
         <button type="button" class="btn btn-primary" data-dismiss="modal" data-loading-text="确定...">确 定</button>
       </div>
     </div>
@@ -352,8 +394,20 @@
         $("#div_wx_2").hide();
       }
     });
+    $("input[name=oauth_open]").on("click",function(){
+      if($(this).val()=='1'){
+        $("#div_oauth").show();
+      }else {
+        $("#div_oauth").hide();
+      }
+    });
     $("#btnWx").on("click",function(){
       $("#dialogWxpay input[type=text]").each(function(){
+        $(this).val("");
+      });
+    });
+    $("#btnQq").on("click",function(){
+      $("#dialogOauth_qq input[type=text]").each(function(){
         $(this).val("");
       });
     });
@@ -374,6 +428,11 @@
       wxpay.wxpay_key=$("#wxpay_key").val();
       wxpay.wxpay_appsecret=$("#wxpay_appsecret").val();
       $("#pay_wxpay_info").val(JSON.stringify(wxpay));
+      var qq={};
+      qq.qq_appid=$("#qq_appid").val();
+      qq.qq_appkey=$("#qq_appkey").val();
+      qq.qq_appcontent=$("#qq_appcontent").val();
+      $("#oauth_qq_info").val(JSON.stringify(qq));
       $('#addForm').submit();
     });
       $('#addForm').ajaxForm({

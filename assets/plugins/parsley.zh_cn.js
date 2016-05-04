@@ -32,6 +32,15 @@ window.ParsleyConfig.i18n.zh_cn = $.extend(window.ParsleyConfig.i18n.zh_cn || {}
 if ('undefined' !== typeof window.Parsley)
   window.Parsley.addCatalog('zh_cn', window.ParsleyConfig.i18n.zh_cn, true);
 $(function(){
+  window.Parsley.addValidator('price', {
+    validateString: function(value) {
+      var price = /^([1-9][\d]{0,7}|0)(\.[\d]{1,2})?$/;
+      return (price.test(value));
+    },
+    messages: {
+      zh_cn:'请填写正确的金额'
+    }
+  });
   window.Parsley.addValidator('phone', {
     validateString: function(value) {
       var phone = /^1[3|4|5|7|8][0-9]\d{8}$/;

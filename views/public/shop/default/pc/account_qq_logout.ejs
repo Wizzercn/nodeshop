@@ -1,0 +1,21 @@
+
+<%if(sails.config.system.ShopConfig.oauth_open&&sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_qq){
+var qq_appid='';
+  if(sails.config.system.ShopConfig.oauth_qq_info){
+    qq_appid=sails.config.system.ShopConfig.oauth_qq_info.qq_appid;
+}
+%>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="<%=qq_appid||''%>" data-redirecturi="http://<%=sails.config.system.AppDomain%>/public/shop/pc/account/oauthQq" charset="utf-8" ></script>
+<script type="text/javascript">
+  QC.Login.signOut();
+  if(QC.Login.check()==false){
+    window.location.href='/public/shop/pc/account/logout';
+  }else{
+    window.location.reload();
+  }
+</script>
+<%}else{%>
+<script type="text/javascript">
+  window.location.href='/public/shop/pc/account/logout';
+</script>
+<%}%>

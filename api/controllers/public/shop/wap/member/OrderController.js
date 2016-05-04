@@ -69,8 +69,13 @@ module.exports = {
         if (order.shipStatus != 0) {
           return res.json({code: 2, msg: '订单已发货，不能取消，请联系客服'});
         }
+        var thisPayStatus=order.payStatus;
+        if (order.payStatus == 1){//如果是已支付取消的，支付状态改为申请退款
+          thisPayStatus=2;
+        }
         Shop_order.update({id: id, memberId: m.memberId}, {
           status: 'dead',
+          payStatus:thisPayStatus,
           updateAt: moment().format('X')
         }).exec(function (e, o) {
           if (e) {
@@ -155,7 +160,7 @@ module.exports = {
                     payType: 'pay_money',
                     payName: '余额支付',
                     payAccount: member.nickname,
-                    payIp: req.ip,
+                    payIp: StringUtil.getIp(req),
                     payAt: moment().format('X'),
                     memo: '退款到账户余额:￥' + StringUtil.setPrice(order.finishAmount),
                     finishAt: moment().format('X'),

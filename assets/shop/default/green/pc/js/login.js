@@ -1,6 +1,7 @@
 /**
  * Created by wizzer.cn on 3/10/16.
  */
+var timer_wx;
 function checkLoginName(){
   if($("#login_name").val()==""){
     $("#login_name_tip").html('<span class="errorn">请输入用户名</span>');
@@ -66,6 +67,39 @@ function checkSmscode(){
     return false;
   }
   return true;
+}
+function closeWx(){
+  if(timer_wx){
+    clearInterval(timer_wx);
+  }
+  $("#wx").hide();
+}
+function loginWx(){
+  $.get(
+    "/public/shop/pc/account/oauthWeixin",
+    function(result){
+      if(result.code==0){
+        $("#qrCode").html("");
+        $("#qrCode").qrcode({width: 200,height: 200,text: 'http://'+domain+"/public/shop/wap/account/oauthWeixinSend/"+result.sn});
+        $("#wx").show();
+        timer_wx=setInterval(function(){
+          $.get(
+            "/public/shop/pc/account/oauthWeixinStatus/"+result.sn,
+            function(d){
+              if(d.code==0){
+                 window.location.href=$("#r").val()||'/member';
+              }
+            },'json'
+          );
+        },2345);
+        $("#wx input[type=button]").eq(0).unbind("click").on("click",function(){
+          closeWx();
+        });
+        $("#wx input[type=button]").eq(1).unbind("click").on("click",function(){
+          closeWx();
+        });
+      }
+    },'json');
 }
 $(function(){
   $("#doLoginMobile").on("click",function(){

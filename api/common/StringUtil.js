@@ -189,5 +189,11 @@ module.exports = {
     return function (a, b) {
       return desc ? ~~(a[key] < b[key]) : ~~(a[key] > b[key]);
     }
+  },
+  getIp:function(req){
+    return req.headers['x-forwarded-for'] ||
+      req.connection.remoteAddress ||
+      req.socket.remoteAddress ||
+      req.connection.socket.remoteAddress;
   }
 };

@@ -8,7 +8,7 @@
           <div class="z_resa">
           <%if(member&&member.memberId>0){%>
             <span class="z_resml radius3"><a href="/member" class="z_resb">会员中心</a></span>
-          <span class="z_resml radius3"><a href="/public/shop/pc/account/logout" class="z_resb">退出登录</a></span>
+          <span class="z_resml radius3"><a href="<%=true==member.loginQq?'/public/shop/pc/account/oauthQqLogout':'/public/shop/pc/account/logout'%>" class="z_resb">退出登录</a></span>
           <%}else{%>
             <span class="z_resml radius3"><a href="/login<%if(r){%>?r=<%=r%><%}%>" class="z_resb">登录</a></span>
           <span class="z_resml radius3"><a href="/join" class="z_resb">注册</a></span>

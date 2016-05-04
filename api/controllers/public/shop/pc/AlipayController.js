@@ -71,7 +71,7 @@ module.exports = {
                           payType: 'pay_alipay',
                           payName: '支付宝支付',
                           payAccount: buyer_email,
-                          payIp: req.ip,
+                          payIp: StringUtil.getIp(req),
                           payAt: moment().format('X'),
                           memo: '支付宝支付:￥' + StringUtil.setPrice(order.finishAmount),
                           finishAt: moment().format('X'),

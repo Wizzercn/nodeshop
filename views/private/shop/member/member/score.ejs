@@ -27,6 +27,18 @@
                 <input type="text" id="txt" name="txt" class="control-group">
               </td>
             </tr>
+            <tr style="height: 40px;padding-top: 30px;">
+              <td width="30%" align="right">最近十条记录：</td>
+              <td width="70%" align="left">
+                <%if(list.length>0){list.forEach(function(o){
+                %>
+                <%=moment(o.createdAt*1000).format('YYYY-MM-DD HH:mm:ss')%>,<span style="color: green"><%-o.oldScore-o.newScore>0?'-':'+'%><%=o.diffScore%></span>,<%=o.note||''%>
+                <br>
+                <%});}else{%>
+                无
+                <%}%>
+              </td>
+            </tr>
           </table>
         </div>
       </section>

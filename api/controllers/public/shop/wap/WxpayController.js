@@ -63,7 +63,7 @@ module.exports = {
                         payType: 'pay_wxpay',
                         payName: '微信网页支付',
                         payAccount: msg.openid,
-                        payIp: req.ip,
+                        payIp: StringUtil.getIp(req),
                         payAt: moment().format('X'),
                         memo: '微信网页支付:￥' + StringUtil.setPrice(order.finishAmount),
                         finishAt: moment().format('X'),

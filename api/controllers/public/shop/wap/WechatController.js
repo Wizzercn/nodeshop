@@ -33,14 +33,14 @@ module.exports = {
     api.getAccessToken(code, function (ew, ow) {
       if (ow && ow.data) {
         var openid = ow.data.openid;
-        Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr1, bind1) {
+        Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr1, bind1) {
           if (bind1) {
             //如果存在微信商城帐号
                 req.session.member = {
                   memberId: bind1.memberId,
                   nickname: bind1.bind_nickname,
                   login_name: openid,
-                  loginIp: req.ip,
+                  loginIp: StringUtil.getIp(req),
                   loginAt: moment().format('X'),
                   loginWx: true,
                   binded: bind1.binded,
@@ -93,14 +93,14 @@ module.exports = {
                 function (wxuser, done) {
                   //是否开启自动创建商城帐号
                   if (sails.config.system.ShopConfig.member_weixinreg_auto) {
-                    Shop_member_bind.findOne({bind_openid: openid}).exec(function (bindErr, bind) {
+                    Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr, bind) {
                       if (!bind) {
                         //如果帐号绑定表数据不存在，则创建
                         Shop_member.create({
                           nickname: wxuser.nickname,
                           headimgurl: wxuser.headimgurl || '',
                           sex: wxuser.sex || 0,
-                          reg_ip: req.ip,
+                          reg_ip: StringUtil.getIp(req),
                           reg_time: moment().format('X'),
                           reg_source: 'weixin'
                         }).exec(function (mmbErr, mmb) {
@@ -117,9 +117,9 @@ module.exports = {
                           });
                         });
                       } else {
-                        Shop_member_bind.update({bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                        Shop_member_bind.update({bind_type:'weixin',bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
                           //如果是取消关注重新关注的，则不进行积分优惠券计算
-                          bc.jiSuan=false;
+                          bind.jiSuan=false;
                           return done(null, bind);
 
                         });
@@ -131,7 +131,7 @@ module.exports = {
                 }
                 , function (bind, done) {
                   if (bind.jiSuan == false)
-                    done(null, bind);
+                    return done(null, bind);
                   Shop_member.findOne(bind.memberId).exec(function (errmmb, mmb) {
                     var member_weixinreg_score = sails.config.system.ShopConfig.member_weixinreg_score || 0;
                     if (member_weixinreg_score > 0) {
@@ -153,7 +153,7 @@ module.exports = {
                   });
                 }, function (bind, done) {
                   if (bind.jiSuan == false)
-                    done(null, bind);
+                    return done(null, bind);
                   //注册赠送优惠券
                   if (sails.config.system.ShopConfig.member_weixinreg_coupon > 0) {
                     Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_weixinreg_coupon).exec(function (couponErr, coupon) {
@@ -181,7 +181,7 @@ module.exports = {
                   memberId: bind.memberId,
                   nickname: bind.bind_nickname,
                   login_name: openid,
-                  loginIp: req.ip,
+                  loginIp: StringUtil.getIp(req),
                   loginAt: moment().format('X'),
                   loginWx: true,
                   binded: bind.binded,

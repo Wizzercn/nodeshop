@@ -3,6 +3,7 @@
  * Created by wizzer on 2015/9/6.
  */
 var moment = require('moment');
+var StringUtil = require('../../common/StringUtil');
 module.exports = {
   schema: true,
   autoCreatedAt: false,
@@ -54,7 +55,7 @@ module.exports = {
   log:function(type,user,note,req){
     Sys_log.create({
       type: type, url: req.url, note: note,
-      createdBy: user.id, createdByName: user.nickname, createdIp: req.ip
+      createdBy: user.id, createdByName: user.nickname, createdIp: StringUtil.getIp(req)
     }).exec(function (err) {
     });
   }

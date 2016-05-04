@@ -4,6 +4,7 @@
  */
 var emoji=require('emoji');
 var moment = require('moment');
+var StringUtil = require('../../common/StringUtil');
 module.exports = {
   api: function (req, res) {
     var id = req.params.id;
@@ -50,7 +51,7 @@ module.exports = {
                                 nickname:result.nickname,
                                 headimgurl:result.headimgurl||'',
                                 sex:result.sex||0,
-                                reg_ip:req.ip,
+                                reg_ip:StringUtil.getIp(req),
                                 reg_time:moment().format('X'),
                                 reg_source:'weixin'
                               }).exec(function(mmbErr,mmb){
@@ -146,7 +147,7 @@ module.exports = {
                                     nickname:result.nickname,
                                     headimgurl:result.headimgurl||'',
                                     sex:result.sex||0,
-                                    reg_ip:req.ip,
+                                    reg_ip:StringUtil.getIp(req),
                                     reg_time:moment().format('X'),
                                     reg_source:'weixin'
                                   }).exec(function(mmbErr,mmb){

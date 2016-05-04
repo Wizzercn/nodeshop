@@ -108,10 +108,10 @@
       <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-      <a href="/sysadmin/home"  class="navbar-brand">
+      <a href="/sysadmin/home"  data-pjax class="navbar-brand">
         <img src="/img/logo.png" alt="">
                 <span class="heading-font">
-                <%= sails.config.system.AppName %>
+                <%= sails.config.system.AppShrotName||'' %>
                 </span>
       </a>
 
@@ -126,13 +126,13 @@
       </li>
 
     </ul>
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="/sysadmin/home" data-pjax>
-            <i class="ti-home"></i>
-            <span>首页</span>
-          </a>
-        </li>
+      <ul class="nav navbar-nav hidden-xs">
+        <!--<li>-->
+          <!--<a href="/sysadmin/home" data-pjax>-->
+            <!--<i class="ti-home"></i>-->
+            <!--<span>首页</span>-->
+          <!--</a>-->
+        <!--</li>-->
         <% if(firstMenus){ firstMenus.forEach(function(firstMenu){ %>
         <li class="dropdown">
           <a href="javascript:;" data-toggle="dropdown">
@@ -164,78 +164,7 @@
         </li><% });} %>
       </ul>
     <ul class="nav navbar-nav navbar-right">
-
-      <li class="notifications dropdown">
-        <a href="javascript:;" data-toggle="dropdown">
-          <i class="ti-bell"></i>
-
-          <div class="badge badge-top bg-danger animated flash">
-            <span>3</span>
-          </div>
-        </a>
-
-        <div class="dropdown-menu animated fadeInLeft">
-          <div class="panel panel-default no-m">
-            <div class="panel-heading small"><b>Notifications</b>
-            </div>
-
-            <ul class="list-group">
-              <li class="list-group-item">
-                <a href="javascript:;">
-                                    <span class="pull-left mt5 mr15">
-                                    <img src="/img/face4.jpg" class="avatar avatar-sm img-circle" alt="">
-                                    </span>
-
-                  <div class="m-body">
-                    <div class="">
-                      <small><b>CRYSTAL BROWN</b></small>
-                      <span class="label label-danger pull-right">ASSIGN AGENT</span>
-                    </div>
-                    <span>Opened a support query</span>
-                    <span class="time small">2 mins ago</span>
-                  </div>
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="javascript:;">
-                  <div class="pull-left mt5 mr15">
-                    <div class="circle-icon bg-danger">
-                      <i class="ti-download"></i>
-                    </div>
-                  </div>
-                  <div class="m-body">
-                    <span>Upload Progress</span>
-
-                    <div class="progress progress-xs mt5 mb5">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="40"
-                           aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                      </div>
-                    </div>
-                    <span class="time small">Submited 23 mins ago</span>
-                  </div>
-                </a>
-              </li>
-              <li class="list-group-item">
-                <a href="javascript:;">
-                                    <span class="pull-left mt5 mr15">
-                                    <img src="/img/face3.jpg" class="avatar avatar-sm img-circle" alt="">
-                                    </span>
-
-                  <div class="m-body">
-                    <em>Status Update:</em>
-                    <span>All servers now online</span>
-                    <span class="time small">5 days ago</span>
-                  </div>
-                </a>
-              </li>
-            </ul>
-            <div class="panel-footer">
-              <a href="javascript:;">See all notifications</a>
-            </div>
-          </div>
-        </div>
-      </li>
-
+      <!--通知位置-->
 
       <li class="off-right">
         <a href="javascript:;" data-toggle="dropdown">
@@ -259,7 +188,7 @@
           </li>
         </ul>
       </li>
-      <li class="off-right hidden-xs">
+      <li class="off-right">
         <a href="/private/login/logout">
           <i class="ti-power-off"></i>
         </a>

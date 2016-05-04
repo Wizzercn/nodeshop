@@ -5,6 +5,7 @@
 var captchapng = require('captchapng');
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
+var emoji = require('emoji');
 module.exports = {
   join: function (req, res) {
     async.parallel({
@@ -62,20 +63,23 @@ module.exports = {
       Shop_member_account.findOne({
         login_name: login_name
       }).populate('memberId').exec(function (err, obj) {
-        if (obj&&obj.disabled) {
+        if (obj && obj.disabled) {
           return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
-        }else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
-          if(obj.memberId){
-          req.session.member = {
-            memberId: obj.memberId.id,
-            nickname: obj.memberId.nickname,
-            login_name: login_name,
-            loginIp: obj.loginIp,
-            loginAt: obj.loginAt
-          };
+        } else if (obj && obj.login_password == StringUtil.password(login_pass, login_name, obj.createdAt)) {
+          if (obj.memberId) {
+            req.session.member = {
+              memberId: obj.memberId.id,
+              nickname: obj.memberId.nickname,
+              login_name: login_name,
+              loginIp: obj.loginIp,
+              loginAt: obj.loginAt
+            };
           }
           //记录登录IP和时间
-          Shop_member_account.update(obj.id, {loginIp: req.ip, loginAt: moment().format('X')}).exec(function (ep, op) {
+          Shop_member_account.update(obj.id, {
+            loginIp: StringUtil.getIp(req),
+            loginAt: moment().format('X')
+          }).exec(function (ep, op) {
           });
           if (saveLoginname) {
             res.cookie('saveLoginname', login_name, {
@@ -109,21 +113,21 @@ module.exports = {
         Shop_member_account.findOne({
           login_name: mobile
         }).populate('memberId').exec(function (err, obj) {
-          if (obj&&obj.disabled) {
+          if (obj && obj.disabled) {
             return res.json({code: 3, msg: '用户已被禁用，请联系客服'});
-          }else if (obj) {
-            if(obj.memberId){
-            req.session.member = {
-              memberId: obj.memberId.id,
-              nickname: obj.memberId.nickname,
-              login_name: mobile,
-              loginIp: obj.loginIp,
-              loginAt: obj.loginAt
-            };
+          } else if (obj) {
+            if (obj.memberId) {
+              req.session.member = {
+                memberId: obj.memberId.id,
+                nickname: obj.memberId.nickname,
+                login_name: mobile,
+                loginIp: obj.loginIp,
+                loginAt: obj.loginAt
+              };
             }
             //记录登录IP和时间
             Shop_member_account.update(obj.id, {
-              loginIp: req.ip,
+              loginIp: StringUtil.getIp(req),
               loginAt: moment().format('X')
             }).exec(function (ep, op) {
             });
@@ -131,7 +135,7 @@ module.exports = {
             Shop_member_cart.updateCookieCartDataToDb(req, res, obj.memberId, function () {
               return res.json({code: 0, msg: '登录成功'});
             });
-          }else {
+          } else {
             return res.json({code: 2, msg: '用户不存在'});
           }
         });
@@ -151,10 +155,10 @@ module.exports = {
         Shop_member_account.findOne({login_name: mobile}).exec(function (err, obj) {
           if (obj)return res.json({code: 2, msg: '帐号已存在，请更换手机号注册'});
           Shop_member.create({
-            lv_id:0,
+            lv_id: 0,
             nickname: mobile.substring(0, 3) + '****' + mobile.substring(7),
             mobile: mobile,
-            reg_ip: req.ip,
+            reg_ip: StringUtil.getIp(req),
             reg_source: 'pc'
           }).exec(function (err, member) {
             if (member) {
@@ -176,47 +180,47 @@ module.exports = {
                     loginAt: member.loginAt
                   };
 //网页注册赠送优惠券
-                  if(sails.config.system.ShopConfig.member_reg_coupon>0){
-                    Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function(couponErr,coupon){
-                      if(coupon.disabled==false&&coupon.maxNum>coupon.hasNum){
+                  if (sails.config.system.ShopConfig.member_reg_coupon > 0) {
+                    Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function (couponErr, coupon) {
+                      if (coupon.disabled == false && coupon.maxNum > coupon.hasNum) {
                         Shop_member_coupon.create({
-                          memberId:member.id,
-                          couponId:coupon.id,
-                          couponName:coupon.name,
-                          couponPrice:coupon.price,
-                          status:0,
-                          createdAt:moment().format('X')
-                        }).exec(function(mcErr,mc){
+                          memberId: member.id,
+                          couponId: coupon.id,
+                          couponName: coupon.name,
+                          couponPrice: coupon.price,
+                          status: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (mcErr, mc) {
 
                         });
                       }
                     });
                   }
                   //网页注册赠送积分
-                  var member_reg_score=sails.config.system.ShopConfig.member_reg_score||0;
-                  if(member_reg_score>0){
-                    Shop_member.update(member.id,{score:member.score+member_reg_score}).exec(function(mscoreErr,mscore){
-                      if(mscore.length>0){
+                  var member_reg_score = sails.config.system.ShopConfig.member_reg_score || 0;
+                  if (member_reg_score > 0) {
+                    Shop_member.update(member.id, {score: member.score + member_reg_score}).exec(function (mscoreErr, mscore) {
+                      if (mscore.length > 0) {
                         //将cookies购物车数据同步到数据库
-                        Shop_member.findOne(mscore[0].id).exec(function(findErr,findObj){
+                        Shop_member.findOne(mscore[0].id).exec(function (findErr, findObj) {
                           Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
                             return res.json({code: 0, msg: '注册成功'});
                           });
                         });
                         Shop_member_score_log.create({
-                          memberId:member.id,
-                          oldScore:member.score,
-                          newScore:member.score+member_reg_score,
-                          diffScore:member_reg_score,
-                          note:'注册会员赠送',
-                          createdBy:0,
-                          createdAt:moment().format('X')
-                        }).exec(function(logErr,log){
+                          memberId: member.id,
+                          oldScore: member.score,
+                          newScore: member.score + member_reg_score,
+                          diffScore: member_reg_score,
+                          note: '注册会员赠送',
+                          createdBy: 0,
+                          createdAt: moment().format('X')
+                        }).exec(function (logErr, log) {
 
                         });
                       }
                     });
-                  }else{
+                  } else {
                     //将cookies购物车数据同步到数据库
                     Shop_member_cart.updateCookieCartDataToDb(req, res, member, function () {
                       return res.json({code: 0, msg: '注册成功'});
@@ -259,7 +263,7 @@ module.exports = {
     var publicCaptcha = req.session.publicCaptcha || '';
     var code = StringUtil.randomNum(6);
     if (vercode == publicCaptcha) {
-      if(type=='login'){
+      if (type == 'login') {
         Shop_member_account.findOne({
           login_name: mobile
         }).exec(function (em, om) {
@@ -287,7 +291,7 @@ module.exports = {
           }
         });
       }
-      if(type=='join'){
+      if (type == 'join') {
         Shop_member_account.findOne({
           login_name: mobile
         }).exec(function (em, om) {
@@ -364,6 +368,49 @@ module.exports = {
       return res.json({code: 1, msg: '用户尚未登录'});
     }
   },
+  getSmscodeMobile: function (req, res) {
+    var mobile = req.body.mobile || '';
+    var type = req.body.type || '';
+    var sms = '';
+    var member = req.session.member;
+    //return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
+    if (member && member.memberId > 0) {
+      var tmp = sails.config.system.SmsConfig.sms_reg_template;
+      if (type == 'join') {
+        sms = '注册验证';
+      } else if (type == 'login') {
+        tmp = sails.config.system.SmsConfig.sms_login_template;
+        sms = '登录验证';
+      } else if (type == 'check') {
+        tmp = sails.config.system.SmsConfig.sms_check_template;
+        sms = '身份验证';
+      } else if (type == 'password') {
+        tmp = sails.config.system.SmsConfig.sms_password_template;
+        sms = '变更验证';
+      }
+      var code = StringUtil.randomNum(6);
+      SmsService.sendVercode(mobile || '', {
+        code: code,
+        product: sails.config.system.SiteConfig.site_name || 'SunShop'
+      }, tmp, function (result) {
+        if (result) {
+          RedisService.set('sms_vercode_' + mobile || '', code, 60 * 5, function (e, o) {
+            if (!e) {
+              Sms_log.create({mobile: mobile || '', code: code, sms: sms}).exec(function (e1, o1) {
+              });
+              return res.json({code: 0, msg: '短信发送成功，请在5分钟之内进行验证'});
+            } else {
+              return res.json({code: 2, msg: '短信未发送成功，请重试'});
+            }
+          });
+        } else {
+          return res.json({code: 2, msg: '短信未发送成功，请重试'});
+        }
+      });
+    } else {
+      return res.json({code: 1, msg: '用户尚未登录'});
+    }
+  },
   checkLoginname: function (req, res) {
     var id = req.params.id;
     Shop_member_account.findOne({login_name: id}).exec(function (err, obj) {
@@ -394,5 +441,313 @@ module.exports = {
     } else {
       res.redirect('/');
     }
+  },
+  oauthQq:function(req,res){
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/account_qq', req.data);
+  },
+  oauthQqLogout:function(req,res){
+    return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/account_qq_logout', req.data);
+  },
+  oauthQqStatus:function(req, res){
+    var oInfo=req.body||{};
+    var openid=oInfo.openid;
+    if(openid){
+      Shop_member_bind.findOne({bind_type:'qq',bind_openid: openid}).exec(function (bindErr1, bind1) {
+        if (bind1) {
+          //如果存在微信商城帐号
+          req.session.member = {
+            memberId: bind1.memberId,
+            nickname: bind1.bind_nickname,
+            login_name: openid,
+            loginIp: StringUtil.getIp(req),
+            loginAt: moment().format('X'),
+            loginQq: true,
+            binded: bind1.binded,
+            openid: openid
+          };
+          Shop_member.findOne(bind1.memberId).exec(function (findErr, findObj) {
+            Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+              return res.json({code: 0});
+            });
+          });
+        } else {
+          //如果不存在微信商城帐号，则新注册帐号(前提是微信支付和微信帐号、菜单都配置好)
+            async.waterfall([
+              function (done) {
+                //是否开启自动创建商城帐号
+                Shop_member_bind.findOne({bind_type:'qq',bind_openid: openid}).exec(function (bindErr, bind) {
+                  if (!bind) {
+                    //如果帐号绑定表数据不存在，则创建
+                    var sex=0;
+                    if(oInfo.gender=='男'){
+                      sex=1;
+                    }else if(oInfo.gender=='女'){
+                      sex=2;
+                    }
+                    Shop_member.create({
+                      nickname: oInfo.nickname,
+                      headimgurl: oInfo.headimgurl || '',
+                      sex: sex,
+                      reg_ip: StringUtil.getIp(req),
+                      reg_time: moment().format('X'),
+                      reg_source: 'oauth_qq'
+                    }).exec(function (mmbErr, mmb) {
+                      Shop_member_bind.create({
+                        memberId: mmb.id,
+                        bind_type: 'qq',
+                        bind_openid: openid,
+                        bind_nickname: oInfo.nickname,
+                        disabled: false,
+                        createdAt: moment().format('X')
+                      }).exec(function (bcErr, bc) {
+                        bc.jiSuan = true;
+                        return done(null, bc);
+                      });
+                    });
+                  } else {
+                    Shop_member_bind.update({bind_type:'qq',bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                      //如果是取消关注重新关注的，则不进行积分优惠券计算
+                      bind.jiSuan = false;
+                      return done(null, bind);
+                    });
+                  }
+                });
+              }
+              , function (bind, done) {
+                if (bind.jiSuan == false)
+                  return done(null, bind);
+                Shop_member.findOne(bind.memberId).exec(function (errmmb, mmb) {
+                  var member_reg_score = sails.config.system.ShopConfig.member_reg_score || 0;
+                  if (member_reg_score > 0) {
+                    Shop_member.update(mmb.id, {score: mmb.score + member_reg_score}).exec(function (mscoreErr, mscore) {
+                      Shop_member_score_log.create({
+                        memberId: mmb.id,
+                        oldScore: mmb.score,
+                        newScore: mmb.score + member_reg_score,
+                        diffScore: member_reg_score,
+                        note: 'QQ信任登录注册赠送',
+                        createdBy: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (logErr, log) {
+                        return done(null, bind);
+                      });
+                    });
+                  } else
+                    return done(null, bind);
+                });
+              }, function (bind, done) {
+                if (bind.jiSuan == false)
+                  return done(null, bind);
+                //注册赠送优惠券
+                if (sails.config.system.ShopConfig.member_reg_coupon > 0) {
+                  Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function (couponErr, coupon) {
+                    if (coupon.disabled == false && coupon.maxNum > coupon.hasNum) {
+                      Shop_member_coupon.create({
+                        memberId: bind.memberId,
+                        couponId: coupon.id,
+                        couponName: coupon.name,
+                        couponPrice: coupon.price,
+                        status: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (mcErr, mc) {
+                        return done(null, bind);
+                      });
+                    } else {
+                      return done(null, bind);
+                    }
+                  });
+                } else {
+                  return done(null, bind);
+                }
+              }
+            ], function (e, bind) {
+              req.session.member = {
+                memberId: bind.memberId,
+                nickname: bind.bind_nickname,
+                login_name: openid,
+                loginIp: StringUtil.getIp(req),
+                loginAt: moment().format('X'),
+                loginQq: true,
+                binded: bind.binded,
+                openid: openid
+              };
+              Shop_member.findOne(bind.memberId).exec(function (findErr, findObj) {
+                Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+                  return res.json({code: 0});
+                });
+              });
+            });
+          }
+      });
+
+    }else return res.json({code: 1});
+  },
+  oauthWeixin: function (req, res) {
+    var sn = StringUtil.getUuid(6, 10);
+    RedisService.set('oauthWeixin_' + sn, JSON.stringify({loginStatus: false}), 10 * 60, function (err, reply) {
+      return res.json({code: 0, msg: '', sn: sn});
+    });
+  },
+  oauthWeixinStatus: function (req, res) {
+    var sn = req.params.id;
+    RedisService.get('oauthWeixin_' + sn, function (e, o) {
+      if (e || !o)return res.json({code: 1});
+      var user = JSON.parse(o);
+      if (!user.loginStatus)return res.json({code: 1});
+      var openid = user.openid;
+      Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr1, bind1) {
+        if (bind1) {
+          //如果存在微信商城帐号
+          req.session.member = {
+            memberId: bind1.memberId,
+            nickname: bind1.bind_nickname,
+            login_name: openid,
+            loginIp: StringUtil.getIp(req),
+            loginAt: moment().format('X'),
+            loginWx: true,
+            binded: bind1.binded,
+            openid: openid
+          };
+          Shop_member.findOne(bind1.memberId).exec(function (findErr, findObj) {
+            Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+              return res.json({code: 0});
+            });
+          });
+        } else {
+          //如果不存在微信商城帐号，则新注册帐号(前提是微信支付和微信帐号、菜单都配置好)
+          if (sails.config.system.ShopConfig.pay_wxpay) {
+            async.waterfall([
+              function (done) {
+                Wx_config.findOne({appid: sails.config.system.ShopConfig.pay_wxpay_info.wxpay_appid}).exec(function (e, o) {
+                  if (o) {
+                    return done(null, o);
+                  }
+                  return done('error', {id: 0});
+                });
+              },
+              function (conf, done) {
+                Wx_user.count({openid: openid, wxid: conf.id}).exec(function (err, c) {
+                  if (!err && c > 0) {
+                    //若微信表存在数据,则更新
+                    user.nickname = emoji.unifiedToHTML(user.nickname);
+                    Wx_user.update({openid: openid, wxid: conf.id}, user).exec(function (e3, o3) {
+                      return done(null, o3[0]);
+                    });
+                  } else {
+                    user.wxid = conf.id;
+                    user.subscribe = 0;
+                    user.nickname = emoji.unifiedToHTML(user.nickname);
+                    Wx_user.create(user).exec(function (e3, o) {
+                      return done(null, o);
+                    });
+
+                  }
+                });
+              },
+              function (wxuser, done) {
+                //是否开启自动创建商城帐号
+                Shop_member_bind.findOne({bind_type:'weixin',bind_openid: openid}).exec(function (bindErr, bind) {
+                  if (!bind) {
+                    //如果帐号绑定表数据不存在，则创建
+                    Shop_member.create({
+                      nickname: wxuser.nickname,
+                      headimgurl: wxuser.headimgurl || '',
+                      sex: wxuser.sex || 0,
+                      reg_ip: StringUtil.getIp(req),
+                      reg_time: moment().format('X'),
+                      reg_source: 'oauth_weixin'
+                    }).exec(function (mmbErr, mmb) {
+                      Shop_member_bind.create({
+                        memberId: mmb.id,
+                        bind_type: 'weixin',
+                        bind_openid: openid,
+                        bind_nickname: wxuser.nickname,
+                        disabled: false,
+                        createdAt: moment().format('X')
+                      }).exec(function (bcErr, bc) {
+                        bc.jiSuan = true;
+                        return done(null, bc);
+                      });
+                    });
+                  } else {
+                    Shop_member_bind.update({bind_type:'weixin',bind_openid: openid}, {disabled: false}).exec(function (bcErr2, bc2) {
+                      //如果是取消关注重新关注的，则不进行积分优惠券计算
+                      bind.jiSuan = false;
+                      return done(null, bind);
+
+                    });
+                  }
+                });
+              }
+              , function (bind, done) {
+                if (bind.jiSuan == false)
+                  done(null, bind);
+                Shop_member.findOne(bind.memberId).exec(function (errmmb, mmb) {
+                  var member_reg_score = sails.config.system.ShopConfig.member_reg_score || 0;
+                  if (member_reg_score > 0) {
+                    Shop_member.update(mmb.id, {score: mmb.score + member_reg_score}).exec(function (mscoreErr, mscore) {
+                      Shop_member_score_log.create({
+                        memberId: mmb.id,
+                        oldScore: mmb.score,
+                        newScore: mmb.score + member_reg_score,
+                        diffScore: member_reg_score,
+                        note: '微信信任登录注册赠送',
+                        createdBy: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (logErr, log) {
+                        return done(null, bind);
+                      });
+                    });
+                  } else
+                    return done(null, bind);
+                });
+              }, function (bind, done) {
+                if (bind.jiSuan == false)
+                  done(null, bind);
+                //注册赠送优惠券
+                if (sails.config.system.ShopConfig.member_reg_coupon > 0) {
+                  Shop_sales_coupon.findOne(sails.config.system.ShopConfig.member_reg_coupon).exec(function (couponErr, coupon) {
+                    if (coupon.disabled == false && coupon.maxNum > coupon.hasNum) {
+                      Shop_member_coupon.create({
+                        memberId: bind.memberId,
+                        couponId: coupon.id,
+                        couponName: coupon.name,
+                        couponPrice: coupon.price,
+                        status: 0,
+                        createdAt: moment().format('X')
+                      }).exec(function (mcErr, mc) {
+                        return done(null, bind);
+                      });
+                    } else {
+                      return done(null, bind);
+                    }
+                  });
+                } else {
+                  return done(null, bind);
+                }
+              }
+            ], function (e, bind) {
+              req.session.member = {
+                memberId: bind.memberId,
+                nickname: bind.bind_nickname,
+                login_name: openid,
+                loginIp: StringUtil.getIp(req),
+                loginAt: moment().format('X'),
+                loginWx: true,
+                binded: bind.binded,
+                openid: openid
+              };
+              Shop_member.findOne(bind.memberId).exec(function (findErr, findObj) {
+                Shop_member_cart.updateCookieCartDataToDb(req, res, findObj, function () {
+                  return res.json({code: 0});
+                });
+              });
+            });
+          } else {
+            return res.json({code: 1});
+          }
+        }
+      });
+    });
   }
 };

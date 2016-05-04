@@ -1,0 +1,9 @@
+
+<%if(sails.config.system.ShopConfig.oauth_open&&sails.config.system.ShopConfig.pay_wxpay&&sails.config.system.ShopConfig.oauth_qq){
+var qq_appid='';
+  if(sails.config.system.ShopConfig.oauth_qq_info){
+    qq_appid=sails.config.system.ShopConfig.oauth_qq_info.qq_appid;
+}
+%>
+<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+<%}%>

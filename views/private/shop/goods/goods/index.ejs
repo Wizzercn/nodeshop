@@ -213,7 +213,7 @@
   function qrcode(id,name){
     $("#qrName").html(name);
     $("#qrCode").html("");
-    $("#qrCode").qrcode({width: 120,height: 120,text: "http://<%=sails.config.system.AppDomain%>/prodcut/"+id});
+    $("#qrCode").qrcode({width: 120,height: 120,text: "http://<%=sails.config.system.AppDomain%>/goods/"+id});
     $("#dialogQrcode").modal("show");
   }
   function del(id) {

@@ -17,15 +17,24 @@ module.exports = {
       size:100
     },
     price:{
-      type:'integer'
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     //最大数量
     maxNum:{
-      type:'integer'
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     //已发放数量
     hasNum:{
-      type:'integer'
+      type:'integer',
+      defaultsTo: function () {
+        return 0;
+      }
     },
     //是否可用于积分兑换
     is_score:{

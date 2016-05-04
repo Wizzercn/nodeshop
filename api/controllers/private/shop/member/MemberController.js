@@ -14,10 +14,22 @@ module.exports = {
     var draw = parseInt(req.body.draw);
     var order = req.body.order || [];
     var columns = req.body.columns || [];
+    var id = req.body.id;
+    var nickname = req.body.nickname;
+    var mobile = req.body.mobile;
     var sort = {};
     var where = {};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
+    }
+    if(id){
+      where.id=id;
+    }
+    if(nickname){
+      where.nickname={like:'%'+nickname+'%'};
+    }
+    if(mobile){
+      where.mobile={like:'%'+mobile+'%'};
     }
     Shop_member.count(where).exec(function (err, count) {
       if (!err && count > 0) {
@@ -154,7 +166,10 @@ module.exports = {
       req.data.obj=obj||{};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-      return res.view('private/shop/member/member/money', req.data);
+      Shop_member_money_log.find({memberId:id}).sort({createdAt:'desc'}).limit(10).exec(function(e,l){
+        req.data.list = l||[];
+        return res.view('private/shop/member/member/money', req.data);
+      });
     });
   },
   doMoney:function(req,res){
@@ -192,7 +207,10 @@ module.exports = {
       req.data.obj=obj||{};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-      return res.view('private/shop/member/member/score', req.data);
+      Shop_member_score_log.find({memberId:id}).sort({createdAt:'desc'}).limit(10).exec(function(e,l){
+        req.data.list = l||[];
+        return res.view('private/shop/member/member/score', req.data);
+      });
     });
   },
   doScore:function(req,res){
@@ -222,6 +240,39 @@ module.exports = {
           return res.json({code:0,msg:''});
         });
       });
+    });
+  },
+  coupon: function (req, res) {
+    var id=req.params.id||'';
+    Shop_sales_coupon.find({disabled:false}).exec(function(couponErr,couponList){
+      req.data.couponList = couponList||[];
+      req.data.moment = moment;
+      req.data.StringUtil = StringUtil;
+      req.data.id = id;
+      Shop_member_coupon.find({memberId:id,status:0}).sort({couponPrice:'asc'}).exec(function(e,l){
+        req.data.list = l||[];
+        return res.view('private/shop/member/member/coupon', req.data);
+      });
+    });
+  },
+  doCoupon:function(req,res){
+    var id=req.body.id||'';
+    var couponId=req.body.couponId||'';
+    Shop_sales_coupon.findOne(couponId).exec(function(e1,coupon){
+      if(e1)
+        return res.json({code:1,msg:'赠送失败'});
+        Shop_member_coupon.create({
+          memberId: id,
+          couponId:couponId,
+          couponName:coupon.name,
+          couponPrice:coupon.price,
+          status:0,
+          createdAt:moment().format('X')
+        }).exec(function(e3,o3){
+          if(e3)
+            return res.json({code:1,msg:'赠送失败'});
+          return res.json({code:0,msg:'赠送成功'});
+        });
     });
   },
   delete: function (req, res) {

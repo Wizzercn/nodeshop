@@ -5,10 +5,7 @@ module.exports = {
   index: function (req, res) {
     Shop_config.findOrCreate({id: 1}).exec(function (err, obj) {
       req.data.obj = obj||{};
-      Shop_sales_coupon.find({disabled:false}).exec(function(couponErr,couponList){
-        req.data.couponList = couponList||[];
-        return res.view('private/conf/shop/index', req.data);
-      });
+      return res.view('private/conf/shop/index', req.data);
     });
   },
   editDo: function (req, res) {
@@ -20,13 +17,14 @@ module.exports = {
     body.pay_money=body.pay_money=='1';
     body.pay_alipay=body.pay_alipay=='1';
     body.pay_wxpay=body.pay_wxpay=='1';
-    body.member_weixinreg_auto=body.member_weixinreg_auto=='1';
+    body.oauth_open=body.oauth_open=='1';
+    body.oauth_weixin=body.oauth_weixin=='1';
+    body.oauth_qq=body.oauth_qq=='1';
     body.pay_alipay_info=JSON.parse(body.pay_alipay_info)||{};
     body.pay_wxpay_info=JSON.parse(body.pay_wxpay_info)||{};
-
     Shop_config.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: '保存失败'});
-      sails.config.system.ShopConfig=body;
+      sails.config.system.ShopConfig=obj[0];
       return res.json({code: 0, msg: '保存成功'});
     });
   }
