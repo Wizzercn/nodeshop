@@ -3,16 +3,44 @@
     <a class="btn btn-primary navbar-btn" href="/private/shop/member/member/add" data-pjax><i class="ti-plus"></i> 添加会员</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
   </div>
+  <div class="pull-right">
+    <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
+        class="fa fa-sliders"></i> 筛选
+    </button>
+  </div>
 </header>
+<div class="cd-panel from-right">
+  <header class="cd-panel-header">
+    <h4>高级筛选</h4>
+  </header>
+  <div class="cd-panel-container">
+    <div class="cd-panel-content shadow">
+      <div class="form-group">
+        <label for="name">会员ID</label>
+        <input type="text" id="id" name="id" onclick="this.value=''" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="name">会员昵称</label>
+        <input type="text" id="nickname" name="nickname" onclick="this.value=''" class="form-control" placeholder="">
+      </div>
+      <div class="form-group">
+        <label for="name">手机号码</label>
+        <input type="text" id="mobile" name="mobile" onclick="this.value=''" class="form-control" placeholder="">
+      </div>
+      <button id="searchBtn" type="button" class="btn btn-default">查询</button>
+    </div>
+  </div>
+</div>
 <div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
     <input id="unitid" type="hidden">
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
+        <th>会员ID</th>
         <th>会员昵称</th>
         <th>会员等级</th>
-        <th>用户名</th>
+        <th>登录名</th>
         <th>手机号码</th>
         <th>预存款</th>
         <th>积分</th>
@@ -80,10 +108,14 @@
         "url": "/private/shop/member/member/data",
         "type": "post",
         "data": function (d) {
+          d.id=$("#id").val();
+          d.nickname=$("#nickname").val();
+          d.mobile=$("#mobile").val();
         }
       },
       "order": [[7, "desc"]],
       "columns": [
+        {"data": "id", "bSortable": true},
         {"data": "nickname", "bSortable": true},
         {"data": "lv_id", "bSortable": true},
         {"data": "accounts", "bSortable": true},
@@ -100,7 +132,7 @@
               return row.lv_id.name;
             return '';
           },
-          "targets": 1
+          "targets": 2
         },
         {
           "render": function (data, type, row) {
@@ -113,19 +145,19 @@
             }
             return s;
           },
-          "targets": 2
+          "targets": 3
         },
         {
           "render": function (data, type, row) {
             return '&yen;'+setPrice(data);
           },
-          "targets": 4
+          "targets": 5
         },
         {
           "render": function (data, type, row) {
             return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
           },
-          "targets": 7
+          "targets": 8
         },
         {
           "render": function (data, type, row) {
@@ -136,12 +168,13 @@
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
               '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
+              '<li><a href="/private/shop/member/member/coupon/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">优惠券</a></li>' +
               '<li class="divider"></li>' +
               '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 8
+          "targets": 9
         }
       ]
     });

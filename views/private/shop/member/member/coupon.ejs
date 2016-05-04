@@ -4,37 +4,31 @@
       <section class="panel panel-primary no-b">
         <header class="panel-heading clearfix brtl brtr">
           <div class="overflow-hidden">
-            <a href="javascript:;" class="h4 show no-m pt5">积分</a>
+            <a href="javascript:;" class="h4 show no-m pt5">赠送优惠券</a>
           </div>
         </header>
         <div class="row mb10" style="text-align: center;padding-top: 10px;">
           <table width="80%" style="padding: 10px;">
             <tr style="height: 30px;">
-              <td width="30%" align="right">当前积分：</td>
+              <td width="30%" align="right">选择优惠券：</td>
               <td width="70%" align="left">
-                <span style="color: red">&yen;<%= obj.score||0 %></span>
+                <select class="form-control" name="couponId" id="couponId">
+                  <option value="0">无</option>
+                  <%couponList.forEach(function(o){
+                  if(o.maxNum> o.hasNum){
+                  %>
+                  <option value="<%=o.id%>"><%=o.name%>(&yen;<%=StringUtil.setPrice(o.price)||'0.00'%>)</option>
+                  <%}});%>
+                </select>
               </td>
             </tr>
-            <tr style="height: 30px;">
-              <td width="30%" align="right">调整积分：</td>
+            <tr style="height: 40px;">
+              <td width="30%" align="right">尚未使用的优惠券：</td>
               <td width="70%" align="left">
-                <input type="text" id="score" name="score" class="control-group" placeholder="负值表示减积分">
-              </td>
-            </tr>
-            <tr style="height: 30px;">
-              <td width="30%" align="right">备注：</td>
-              <td width="70%" align="left">
-                <input type="text" id="txt" name="txt" class="control-group">
-              </td>
-            </tr>
-            <tr style="height: 40px;padding-top: 30px;">
-              <td width="30%" align="right">最近十条记录：</td>
-              <td width="70%" align="left">
-                <%if(list.length>0){list.forEach(function(o){
-                %>
-                <%=moment(o.createdAt*1000).format('YYYY-MM-DD HH:mm:ss')%>,<span style="color: green"><%-o.oldScore-o.newScore>0?'-':'+'%><%=o.diffScore%></span>,<%=o.note||''%>
-                <br>
-                <%});}else{%>
+                  <%if(list.length>0){list.forEach(function(o){
+                  %>
+                <%=o.couponName||''%>(&yen;<%=StringUtil.setPrice(o.couponPrice)||'0.00'%>)<br>
+                  <%});}else{%>
                 无
                 <%}%>
               </td>
@@ -55,7 +49,7 @@
       var btn = $("#ok");
       var dialog = $("#dialogDetail");
       btn.button("loading");
-      $.post("/private/shop/member/member/doScore", {id: <%=obj.id%>,score:$("#score").val(),txt:$("#txt").val()}, function (data) {
+      $.post("/private/shop/member/member/doCoupon", {id: <%=id%>,couponId:$("#couponId").val()}, function (data) {
         if (data.code == 0) {
           Toast.success("提交成功");
           dialog.modal("hide");

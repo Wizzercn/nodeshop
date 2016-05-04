@@ -90,6 +90,21 @@
         },
         {
           "render": function (data, type, row) {
+            switch(data){
+              case 0:
+                return '未使用';
+              case 1:
+                return '已使用';
+              case 2:
+                return '已过期';
+              default :
+                return '已过期';
+            }
+          },
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
             if(data)
               return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
             return '';
