@@ -203,6 +203,10 @@
               $.post("/private/shop/order/order/cancel/" + id, {}, function (data) {
                 if (data.code == 0) {
                   datatable.ajax.reload(null,false);
+                }else if (data.code == 'alipay') {
+                  console.log(data.msg);
+                  var obj = window.open("about:blank");
+                  obj.document.write(data.msg);   
                 } else {
                   Toast.error(data.msg);
                 }

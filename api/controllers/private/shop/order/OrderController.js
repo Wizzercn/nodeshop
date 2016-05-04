@@ -1,3 +1,4 @@
+
 /**
 * Created by root on 20/4/16.
 */
@@ -117,8 +118,6 @@ module.exports = {
       });
     });
   },
-
-
   doSend: function(req,res){
     var orderList = req.body.orderlist;
     var i = 0;
@@ -157,7 +156,6 @@ module.exports = {
     Shop_order.findOne(req.params.id)
     .populate('memberId')
     .exec(function (err,order) {
-      console.log(order);
       if(err) {res.json({msg:'订单不存在'});}
       var member = order.memberId;
       Shop_order.update({id: req.params.id}, {
@@ -194,9 +192,9 @@ module.exports = {
             opResult:ok,fail
             */
             Shop_order_log.create({
-              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
-              opId: member.id,
-              opNickname: member.nickname,
+              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
+              opId: 'admin',
+              opNickname: '管理员',
               opAt: moment().format('X'),
               opResult: 'ok'
             }).exec(function (el1, ol1) {
@@ -242,7 +240,7 @@ module.exports = {
                     newScore: member.score - order.score,
                     diffScore: order.score,
                     note: '取消订单:' + id,
-                    createdBy: 0,
+                    createdBy: '管理员',
                     createdAt: moment().format('X')
                   }).exec(function (es, os) {
 
@@ -276,9 +274,16 @@ module.exports = {
                 }).exec(function (e3, o3) {
 
                 });
+                Shop_order.update({id: id}, {
+                  payStatus: 3,
+                  updateAt: moment().format('X')
+                }).exec(function (err,obj){
+
+                });
                 return res.json({code: 0, msg: ''});
               });
-            } else {
+            }
+            else {
               //如果是微信支付、支付宝支付
               if (order.payType == 'pay_wxpay') {
                 Shop_history_payments.findOne({orderId:id})
@@ -297,10 +302,110 @@ module.exports = {
                         transaction_id: payHistory.trade_no
                       };
                       wxpay.refund(params, function(err, result){
-                        console.log('wx_result'+result);
-                        console.log('wx_err'+err);
-                        return res.json({code: 0, msg: ''});
+                        Shop_member.update(member.id, {
+                          money: member.money + order.finishAmount,
+                          score: member.score - order.score
+                        }).exec(function (e4, o4) {
+
+                          if (order.score > 0) {
+                            Shop_member_score_log.create({
+                              memberId: member.id,
+                              orderId: order.id,
+                              oldScore: member.score,
+                              newScore: member.score - order.score,
+                              diffScore: order.score,
+                              note: '取消订单:' + id,
+                              createdBy: '管理员',
+                              createdAt: moment().format('X')
+                            }).exec(function (es, os) {
+
+                            });
+                          }
+                          Shop_history_refunds.create({
+                            orderId: order.id,
+                            memberId: member.id,
+                            money: order.finishAmount,
+                            payType: 'pay_wxpay',
+                            payName: '微信支付',
+                            payAccount: member.nickname,
+                            payIp: req.ip,
+                            payAt: moment().format('X'),
+                            memo: '微信退款:￥' + StringUtil.setPrice(order.finishAmount),
+                            finishAt: moment().format('X'),
+                            disabled: false
+                          }).exec(function (e3, o3) {
+
+                          });
+                          Shop_order.update({id: id}, {
+                            payStatus: 3,
+                            updateAt: moment().format('X')
+                          }).exec(function (err,obj){
+                            return res.json({code: 0, msg: ''});
+                          });
+                        });
                       });
+                    }
+                  });
+                });
+              }
+              else if (order.payType == 'pay_alipay') {
+                Shop_history_payments.findOne({orderId:id})
+                .exec(function(err,payHistory){
+                  AlipayService.init_refund(function (err, alipay) {
+                    if (err) {
+                      return res.send("支付宝加载失败，请重试。");
+                    } else {
+                      var detailData = payHistory.trade_no+'^'+payHistory.money+'^'+'备注';
+                      var data = {
+                        refund_date : moment().format('YYYY-MM-DD HH:mm:ss'),
+                        batch_no: moment().format('YYYYMMDD')+id,
+                        batch_num:1,
+                        detail_data: detailData
+                      };
+                      var result = alipay.refund_fastpay_by_platform_pwd(data,res);
+                      Shop_member.update(member.id, {
+                        money: member.money + order.finishAmount,
+                        score: member.score - order.score
+                      }).exec(function (e4, o4) {
+
+                        if (order.score > 0) {
+                          Shop_member_score_log.create({
+                            memberId: member.id,
+                            orderId: order.id,
+                            oldScore: member.score,
+                            newScore: member.score - order.score,
+                            diffScore: order.score,
+                            note: '取消订单:' + id,
+                            createdBy: '管理员',
+                            createdAt: moment().format('X')
+                          }).exec(function (es, os) {
+
+                          });
+                        }
+                        Shop_history_refunds.create({
+                          orderId: order.id,
+                          memberId: member.id,
+                          money: order.finishAmount,
+                          payType: 'pay_alipay',
+                          payName: '支付宝支付',
+                          payAccount: member.nickname,
+                          payIp: req.ip,
+                          payAt: moment().format('X'),
+                          memo: '支付宝退款:￥' + StringUtil.setPrice(order.finishAmount),
+                          finishAt: moment().format('X'),
+                          disabled: false
+                        }).exec(function (e3, o3) {
+
+                        });
+                        Shop_order.update({id: id}, {
+                          payStatus: 3,
+                          updateAt: moment().format('X')
+                        }).exec(function (err,obj){
+                          return  res.json({code: 'alipay', msg: result});
+                          // return res.json({code: 0, msg: ''});
+                        });
+                      });
+
                     }
                   });
                 });
@@ -325,5 +430,8 @@ module.exports = {
         }
       });
     });
+  },
+  doAliRefund: function (req, res) {
+    data
   }
 }

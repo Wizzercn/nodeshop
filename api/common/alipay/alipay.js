@@ -128,7 +128,8 @@ Alipay.prototype.refund_fastpay_by_platform_pwd = function(data, res){
   };
 
   var html_text = alipaySubmit.buildRequestForm(parameter,"get", "确认");
-  return res.send(html_text);
+  return html_text;
+  // return res.send(html_text);
 };
 
 //支付宝纯担保交易接口接口
@@ -320,7 +321,3 @@ Alipay.prototype.create_direct_pay_by_user_return = function(req, cb){
 };
 
 exports.Alipay = Alipay;
-
-
-
-
