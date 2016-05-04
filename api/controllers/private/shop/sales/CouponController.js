@@ -47,29 +47,27 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    var name = body.name;
-    Shop_sales_coupon.findOne({name: name}).exec(function (err, obj) {
-      if (obj) {
-        return res.json({code: 1, msg: sails.__('add.exist')});
-      } else {
-        body.disabled=body.disabled=='1';
-        body.createdBy = req.session.user.id;
-        Shop_sales_coupon.create(body).exec(function (e, o) {
-          if (e)return res.json({code: 1, msg: sails.__('add.fail')});
-          return res.json({code: 0, msg: sails.__('add.ok')});
-        });
-      }
+    body.price=StringUtil.getPrice(body.price);
+    body.is_score=body.is_score=='1';
+    body.disabled=body.disabled=='1';
+    body.createBy = req.session.user.id;
+    Shop_sales_coupon.create(body).exec(function (e, o) {
+      if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      return res.json({code: 0, msg: sails.__('add.ok')});
     });
   },
   edit: function (req, res) {
     var id = req.params.id;
     Shop_sales_coupon.findOne({id: id}).exec(function (err, obj) {
       req.data.obj = obj;
+      req.data.StringUtil = StringUtil;
       return res.view('private/shop/sales/coupon/edit', req.data);
     });
   },
   editDo: function (req, res) {
     var body = req.body;
+    body.price=StringUtil.getPrice(body.price);
+    body.is_score=body.is_score=='1';
     body.disabled=body.disabled=='1';
     Shop_sales_coupon.update({id: body.id}, body).exec(function (err, obj) {
       if (err)return res.json({code: 1, msg: sails.__('update.fail')});
