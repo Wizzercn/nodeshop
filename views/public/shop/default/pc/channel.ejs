@@ -6,7 +6,7 @@
 <div id="schedule">
   <div class="schedule_h">
     <span class="schedule_hf">当前位置:</span>
-    <span class="schedule_hs"><a href="/">首页</a> <%if(channel.parentId>0){%> /&nbsp;&nbsp;<%=channel.parentChannel.name||'没有此栏目'%>&nbsp;&nbsp;<%}%> / <a href="/channel/<%=channel.id||'news'%>" class="color_y"><%=channel.name||'没有此栏目'%></a></span>
+    <span class="schedule_hs"><a href="/">首页</a> <%if(channel.parentId>0){%> >&nbsp;&nbsp;<%=channel.parentChannel.name||'没有此栏目'%>&nbsp;&nbsp;<%}%> > <a href="/channel/<%=channel.id||'news'%>" class="color_y"><%=channel.name||'没有此栏目'%></a></span>
   </div>
 </div>
 <div class="member_cm_f clear cf ban">

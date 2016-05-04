@@ -6,7 +6,7 @@
 <div id="schedule">
   <div class="schedule_h">
     <span class="schedule_hf">当前位置:</span>
-    <div class="schedule_hs"><a href="/">首页</a>  / <a href="/goods/<%=goods.id%>" class="color_y">产品详情</a></div>
+    <div class="schedule_hs"><a href="/">首页</a>  > <a href="/goods/<%=goods.id%>" class="color_y">产品详情</a></div>
   </div>
 </div>
 
@@ -98,30 +98,29 @@
     <li class="schedule_hd5m cf clear">
       <div class="guige_add"><span class="jia_ge">计量单位：</span><%=goods.unit||''%></div>
     </li>
-
+  <style>
+    .addr_add_c span{display: none}
+  </style>
     <li class="song cf2">
       <span class="song_l">配送范围：</span>
-      <div class="song_r"><span class="song_ra">查看具体范围<img src="<%=CssPath%>/pc/img/icon/song_x.jpg" class="song_i"/><img src="<%=CssPath%>/pc/img/icon/song_s.jpg" class="c_hide song_i"/></span>
-        <div class="slideTxtBox c_hide">
-          <div class="hd">
+      <div class="song_r"><span class="song_ra" style="background:#F4F4F4;z-index:2">查看具体范围<img src="<%=CssPath%>/pc/img/icon/song_x.jpg" class="song_i"/></span>
+        <div class="slideTxtBox c_hide" style="z-index:1">
+          <div class="hd cf2">
 
 
             <span class="arrow"><a class="next"></a><a class="prev"></a></span>
-
-            <ul>
-              <li id="s_province">查看省</li>
-              <li id="s_city">查看市</li>
-              <li id="s_county">查看区/县</li>
-            </ul>
+          <div class="addr_add_c">
+            <span id="province_chose"></span>
+            <span id="city_chose"></span>
+            <span id="county_chose"></span>
+          </div>
           </div>
           <div class="bd">
             <ul class="song_bot" id="s_province_s">
             </ul>
-            <ul class="song_bot" id="s_city_s">
-              <h3>请先选择省份</h3>
+            <ul class="song_bot" id="s_city_s" style="display: none">
             </ul>
-            <ul class="song_bot" id="s_county_s">
-              <h3>请先选择市</h3>
+            <ul class="song_bot" id="s_county_s" style="display: none">
             </ul>
           </div>
         </div></div>
@@ -244,6 +243,6 @@
   var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
   var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
 </script>
-<script type="text/javascript">jQuery(".slideTxtBox").slide();</script>
+
 <script src="<%=CssPath%>/pc/js/goods.js"></script>
 <% include common_buttom.ejs %>

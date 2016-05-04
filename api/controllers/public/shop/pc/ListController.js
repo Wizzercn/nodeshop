@@ -45,6 +45,19 @@ module.exports = {
           done(null, o);
         });
       },
+      classNext:function(done){
+        Shop_goods_class.findOne(id).exec(function(err,obj){
+          if(obj&&obj.parentId&&obj.parentId>0){
+            Shop_goods_class.find({parentId:obj.parentId,disabled:false}).exec(function(e,o){
+              done(null, o);
+            });
+          }else{
+            Shop_goods_class.find({parentId:id,disabled:false}).exec(function(e,o){
+              done(null, o);
+            });
+          }
+        });
+      },
       //获取热卖商品
       goodsData: function (done) {
         var sort={location:'desc',updatedAt:'desc'};
@@ -92,6 +105,7 @@ module.exports = {
       req.data.bannerLink = result.bannerLink || {};
       req.data.classObj = result.classObj || {};
       req.data.classChildren = result.classChildren || [];
+      req.data.classNext = result.classNext || [];
       req.data.sort_name = sort_name;
       req.data.sort_type = sort_type;
       req.data.StringUtil = StringUtil;
