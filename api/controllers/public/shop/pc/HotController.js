@@ -7,7 +7,7 @@ module.exports = {
   index: function (req, res) {
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
-    var sort_type=req.query.sort_type||'desc';
+    var sort_type = 'desc'==req.query.sort_type?'desc':'asc';
     var search_name=req.query.search_name;
     async.parallel({
       //获取cms栏目分类
@@ -62,7 +62,7 @@ module.exports = {
   ajax:function(req,res){
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
-    var sort_type=req.query.sort_type||'desc';
+    var sort_type = 'desc'==req.query.sort_type?'desc':'asc';
     var search_name=req.query.search_name;
     var sort={location:'desc',updatedAt:'desc'};
     if(sort_name=='buy'){

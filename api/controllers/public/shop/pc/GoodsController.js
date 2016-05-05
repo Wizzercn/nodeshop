@@ -137,7 +137,8 @@ module.exports = {
     var contact = req.body.contact;
     var member = req.session.member;
     var ip = StringUtil.getIp(req);
-    if (!member){memberId = 0}else{memberId = member.memberId}
+    var memberId=0;
+    if (member){memberId = member.memberId}
     var pushData = {memberId:memberId,
       contact:contact,
       comment:consultContent,
@@ -149,9 +150,9 @@ module.exports = {
     };
     Shop_member_comment.create(pushData).exec(function(err,obj){
       if(obj){
-        return res.json({code:1,msg:'成功提交咨询'});
+        return res.json({code:0,msg:'成功提交咨询'});
       }else{
-        return res.json({code:0,msg:'提交失败，请稍后再提交咨询'});
+        return res.json({code:1,msg:'提交失败，请稍后再提交咨询'});
       }
     });
   },
