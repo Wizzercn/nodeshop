@@ -36,8 +36,7 @@ module.exports = {
     //支付方式
     payType:{
       type: 'string',
-      enum: ['online','offline','deposit'],
-      size: 10
+      size: 100
     },
     //支付时间
     payAt:{

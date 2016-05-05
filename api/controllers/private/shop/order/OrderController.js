@@ -3,6 +3,7 @@
 * Created by root on 20/4/16.
 */
 var moment = require('moment');
+var fs= require('fs');
 var StringUtil = require('../../../../common/StringUtil');
 // var util = require('weixin-pay/lib/util');
 // var WXPay = require('weixin-pay');
@@ -75,6 +76,7 @@ module.exports = {
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
+        console.log(req.data);
       return res.view('private/shop/order/order/detail', req.data);
     });
   },
@@ -170,7 +172,7 @@ module.exports = {
           */
           Shop_order_log.create({
             orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
-            opId: 'admin',
+            opId: '0',
             opNickname: '管理员',
             opAt: moment().format('X'),
             opResult: 'fail'
@@ -193,7 +195,7 @@ module.exports = {
             */
             Shop_order_log.create({
               orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
-              opId: 'admin',
+              opId: '0',
               opNickname: '管理员',
               opAt: moment().format('X'),
               opResult: 'ok'
@@ -240,7 +242,7 @@ module.exports = {
                     newScore: member.score - order.score,
                     diffScore: order.score,
                     note: '取消订单:' + id,
-                    createdBy: '管理员',
+                    createdBy: 0,
                     createdAt: moment().format('X')
                   }).exec(function (es, os) {
 
@@ -315,7 +317,7 @@ module.exports = {
                               newScore: member.score - order.score,
                               diffScore: order.score,
                               note: '取消订单:' + id,
-                              createdBy: '管理员',
+                              createdBy: 0,
                               createdAt: moment().format('X')
                             }).exec(function (es, os) {
 
@@ -334,14 +336,14 @@ module.exports = {
                             finishAt: moment().format('X'),
                             disabled: false
                           }).exec(function (e3, o3) {
+                            Shop_order.update({id: id}, {
+                              payStatus: 3,
+                              updateAt: moment().format('X')
+                            }).exec(function (err,obj){
+                              return res.json({code: 0, msg: ''});
+                            });
+                          });
 
-                          });
-                          Shop_order.update({id: id}, {
-                            payStatus: 3,
-                            updateAt: moment().format('X')
-                          }).exec(function (err,obj){
-                            return res.json({code: 0, msg: ''});
-                          });
                         });
                       });
                     }
@@ -376,7 +378,7 @@ module.exports = {
                             newScore: member.score - order.score,
                             diffScore: order.score,
                             note: '取消订单:' + id,
-                            createdBy: '管理员',
+                            createdBy: 0,
                             createdAt: moment().format('X')
                           }).exec(function (es, os) {
 
@@ -419,7 +421,7 @@ module.exports = {
             */
             Shop_order_log.create({
               orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
-              opId: 'admin',
+              opId: '0',
               opNickname: '管理员操作',
               opAt: moment().format('X'),
               opResult: 'ok'
@@ -432,6 +434,20 @@ module.exports = {
     });
   },
   doAliRefund: function (req, res) {
-    data
+    Shop_history_refunds.create({
+      orderId: 1,
+      memberId: 1,
+      money: 1,
+      payType: 'pay_alipay',
+      payName: '支付宝支付',
+      payAccount:'req.body',
+      payIp: req.ip,
+      payAt: moment().format('X'),
+      memo: '支付宝退款回调',
+      finishAt: moment().format('X'),
+      disabled: false
+    }).exec(function (e3, o3) {
+
+    });
   }
 }
