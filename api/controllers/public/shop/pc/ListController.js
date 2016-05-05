@@ -8,7 +8,7 @@ module.exports = {
     var id=StringUtil.getInt(req.params.id);
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
-    var sort_type=req.query.sort_type||'desc';
+    var sort_type = 'desc'==req.query.sort_type?'desc':'asc';
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {
@@ -119,7 +119,7 @@ module.exports = {
     var id=StringUtil.getInt(req.params.id);
     var start=StringUtil.getInt(req.query.start);
     var sort_name=req.query.sort_name||'default';
-    var sort_type=req.query.sort_type||'desc';
+    var sort_type = 'desc'==req.query.sort_type?'desc':'asc';
     var sort={location:'desc',updatedAt:'desc'};
     if(sort_name=='buy'){
       sort={buy_count:sort_type};
