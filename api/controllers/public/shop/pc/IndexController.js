@@ -41,7 +41,6 @@ module.exports = {
       indexClassList: function (done) {
         Shop_goods_class.getIndexClass(function (list) {
           console.log('list::1' + JSON.stringify(list));
-
           async.waterfall([function (cb) {
             var l = [];
             var j = 0;
@@ -56,24 +55,23 @@ module.exports = {
                     clist.forEach(function (cobj) {
                       ids.push(cobj.id);
                     });
-                    obj.goodsids = ids;
+                    obj.id = ids;
                     l.push(obj);
                     j++;
                     if (j == list.length) {
                       cb(null, l);
                     }
                   });
-                } else cb(null, l);
+                } else cb(null, list);
               });
             } else cb(null, l);
           }, function (list, cb) {
             console.log('list::2' + JSON.stringify(list));
-
             var l = [];
             var j = 0;
             if (list.length > 0) {
               list.forEach(function (obj) {
-                var ids = obj.goodsids;
+                var ids = obj.id;
                 Shop_goods.getGoodsList(ids, 8, function (clist) {
                   obj.goodslist = clist || [];
                   l.push(obj);
@@ -97,7 +95,6 @@ module.exports = {
         });
       }
     }, function (err, result) {
-
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.indexClassList = result.indexClassList || [];
