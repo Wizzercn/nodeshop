@@ -40,44 +40,52 @@ module.exports = {
       //获取首页显示的商品分类、子分类及商品
       indexClassList: function (done) {
         Shop_goods_class.getIndexClass(function (list) {
+          console.log('list::1' + JSON.stringify(list));
+
           async.waterfall([function (cb) {
             var l = [];
             var j = 0;
-            list.forEach(function (obj) {
-              var ids = [];
-              ids.push(obj.id);
-              if (obj.hasChildren) {
-                Shop_goods_class.getChildrenClass(obj.id, function (clist) {
-                  obj.children = clist;
-                  var k = 0;
-                  clist.forEach(function (cobj) {
-                    ids.push(cobj.id);
+            if (list.length > 0) {
+              list.forEach(function (obj) {
+                var ids = [];
+                ids.push(obj.id);
+                if (obj.hasChildren) {
+                  Shop_goods_class.getChildrenClass(obj.id, function (clist) {
+                    obj.children = clist;
+                    var k = 0;
+                    clist.forEach(function (cobj) {
+                      ids.push(cobj.id);
+                    });
+                    obj.goodsids = ids;
+                    l.push(obj);
+                    j++;
+                    if (j == list.length) {
+                      cb(null, l);
+                    }
                   });
-                  obj.goodsids = ids;
+                } else cb(null, l);
+              });
+            } else cb(null, l);
+          }, function (list, cb) {
+            console.log('list::2' + JSON.stringify(list));
+
+            var l = [];
+            var j = 0;
+            if (list.length > 0) {
+              list.forEach(function (obj) {
+                var ids = obj.goodsids;
+                Shop_goods.getGoodsList(ids, 8, function (clist) {
+                  obj.goodslist = clist || [];
                   l.push(obj);
                   j++;
                   if (j == list.length) {
                     cb(null, l);
                   }
                 });
-              }
-            });
-          }, function (list, cb) {
-            var l = [];
-            var j = 0;
-            list.forEach(function (obj) {
-              var ids = obj.goodsids;
-              Shop_goods.getGoodsList(ids, 8, function (clist) {
-                obj.goodslist = clist || [];
-                l.push(obj);
-                j++;
-                if (j == list.length) {
-                  cb(null, l);
-                }
               });
-            });
+            } else cb(null, l);
           }], function (index_err, list) {
-            //console.log('list::' + JSON.stringify(list));
+            console.log('list::' + JSON.stringify(list));
             done(null, list);
           });
         });
