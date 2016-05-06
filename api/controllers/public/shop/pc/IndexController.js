@@ -40,7 +40,6 @@ module.exports = {
       //获取首页显示的商品分类、子分类及商品
       indexClassList: function (done) {
         Shop_goods_class.getIndexClass(function (list) {
-          console.log('list::1' + JSON.stringify(list));
           async.waterfall([function (cb) {
             var l = [];
             var j = 0;
@@ -66,7 +65,6 @@ module.exports = {
               });
             } else cb(null, l);
           }, function (list, cb) {
-            console.log('list::2' + JSON.stringify(list));
             var l = [];
             var j = 0;
             if (list.length > 0) {
@@ -83,7 +81,6 @@ module.exports = {
               });
             } else cb(null, l);
           }], function (index_err, list) {
-            console.log('list::' + JSON.stringify(list));
             done(null, list);
           });
         });
