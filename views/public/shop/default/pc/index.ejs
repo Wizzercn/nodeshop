@@ -44,9 +44,11 @@
   <div class="k_hotc cf clear"><span><%=clist1.name%></span>
     <ul class="k_hotch">
       <li class="k_hotchg brn"><a href="/list/<%=clist1.id%>">更多>></a></li>
+      <%if(clist1.children){%>
       <%clist1.children.forEach(function(clist2){%>
       <li><a href="/list/<%=clist2.id%>"><%=clist2.name%></a></li>
       <%});%>
+      <%}%>
     </ul>
   </div>
   <div class="k_hotcfg">

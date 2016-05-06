@@ -23,13 +23,33 @@ var link=bannerLink.links[0];
   <img src="<%= link.picurl||'' %>">
 </div>
 <%}%>
-<div class="wrap">
-  <ul class="mall_rf">
-    <li ><a href="<%=page_url%>?search_name=<%=search_name||''%>" style="<%=sort_name=='default'?'color: red':''%>">默认排序</a></li>
-    <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
-    <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
-  </ul>
 
+<%
+sort_type == 'asc'?'desc':'asc';
+var sortObj = {
+  'default': ['默认排序'],
+  'buy': ['销量'],
+  'price': ['价格']
+}
+%>
+
+<div class="wrap">
+  <div class="pai_m">
+    <div class="pai_w">
+      <i><%=sortObj[sort_name][0]%></i><img src="<%=CssPath%>/pc/img/paix.png" class="paix_ka"/><img src="<%=CssPath%>/pc/img/paix_a.png" class="paix_kb c_hide"/>
+      <ul class="mall_rf pai_a c_hide">
+        <%if(sort_name != 'default'){%>
+        <li><a href="<%=page_url%>?search_name=<%=search_name||''%>">默认排序</a></li>
+        <%}%>
+        <%if(sort_name != 'buy'){%>
+        <li ><a style="<%=sort_name=='buy'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=buy&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">销量<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+        <%}%>
+        <%if(sort_name != 'price'){%>
+        <li ><a style="<%=sort_name=='price'?'color: red':''%>" href="<%=page_url%>?search_name=<%=search_name||''%>&sort_name=price&sort_type=<%=sort_type=='asc'?'desc':'asc'%>">价格<img src="<%=CssPath%>/pc/img/public/<%=sort_type=='asc'?'y_jiagel':'y_jiagel1'%>.png" /></a></li>
+        <%}%>
+      </ul>
+    </div>
+  </div>
   <div class="k_hotcfg">
     <%goodsData.data.forEach(function(hotgoods){
       var len=0;
@@ -45,10 +65,7 @@ var link=bannerLink.links[0];
     </ul>
     <%});%>
   </div>
-
-
   <%include common_page.ejs%>
-
 </div>
 <div id="tip" style="display:none">
   <div class="oc_pro_bg"></div>
@@ -58,5 +75,15 @@ var link=bannerLink.links[0];
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
+<script>
+  $(".pai_w").mouseover(function(){
+    $(".pai_a").removeClass("c_hide");
+    $(".paix_ka").addClass("c_hide");
+    $(".paix_kb").removeClass("c_hide");});
+  $(".pai_w").mouseout(function(){
+    $(".pai_a").addClass("c_hide");
+    $(".paix_ka").removeClass("c_hide");
+    $(".paix_kb").addClass("c_hide");});
+</script>
 <%include common_buttom.ejs%>
 
