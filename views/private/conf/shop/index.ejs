@@ -46,8 +46,22 @@
                 <div class="col-sm-8">
                   <select class="form-control" name="shop_css">
                     <option value="green" <%=obj.shop_css=='grenn'?'selected':''%>>绿色</option>
-                    <%for(var i=1;i<13;i++){%>
-                    <option value="demo<%=i%>" <%=obj.shop_css=='demo'+i?'selected':''%>>demo<%=i%></option>
+                    <%
+                    var demo=[];
+                    demo[1]='电器';
+                    demo[2]='服装';
+                    demo[3]='烘培';
+                    demo[4]='红酒';
+                    demo[5]='建材';
+                    demo[6]='零食';
+                    demo[7]='农业';
+                    demo[8]='汽车配件';
+                    demo[9]='生鲜水果';
+                    demo[10]='手机电子';
+                    demo[11]='鲜花';
+                    demo[12]='鞋包';
+                    for(var i=1;i<13;i++){%>
+                    <option value="demo<%=i%>" <%=obj.shop_css=='demo'+i?'selected':''%>>demo<%=i%>(<%=demo[i]%>)</option>
                     <%}%>
                   </select>
                 </div>
