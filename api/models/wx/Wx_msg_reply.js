@@ -12,6 +12,9 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
+    msgid:{
+      model:'Wx_msg'
+    },
     uid:{
       model:'Wx_user'
     },
@@ -20,15 +23,15 @@ module.exports = {
       index: true,
       size: 50
     },
-    nickname:{
-      type: 'string'
-    },
     type:{
       type: 'string',
       size: 20
     },
     content:{
       type:'text'
+    },
+    createdBy: {
+      type: 'integer'
     },
     createdAt: {
       type: 'integer',
@@ -38,9 +41,6 @@ module.exports = {
     },
     wxid: {
       model: 'Wx_config'
-    },
-    replyId: {
-      model: 'Wx_msg_reply'
     }
   }
 };

@@ -30,6 +30,7 @@
         <th>昵称</th>
         <th>消息内容</th>
         <th>接收时间</th>
+        <th>操作</th>
     </table>
   </div>
 </div>
@@ -68,6 +69,12 @@
       <div class="modal-footer">
         <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在同步...">确 定</button>
       </div>
+    </div>
+  </div>
+</div>
+<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
     </div>
   </div>
 </div>
@@ -115,6 +122,15 @@
             return '';
           },
           "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+              '<li><a href="/private/wx/msg/user/reply/' + row.id + '"  data-toggle="modal" data-target="#dialogDetail">回复</a></li>' +
+              '</ul></div>';
+          },
+          "targets": 4
         }
       ]
     });
@@ -130,6 +146,9 @@
     $("#wxid").on("change",function(){
       $("#_reload").attr("href","/private/wx/mgs/user/index/"+$(this).val());
       $("#_reload").trigger("click");
+    });
+    $("#dialogDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
     });
   });
 </script>
