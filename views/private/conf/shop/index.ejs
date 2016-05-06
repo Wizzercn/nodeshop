@@ -46,6 +46,9 @@
                 <div class="col-sm-8">
                   <select class="form-control" name="shop_css">
                     <option value="green" <%=obj.shop_css=='grenn'?'selected':''%>>绿色</option>
+                    <%for(var i=1;i<13;i++){%>
+                    <option value="demo<%=i%>" <%=obj.shop_css=='demo'+i?'selected':''%>>demo<%=i%></option>
+                    <%}%>
                   </select>
                 </div>
               </div>

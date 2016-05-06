@@ -13,18 +13,28 @@ module.exports = {
       if (err)return res.send(200, 'fail');
       if (req.body) {
         WeixinService.loop(req, function (data) {
-          sails.log.warn(JSON.stringify(data));
+          sails.log.debug(JSON.stringify(data));
           if (data.type == 'text') {//用户发送纯文本
             var txt = data.txt;
             Wx_reply.findOne({wxid: id, type: 'keyword', keyword: txt}).exec(function (err, obj) {
-              if (obj) {
+              if (obj) {//查找关键词回复
                 Wx_reply.sendMsg(req, res, obj, conf.ghid, data);
               } else {//查找默认回复内容
                 Wx_reply.findOne({wxid: id, type: 'keyword', keyword: 'default'}).exec(function (err2, obj2) {
-                  if (obj) {
+                  if (obj) {//回复缺省关键词内容
                     Wx_reply.sendMsg(req, res, obj2, conf.ghid, data);
-                  } else {
-                    return res.send(200, req.query.echostr);
+                  } else {//保存文本内容
+                    Wx_user.findOne({openid:data.openid}).exec(function(ew1,ow1){
+                      var uid=0;
+                      var nickname='';
+                      if(ow1){
+                        uid=ow1.id;
+                        nickname=emoji.unifiedToHTML(ow1.nickname);
+                      }
+                      Wx_msg.create({wxid: id,uid:uid,openid:data.openid,nickname:nickname,type:data.type,content:emoji.unifiedToHTML(data.txt)}).exec(function(ew2,ow2){
+                        return res.send(200, req.query.echostr);
+                      });
+                    });
                   }
                 });
               }
