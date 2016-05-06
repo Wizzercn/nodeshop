@@ -31,11 +31,13 @@ var sortObj = {
 %>
 
 <div class="wrap">
+  <%if(classNext.length > 0){%>
   <ul class="m_classfic">
     <%classNext.forEach(function(l){%>
     <li><a href="/list/<%=l.id%>" class="round_s<%if(l.id == id){%> m_classficon<%}%>"><%=l.name%></a></li>
     <%});%>
   </ul>
+  <%}%>
   <div class="pai_m">
     <div class="pai_w">
       <i><%=sortObj[sort_name][0]%></i><img src="<%=CssPath%>/pc/img/paix.png" class="paix_ka"/><img src="<%=CssPath%>/pc/img/paix_a.png" class="paix_kb c_hide"/>
