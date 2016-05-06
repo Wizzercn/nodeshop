@@ -71,6 +71,7 @@ module.exports = function (req, res, next) {
       SiteConfig:sails.config.system.SiteConfig,
       ShopConfig:sails.config.system.ShopConfig,
       CssPath:'/shop/'+sails.config.system.ShopConfig.shop_templet+'/'+sails.config.system.ShopConfig.shop_css,
+      TplPath:'/shop/'+sails.config.system.ShopConfig.shop_templet,
       r:r,
       member:req.session.member||{},
       siteTitle:siteTitle,
