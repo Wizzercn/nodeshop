@@ -71,6 +71,7 @@ var jsFilesToInject = [
   'js/form.js',
   'js/offscreen.js',
   'js/main.js',
+  'js/page.js',
   'js/date.js'
 ];
 

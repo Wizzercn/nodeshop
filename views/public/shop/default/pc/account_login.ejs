@@ -108,6 +108,7 @@ var qq_appid='';
 %>
 <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="<%=qq_appid||''%>" data-redirecturi="<%=req.baseUrl%>/public/shop/pc/account/oauthQq" charset="utf-8" ></script>
 <script type="text/javascript">
+  $(function () {
   QC.Login({
     btnId:"qqLoginBtn",    //插入按钮的节点id
     scope: "get_user_info"
@@ -137,6 +138,7 @@ var qq_appid='';
         );
       });
     }
+  });
   });</script>
 <%}%>
 <script src="<%=TplPath%>/js_pc/login.js"></script>
