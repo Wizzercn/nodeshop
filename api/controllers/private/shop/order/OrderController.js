@@ -1,4 +1,5 @@
 
+
 /**
 * Created by root on 20/4/16.
 */
@@ -76,7 +77,7 @@ module.exports = {
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-        console.log(req.data);
+      console.log(req.data);
       return res.view('private/shop/order/order/detail', req.data);
     });
   },
@@ -129,6 +130,13 @@ module.exports = {
       ssql = ssql+',o.shiptypeNo='+req.body.shiptypeNo;
       ssql = ssql+',og.sendNum = og.num where o.id = og.orderId and o.id = '+ orderId;
       Shop_order_goods.query(ssql,function(){
+        Shop_order_ship_log.create({
+          orderId:orderId,
+          shiptypeNo:req.body.shiptypeNo,
+          memo:'已发货',
+          createAt:moment().format('X'),
+        }).exec(function (el1, ol1) {
+        });
         if(orderList.length==++i){
           return res.view('private/shop/order/order/index', req.data);
         }
@@ -149,7 +157,25 @@ module.exports = {
   doPay: function(req,res){
     var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
     Shop_order.query(ssql,function(err,list){
-      return res.json({code: 0});
+      Shop_order.findOne({id:req.body.id}).exec(function(err,order){
+        console.log(order);
+        Shop_history_payments.create({
+          orderId: order.id,
+          memberId: order.memberId,
+          money: order.payAmount,
+          payType: 'pay_cash',
+          payName: '货到付款',
+          payAccount: '管理员支付',
+          payIp: req.ip,
+          payAt: moment().format('X'),
+          memo: '货到付款支付:￥' + StringUtil.setPrice(order.payAmount),
+          finishAt: moment().format('X'),
+          disabled: false,
+          trade_no: ''
+        }).exec(function (er,obj){
+          return res.json({code: 0});
+        });
+      });
       // return res.view('private/shop/order/order/index', req.data);
     });
   },
@@ -295,15 +321,20 @@ module.exports = {
                       return res.json({code: 1, msg: ''});
                     } else {
                       var params = {
-                        appid: wxpay.appid,
-                        mch_id: wxpay.mch_id,
-                        op_user_id:  wxpay.mch_id,
+                        appid: wxpay.options.appid,
+                        mch_id: wxpay.options.mch_id,
+                        op_user_id:  wxpay.options.mch_id,
                         out_refund_no: id,
                         total_fee: payHistory.money, //原支付金额
                         refund_fee: payHistory.money, //退款金额
                         transaction_id: payHistory.trade_no
                       };
+                      console.log(wxpay);
+                      console.log(params);
                       wxpay.refund(params, function(err, result){
+                        console.log(result);
+                        console.log(err);
+                        console.error(result);
                         Shop_member.update(member.id, {
                           money: member.money + order.finishAmount,
                           score: member.score - order.score

@@ -81,7 +81,7 @@ module.exports = {
               ,transport:'http' //访问模式,根据自己的服务器是否支持ssl访问，若支持请选择https；若不支持请选择http
               ,input_charset:'utf-8'//字符编码格式 目前支持 gbk 或 utf-8
               ,create_direct_pay_by_user_notify_url:'/private/shop/order/order/aliNotify'//异步通知地址
-              ,create_direct_pay_by_user_return_url:'/private/shop/order/order/aliretu'//同步通知地址
+              ,refund_fastpay_by_platform_pwd_notify_url:'/private/shop/order/order/aliretu'//同步通知地址
             });
             cb(null,alipay_fefund);
           } catch (err) {
