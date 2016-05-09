@@ -65,8 +65,10 @@ module.exports = {
   },
   reply:function(req,res){
     var id=req.params.id;
+    var type=req.query.type;
     Wx_msg.findOne(id).exec(function(e,o){
       req.data.obj=o||{};
+      req.data.type=type||0;
       return res.view('private/wx/msg/user/reply', req.data);
     });
   },
@@ -81,6 +83,35 @@ module.exports = {
     }
     Wx_msg.getPageList(pageSize,start,where,sort, function (obj) {
       return res.json(obj);
+    });
+  },
+  replyDo: function (req, res) {
+    var id=req.body.id;
+    var openid=req.body.openid;
+    var wxid=req.body.wxid;
+    var uid=req.body.uid;
+    var content=req.body.content;
+    WechatService.init_id(wxid, function (api) {
+      api.sendText(openid, content, function(err,result){
+        if(result&&result.errcode==0){
+          Wx_msg_reply.create({
+            msgid:id,
+            uid:uid,
+            openid:openid,
+            type:'text',
+            content:content,
+            createdBy:req.session.user.id,
+            createdAt: moment().format('X'),
+            wxid:wxid
+          }).exec(function(e,o){
+            if(o){
+              Wx_msg.update(id,{replyId: o.id}).exec(function(eu,ou){});
+            }
+            return res.json({code:0,msg:'发送成功'});
+          });
+        }else
+          return res.json({code:1,msg:'发送失败'});
+      });
     });
   }
 };
