@@ -1013,7 +1013,7 @@ a, a:hover {
 .shops_s5 textarea{width:578px;height:95px;}
 .shops_s6{height:110px;width: 1137px;margin: 0px auto;text-align: right;}
 .shops_s6 .error{color:#9e1634;background:url(../img/error.png) no-repeat 70px -8px; padding-left:95px;}
-.shops_s6 input{background:#9f1432;width:148px;height:38px;border-radius:3px;border:none;font-size:18px;color:#fff;text-align:center;line-height:38px;margin-left:40px;margin-top:30px; cursor:pointer;}
+.shops_s6 input{background:#fbb03b;width:148px;height:40px;border-radius:3px;border:none;font-size:18px;color:#fff;text-align:center;line-height:38px;margin-left:40px;margin-top:30px; cursor:pointer;}
 .shops_s7{height:110px;width: 1137px;margin: 0px auto;text-align: left;}
 .shops_s7 input{width:148px;height:38px;border-radius:3px;border:none;font-size:16px;color:#fff;text-align:center;line-height:38px;margin-top:5px; cursor:pointer;}
 
@@ -1051,7 +1051,7 @@ a, a:hover {
 .g_chengm{width:550px;height:74px;line-height:64px;font-size:30px;margin-left:40px;margin-top:62px;}
 .g_chengm img{margin-right:10px;width:70px;height:70px;}
 .g_dingdan{width:550px;height:80px;line-height:30px;font-size:16px;color:#333333;margin-left:220px;text-align:left;}
-.g_dingdan span{color: #9f1432;font-size: 18px;}
+.g_dingdan span{color: #fbb03b;font-size: 18px;}
 .xuanze5a{width:350px;height:42px;margin-top:30px;}
 .xuanze5{float:left;width:150px !important;height:40px;display:block;border:none;font-size:18px;text-align:center;border-radius:3px;}
 .xuanze6{float:left;width:150px !important;height:40px;display:block;border:none;font-size:18px;text-align:center;border-radius:3px;margin-left:10px;}
@@ -1094,8 +1094,8 @@ a, a:hover {
 .password1{width:340px;height:90px;line-height:90px;text-align:center;font-size:24px;color:#000;margin-left:20px;border-bottom:1px solid #dddddd;font-size:14px;}
 .password2{width:600px;height:40px;margin-top:10px;font-size:14px;}
 .password2 .error{height:20px;color:#9e1634;background:url(../img/error.png) no-repeat 0px -6px; text-indent:12px;}
-.password2 select{height:40px;border:1px solid #dddddd;margin-left: 1px;}
-.password2 input{width:280px;height:40px;border:1px solid #dddddd;border-radius:3px;text-indent:10px;margin-left:10px;}
+.password2 select{height:40px;border:1px solid #dddddd;margin-left: 10px;padding-right: 5px;}
+.password2 input{width:286px;height:40px;border:1px solid #dddddd;border-radius:3px;text-indent:10px;margin-left:10px;}
 .password6{width:600px;height:40px;margin-top:10px;font-size:14px;}
 .password6 .error{height:20px;color:#9e1634;text-indent:20px;}
 .password6 select{height:40px;border:1px solid #dddddd;margin-left: 1px;}
@@ -1119,7 +1119,7 @@ a, a:hover {
 .password5 .input_1{width:90px;height:30px;border:1px solid #dddddd;text-indent:5px;border-radius:3px;}
 .password5 .input_2{width:80px;height:30px;border:1px solid #dddddd;margin-left:10px;color:#fff;border-radius:3px; cursor:pointer;margin-top:-12px !important;}
 .password_m{width:400px;height:550px;margin:0 auto;}
-.password1m{width:360px;height:90px;line-height:90px;text-align:center;font-size:24px;color:#000;margin-left:20px;border-bottom:1px solid #dddddd;margin-bottom:40px;}
+.password1m{width:382px;height:90px;line-height:90px;text-align:center;font-size:24px;color:#000;margin-left:-5px;border-bottom:1px solid #dddddd;margin-bottom:40px;}
 
 .my_icon_first{line-height:60px;}
 .kti{width:60px;height:60px;display:inline-block;border:1px solid #dddddd;margin-right:20px;vertical-align: -moz-middle-with-baseline;margin-left:10px;}
@@ -1127,10 +1127,10 @@ a, a:hover {
 .my_icon_second input{display:inline-block;height:40px;width:100px;text-align:center;font-size:14px;background:#ffffff;border:1px solid #dddddd;border-radius:3px;}
 
 /*---------确定按钮---------*/
-.land_six{width:140px;height:40px;border-radius:3px;margin-left:20px;margin-top:15px;text-align:center;}
-.land_six input{width:130px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
-.land_six_a{width:140px;height:40px;border-radius:3px;margin-left:95px;margin-top:15px;text-align:center;}
-.land_six_a input{width:130px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
+.land_six{width:278px;height:40px;border-radius:3px;margin-left:20px;margin-top:40px;text-align:center;}
+.land_six input{width:278px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
+.land_six_a{width:260px;height:40px;border-radius:3px;margin-left:109px;margin-top:40px;text-align:center;}
+.land_six_a input{width:260px;text-align:center;line-height:40px;font-size:18px;background:none;border:none;color:#ffffff;}
 
 
 /*-----添加地址-----*/
