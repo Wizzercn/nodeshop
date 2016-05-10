@@ -21,10 +21,23 @@ module.exports = {
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
-    var orderStatus = req.body.orderStatus||'0';
-    switch (orderStatus) {
+    var status = req.body.status||'0';
+    switch (status) {
       case 'unship':
-      where = {shipStatus:0,status:'active'};
+      where = {disabled: false,
+        status:'active',
+        shipStatus:0,
+        or:[
+          {
+            payStatus:1,
+            payType:{'!':'pay_cash'}
+          },
+          {
+            payStatus:0,
+            payType:'pay_cash'
+          }
+        ]
+      };
       break;
       case 'shiped':
       where = {shipStatus:1,status:'active'};
@@ -41,6 +54,9 @@ module.exports = {
       default:
       where = {shipStatus:0,status:'active'};
 
+    }
+    if(req.body.id){
+      where.id = req.body.id;
     }
     // var where = {shipStatus:orderStatus};
     if (order.length > 0) {
@@ -70,7 +86,7 @@ module.exports = {
     });
   },
   detail: function (req, res) {
-    Shop_order.findOne(req.params.id)
+    Shop_order.find(req.params.id)
     .populate('memberId')
     .populate('goods')
     .exec(function (err, obj) {
@@ -88,7 +104,7 @@ module.exports = {
     .populate('memberId')
     .exec(function (err, obj) {
       orderObj = obj||{};
-      Shop_order_ship.find().exec(function (err,obj) {
+      Shop_logistics.find().exec(function (err,obj) {
         var where = {
           shipStatus:0,
           addrCity:orderObj.addrCity,
@@ -336,7 +352,6 @@ module.exports = {
                         console.log(err);
                         console.error(result);
                         Shop_member.update(member.id, {
-                          money: member.money + order.finishAmount,
                           score: member.score - order.score
                         }).exec(function (e4, o4) {
 
@@ -388,16 +403,20 @@ module.exports = {
                     if (err) {
                       return res.send("支付宝加载失败，请重试。");
                     } else {
-                      var detailData = payHistory.trade_no+'^'+payHistory.money+'^'+'备注';
+                      var detailData = payHistory.trade_no+'^'+payHistory.money/100+'^'+'备注';
                       var data = {
                         refund_date : moment().format('YYYY-MM-DD HH:mm:ss'),
-                        batch_no: moment().format('YYYYMMDD')+id,
+                        batch_no: moment().format('YYYYMMDD')+id+'1',
                         batch_num:1,
                         detail_data: detailData
                       };
+                      console.log(data);
                       var result = alipay.refund_fastpay_by_platform_pwd(data,res);
+                      console.log(result);
+                      // return  res.json({code: '1', msg: result});
+
+
                       Shop_member.update(member.id, {
-                        money: member.money + order.finishAmount,
                         score: member.score - order.score
                       }).exec(function (e4, o4) {
 
@@ -437,6 +456,8 @@ module.exports = {
                           return  res.json({code: 'alipay', msg: result});
                           // return res.json({code: 0, msg: ''});
                         });
+
+
                       });
 
                     }
@@ -470,9 +491,9 @@ module.exports = {
       memberId: 1,
       money: 1,
       payType: 'pay_alipay',
-      payName: '支付宝支付',
+      payName: '支付宝退款',
       payAccount:'req.body',
-      payIp: req.ip,
+      payIp: '1',
       payAt: moment().format('X'),
       memo: '支付宝退款回调',
       finishAt: moment().format('X'),
@@ -480,5 +501,26 @@ module.exports = {
     }).exec(function (e3, o3) {
 
     });
+  },
+  print : function (req,res) {
+    req.data.layout = 'layouts/layout';
+
+    var ordid = req.params.id;
+    Shop_order.findOne(req.params.id)
+    .populate('memberId')
+    .populate('goods')
+    .exec(function (err, obj) {
+      req.data.obj = obj || {};
+      req.data.moment = moment;
+      req.data.StringUtil = StringUtil;
+      console.log(req.data);
+      return res.view('private/shop/order/order/print', req.data);
+    });
+
+
+
+
+
+    // return res.send('<p>123</p>');
   }
 }

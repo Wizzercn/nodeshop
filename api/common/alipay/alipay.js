@@ -118,7 +118,7 @@ Alipay.prototype.refund_fastpay_by_platform_pwd = function(data, res){
     partner : this.alipay_config.partner,
     notify_url	: url.resolve(this.alipay_config.host, this.alipay_config.refund_fastpay_by_platform_pwd_notify_url),
     seller_email	: this.alipay_config.seller_email,
-
+    seller_user_id : this.alipay_config.partner,
     refund_date	: data.refund_date,
     batch_no	: data.batch_no,
     batch_num	: data.batch_num,

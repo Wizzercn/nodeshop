@@ -1,7 +1,7 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/shop/member/member/add" data-pjax><i class="ti-plus"></i> 添加会员</a>
-    <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <!-- <a class="btn btn-primary navbar-btn" href="/private/shop/member/member/add" data-pjax><i class="ti-plus"></i> 添加会员</a>
+    <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button> -->
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -11,9 +11,9 @@
       <thead>
       <tr>
         <th>订单编号</th>
-        <th>物流单号</th>
-        <th>发货状态</th>
-        <th>发货时间</th>
+        <th>用户名</th>
+        <th>付款信息</th>
+        <th>付款时间</th>
     </table>
   </div>
 </div>
@@ -72,19 +72,29 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/shop/order/ship/data",
+        "url": "/private/shop/logistics/data",
         "type": "post",
         "data": function (d) {
         }
       },
-      "order": [[3, "desc"]],
+      "order": [[1, "desc"]],
       "columns": [
         {"data": "orderId", "bSortable": true},
-        {"data": "shiptypeNo", "bSortable": true},
+        {"data": "memberId", "bSortable": true},
         {"data": "memo", "bSortable": true},
-        {"data": "createAt", "bSortable": true}
+        {"data": "payAt", "bSortable": true}
       ],
       "columnDefs": [
+        {
+            "render": function (data, type, row){
+              var nickname = '用户ID : ' + row.id;
+              if(data){
+                nickname = data.nickname||'无';
+              }
+              return nickname;
+            },
+            "targets": 1
+        },
         {
           "render": function (data, type, row) {
             return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
@@ -108,7 +118,7 @@
     dialog.find("#ok").bind("click", function (event) {
       var btn = $(this);
       btn.button("loading");
-      $.post("/private/shop/member/member/delete/" + id, {}, function (data) {
+      $.post("/private/shop/logistics/delete/" + id, {}, function (data) {
         if (data.code == 0) {
           datatable.ajax.reload(null,false);
         } else {
@@ -133,7 +143,7 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/shop/order/member/delete", {ids: ids}, function (data) {
+        $.post("/private/shop/logistics/delete", {ids: ids}, function (data) {
           if (data.code == 0) {
             datatable.ajax.reload(null,false);
           } else {

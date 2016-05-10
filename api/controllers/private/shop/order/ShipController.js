@@ -52,17 +52,7 @@ module.exports = {
       }
     });
   },
-  detail: function (req, res) {
-    Shop_order.findOne(req.params.id)
-    .populate('memberId')
-    .populate('goods')
-    .exec(function (err, obj) {
-      req.data.obj = obj || {};
-      req.data.moment = moment;
-      req.data.StringUtil = StringUtil;
-        console.log(req.data);
-      return res.view('private/shop/order/order/detail', req.data);
-    });
-  },
+  shipEdit : function(req,res){
 
+  }
 }
