@@ -179,7 +179,7 @@ module.exports = {
     async.waterfall([function (cb) {
       //获取接收人清单
       if(scope==all){
-        Wx_user.find({select:['openid'],where:{wxid:wxid}}).exec(function(e,l){
+        Wx_user.find({select:['openid'],where:{wxid:wxid,subscribe:1}}).exec(function(e,l){
           return cb(null,l||[]);
         });
       }else{
