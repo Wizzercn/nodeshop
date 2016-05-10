@@ -27,7 +27,7 @@ module.exports = {
       },
       //获取热卖商品
       hotGoodsList: function (done) {
-        Shop_goods.getHotGoods(4, function (list) {
+        Shop_goods.getHotGoods(8, function (list) {
           done(null, list);
         });
       },

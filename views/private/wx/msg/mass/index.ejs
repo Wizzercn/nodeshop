@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <a href="/private/wx/user/index/<%=wxid%>" data-pjax id="_reload"></a>
-
+  <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/news/<%=wxid||0%>" data-pjax><i class="ti-book"></i> 素材管理</a>
   <div class="btn-group" style="padding-top: 5px;">
     <div >
       <select id="wxid" name="wxid" class="form-control">
@@ -16,7 +16,7 @@
   </div>
   <div class="pull-right">
     <div class="btn-group tool-button">
-      <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/news" data-toggle="modal" data-target="#dialogDetail"><i class="ti-import"></i> 素材管理</a>
+      <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/news/<%=wxid||0%>?type=1" data-toggle="modal" data-target="#dialogDetail"><i class="ti-import"></i> 素材管理</a>
     </div>
     <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
         class="fa fa-sliders"></i> 筛选
@@ -56,29 +56,9 @@
     </div>
   </div>
 </div>
-<div id="dialog" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">提示</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-xs-12">
-            新配置的微信公众号，只需同步一次会员信息，确定同步吗？ <br/>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在同步...">确 定</button>
-      </div>
-    </div>
-  </div>
-</div>
 <div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal-dialog" style="min-width: 800px;">
+    <div class="modal-content" style="min-width: 800px;">
     </div>
   </div>
 </div>
@@ -162,7 +142,7 @@
   $(function () {
     initDatatable();
     $("#wxid").on("change",function(){
-      $("#_reload").attr("href","/private/wx/mgs/user/index/"+$(this).val());
+      $("#_reload").attr("href","/private/wx/msg/mass/index/"+$(this).val());
       $("#_reload").trigger("click");
     });
     $("#dialogDetail").on("hidden.bs.modal", function() {

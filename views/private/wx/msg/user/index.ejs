@@ -159,7 +159,7 @@
   $(function () {
     initDatatable();
     $("#wxid").on("change",function(){
-      $("#_reload").attr("href","/private/wx/mgs/user/index/"+$(this).val());
+      $("#_reload").attr("href","/private/wx/msg/user/index/"+$(this).val());
       $("#_reload").trigger("click");
     });
     $("#dialogDetail").on("hidden.bs.modal", function() {
