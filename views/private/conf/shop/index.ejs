@@ -19,7 +19,7 @@
           </li>
           <li><a href="#shop_list" data-toggle="tab">商品列表页设置</a>
           </li>
-          <li><a href="#shop_yf" data-toggle="tab">运费设置</a>
+          <li><a href="#shop_yf" data-toggle="tab">物流设置</a>
           </li>
           <li><a href="#shop_fp" data-toggle="tab">发票设置</a>
           </li>
@@ -137,6 +137,15 @@
                 <label class="col-sm-2 control-label">计算基数<br>(单位：< 元或 >= g)</label>
                 <div class="col-sm-8" style="padding-top: 5px;">
                   <input class="form-control" name="freight_num" value="<%=obj.freight_num||0%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">物流跟踪</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="logistics_open" value="1" <%if(obj.logistics_open){%>checked<%}%>>启用
+                  <input type="radio" name="logistics_open" value="0" <%if(!obj.logistics_open){%>checked<%}%>>禁用
+                  <button class="btn btn-info" type="button" id="btnOauth_lg" data-toggle="modal" data-target="#dialogOauth_lg"> 配置</button>
+                  <input name="logistics_info" id="logistics_info" type="hidden" value="<%-JSON.stringify(obj.logistics_info)||{}%>">
                 </div>
               </div>
             </div>
@@ -400,6 +409,49 @@
     </div>
   </div>
 </div>
+<div id="dialogOauth_lg" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">物流接口</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppName</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="lg_appname" type="text" class="form-control" value="<%if(obj.logistics_info){%><%=obj.logistics_info.lg_appname||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppId</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="lg_appid" type="text" class="form-control" value="<%if(obj.logistics_info){%><%=obj.logistics_info.lg_appid||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-group">
+            <label class="col-sm-3 control-label">AppKey</label>
+            <div class="col-sm-7" style="padding-bottom: 5px;">
+              <input id="lg_appkey" type="text" class="form-control" value="<%if(obj.logistics_info){%><%=obj.logistics_info.lg_appkey||''%><%}%>">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnLg" type="button" class="btn btn-default" data-dismiss="modal">清 除</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" data-loading-text="确定...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script language="JavaScript">
   $(document).ready(function () {
     $("input[name=member_weixinreg_auto]").on("click",function(){
@@ -428,6 +480,11 @@
         $(this).val("");
       });
     });
+    $("#btnLg").on("click",function(){
+      $("#dialogOauth_lg input[type=text]").each(function(){
+        $(this).val("");
+      });
+    });
     $("#btnAli").on("click",function(){
       $("#dialogAlipay input[type=text]").each(function(){
         $(this).val("");
@@ -450,6 +507,11 @@
       qq.qq_appkey=$("#qq_appkey").val();
       qq.qq_appcontent=$("#qq_appcontent").val();
       $("#oauth_qq_info").val(JSON.stringify(qq));
+      var lg={};
+      lg.lg_appname=$("#lg_appname").val();
+      lg.lg_appid=$("#lg_appid").val();
+      lg.lg_appkey=$("#lg_appkey").val();
+      $("#logistics_info").val(JSON.stringify(lg));
       $('#addForm').submit();
     });
       $('#addForm').ajaxForm({

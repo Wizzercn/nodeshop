@@ -1,6 +1,6 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/addNews/<%=wxid%>" data-pjax><i class="ti-plus"></i> 添加图文</a>
+    <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/addNews/<%=wxid%>"  data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加图文</a>
     <a class="btn btn-primary navbar-btn" href="/private/wx/msg/mass/index/<%= wxid %>" data-pjax><i
         class="ti-angle-left"></i> 返回</a>
   </div>
@@ -17,9 +17,30 @@
     </table>
   </div>
 </div>
-<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">删除</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            删除后无法恢复，确定删除吗？ <br/>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" style="min-width: 800px;">
+    <div class="modal-content" style="min-width: 800px;">
     </div>
   </div>
 </div>
@@ -69,7 +90,7 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">'+
-              '<li><a href="javascript:;" onclick="delNews('+row.id+')">删除</a></li>'+
+              '<li><a href="javascript:;" onclick="del('+row.id+')">删除</a></li>'+
               '</ul></div>';
           },
           "targets": 3
@@ -78,6 +99,25 @@
     });
     datatable.on('click', 'tr', function () {
       $(this).toggleClass('selected');
+    });
+  }
+  function del(id) {
+    var dialog = $("#dialogDelete");
+    dialog.modal("show");
+    dialog.find("#ok").unbind("click");
+    dialog.find("#ok").bind("click", function (event) {
+      var btn = $(this);
+      btn.button("loading");
+      $.post("/private/wx/msg/mass/deleteNews/" + id, {}, function (data) {
+        if (data.code == 0) {
+          datatable.ajax.reload(null,false);
+        } else {
+          Toast.error(data.msg);
+        }
+        //重置按钮状态，关闭提示框
+        btn.button("reset");
+        dialog.modal("hide");
+      }, "json");
     });
   }
   $(function () {

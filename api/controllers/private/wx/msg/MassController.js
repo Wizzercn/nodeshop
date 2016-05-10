@@ -4,6 +4,7 @@
 var moment = require('moment');
 var emoji = require('emoji');
 var StringUtil = require('../../../../common/StringUtil');
+var fs = require('fs-extra');
 module.exports = {
   index: function (req, res) {
     var wxid = req.params.id || '';
@@ -106,34 +107,57 @@ module.exports = {
       }
     });
   },
-  replyDo: function (req, res) {
-    var id = req.body.id;
-    var openid = req.body.openid;
-    var wxid = req.body.wxid;
-    var uid = req.body.uid;
-    var content = req.body.content;
-    WechatService.init_id(wxid, function (api) {
-      api.sendText(openid, content, function (err, result) {
-        if (result && result.errcode == 0) {
-          Wx_msg_reply.create({
-            msgid: id,
-            uid: uid,
-            openid: openid,
-            type: 'text',
-            content: content,
-            createdBy: req.session.user.id,
-            createdAt: moment().format('X'),
-            wxid: wxid
-          }).exec(function (e, o) {
-            if (o) {
-              Wx_msg.update(id, {replyId: o.id}).exec(function (eu, ou) {
-              });
-            }
-            return res.json({code: 0, msg: '发送成功'});
+  addNews: function (req, res) {
+    req.data.wxid = req.params.id || '';
+    return res.view('private/wx/msg/mass/add', req.data);
+  },
+  uploadThumb: function (req, res) {
+    var wxid = req.params.id || '';
+    req.file('Filedata').upload({
+      maxBytes: 2048000
+    }, function (err, uploadedFiles) {
+      if (err) {
+        return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
+      } else {
+        sails.log.debug('uploadedFiles:::' + JSON.stringify(uploadedFiles));
+        var type = uploadedFiles[0].type;
+        var fd = uploadedFiles[0].fd;
+        var filename = uploadedFiles[0].filename;
+        if (uploadedFiles.length === 0) {
+          return res.json({code: 2, msg: sails.__('file.upload.err')});
+        } else if (type.indexOf('image') != 0) {
+          return res.json({code: 3, msg: sails.__('file.upload.only.image')});
+        } else {
+          if (err)return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + err});
+          WechatService.init_id(wxid, function (api) {
+            api.uploadThumbMaterial(fd, function (e, r) {
+              if (!e) {
+                return res.json({code: 0, msg: sails.__('file.upload.ok'), filename: filename, media_id: r.media_id});
+              } else {
+                return res.json({code: 2, msg: sails.__('file.upload.err') + ' ' + e});
+              }
+            });
           });
-        } else
-          return res.json({code: 1, msg: '发送失败'});
-      });
+        }
+      }
+    });
+  },
+  addDo:function(req,res){
+    var body=req.body;
+    body.createdBy=req.session.user.id;
+    Wx_mass_news.create(body).exec(function (e, o) {
+      if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      return res.json({code: 0, msg: sails.__('add.ok')});
+    });
+  },
+  deleteNews: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    Wx_mass_news.destroy({id: ids}).exec(function (err) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('delete.ok')});
+      }
     });
   }
 };

@@ -45,6 +45,9 @@ module.exports = {
       defaultsTo:function(){
         return moment().format('X');
       }
+    },
+    wxid: {
+      model: 'Wx_config'
     }
   }
 };

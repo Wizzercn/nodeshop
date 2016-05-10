@@ -161,6 +161,15 @@ module.exports = {
     },
     oauth_qq_info:{
       type:'json'
+    },
+    logistics_open:{
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
+    logistics_info:{
+      type:'json'
     }
   }
 };
