@@ -24,8 +24,12 @@ module.exports = {
     media_id: {//图文消息media_id
       type: 'string'
     },
-    content:{//type==text文字
+    content:{//type==text文字  type==news newsids
       type: 'string'
+    },
+    scope: {//all  some
+      type: 'string',
+      size: 20
     },
     status:{//0 待发送 1 已发送 2 发送失败
       type:'integer'

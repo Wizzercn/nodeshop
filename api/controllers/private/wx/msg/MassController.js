@@ -159,5 +159,71 @@ module.exports = {
         return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });
+  },
+  select:function(req,res){
+    req.data.wxid = req.params.id || '';
+    return res.view('private/wx/msg/mass/select', req.data);
+  },
+  send:function(req,res){
+    req.data.wxid = req.params.id || '';
+    return res.view('private/wx/msg/mass/send', req.data);
+  },
+  sendDo:function(req,res){
+    sails.log.debug(req.body);
+    var wxid=req.body.wxid||'';
+    var type=req.body.type||'';//text  news
+    var content=req.body.content||'';//news==ids
+    var scope=req.body.scope||'';//some==ids
+    var openids=req.body.openids||'';// one  more
+    var openidList=[];
+    async.waterfall([function (cb) {
+      //获取接收人清单
+      if(scope==all){
+        Wx_user.find({select:['openid'],where:{wxid:wxid}}).exec(function(e,l){
+          return cb(null,l||[]);
+        });
+      }else{
+        var returnStr=[];
+        if(openids.indexOf(',')>0){
+          var str=[];
+          str=openids.split(",");
+          str.forEach(function(so){
+            if(so&&so.length>1){
+              returnStr.push(so);
+            }
+          });
+        }else{
+          returnStr.push(openids);
+        }
+        return cb(null,str);
+      }
+    },function(olist,cb){
+      //根据发送类型 获取media_id
+      openidList=olist;
+      sails.log.debug('openidList::'+JSON.stringify(openidList));
+      if(type=='news'){
+        var articles=[];
+
+      }else{
+        return cb(null,'');
+      }
+    },function(olist,cb){
+      //创建发送表
+      req.body.createdBy=req.session.user.id;
+      req.body.status=0;
+      req.body.media_id='';
+      Wx_mass.create(req.body).exec(function(e,o){
+
+      });
+      if(openidList.length<=1000){
+
+      }else{
+
+      }
+    }],function(err,result){
+
+    });
+
+    return res.json({code:1,msg:''});
   }
 };
