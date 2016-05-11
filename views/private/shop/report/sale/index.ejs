@@ -28,14 +28,14 @@ canvas{
   <div class="btn-group tool-button" style="width:600px">
     <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="beginDate">
       <input type="text" id='beginDayPick' size="16" readonly class="form-control" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" data-parsley-required="true">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+      <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
     </div>
     <input type="hidden" id="beginDate" name="beginDate" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" />
 
     <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="endDate">
       <input type="text" id='endDayPick' size="16" readonly class="form-control" value="<%=moment().format('YYYY-MM-DD')%>" data-parsley-required="true">
-      <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+      <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
     </div>
     <input type="hidden" id="endDate" name="endDate" value="<%=moment().format('YYYY-MM-DD')%>" />
@@ -60,7 +60,6 @@ canvas{
         <th>销售额</th>
         <th>退款金额</th>
         <th>收入</th>
-        <th>客单价</th>
       </tr>
       <tr style="font-size:16px;color:red">
 

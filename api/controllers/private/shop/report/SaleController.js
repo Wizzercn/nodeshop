@@ -32,7 +32,7 @@ module.exports = {
       for (var i = 0; i < obj.length; i++) {
         day.push(obj[i].date);
         sale.push(obj[i].amount/100);
-        sum += obj[i].amount;
+        sum += obj[i].amount/100;
         payment += obj[i].payment/100;
         refund += obj[i].refund/100;
         countOrder += obj[i].countOrder;

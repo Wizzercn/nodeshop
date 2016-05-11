@@ -11,6 +11,7 @@ module.exports = {
     return res.view('private/shop/order/order/index', req.data);
   },
   data: function (req,res) {
+    console.log(req.body);
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
