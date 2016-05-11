@@ -18,9 +18,6 @@
     <div class="btn-group tool-button">
       <a class="btn btn-info navbar-btn" href="/private/wx/msg/mass/send/<%=wxid%>" data-pjax><i class="ti-export"></i> 群发消息</a>
     </div>
-    <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
-        class="fa fa-sliders"></i> 筛选
-    </button>
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -29,57 +26,17 @@
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
-        <th>Openid</th>
-        <th>昵称</th>
-        <th>消息内容</th>
-        <th>接收时间</th>
-        <th>回复状态</th>
+        <th>群发名称</th>
+        <th>群发类型</th>
+        <th>群发范围</th>
+        <th>群发时间</th>
         <th>操作</th>
     </table>
   </div>
 </div>
-<div class="cd-panel from-right">
-  <header class="cd-panel-header">
-    <h4>高级筛选</h4>
-  </header>
-  <div class="cd-panel-container">
-    <div class="cd-panel-content shadow">
-      <div class="form-group">
-        <label for="nickname">昵称</label>
-        <input type="text" id="nickname" name="nickname" onclick="this.value=''" class="form-control" placeholder="昵称">
-      </div>
-      <div class="form-group">
-        <label for="content">内容</label>
-        <input type="text" id="content" name="content" onclick="this.value=''" class="form-control" placeholder="内容">
-      </div>
-      <button id="searchBtn" type="button" class="btn btn-default">查询</button>
-    </div>
-  </div>
-</div>
-<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">删除</h4>
-      </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-xs-12">
-            删除后无法恢复，确定删除吗？ <br/>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog" style="min-width: 800px;">
-    <div class="modal-content" style="min-width: 800px;">
     </div>
   </div>
 </div>
@@ -103,7 +60,7 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/wx/msg/user/data",
+        "url": "/private/wx/msg/mass/massData",
         "type": "post",
         "data": function (d) {
           d.wxid='<%=wxid%>';
@@ -113,13 +70,30 @@
       },
       "order": [[3, "desc"]],
       "columns": [
-        {"data": "openid", "bSortable": true},
-        {"data": "nickname", "bSortable": true},
-        {"data": "content", "bSortable": true},
-        {"data": "createdAt", "bSortable": true},
-        {"data": "replyId", "bSortable": true}
+        {"data": "name", "bSortable": true},
+        {"data": "type", "bSortable": true},
+        {"data": "scope", "bSortable": true},
+        {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if (data=='text') {
+              return '文本';
+            }
+            return '图文';
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
+            if (data=='all') {
+              return '全部会员';
+            }
+            return '会员列表';
+          },
+          "targets": 2
+        },
         {
           "render": function (data, type, row) {
             if (data) {
@@ -131,25 +105,13 @@
         },
         {
           "render": function (data, type, row) {
-            if (data>0) {
-              return '已回复';
-            }
-            return '未回复';
-          },
-          "targets": 4
-        },
-        {
-          "render": function (data, type, row) {
             var str='<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">';
-            if (!row.replyId||row.replyId==0) {
-              str+='<li><a href="/private/wx/msg/user/reply/' + row.id + '?type=1"  data-toggle="modal" data-target="#dialogDetail">回复</a></li>';
-            }
-            str+= '<li><a href="/private/wx/msg/user/reply/' + row.id + '?type=0"  data-toggle="modal" data-target="#dialogDetail">查看</a></li>' +
+            str+= '<li><a href="/private/wx/msg/mass/detail/' + row.id + '"  data-toggle="modal" data-target="#dialogDetail">查看</a></li>' +
               '</ul></div>';
             return str;
           },
-          "targets": 5
+          "targets": 4
         }
       ]
     });

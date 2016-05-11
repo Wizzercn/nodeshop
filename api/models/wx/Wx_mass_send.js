@@ -22,10 +22,12 @@ module.exports = {
       type:'integer'
     },
     msg_id:{
-      type:'integer'
+      type:'string',
+      size:20
     },
     errcode:{
-      type: 'integer'
+      type: 'string',
+      size:20
     },
     errmsg:{
       type:'string'

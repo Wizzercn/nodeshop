@@ -289,7 +289,11 @@
 <!--script-->
 <% if (sails.config.environment === 'production') { %>
 <script src="/min/production.min.js"></script>
+<%if(req.url.indexOf('private/wx')>0){%>
+<script src="/plugins/ueditor/ueditor.configWx.js"></script>
+<%}else{%>
 <script src="/plugins/ueditor/ueditor.config.js"></script>
+<%}%>
 <script src="/plugins/ueditor/ueditor.all.min.js"></script>
 <%}else{%>
 <script src="/plugins/modernizr.js"></script>
@@ -320,8 +324,6 @@
 <script src="/plugins/chosen/chosen.jquery.min.js"></script>
 <script src="/plugins/jquery.form.js"></script>
 <script src="/plugins/uploadifive/jquery.uploadifive.min.js"></script>
-<script src="/plugins/ueditor/ueditor.config.js"></script>
-<script src="/plugins/ueditor/ueditor.all.min.js"></script>
 <script src="/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
 <script src="/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <script src="/plugins/emoji/emoji.js"></script>
@@ -329,6 +331,12 @@
 <script src="/plugins/jquery.qrcode.min.js"></script>
 <script src="/plugins/jquery.sparkline.js"></script>
 <script src="/plugins/x-editable/bootstrap-editable.js"></script>
+<%if(req.url.indexOf('private/wx')>0){%>
+<script src="/plugins/ueditor/ueditor.configWx.js"></script>
+<%}else{%>
+<script src="/plugins/ueditor/ueditor.config.js"></script>
+<%}%>
+<script src="/plugins/ueditor/ueditor.all.min.js"></script>
 <script src="/js/form.js"></script>
 <script src="/js/offscreen.js"></script>
 <script src="/js/main.js"></script>
