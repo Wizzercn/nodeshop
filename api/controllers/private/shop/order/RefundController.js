@@ -28,6 +28,7 @@ module.exports = {
     Shop_history_refunds.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Shop_history_refunds.find(where)
+        .sort(sort)
         .sort('payAt desc')
         .populate('memberId')
         .paginate({page: page, limit: pageSize})
@@ -57,7 +58,6 @@ module.exports = {
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-        console.log(req.data);
       return res.view('private/shop/order/order/detail', req.data);
     });
   },

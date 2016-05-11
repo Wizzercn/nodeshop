@@ -1,5 +1,3 @@
-
-
 /**
 * Created by root on 20/4/16.
 */
@@ -65,6 +63,7 @@ module.exports = {
     Shop_order.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Shop_order.find(where)
+        .sort(sort)
         .sort('createdAt desc')
         .paginate({page: page, limit: pageSize})
         .exec(function (err, list) {
@@ -93,7 +92,6 @@ module.exports = {
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-      console.log(req.data);
       return res.view('private/shop/order/order/detail', req.data);
     });
   },
@@ -174,7 +172,6 @@ module.exports = {
     var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
     Shop_order.query(ssql,function(err,list){
       Shop_order.findOne({id:req.body.id}).exec(function(err,order){
-        console.log(order);
         Shop_history_payments.create({
           orderId: order.id,
           memberId: order.memberId,
@@ -345,12 +342,7 @@ module.exports = {
                         refund_fee: payHistory.money, //退款金额
                         transaction_id: payHistory.trade_no
                       };
-                      console.log(wxpay);
-                      console.log(params);
                       wxpay.refund(params, function(err, result){
-                        console.log(result);
-                        console.log(err);
-                        console.error(result);
                         Shop_member.update(member.id, {
                           score: member.score - order.score
                         }).exec(function (e4, o4) {
@@ -410,9 +402,7 @@ module.exports = {
                         batch_num:1,
                         detail_data: detailData
                       };
-                      console.log(data);
                       var result = alipay.refund_fastpay_by_platform_pwd(data,res);
-                      console.log(result);
                       // return  res.json({code: '1', msg: result});
 
 
@@ -513,13 +503,8 @@ module.exports = {
       req.data.obj = obj || {};
       req.data.moment = moment;
       req.data.StringUtil = StringUtil;
-      console.log(req.data);
       return res.view('private/shop/order/order/print', req.data);
     });
-
-
-
-
 
     // return res.send('<p>123</p>');
   }

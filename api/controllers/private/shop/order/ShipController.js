@@ -12,7 +12,6 @@ module.exports = {
     return res.view('private/shop/order/ship/index', req.data);
   },
   data: function (req,res) {
-    console.log(req.body);
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -26,15 +25,13 @@ module.exports = {
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
-    console.log(where);
     Shop_order_ship_log.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Shop_order_ship_log.find(where)
+        .sort(sort)
         .sort('createAt desc')
         .paginate({page: page, limit: pageSize})
         .exec(function (err, list) {
-          console.log(err);
-          console.log(list);
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,
