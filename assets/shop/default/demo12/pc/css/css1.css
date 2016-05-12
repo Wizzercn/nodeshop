@@ -306,7 +306,8 @@ a, a:hover {
 
 
 /*添加*/
-.k_logolfi{width:280px;height:50px;float:right;line-height:50px;text-align:right;font-size:14px;color:#666666; vertical-align:middle;}
+.head_r .k_logolfi{width:280px;height:50px;float:right;line-height:50px;text-align:right;font-size:14px;color:#666666; vertical-align:middle;padding-top:0px;}
+.k_logolfi{width:280px;height:50px;float:right;line-height:50px;text-align:right;font-size:14px;color:#666666; vertical-align:middle;padding-top:32px;}
 .k_logolfi img{margin-right:8px;vertical-align:middle;}
 .k_logolfi span{ font-weight:500;font-size:18px;}
 
@@ -483,7 +484,7 @@ a, a:hover {
 
 
 .k_hotcfg{width:100%;height:auto;margin:0 auto;}
-.k_hotc span{width:200px;display:block;text-indent:30px;float:left;}
+.k_hotc span{width:200px;display:block;text-indent:30px;float:left;color:#2e3192 !important;}
 .k_hotc .k_hotch{width:682px;float:right;}
 .k_hotc .k_hotch li{width:119px;height:30px;border-right:1px solid #dddddd;display:block;float:right;text-align:center !important;text-indent:0px;margin-top:10px;}
 .k_hotc .k_hotch a{line-height:30px;display:block;float:left;text-align:center !important;text-indent:0px;font-size:14px;width:80%;margin-left:10%;border-radius:3px;height:30px;}
@@ -543,7 +544,7 @@ a, a:hover {
 .about_usnews1{width:380px;height:360px;float:left;margin-left:30px;}
 .about_usnews2{width:350px;height:194px;margin:15px auto;}
 .about_usnews2 img{width:350px;height:194px;}
-.about_usnews3{font-size:14px;height:35px;line-height:35px;width:350px;margin:0 auto;display:block;margin-top:10px;}
+.about_usnews3{font-size:14px;height:35px;line-height:35px;width:350px;margin:0 auto;display:block;margin-top:10px;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow:hidden;}
 .about_usnews4{font-size:12px;height:90px;line-height:28px;width:350px;margin:0 auto;color:#666666;display:block;overflow:hidden;}
 
 .about_usnews1:hover{border:1px solid #dddddd;background:#eeeeee;}
@@ -607,7 +608,7 @@ a, a:hover {
 /*---------右侧部分----*/
 .schedule_hdm{width:738px;min-height:520px;float:right;}
 .schedule_hd1m{height:auto;width:100%;border-bottom:1px solid #dddddd;margin-top:10px;}
-.schedule_hd1am{color:#000;font-size:24px;width:100%;display:block;height:43px;line-height:43px;}
+.schedule_hd1am{color:#000;font-size:24px;width:100%;display:block;height:43px;line-height:43px;white-space: nowrap;text-overflow: ellipsis;-o-text-overflow: ellipsis;overflow:hidden;}
 .schedule_hd1sm{color:#666666;font-size:14px;display:block;line-height:25px;padding-bottom:20px;}
 .schedule_hd2m{font-size:14px;line-height:30px;margin-top:20px;width:100%;display:block;height:35px;}
 .schedule_hd2m p{width:225px;float:left;display:block;}
@@ -1060,6 +1061,14 @@ a, a:hover {
 .xuanze5a a{color: #3366cc; margin-left: 20px;font-size: 16px;padding-top: 20px;line-height: 38px;}
 .xuanze5b{width:350px;height:42px;margin-left:165px;margin-top:30px;}
 .xuanze5c{width:350px;height:42px;margin-left:220px;margin-top:30px;}
+
+.yudd_dm .g_dingdan{width:420px;height:auto;}
+.yudd_dm .g_zhifu{width:360px;height:auto !important;}
+.yudd_dm .xuanze5a{margin:20px auto;height:350px;}
+.payLi span a{display:inline-block;width:150px;height:40px;border:1px solid #ddd;padding:0;text-align:center;border-radius:3px;color:#333;}
+#smscode{border:1px solid #ddd;padding-left:10px;padding-right:10px;}
+#btnSms{position:relative;top:-3px;}
+
 /*------预定步骤-----*/
 .tian1{width:200px;height:28px;line-height:28px;color:#fff;font-size:14px;text-indent:42px;background:url(../img/icon/q_y.jpg) no-repeat center left;margin-left:40px;margin-top:15px;}
 .tian2{width:190px;height:28px;line-height:28px;color:#fff;font-size:14px;text-indent:42px;background:url(../img/public/q_y1.png) no-repeat center left;margin-top:15px;position:relative;left:-15px;}
