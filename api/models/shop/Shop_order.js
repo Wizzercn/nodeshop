@@ -300,53 +300,22 @@ module.exports = {
   },
   homeData: function (cb) {
     var day = moment().format('YYYY-MM-DD 00:00:00');
-    var day_1 = moment(day).add(-6, 'days').format('X');
-    var day_2 = moment(day).add(-5, 'days').format('X');
-    var day_3 = moment(day).add(-4, 'days').format('X');
-    var day_4 = moment(day).add(-3, 'days').format('X');
-    var day_5 = moment(day).add(-2, 'days').format('X');
-    var day_6 = moment(day).add(-1, 'days').format('X');
-    var day_7 = moment(day).format('X');
+    var day_30 = moment(day).add(-30, 'days').format('X');
+    var day_0 = moment(day).format('X');
+    var days=[];
+    for(var i=-30;i<0;i++){
+      days.push(moment(day).add(i, 'days').format('YYYYMMDD'));
+    }
     async.parallel({
-      finishAmount: function (cb) {//统计一周内卖出(已支付)
-        Shop_order.find({disabled: false, status: {'!': 'dead'}, payStatus: 1})
+      finishAmount: function (cb) {//统计一月内卖出(已支付)
+        Shop_order.find({disabled: false, status: {'!': 'dead'}, payStatus: 1,createdAt:{'>=':day_30,'<':day_0}})
           .sum('finishAmount').then(function (results) {
             cb(null, StringUtil.setPrice(results[0].finishAmount));
           });
       },
-      numDay_1:function(cb){//统计七天前订单数(不论是否支付)
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_1,'<':day_2}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_2:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_2,'<':day_3}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_3:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_3,'<':day_4}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_4:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_4,'<':day_5}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_5:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_5,'<':day_6}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_6:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_6,'<':day_7}}).exec(function(e,o){
-          cb(null,o);
-        });
-      },
-      numDay_7:function(cb){
-        Shop_order.count({disabled: false, status: {'!': 'dead'},createdAt:{'>=':day_7}}).exec(function(e,o){
-          cb(null,o);
+      numDay:function(cb){//统计七天前订单数(不论是否支付)
+        Shop_order.query('SELECT FROM_UNIXTIME(createdAt,\'%Y%m%d\') AS a,COUNT(1) as b FROM Shop_order where disabled=0 and status!=\'dead\' and payStatus=1 and createdAt>=? and createdAt<? GROUP BY FROM_UNIXTIME(createdAt,\'%Y%m%d\') ORDER BY createdAt asc',[day_30,day_0],function (err,list) {
+          cb(null,list||[]);
         });
       },
       numAll:function(cb){//总订单数
@@ -366,13 +335,24 @@ module.exports = {
       }
     }, function (err, result) {
       var numDay=[];
-      numDay.push(result.numDay_1);
-      numDay.push(result.numDay_2);
-      numDay.push(result.numDay_3);
-      numDay.push(result.numDay_4);
-      numDay.push(result.numDay_5);
-      numDay.push(result.numDay_6);
-      numDay.push(result.numDay_7);
+      var str=JSON.stringify(result.numDay);
+      days.forEach(function(o){
+        var t = new RegExp();
+        var t2 = new RegExp();
+        t.compile(o);
+        t.global=true;
+        t.ignoreCase=true;
+        sails.log.debug(t);
+        t2.compile('{"a":"'+o+'","b":[0-9]}');
+        t2.global=true;
+        t2.ignoreCase=true;
+        if(t.test(str)){
+          var s=str.match(t2);
+          if(s&&s.length>0){
+            numDay.push(StringUtil.getInt(s[0].substring(s[0].indexOf('"b":')+4,s[0].indexOf('}'))));
+          }else numDay.push(0);
+        }else numDay.push(0);
+      });
       return cb({
         finishAmount:result.finishAmount,
         numDay:numDay,
