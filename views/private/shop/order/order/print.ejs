@@ -1,0 +1,91 @@
+ <style type="text/css">*{ margin:0; padding:0;}
+body{ font-family:"Microsoft YaHei",Arial,"宋体"; font-size:14px; color:#333; line-height:1.6em;}
+h1{line-height:1.3em;}
+a:hover img,img{ border:none;}
+img{ vertical-align:top;}
+ul{ list-style:none;}
+input,button,select,textarea{outline:none;font-family:"Microsoft YaHei",Arial,"宋体"; font-size:14px;}
+table input,table button,table select,table textarea{ vertical-align:middle;}
+textarea{resize:none}
+table{ border-collapse:collapse;}
+a{ text-decoration:none; color:#333;font-family: "微软雅黑";}
+a:hover{ text-decoration:none; color:#e22b21;}
+/*-------------------------结束公用样式--------------------------*/
+.cf { overflow:hidden; zoom:1;}
+.cf2{zoom: 1;}
+.cf2:after {content: ""; display: block;height: 0;clear: both;}
+input.checlass{ margin:0 5px; margin-left:0;vertical-align:middle; _vertical-align:baseline;}
+
+/*购物清单开始*/
+.w756{width:656px;margin:0 auto;}
+.delivery_top{height:36px;border-bottom:2px solid #666;line-height:36px;margin:0 auto}
+.delivery_head{padding:10px 0 0;}
+.delivery_headl{display:inline-block;float:left;height:60px;}
+.delivery_headr{display:inline-block;float:left;width:50%;}
+.delivery_name img{width:60px;height:60px;padding:9px;float:left;}
+.delivery_name p{font-size:12px;color:#666;line-height:20px;padding-top:10px;height:40px;}
+.delivery_tab tr td{text-align: center;}
+.delivery_tab tr td p{text-align: left;}
+.delivery_tab tr{border-bottom:2px solid #666;}
+.delivery_bei{margin-top:20px;border-bottom:1px solid #999;padding-bottom: 20px;}
+.delivery_beil{display:block;width:50px;float:left;text-indent:10px;min-height:110px;}
+.delivery_beic{display:block;float:left;width:330px;border-radius:3px;padding:5px 10px;min-height:100px;border:1px solid #ddd;}
+.delivery_beir{padding-left:60px;float:left;width:180px;}
+.delivery_beinoy{font-weight:700;line-height:40px;}
+.delivery_num{margin-top:15px;border-bottom:2px solid #666;padding-bottom:15px;}
+.delivery_num .delivery_headr span{color:#666;padding-left:5px;}
+.delivery_k{padding-top:10px;border-bottom:2px solid #666;}
+.delivery_adr{border-bottom:2px solid #666;padding-bottom:10px;}
+.delivery_main{min-height:759px;padding-bottom: 170px;}
+.delivery_footer{position:absolute;bottom:0;width:100%;}
+
+</style>
+	<div style="min-height:967px;padding-top:13px;position: relative;"><div class="delivery_top w756">购物单</div>
+
+	<div class="delivery_main"><table width="756" class="delivery_tab w756">
+		<tr class="delivery_taba">
+			<td width="120">商品编号</td><td width="360">商品名称</td><td>单价</td><td>数量</td><td>小计</td>
+
+		</tr>
+  <%if(obj.goods){obj.goods.forEach(function(o){%>
+		<tr>
+      <td><%=o.gn||''%>
+			<td class="delivery_name"><p><%=o.name||''%></p></td>
+			<td>&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
+			<td><%=o.num||''%></td>
+			<td>&yen;<%=StringUtil.setPrice(o.amount)||'0.00'%></td>
+		</tr>
+    <%});}%>
+	</table>
+
+	<div class="delivery_bei cf2 w756"><span class="delivery_beil">备注:</span><textarea class="delivery_beic"></textarea>
+
+			<div class="delivery_beir"><p>商品总价：&yen;<%=StringUtil.setPrice(obj.goodsAmount)||'0.00'%></p>
+		<p>配送费用：&yen;<%=StringUtil.setPrice(obj.freightAmount)||'0.00'%></p>
+		<p>订单优惠：&yen;<%=StringUtil.setPrice(obj.discountAmount)||'0.00'%></p>
+		<p class="delivery_beinoy">应付总金额：&yen;<%=StringUtil.setPrice(obj.finishAmount)||'0.00'%></p></p>
+	</div>
+	</div>
+	</div>
+	<div class="delivery_footer"><div class="delivery_head cf2 w756">
+		<span class="delivery_headr">
+			<p>收货：<%= obj.addrName%></p>
+			<p>电话：<%=obj.addrMobile||'0'%></p>
+
+
+		</span>
+		<span class="delivery_headr">
+      <p>订 单 号：<%=obj.id%></p>
+			<p>打印时间：<%var wdate=moment().format('YYYY-MM-DD hh:mm:ss');%><%=wdate%>
+      </p>
+		</span>
+	</div>
+	<div class="w756 delivery_adr">地址：<%-obj.addrProvince+obj.addrCity+obj.addrArea+obj.addrAddr%></div>
+	<div class="delivery_num w756 cf2"><span class="delivery_headr"><p>服务商：<span>SUNCHN</span></p>
+		<p>电话：<span>0551-12345678</span></p></span>
+		<span class="delivery_headr"><p>邮箱：</p>
+		<p>网址：<span>www.sunchn.cn</span></p></span>
+	</div>
+
+	</div>
+	</div>

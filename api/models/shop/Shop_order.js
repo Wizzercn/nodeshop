@@ -97,7 +97,7 @@ module.exports = {
     },
     //配送方式id
     shiptypeId: {
-      model: 'Shop_order_ship',
+      model: 'Shop_logistics',
       defaultsTo: function () {
         return 0;
       }

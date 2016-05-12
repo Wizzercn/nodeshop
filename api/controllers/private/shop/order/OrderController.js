@@ -2,6 +2,7 @@
 * Created by root on 20/4/16.
 */
 var moment = require('moment');
+var fs= require('fs');
 var StringUtil = require('../../../../common/StringUtil');
 // var util = require('weixin-pay/lib/util');
 // var WXPay = require('weixin-pay');
@@ -10,6 +11,7 @@ module.exports = {
     return res.view('private/shop/order/order/index', req.data);
   },
   data: function (req,res) {
+    console.log(req.body);
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -18,10 +20,23 @@ module.exports = {
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
-    var orderStatus = req.body.orderStatus||'0';
-    switch (orderStatus) {
+    var status = req.body.status||'0';
+    switch (status) {
       case 'unship':
-      where = {shipStatus:0,status:'active'};
+      where = {disabled: false,
+        status:'active',
+        shipStatus:0,
+        or:[
+          {
+            payStatus:1,
+            payType:{'!':'pay_cash'}
+          },
+          {
+            payStatus:0,
+            payType:'pay_cash'
+          }
+        ]
+      };
       break;
       case 'shiped':
       where = {shipStatus:1,status:'active'};
@@ -39,6 +54,9 @@ module.exports = {
       where = {shipStatus:0,status:'active'};
 
     }
+    if(req.body.id){
+      where.id = req.body.id;
+    }
     // var where = {shipStatus:orderStatus};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
@@ -46,6 +64,7 @@ module.exports = {
     Shop_order.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         Shop_order.find(where)
+        .sort(sort)
         .sort('createdAt desc')
         .paginate({page: page, limit: pageSize})
         .exec(function (err, list) {
@@ -67,7 +86,7 @@ module.exports = {
     });
   },
   detail: function (req, res) {
-    Shop_order.findOne(req.params.id)
+    Shop_order.find(req.params.id)
     .populate('memberId')
     .populate('goods')
     .exec(function (err, obj) {
@@ -84,7 +103,7 @@ module.exports = {
     .populate('memberId')
     .exec(function (err, obj) {
       orderObj = obj||{};
-      Shop_order_ship.find().exec(function (err,obj) {
+      Shop_logistics.find().exec(function (err,obj) {
         var where = {
           shipStatus:0,
           addrCity:orderObj.addrCity,
@@ -117,8 +136,6 @@ module.exports = {
       });
     });
   },
-
-
   doSend: function(req,res){
     var orderList = req.body.orderlist;
     var i = 0;
@@ -128,6 +145,13 @@ module.exports = {
       ssql = ssql+',o.shiptypeNo='+req.body.shiptypeNo;
       ssql = ssql+',og.sendNum = og.num where o.id = og.orderId and o.id = '+ orderId;
       Shop_order_goods.query(ssql,function(){
+        Shop_order_ship_log.create({
+          orderId:orderId,
+          shiptypeNo:req.body.shiptypeNo,
+          memo:'已发货',
+          createAt:moment().format('X'),
+        }).exec(function (el1, ol1) {
+        });
         if(orderList.length==++i){
           return res.view('private/shop/order/order/index', req.data);
         }
@@ -148,7 +172,24 @@ module.exports = {
   doPay: function(req,res){
     var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = '+req.body.id;
     Shop_order.query(ssql,function(err,list){
-      return res.json({code: 0});
+      Shop_order.findOne({id:req.body.id}).exec(function(err,order){
+        Shop_history_payments.create({
+          orderId: order.id,
+          memberId: order.memberId,
+          money: order.payAmount,
+          payType: 'pay_cash',
+          payName: '货到付款',
+          payAccount: '管理员支付',
+          payIp: req.ip,
+          payAt: moment().format('X'),
+          memo: '货到付款支付:￥' + StringUtil.setPrice(order.payAmount),
+          finishAt: moment().format('X'),
+          disabled: false,
+          trade_no: ''
+        }).exec(function (er,obj){
+          return res.json({code: 0});
+        });
+      });
       // return res.view('private/shop/order/order/index', req.data);
     });
   },
@@ -157,7 +198,6 @@ module.exports = {
     Shop_order.findOne(req.params.id)
     .populate('memberId')
     .exec(function (err,order) {
-      console.log(order);
       if(err) {res.json({msg:'订单不存在'});}
       var member = order.memberId;
       Shop_order.update({id: req.params.id}, {
@@ -172,7 +212,7 @@ module.exports = {
           */
           Shop_order_log.create({
             orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
-            opId: 'admin',
+            opId: '0',
             opNickname: '管理员',
             opAt: moment().format('X'),
             opResult: 'fail'
@@ -194,9 +234,9 @@ module.exports = {
             opResult:ok,fail
             */
             Shop_order_log.create({
-              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
-              opId: member.id,
-              opNickname: member.nickname,
+              orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
+              opId: '0',
+              opNickname: '管理员',
               opAt: moment().format('X'),
               opResult: 'ok'
             }).exec(function (el1, ol1) {
@@ -276,9 +316,16 @@ module.exports = {
                 }).exec(function (e3, o3) {
 
                 });
+                Shop_order.update({id: id}, {
+                  payStatus: 3,
+                  updateAt: moment().format('X')
+                }).exec(function (err,obj){
+
+                });
                 return res.json({code: 0, msg: ''});
               });
-            } else {
+            }
+            else {
               //如果是微信支付、支付宝支付
               if (order.payType == 'pay_wxpay') {
                 Shop_history_payments.findOne({orderId:id})
@@ -288,19 +335,122 @@ module.exports = {
                       return res.json({code: 1, msg: ''});
                     } else {
                       var params = {
-                        appid: wxpay.appid,
-                        mch_id: wxpay.mch_id,
-                        op_user_id:  wxpay.mch_id,
+                        appid: wxpay.options.appid,
+                        mch_id: wxpay.options.mch_id,
+                        op_user_id:  wxpay.options.mch_id,
                         out_refund_no: id,
                         total_fee: payHistory.money, //原支付金额
                         refund_fee: payHistory.money, //退款金额
                         transaction_id: payHistory.trade_no
                       };
                       wxpay.refund(params, function(err, result){
-                        console.log('wx_result'+result);
-                        console.log('wx_err'+err);
-                        return res.json({code: 0, msg: ''});
+                        Shop_member.update(member.id, {
+                          score: member.score - order.score
+                        }).exec(function (e4, o4) {
+
+                          if (order.score > 0) {
+                            Shop_member_score_log.create({
+                              memberId: member.id,
+                              orderId: order.id,
+                              oldScore: member.score,
+                              newScore: member.score - order.score,
+                              diffScore: order.score,
+                              note: '取消订单:' + id,
+                              createdBy: 0,
+                              createdAt: moment().format('X')
+                            }).exec(function (es, os) {
+
+                            });
+                          }
+                          Shop_history_refunds.create({
+                            orderId: order.id,
+                            memberId: member.id,
+                            money: order.finishAmount,
+                            payType: 'pay_wxpay',
+                            payName: '微信支付',
+                            payAccount: member.nickname,
+                            payIp: req.ip,
+                            payAt: moment().format('X'),
+                            memo: '微信退款:￥' + StringUtil.setPrice(order.finishAmount),
+                            finishAt: moment().format('X'),
+                            disabled: false
+                          }).exec(function (e3, o3) {
+                            Shop_order.update({id: id}, {
+                              payStatus: 3,
+                              updateAt: moment().format('X')
+                            }).exec(function (err,obj){
+                              return res.json({code: 0, msg: ''});
+                            });
+                          });
+
+                        });
                       });
+                    }
+                  });
+                });
+              }
+              else if (order.payType == 'pay_alipay') {
+                Shop_history_payments.findOne({orderId:id})
+                .exec(function(err,payHistory){
+                  AlipayService.init_refund(function (err, alipay) {
+                    if (err) {
+                      return res.send("支付宝加载失败，请重试。");
+                    } else {
+                      var detailData = payHistory.trade_no+'^'+payHistory.money/100+'^'+'备注';
+                      var data = {
+                        refund_date : moment().format('YYYY-MM-DD HH:mm:ss'),
+                        batch_no: moment().format('YYYYMMDD')+id+'1',
+                        batch_num:1,
+                        detail_data: detailData
+                      };
+                      var result = alipay.refund_fastpay_by_platform_pwd(data,res);
+                      // return  res.json({code: '1', msg: result});
+
+
+                      Shop_member.update(member.id, {
+                        score: member.score - order.score
+                      }).exec(function (e4, o4) {
+
+                        if (order.score > 0) {
+                          Shop_member_score_log.create({
+                            memberId: member.id,
+                            orderId: order.id,
+                            oldScore: member.score,
+                            newScore: member.score - order.score,
+                            diffScore: order.score,
+                            note: '取消订单:' + id,
+                            createdBy: 0,
+                            createdAt: moment().format('X')
+                          }).exec(function (es, os) {
+
+                          });
+                        }
+                        Shop_history_refunds.create({
+                          orderId: order.id,
+                          memberId: member.id,
+                          money: order.finishAmount,
+                          payType: 'pay_alipay',
+                          payName: '支付宝支付',
+                          payAccount: member.nickname,
+                          payIp: req.ip,
+                          payAt: moment().format('X'),
+                          memo: '支付宝退款:￥' + StringUtil.setPrice(order.finishAmount),
+                          finishAt: moment().format('X'),
+                          disabled: false
+                        }).exec(function (e3, o3) {
+
+                        });
+                        Shop_order.update({id: id}, {
+                          payStatus: 3,
+                          updateAt: moment().format('X')
+                        }).exec(function (err,obj){
+                          return  res.json({code: 'alipay', msg: result});
+                          // return res.json({code: 0, msg: ''});
+                        });
+
+
+                      });
+
                     }
                   });
                 });
@@ -314,7 +464,7 @@ module.exports = {
             */
             Shop_order_log.create({
               orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'admin',
-              opId: 'admin',
+              opId: '0',
               opNickname: '管理员操作',
               opAt: moment().format('X'),
               opResult: 'ok'
@@ -325,5 +475,38 @@ module.exports = {
         }
       });
     });
+  },
+  doAliRefund: function (req, res) {
+    Shop_history_refunds.create({
+      orderId: 1,
+      memberId: 1,
+      money: 1,
+      payType: 'pay_alipay',
+      payName: '支付宝退款',
+      payAccount:'req.body',
+      payIp: '1',
+      payAt: moment().format('X'),
+      memo: '支付宝退款回调',
+      finishAt: moment().format('X'),
+      disabled: false
+    }).exec(function (e3, o3) {
+
+    });
+  },
+  print : function (req,res) {
+    req.data.layout = 'layouts/layout';
+
+    var ordid = req.params.id;
+    Shop_order.findOne(req.params.id)
+    .populate('memberId')
+    .populate('goods')
+    .exec(function (err, obj) {
+      req.data.obj = obj || {};
+      req.data.moment = moment;
+      req.data.StringUtil = StringUtil;
+      return res.view('private/shop/order/order/print', req.data);
+    });
+
+    // return res.send('<p>123</p>');
   }
 }

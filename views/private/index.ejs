@@ -99,6 +99,7 @@
 <script type="text/javascript">
   $(function(){
     $.post("/private/home/orderData", {}, function (data) {
+      console.log(data);
       $("#finishAmount").html("&yen;"+data.finishAmount);
       $("#numAll").html(data.numAll);
       $("#numDf").html(data.numDf);

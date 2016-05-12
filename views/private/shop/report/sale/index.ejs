@@ -1,0 +1,221 @@
+
+<style>
+canvas{
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+#chartjs-tooltip {
+  opacity: 1;
+  position: absolute;
+  background: rgba(0, 0, 0, .7);
+  color: white;
+  border-radius: 3px;
+  -webkit-transition: all .1s ease;
+  transition: all .1s ease;
+  pointer-events: none;
+  -webkit-transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
+}
+.chartjs-tooltip-key {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+}
+</style>
+
+<header class="header navbar bg-white shadow" style="line-height: 50px;">
+  <div class="btn-group tool-button" style="width:600px">
+    <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="beginDate">
+      <input type="text" id='beginDayPick' size="16" readonly class="form-control" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" data-parsley-required="true">
+      <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
+      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+    </div>
+    <input type="hidden" id="beginDate" name="beginDate" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" />
+
+    <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="endDate">
+      <input type="text" id='endDayPick' size="16" readonly class="form-control" value="<%=moment().format('YYYY-MM-DD')%>" data-parsley-required="true">
+      <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
+      <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+    </div>
+    <input type="hidden" id="endDate" name="endDate" value="<%=moment().format('YYYY-MM-DD')%>" />
+  </div>
+  <button class="btn btn-primary navbar-btn" onclick="select()">查询</button>
+<button class="btn btn-default  navbar-btn" onclick="lastMonth()">上月</button>
+<button class="btn btn-default  navbar-btn" onclick="thisMonth()">本月</button>
+<button class="btn btn-default  navbar-btn" onclick="lastDay()">昨日</button>
+<button class="btn btn-default  navbar-btn" onclick="thisDay()">今日</button>
+<button class="btn btn-default  navbar-btn" onclick="lastWeek()">上周</button>
+<button class="btn btn-default  navbar-btn" onclick="thisWeek()">本周</button>
+  <!-- <div class="pull-right">
+    <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
+      class="fa fa-sliders"></i> 筛选
+    </button>
+  </div> -->
+</header>
+<div class=panel-body style="padding-top: 55px;">
+  <table class="table table-bordered table-striped mg-t" style="background: #fff;">
+    <thead>
+      <tr>
+        <th>销售额</th>
+        <th>退款金额</th>
+        <th>收入</th>
+      </tr>
+      <tr style="font-size:16px;color:red">
+
+        <td><span id='payAmont'>&yen;12345</span>
+        </td>
+        <td><span id='refundAmont'>&yen;12345</span>
+        </td>
+        <td><span id='money'>&yen;12345</span>
+        </td>
+        <td><span id='custPrice'>&yen;12345</span>
+        </td>
+      </tr>
+    </table>
+    <!-- canvas     -->
+    <div style="width:90%;margin:0 auto">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+<script src="/js/Chart.bundle.js"></script>
+  <script>
+    $(function(){
+      initChart();
+      initDatePicked();
+      // updSparkLine();
+    });
+    function initDatePicked() {
+      $('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        minView: 2,
+        format:'yyyy-mm-dd',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+      });
+    }
+
+    function initChart(){
+
+      var beginDay = $('#beginDate').val();
+      var endDay = $('#endDate').val();
+
+
+      $.post("/private/shop/report/sale/saleDate", {beginDay:beginDay,endDay:endDay}, function (saleDate) {
+
+        $('#payAmont').html('&yen;'+(saleDate.payment).toFixed(2));
+        $('#refundAmont').html('&yen;'+saleDate.refund.toFixed(2));
+        $('#money').html('&yen;'+(saleDate.payment-saleDate.refund).toFixed(2));
+        if(saleDate.countOrder==0){
+            $('#custPrice').html('&yen;'+(0).toFixed(2));
+        }else {
+          $('#custPrice').html('&yen;'+(saleDate.payment/saleDate.countOrder).toFixed(2));
+        }
+        var config = {
+          type: 'line',
+          data: {
+            labels: saleDate.day,
+            datasets: [{
+              label: "销售金额",
+              data: saleDate.sale,
+              fill: false,
+              lineTension: 0,
+            },]
+          },
+          options: {
+            responsive: true,
+            legend: {
+              position: 'bottom',
+            },
+            hover: {
+              mode: 'label'
+            },
+            scales: {
+              xAxes: [{
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: '日期'
+                }
+              }],
+              yAxes: [{
+                display: true,
+                scaleLabel: {
+                  display: true,
+                  labelString: '金额'
+                }
+              }]
+            },
+            title: {
+              display: false,
+              text: '销售趋势表'
+            }
+          }
+        };
+        $.each(config.data.datasets, function(i, dataset) {
+          var background = '#285e8e';
+          dataset.borderColor = background;
+          dataset.backgroundColor = background;
+          dataset.pointBorderColor = background;
+          dataset.pointBackgroundColor = background;
+          dataset.pointBorderWidth = 1;
+        });
+        var ctx = document.getElementById("canvas").getContext("2d");
+        window.myLine = new Chart(ctx, config);
+        // var myNewChart = new Chart(ctx).Line(data);
+      }, "json");
+    }
+    function select(){
+        initChart();
+    }
+    function lastMonth() {
+      var now = new Date();
+      var tmpDay = new Date(now.getFullYear(),now.getMonth());
+      var beginDay = new Date(now.getFullYear(),now.getMonth()-1);
+      var endDay = new Date(tmpDay-1);
+      setDatePicker(beginDay,endDay);
+    }
+    function thisMonth() {
+      var now = new Date();
+      var beginDay = new Date(now.getFullYear(),now.getMonth());
+      var endDay = new Date(now);
+      setDatePicker(beginDay,endDay);
+    }
+    function lastDay(){
+      var now = new Date();
+      var yesterday  = new Date(now-1000*60*60*24);
+      setDatePicker(yesterday,yesterday);
+    }
+    function thisDay() {
+      var now = new Date();
+      setDatePicker(now,now);
+    }
+    function lastWeek() {
+      var now = new Date();
+      var tmpDay = now.getDay();
+      var beginDay = new Date(now-(tmpDay+6)*1000*60*60*24);
+      var endDay = new Date(now-tmpDay*1000*60*60*24);
+      setDatePicker(beginDay,endDay);
+    }
+    function thisWeek() {
+        var now = new Date();
+        var tmpDay = now.getDay();
+        var beginDay = new Date(now-(tmpDay-1)*1000*60*60*24);
+        setDatePicker(beginDay,now);
+    }
+
+    function setDatePicker(beginDay,endDay) {
+      beginDay = beginDay.Format("yyyy-MM-dd");
+      endDay = endDay.Format("yyyy-MM-dd");
+      $('#beginDate').val(beginDay);
+      $('#beginDayPick').val(beginDay);
+      $('#endDate').val(endDay);
+      $('#endDayPick').val(endDay);
+      initChart();
+    }
+  </script>
