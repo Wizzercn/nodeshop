@@ -342,7 +342,6 @@ module.exports = {
         t.compile(o);
         t.global=true;
         t.ignoreCase=true;
-        sails.log.debug(t);
         t2.compile('{"a":"'+o+'","b":[0-9]}');
         t2.global=true;
         t2.ignoreCase=true;
