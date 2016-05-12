@@ -6,7 +6,7 @@
   </div>
   <div class="pull-right">
     <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
-      class="fa fa-sliders"></i> 筛选
+        class="fa fa-sliders"></i> 筛选
     </button>
   </div>
 </header>
@@ -27,94 +27,96 @@
 </div>
 <div class=panel-body style="padding-top: 55px;">
   <ul id="orderTab" class="nav nav-tabs" style="padding-top: 0px;margin-bottom: -5px">
-    <li class="active"><a href="javascript:;" data-toggle="tab" data-id="unship">待发货</a>
+    <li id="unship" class="active"><a href="javascript:;" data-toggle="tab" data-id="unship">待发货</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="shiped">已发货</a>
+    <li id="shiped"><a href="javascript:;" data-toggle="tab" data-id="shiped">已发货</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="unpay">待支付</a>
+    <li id="unpay"><a href="javascript:;" data-toggle="tab" data-id="unpay">待支付</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="payed">已支付</a>
+    <li id="payed"><a href="javascript:;" data-toggle="tab" data-id="payed">已支付</a>
     </li>
-    <li><a href="javascript:;" data-toggle="tab" data-id="all">全部</a>
+    <li id="finish"><a href="javascript:;" data-toggle="tab" data-id="finish">已完成</a>
+    </li>
+    <li id="all"><a href="javascript:;" data-toggle="tab" data-id="all">全部</a>
     </li>
   </ul>
   <div class="table-responsive no-border">
     <input id="unitid" type="hidden">
     <table class="table table-bordered table-striped mg-t datatable" style="background: #fff;">
       <thead>
-        <tr>
-          <th>订单号</th>
-          <th>状态</th>
-          <th>发货状态</th>
-          <th>支付状态</th>
-          <th>支付方式</th>
-          <th>金额</th>
-          <th>收货地址</th>
-          <th>收货人</th>
-          <th>联系电话</th>
-          <th>创建时间</th>
-          <th>操作</th>
-        </tr>
-      </table>
-    </div>
+      <tr>
+        <th>订单号</th>
+        <th>状态</th>
+        <th>发货状态</th>
+        <th>支付状态</th>
+        <th>支付方式</th>
+        <th>金额</th>
+        <th>收货地址</th>
+        <th>收货人</th>
+        <th>联系电话</th>
+        <th>创建时间</th>
+        <th>操作</th>
+      </tr>
+    </table>
   </div>
-  <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h4 class="modal-title">取消订单</h4>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-xs-12">
-              确定要取消该订单吗？ <br/>
-            </div>
+</div>
+<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title">取消订单</h4>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-xs-12">
+            确定要取消该订单吗？ <br/>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">放 弃</button>
-          <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">放 弃</button>
+        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
       </div>
     </div>
   </div>
-  <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
+</div>
+<div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-      </div>
     </div>
   </div>
-  <script language="JavaScript">
-    var datatable;
-    function initDatatable() {
-      datatable = $('.datatable').DataTable({
-        "dom": '<"toolbar">frtip',
-        "searching": false,
-        "processing": false,
-        "serverSide": true,
-        "select": true,
-        "ordering": true,
-        "language": {
-          "url": "/plugins/datatables/cn.json"
-        },
-        "preDrawCallback": function () {
-          sublime.showLoadingbar($(".main-content"));
-        },
-        "drawCallback": function () {
-          sublime.closeLoadingbar($(".main-content"));
-        },
-        "ajax": {
-          "url": "/private/shop/order/order/data",
-          "type": "post",
-          "data": function (d) {
-            d.status=$("#orderTab .active").find("a").attr("data-id");
-            d.id = $('#id').val();
-          }
-        },
-        "order": [[6, "desc"]],
-        "columns": [
+</div>
+<script language="JavaScript">
+  var datatable;
+  function initDatatable() {
+    datatable = $('.datatable').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching": false,
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "preDrawCallback": function () {
+        sublime.showLoadingbar($(".main-content"));
+      },
+      "drawCallback": function () {
+        sublime.closeLoadingbar($(".main-content"));
+      },
+      "ajax": {
+        "url": "/private/shop/order/order/data",
+        "type": "post",
+        "data": function (d) {
+          d.status = $("#orderTab .active").find("a").attr("data-id");
+          d.id = $('#id').val();
+        }
+      },
+      "order": [[6, "desc"]],
+      "columns": [
         {"data": "id", "bSortable": true},
         {"data": "status", "bSortable": true},
         {"data": "shipStatus", "bSortable": true},
@@ -126,22 +128,22 @@
         {"data": "addrMobile", "bSortable": true},
         {"data": "createdAt", "bSortable": true},
 
-        ],
-        "columnDefs": [
+      ],
+      "columnDefs": [
         {
           "render": function (data, type, row) {
             switch (data) {
               case 'active':
-              return '活动';
-              break;
+                return '活动';
+                break;
               case 'dead':
-              return '取消';
-              break;
+                return '取消';
+                break;
               case 'finish':
-              return '完成';
-              break;
+                return '完成';
+                break;
               default:
-              return '未知';
+                return '未知';
             }
           },
           "targets": 1
@@ -150,16 +152,16 @@
           "render": function (data, type, row) {
             switch (data) {
               case 0:
-              return '未发货';
-              break;
+                return '未发货';
+                break;
               case 1:
-              return '已发货';
-              break;
+                return '已发货';
+                break;
               case 2:
-              return '部分发货';
-              break;
+                return '部分发货';
+                break;
               default:
-              return '未知';
+                return '未知';
             }
           },
           "targets": 2
@@ -168,59 +170,59 @@
           "render": function (data, type, row) {
             switch (data) {
               case 'pay_wxpay':
-              return '微信';
-              break;
+                return '微信';
+                break;
               case 'pay_alipay':
-              return '支付宝';
-              break;
+                return '支付宝';
+                break;
               case 'pay_money':
-              return '预存款';
-              break;
+                return '预存款';
+                break;
               case 'pay_cash':
-              return '货到付款';
-              break;
+                return '货到付款';
+                break;
               default:
-              return '未知';
+                return '未知';
             }
           },
           "targets": 4
         },
         {
           "render": function (data, type, row) {
-            return '&yen;'+setPrice(data);
+            return '&yen;' + setPrice(data);
           },
           "targets": 5
         },
         {
           "render": function (data, type, row) {
-            let addr = row.addrProvince+row.addrCity+row.addrArea+row.addrAddr;
+            let addr = row.addrProvince + row.addrCity + row.addrArea + row.addrAddr;
             return addr;
           },
           "targets": 6
         },
         {
           "render": function (data, type, row) {
-            return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
+            return new Date(data * 1000).Format('yyyy-MM-dd hh:mm:ss');
           },
           "targets": 9
         },
         {
           "render": function (data, type, row) {
-            switch (data){
+            switch (data) {
               case 0:
-              return '未付款';
-              break;
+                return '未付款';
+                break;
               case 1:
-              return '已付款';
-              break;
+                return '已付款';
+                break;
               case 2:
-              return '申请退款';
-              break;
+                return '申请退款';
+                break;
               case 3:
-              return '已退款';
-              break;
+                return '已退款';
+                break;
               default:
-              return '未知';
+                return '未知';
             }
 
 
@@ -232,113 +234,122 @@
           "render": function (data, type, row) {
             var editMenu = '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul style="margin-left: -98px;" class="dropdown-menu" role="menu">';
-                editMenu += '<li><a href="/private/shop/order/order/print/' + row.id + '" target="_blank" >打印单据</a></li>';
-                editMenu +='<li class="divider"></li>';
-                editMenu += '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>';
-                if (row.status == 'active') {
-                  if (row.shipStatus == 0 && (row.payType=='pay_cash'||row.payStatus==1)) {
-                    editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">发货</a></li>';
-                  }else if (row.shipStatus == 1) {
-                    if (row.payType=='pay_cash'&&row.payStatus==0) {
-                      editMenu += '<li><a href="/private/shop/order/order/pay/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">支付</a></li>';
-                    }
-                    // editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">退货</a></li>';
-                  }
-                  editMenu += '<li><a href="javascript:;" onclick="cancel(' + row.id + ')">取消</a></li>';
+            editMenu += '<li><a href="/private/shop/order/order/print/' + row.id + '" target="_blank" >打印单据</a></li>';
+            editMenu += '<li class="divider"></li>';
+            editMenu += '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>';
+            if (row.status == 'active') {
+              if (row.shipStatus == 0 && (row.payType == 'pay_cash' || row.payStatus == 1)) {
+                editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">发货</a></li>';
+              } else if (row.shipStatus == 1) {
+                if (row.payType == 'pay_cash' && row.payStatus == 0) {
+                  editMenu += '<li><a href="/private/shop/order/order/pay/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">支付</a></li>';
                 }
-
-                editMenu+='</ul></div>';
-                return editMenu;
-                // return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                //   ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-                //     '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>' +
-                //     '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">发货</a></li>' +
-                //     '<li><a href="javascript:;" onclick="order(' + row.id + ')">发货</a></li>' +
-                //     '<li class="divider"></li>' +
-                //     '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
-                //     '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
-                //     '<li class="divider"></li>' +
-                //     '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
-                //     '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
-                //     '</ul></div>';
-              },
-              "targets": 10
+                // editMenu += '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">退货</a></li>';
+              }
+              editMenu += '<li><a href="javascript:;" onclick="cancel(' + row.id + ')">取消</a></li>';
             }
-            ]
-          });
-          datatable.on('click', 'tr', function () {
-            $(this).toggleClass('selected');
-          });
-          $("#searchBtn").on('click', function () {
-            datatable.ajax.reload();
-          });
+
+            editMenu += '</ul></div>';
+            return editMenu;
+            // return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+            //   ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+            //     '<li><a href="/private/shop/order/order/detail/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">订单详情</a></li>' +
+            //     '<li><a href="/private/shop/order/order/send/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">发货</a></li>' +
+            //     '<li><a href="javascript:;" onclick="order(' + row.id + ')">发货</a></li>' +
+            //     '<li class="divider"></li>' +
+            //     '<li><a href="/private/shop/member/member/money/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">预存款</a></li>' +
+            //     '<li><a href="/private/shop/member/member/score/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">积分</a></li>' +
+            //     '<li class="divider"></li>' +
+            //     '<li><a href="/private/shop/member/member/edit/' + row.id + '" data-pjax>编辑</a></li>' +
+            //     '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
+            //     '</ul></div>';
+          },
+          "targets": 10
         }
-        function cancel(id) {
-          var dialog = $("#dialogDelete");
-          dialog.modal("show");
-          dialog.find("#ok").unbind("click");
-          dialog.find("#ok").bind("click", function (event) {
-            var btn = $(this);
-            btn.button("loading");
-            $.post("/private/shop/order/order/cancel/" + id, {}, function (data) {
-              if (data.code == 0) {
-                datatable.ajax.reload(null,false);
-              }else if (data.code == 'alipay') {
-                console.log(data.msg);
-                var obj = window.open("about:blank");
-                var refundHtml = '<html lang="zh-CN"><body>';
-                  refundHtml += data.msg;
-                  refundHtml += '</body><html>'
-                  obj.document.write(data.msg);
-                } else {
-                  Toast.error(data.msg);
-                }
-                //重置按钮状态，关闭提示框
-                btn.button("reset");
-                dialog.modal("hide");
-              }, "json");
-            });
+      ]
+    });
+    datatable.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click', function () {
+      datatable.ajax.reload();
+    });
+  }
+  function cancel(id) {
+    var dialog = $("#dialogDelete");
+    dialog.modal("show");
+    dialog.find("#ok").unbind("click");
+    dialog.find("#ok").bind("click", function (event) {
+      var btn = $(this);
+      btn.button("loading");
+      $.post("/private/shop/order/order/cancel/" + id, {}, function (data) {
+        if (data.code == 0) {
+          datatable.ajax.reload(null, false);
+        } else if (data.code == 'alipay') {
+          console.log(data.msg);
+          var obj = window.open("about:blank");
+          var refundHtml = '<html lang="zh-CN"><body>';
+          refundHtml += data.msg;
+          refundHtml += '</body><html>'
+          obj.document.write(data.msg);
+        } else {
+          Toast.error(data.msg);
+        }
+        //重置按钮状态，关闭提示框
+        btn.button("reset");
+        dialog.modal("hide");
+      }, "json");
+    });
+  }
+  function delCheck() {
+    var chks = datatable.rows('.selected').data();
+    if (chks.length > 0) {
+      var ids = [];
+      $.each(datatable.rows('.selected').data(), function (i, n) {
+        ids.push(n.id);
+      });
+      var dialog = $("#dialogDelete");
+      dialog.modal("show");
+      dialog.find("#ok").unbind("click");
+      dialog.find("#ok").bind("click", function (event) {
+        var btn = $(this);
+        btn.button("loading");
+        $.post("/private/shop/member/member/delete", {ids: ids}, function (data) {
+          if (data.code == 0) {
+            datatable.ajax.reload(null, false);
+          } else {
+            Toast.error(data.msg);
           }
-          function delCheck() {
-            var chks = datatable.rows('.selected').data();
-            if (chks.length > 0) {
-              var ids = [];
-              $.each(datatable.rows('.selected').data(), function (i, n) {
-                ids.push(n.id);
-              });
-              var dialog = $("#dialogDelete");
-              dialog.modal("show");
-              dialog.find("#ok").unbind("click");
-              dialog.find("#ok").bind("click", function (event) {
-                var btn = $(this);
-                btn.button("loading");
-                $.post("/private/shop/member/member/delete", {ids: ids}, function (data) {
-                  if (data.code == 0) {
-                    datatable.ajax.reload(null,false);
-                  } else {
-                    Toast.error(data.msg);
-                  }
-                  btn.button("reset");
-                  dialog.modal("hide");
-                }, "json");
-              });
-            } else {
-              Toast.warning("请先选择要删除的项！");
-            }
-          }
+          btn.button("reset");
+          dialog.modal("hide");
+        }, "json");
+      });
+    } else {
+      Toast.warning("请先选择要删除的项！");
+    }
+  }
 
-          $(function () {
-            initDatatable();
-            $("#dialogDetail").on("hidden.bs.modal", function() {
-              $(this).removeData("bs.modal");
-            });
-            $(".nav-tabs>li ").on("click",function (e) {
-              $("#orderTab").find("li").each(function(){
-                $(this).removeClass("active");
-              });
-              $(this).addClass("active");
-              datatable.ajax.reload();
-            });
-          });
+  $(function () {
 
-        </script>
+    initNavBar();
+    initDatatable();
+    $("#dialogDetail").on("hidden.bs.modal", function () {
+      $(this).removeData("bs.modal");
+    });
+    $(".nav-tabs>li ").on("click", function (e) {
+      $("#orderTab").find("li").each(function () {
+        $(this).removeClass("active");
+      });
+      $(this).addClass("active");
+      datatable.ajax.reload();
+    });
+  });
+  function initNavBar() {
+    <%var status = navStatus?navStatus:'unship'%>
+    console.log("<%= status%>");
+    $("#orderTab").find("li").each(function () {
+      $(this).removeClass("active");
+    });
+    $('#<%= status%>').addClass("active");
+  }
+</script>

@@ -5,6 +5,10 @@ var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
+    //sails.log.debug(req.query);
+    req.data.navStatus = req.query.navStatus;
+    req.data.moment = moment;
+    req.data.StringUtil = StringUtil;
     return res.view('private/shop/order/order/index', req.data);
   },
   data: function (req, res) {
@@ -36,13 +40,16 @@ module.exports = {
         };
         break;
       case 'shiped':
-        where = {shipStatus: 1, status: 'active'};
+        where = {shipStatus: 1, status: 'active',disabled: false};
         break;
       case 'unpay':
-        where = {payStatus: 0, status: 'active'};
+        where = {payStatus: 0, status: 'active',disabled: false};
         break;
       case 'payed':
-        where = {payStatus: 1, status: 'active'};
+        where = {payStatus: 1, status: 'active',disabled: false};
+        break;
+      case 'finish':
+        where = {payStatus: 1, status: 'finish',disabled: false};
         break;
       case 'all':
         where = {};
@@ -82,7 +89,7 @@ module.exports = {
     });
   },
   detail: function (req, res) {
-    Shop_order.find(req.params.id)
+    Shop_order.findOne({id:req.params.id})
       .populate('memberId')
       .populate('goods')
       .exec(function (err, obj) {
@@ -137,10 +144,9 @@ module.exports = {
       });
   },
   doSend: function (req, res) {
-    if(!req.body.orderlist){return  res.json({code: 1,msg:'未选择发货订单'}); }
-    if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'未填写物流单号'}); }
+    if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
+    if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
     var orderList = req.body.orderlist;
-    sails.log.debug(orderList);
     var i = 0;
     orderList.forEach(function (orderId) {
       var ssql = 'update Shop_order o,Shop_order_goods og ';
@@ -156,10 +162,7 @@ module.exports = {
         }).exec(function (el1, ol1) {
         });
         if (orderList.length == ++i) {
-
-          return res.json({code: 0});
-          //return res.view('private/shop/order/order/index', req.data);
-        }
+          return res.json({code: 0});        }
       });
     });
   },
@@ -230,7 +233,10 @@ module.exports = {
             //退库存
             Shop_order_goods.find({orderId: id}).exec(function (orderErr, orderGoogs) {
               orderGoogs.forEach(function (goodsObj) {
-                Shop_goods_products.query('UPDATE shop_goods_products SET stock=stock+? WHERE goodsId=? and id=?', [StringUtil.getInt(goodsObj.num), goodsObj.goodsId, goodsObj.productId], function (gErr, g) {
+                var ssql = "UPDATE shop_goods_products SET stock=stock+"+StringUtil.getInt(goodsObj.num);
+                ssql += " WHERE goodsId="+goodsObj.goodsId+" and id="+goodsObj.productId;
+                sails.log.debug(ssql);
+                Shop_goods_products.query(ssql, [StringUtil.getInt(goodsObj.num), goodsObj.goodsId, goodsObj.productId], function (gErr, g) {
                 });
               });
             });

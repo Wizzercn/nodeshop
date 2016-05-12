@@ -17,7 +17,7 @@ module.exports = {
     ssql += "sum(IFNULL(hp.money,0)) as payment,sum(IFNULL(hr.money,0)) as refund,IFNULL(count(1),0) as countOrder"
     ssql += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
     ssql += " left join shop_history_refunds hr on o.id=hr.orderId";
-    ssql += " where o.status!='dead' and o.payStatus=1";
+    ssql += " where o.status!='dead' and o.payStatus=1 and o.disabled=0";
     ssql += " and o.createdAt<=" + endDay;
     ssql += " and o.createdAt>=" + beginDay;
     ssql += " group by FROM_UNIXTIME(createdAt,'%Y%m%d')";
