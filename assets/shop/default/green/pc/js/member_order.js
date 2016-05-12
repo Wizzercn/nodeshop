@@ -61,7 +61,7 @@ function list(type,start){
           $.each(listObj,function(i,o){
 
         str+='<div class="t_table_m">'+
-          '<div class="member_cdf">订单编号：'+ o.id+'<span>  下单时间：'+new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span></div>'+
+          '<div class="member_cdf">订单号：'+ o.id+'<span>  下单时间：'+new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span></div>'+
           '<table class="t_main">';
             $.each(o.goods,function(j,goods) {
 

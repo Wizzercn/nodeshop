@@ -1,4 +1,3 @@
-
 /**
 * Created by root on 20/4/16.
 */
@@ -60,6 +59,5 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       return res.view('private/shop/order/order/detail', req.data);
     });
-  },
-
-}
+  }
+};

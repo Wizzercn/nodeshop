@@ -60,16 +60,17 @@ canvas{
         <th>销售额</th>
         <th>退款金额</th>
         <th>收入</th>
+        <th>客单价</th>
       </tr>
       <tr style="font-size:16px;color:red">
 
-        <td><span id='payAmont'>&yen;12345</span>
+        <td><span id='payAmont'>&yen;0</span>
         </td>
-        <td><span id='refundAmont'>&yen;12345</span>
+        <td><span id='refundAmont'>&yen;0</span>
         </td>
-        <td><span id='money'>&yen;12345</span>
+        <td><span id='money'>&yen;0</span>
         </td>
-        <td><span id='custPrice'>&yen;12345</span>
+        <td><span id='custPrice'>&yen;0</span>
         </td>
       </tr>
     </table>
@@ -108,13 +109,13 @@ canvas{
 
       $.post("/private/shop/report/sale/saleDate", {beginDay:beginDay,endDay:endDay}, function (saleDate) {
 
-        $('#payAmont').html('&yen;'+(saleDate.payment).toFixed(2));
-        $('#refundAmont').html('&yen;'+saleDate.refund.toFixed(2));
-        $('#money').html('&yen;'+(saleDate.payment-saleDate.refund).toFixed(2));
+        $('#payAmont').html('&yen;'+ saleDate.payment);
+        $('#refundAmont').html('&yen;'+ saleDate.refund);
+        $('#money').html('&yen;'+ (saleDate.payment-saleDate.refund));
         if(saleDate.countOrder==0){
-            $('#custPrice').html('&yen;'+(0).toFixed(2));
+            $('#custPrice').html('&yen;'+ (0.00));
         }else {
-          $('#custPrice').html('&yen;'+(saleDate.payment/saleDate.countOrder).toFixed(2));
+          $('#custPrice').html('&yen;'+ (saleDate.payment/saleDate.countOrder));
         }
         var config = {
           type: 'line',

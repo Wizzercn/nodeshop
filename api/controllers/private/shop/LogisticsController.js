@@ -1,4 +1,3 @@
-
 /**
 * Created by root on 20/4/16.
 */
@@ -81,8 +80,5 @@ module.exports = {
         }
         return res.json({code: 0, msg: sails.__('delete.ok')});
       });
-    },
-  shipEdit : function(req,res){
-
-  }
-}
+    }
+};

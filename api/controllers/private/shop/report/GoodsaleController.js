@@ -1,9 +1,7 @@
-
 /**
-* Created by root on 20/4/16.
-*/
+ * Created by root on 20/4/16.
+ */
 var moment = require('moment');
-var fs= require('fs');
 var StringUtil = require('../../../../common/StringUtil');
 // var util = require('weixin-pay/lib/util');
 // var WXPay = require('weixin-pay');
@@ -12,7 +10,7 @@ module.exports = {
     req.data.moment = moment;
     return res.view('private/shop/report/goodsale/index', req.data);
   },
-  data: function (req,res) {
+  data: function (req, res) {
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -26,21 +24,22 @@ module.exports = {
     //   sort[columns[order[0].column].data] = order[0].dir;
     // }
 
-      console.log(req.body);
+    console.log(req.body);
     Shop_order.count(where).exec(function (err, count) {
       if (!err && count > 0) {
-        var beginDay = req.body.beginDay?moment(req.body.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
-        var endDay = req.body.endDay?moment(req.body.endDay).format('X'):endDay = moment().format('X');
-        var ssql = "select gp.name name,sum(og.amount) amount from shop_order_goods og,shop_order o,shop_goods_products gp ";
-        ssql += "where o.id=og.orderId and og.productId = gp.id and o.status <> 'dead'";
+        var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
+        var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
+        endDay += 1000 * 3600 * 24 - 1;
+        var ssql = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
+        ssql += "where o.id=og.orderId and  o.status <> 'dead'";
         ssql += " and o.createdAt<=" + endDay;
         ssql += " and o.createdAt>=" + beginDay;
-        ssql +=" group by gp.name order by sum(og.amount) desc";
+        ssql += " group by og.name order by sum(og.amount) desc";
         var list = [];
-        Shop_order_goods.query(ssql,function (err,obj) {
+        Shop_order_goods.query(ssql, function (err, obj) {
           console.log(obj);
           for (var i = 0; i < obj.length; i++) {
-              list.push({index:i+1,name:obj[i].name,amount:obj[i].amount/100});
+            list.push({index: i + 1, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
           }
           return res.json({
             "draw": draw,
@@ -48,29 +47,26 @@ module.exports = {
             "recordsFiltered": obj.length,
             "data": list
           });
-
-
         });
-    } else {
-      return res.json({
-        "draw": draw,
-        "recordsTotal": pageSize,
-        "recordsFiltered": 0,
-        "data": []
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  detail: function (req, res) {
+    Shop_order.findOne(req.params.id)
+      .populate('memberId')
+      .populate('goods')
+      .exec(function (err, obj) {
+        req.data.obj = obj || {};
+        req.data.moment = moment;
+        req.data.StringUtil = StringUtil;
+        return res.view('private/shop/order/order/detail', req.data);
       });
-    }
-  });
-},
-detail: function (req, res) {
-  Shop_order.findOne(req.params.id)
-  .populate('memberId')
-  .populate('goods')
-  .exec(function (err, obj) {
-    req.data.obj = obj || {};
-    req.data.moment = moment;
-    req.data.StringUtil = StringUtil;
-    return res.view('private/shop/order/order/detail', req.data);
-  });
-},
-
-}
+  }
+};

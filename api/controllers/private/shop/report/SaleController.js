@@ -31,19 +31,18 @@ module.exports = {
       var sum = 0;
       for (var i = 0; i < obj.length; i++) {
         day.push(obj[i].date);
-        sale.push(obj[i].amount/100);
-        sum += obj[i].amount/100;
-        payment += obj[i].payment/100;
-        refund += obj[i].refund/100;
-        countOrder += obj[i].countOrder;
+        sale.push(obj[i].amount);
+        sum += obj[i].amount;
+        payment += obj[i].payment;
+        refund += obj[i].refund;
+        countOrder +=obj[i].countOrder;
       }
-      data.amountSum = sum;
+      data.amountSum =  StringUtil.setPrice(sum);
       data.sale = sale;
       data.day = day;
-      data.payment = payment;
-      data.refund = refund;
+      data.payment =  StringUtil.setPrice(payment);
+      data.refund =  StringUtil.setPrice(refund);
       data.countOrder = countOrder;
-      console.log(data);
       return res.json(data);
     });
   },
@@ -87,6 +86,5 @@ module.exports = {
         });
       }
     });
-  },
-
-}
+  }
+};

@@ -1,4 +1,3 @@
-
 /**
 * Created by root on 20/4/16.
 */
@@ -52,4 +51,4 @@ module.exports = {
   shipEdit : function(req,res){
 
   }
-}
+};

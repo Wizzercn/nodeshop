@@ -1,4 +1,3 @@
-
 /**
 * Created by root on 20/4/16.
 */
@@ -12,7 +11,7 @@ module.exports = {
     return res.view('private/shop/order/payment/index', req.data);
   },
   data: function (req,res) {
-    
+
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -61,6 +60,5 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       return res.view('private/shop/order/order/detail', req.data);
     });
-  },
-
-}
+  }
+};

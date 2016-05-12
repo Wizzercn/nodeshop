@@ -17,7 +17,7 @@
   <div class="cd-panel-container">
     <div class="cd-panel-content shadow">
       <div class="form-group">
-        <label for="id">订单编号</label>
+        <label for="id">订单号</label>
         <input type="text" id="id" name="id" onclick="this.value=''" class="form-control" placeholder="订单编号">
       </div>
 
@@ -286,7 +286,7 @@
               }else if (data.code == 'alipay') {
                 console.log(data.msg);
                 var obj = window.open("about:blank");
-                var refundHtml = '<html lang="zh-CN"><he<body>';
+                var refundHtml = '<html lang="zh-CN"><body>';
                   refundHtml += data.msg;
                   refundHtml += '</body><html>'
                   obj.document.write(data.msg);
