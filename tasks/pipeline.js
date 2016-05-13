@@ -37,8 +37,6 @@ var jsFilesToInject = [
   'js/jquery.pjax.js',
   'bootstrap/js/bootstrap.js',
   'plugins/jquery.form.js',
-  'plugins/parsley.min.js',
-  'plugins/parsley.zh_cn.js',
   'plugins/jquery.sortable.js',
   'plugins/jquery.nestable.js',
   'plugins/icheck/icheck.js',
