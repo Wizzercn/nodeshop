@@ -31,7 +31,7 @@ module.exports = {
       var sum = 0;
       for (var i = 0; i < obj.length; i++) {
         day.push(obj[i].date);
-        sale.push(obj[i].amount);
+        sale.push(StringUtil.setPrice(obj[i].amount));
         sum += obj[i].amount;
         payment += obj[i].payment;
         refund += obj[i].refund;

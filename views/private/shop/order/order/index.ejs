@@ -54,7 +54,7 @@
         <th>收货地址</th>
         <th>收货人</th>
         <th>联系电话</th>
-        <th>创建时间</th>
+        <th>更新时间</th>
         <th>操作</th>
       </tr>
     </table>
@@ -126,8 +126,7 @@
         {"data": "addrProvince", "bSortable": true},
         {"data": "addrName", "bSortable": true},
         {"data": "addrMobile", "bSortable": true},
-        {"data": "createdAt", "bSortable": true},
-
+        {"data": "updateAt", "bSortable": true},
       ],
       "columnDefs": [
         {
@@ -268,6 +267,10 @@
         }
       ]
     });
+    // if($('#unship').hasClass('active')){
+    //   console.log(  $('#orderTime').html());
+    //   $('#orderTime').html('支付时间');
+    // }
     datatable.on('click', 'tr', function () {
       $(this).toggleClass('selected');
     });

@@ -204,7 +204,10 @@ module.exports = {
     //状态更新时间
     updateAt: {
       type: 'integer',
-      index: true
+      index: true,
+      defaultsTo: function () {
+        return moment().format('X');
+      }
     },
     //会员ID
     memberId: {
