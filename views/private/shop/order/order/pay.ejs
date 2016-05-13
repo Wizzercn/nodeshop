@@ -72,7 +72,6 @@
 <script>
   $('#pay').on('click',function(e){
     $.post("/private/shop/order/order/doPay", {id: <%=obj.id%>}, function (data) {
-      console.log(data);
       if (data.code == 0) {
         datatable.ajax.reload(null,false);
       } else {
