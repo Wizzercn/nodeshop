@@ -3,7 +3,7 @@
     border-color: #6AABE0 !important;
   }
 </style>
-<form action="/private/shop/order/order/doSend" method="post">
+<!--<form action="/private/shop/order/order/doSend" method="post">-->
 <div class="modal-body no-p">
   <div class="row">
     <div class="col-xs-12">
@@ -27,13 +27,19 @@
             </tr> -->
             <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
-              <td width="30%" align="left"><%- obj.memberId.nickname||'' %></td>
+              <td width="30%" align="left">
+                <%var nickname = obj.memberId?obj.memberId.nickname:'' %>
+                <%=nickname%>
+              </td>
               <td width="20%" align="right">会员手机：</td>
-              <td width="30%" align="left"><%- obj.memberId.mobile||'' %></td>
+              <td width="30%" align="left">
+                <%var mobile = obj.memberId?obj.memberId.mobile:''%>
+                <%= mobile %>
+              </td>
             </tr>
             <tr style="height: 30px;">
               <td width="20%" align="right">收货人：</td>
-              <td width="30%" align="left"><%= obj.addrName%></td>
+              <td width="30%" align="left"><%= obj.addrName||'未知'%></td>
               <td width="20%" align="right">收货人手机：</td>
               <td width="30%" align="left"><%=obj.addrMobile||'0'%></td>
             </tr>
@@ -46,21 +52,21 @@
             <tr style="height: 30px;">
               <td width="20%" align="right">发货方式：</td>
               <td width="30%" align="left">
-              <select name="shiptypeId">
+              <select id="shiptypeId" name="shiptypeId">
                 <%if(obj.ship){obj.ship.forEach(function(o){%>
                   <option value ="<%=o.id%>"><%=o.name%></option>
                 <%});}%>
               </select>
             </td>  <td width="20%" align="right">物流单号：</td>
                 <td width="30%" align="left">
-                  <input type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
+                  <input id="shiptypeNo" type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
                 </td>
             </tr>
           </table>
           <%if(obj.orderList){obj.orderList.forEach(function(obj){%>
-        <div class="order-item" style="border: solid 1px #CCC;margin: 5px 25px;padding: 5px;">
+        <div class="order-item order-item-select" style="border: solid 1px #CCC;margin: 5px 25px;padding: 5px;">
           <div style="float:left">
-          <input type="checkbox" class='order-chk' name="orderlist[]" style="display:none" value="<%=obj.id%>"><%=obj.id%>
+          <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="" value="<%=obj.id%>"><%=obj.id%>
         </div>
           <table width="80%" style="padding: 10px;margin-left: 25px;">
             <thead>
@@ -92,14 +98,33 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-block" data-dismiss="">发货</button>
+    <button id="send" type="button" class="btn btn-primary btn-block" data-dismiss="modal">发货</button>
   </div>
-    </form>
+    <!--</form>-->
 <script>
 $('.order-chk').bind('change',function(e){
   $(this).parent().parent().toggleClass('order-item-select');
 });
 $('.order-item').bind('click',function(e){
   $(this).find('.order-chk').click();
+});
+$('#send').on('click',function(e){
+  var ids = [];
+  $('.order-chk:checked').each(function(o){
+    ids.push($(this).val());
+  });
+  var shiptypeId = $('#shiptypeId').val();
+  var shiptypeNo = $('#shiptypeNo').val();
+
+  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo}, function (data) {
+    console.log(data);
+    if (data.code == 0) {
+      console.log(data);
+      datatable.ajax.reload(null,false);
+    } else {
+      Toast.error(data.msg);
+    }
+  }, "json");
+
 });
 </script>

@@ -52,4 +52,4 @@ module.exports = {
   shipEdit : function(req,res){
 
   }
-}
+};

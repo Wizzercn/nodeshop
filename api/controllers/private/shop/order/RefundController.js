@@ -60,6 +60,6 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       return res.view('private/shop/order/order/detail', req.data);
     });
-  },
 
 }
+};
