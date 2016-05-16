@@ -66,11 +66,12 @@
     </div>
     <div class="clear"></div>
   </li>
+  <%if(ShopConfig.pay_wxpay){%>
   <li id="wxLi" class="xuanze5c" style="height: 200px;display: <%=order.payType=='pay_wxpay'?'block':'none'%>;">
     <div id="qrCode" style="font-size: 22px;">二维码加载中...</div>
     <div style="padding-top: 10px;"><img src="<%=CssPath%>/pc/img/public/wxpay_b.png" width="200" height="65"></div>
   </li>
-
+  <%}%>
   <li id="payLi" class="<%=order.payType=='pay_cash'?'xuanze5b':'xuanze5a'%>" style="display: <%=order.payType=='pay_wxpay'?'none':'block'%>;">
     <%if(order.payType=='pay_cash'){%>
     <input type="button" value="查看订单" class="xuanze5 ml20" onclick="window.location.href='/member/order'">
@@ -142,7 +143,7 @@
 </div>
 <script>
   var orderId='<%=order.id%>';
-  <%if(order.payStatus==0&&order.payType=='pay_wxpay'){%>
+  <%if(ShopConfig.pay_wxpay&&order.payStatus==0&&order.payType=='pay_wxpay'){%>
   $(function(){
     wxPay();
   });
