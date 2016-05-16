@@ -46,6 +46,11 @@
 </div>
 <script type="text/javascript">
   function doScore(){
+    if($("#couponId").val()=="0"){
+      Toast.error("请选择优惠券");
+      $("#couponId").focus();
+      return false;
+    }
       var btn = $("#ok");
       var dialog = $("#dialogDetail");
       btn.button("loading");

@@ -52,6 +52,16 @@
 </div>
 <script type="text/javascript">
   function doScore(){
+      if($("#score").val()==""){
+        Toast.error("积分不可为空");
+        $("#score").focus();
+        return false;
+      }
+      if($("#txt").val()==""){
+        Toast.error("备注不可为空");
+        $("#txt").focus();
+        return false;
+      }
       var btn = $("#ok");
       var dialog = $("#dialogDetail");
       btn.button("loading");

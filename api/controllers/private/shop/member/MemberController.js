@@ -259,8 +259,7 @@ module.exports = {
     var id=req.body.id||'';
     var couponId=req.body.couponId||'';
     Shop_sales_coupon.findOne(couponId).exec(function(e1,coupon){
-      if(e1)
-        return res.json({code:1,msg:'赠送失败'});
+      if(coupon){
         Shop_member_coupon.create({
           memberId: id,
           couponId:couponId,
@@ -273,6 +272,7 @@ module.exports = {
             return res.json({code:1,msg:'赠送失败'});
           return res.json({code:0,msg:'赠送成功'});
         });
+      }else return res.json({code:1,msg:'赠送失败'});
     });
   },
   delete: function (req, res) {

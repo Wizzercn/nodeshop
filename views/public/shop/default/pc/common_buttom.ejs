@@ -22,10 +22,14 @@
 
     <ul class="footer_sh">
       <li class="footer_shf"><a href="javascript:;">售后服务</a></li>
+      <%if(SiteConfig.site_qq){%>
       <a href="<%=SiteConfig.site_qq?'http://wpa.qq.com/msgrd?v=3&amp;uin='+SiteConfig.site_qq+'&amp;site=qq&amp;menu=yes':''%>" target="_blank">
         <li class="footer_shs">24小时在线客服</li>
       </a>
+      <%}%>
+      <%if(SiteConfig.site_tel){%>
       <li class="footer_sht"><%-SiteConfig.site_tel||''%></li>
+      <%}%>
       <li>周一至周日&nbsp; 8：00-18：00</li>
     </ul>
   </div>
@@ -33,9 +37,16 @@
 <script src="<%=TplPath%>/js_pc/lrtk.js"></script>
 <script src="<%=TplPath%>/js_pc/scoll.js"></script>
 <div id="top">
-  <div id="izl_rmenu" class="izl-rmenu"><a href="<%=SiteConfig.site_qq?'http://wpa.qq.com/msgrd?v=3&amp;uin='+SiteConfig.site_qq+'&amp;site=qq&amp;menu=yes':''%>" target="_blank" class="btn btn-qq"></a>
+  <div id="izl_rmenu" class="izl-rmenu">
+    <%if(SiteConfig.site_qq){%>
+    <a href="<%=SiteConfig.site_qq?'http://wpa.qq.com/msgrd?v=3&amp;uin='+SiteConfig.site_qq+'&amp;site=qq&amp;menu=yes':''%>" target="_blank" class="btn btn-qq"></a>
+    <%}%>
+    <%if(SiteConfig.wechat_qrcode){%>
     <div class="btn btn-wx"><img class="pic" src="<%=SiteConfig.wechat_qrcode||''%>" /></div>
+    <%}%>
+    <%if(SiteConfig.site_tel){%>
     <div class="btn btn-phone"><div class="phone"><%-SiteConfig.site_tel||''%></div></div>
+    <%}%>
     <div class="btn btn-top"></div></div>
 </div>
 

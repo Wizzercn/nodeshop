@@ -32,7 +32,7 @@
               <td width="70%" align="left">
                 <%if(list.length>0){list.forEach(function(o){
                 %>
-                <%=moment(o.createdAt*1000).format('YYYY-MM-DD HH:mm:ss')%>,<span style="color: green"><%-o.oldMoney-o.newMoney>0?'-':'+'%><%=o.diffMoney%></span>,<%=o.note||''%>
+                <%=moment(o.createdAt*1000).format('YYYY-MM-DD HH:mm:ss')%>,<span style="color: green"><%-o.oldMoney-o.newMoney>0?'-':'+'%>&yen;<%=StringUtil.setPrice(o.diffMoney)||'0.00'%></span>,<%=o.note||''%>
                 <br>
                 <%});}else{%>
                 无
@@ -52,6 +52,16 @@
 </div>
 <script type="text/javascript">
   function doMoney(){
+      if($("#money").val()==""){
+        Toast.error("金额不可为空");
+        $("#money").focus();
+        return false;
+      }
+      if($("#txt").val()==""){
+        Toast.error("备注不可为空");
+        $("#txt").focus();
+        return false;
+      }
       var btn = $("#ok");
       var dialog = $("#dialogDetail");
       btn.button("loading");
