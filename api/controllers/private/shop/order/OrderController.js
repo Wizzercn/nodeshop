@@ -68,7 +68,7 @@ module.exports = {
       if (!err && count > 0) {
         Shop_order.find(where)
           .sort(sort)
-          .sort('createdAt desc')
+          .sort('updateAt asc')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({
