@@ -23,12 +23,12 @@ module.exports = {
     });
   },
   add: function (req, res) {
-    var wxid = req.params.id || '';
+    var wxid = req.params.id || '0';
     Wx_config.findOne(wxid).exec(function (e2, config) {
       Wx_menu.find({wxid: wxid, parentId: 0}).sort({location: "asc"}).sort({path: "asc"}).exec(function (err, menus) {
-        req.data.menus = menus;
+        req.data.menus = menus||[];
         req.data.wxid = wxid;
-        req.data.config = config;
+        req.data.config = config||{};
         return res.view('private/wx/menu/add', req.data);
       });
     });
@@ -56,6 +56,9 @@ module.exports = {
   addDo: function (req, res) {
     var body = req.body;
     var wxid = body.wxid;
+    if(!wxid||wxid=='0'){
+      return res.json({code: 2, msg: '请配置公众号'});
+    }
     var parentId = parseInt(body.parentId);
 
     Wx_menu.findOne({id: parentId}).exec(function (err, m) {
