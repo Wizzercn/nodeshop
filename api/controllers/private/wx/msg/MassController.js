@@ -114,6 +114,9 @@ module.exports = {
   },
   uploadThumb: function (req, res) {
     var wxid = req.params.id || '';
+    if(!wxid||wxid=='0'){
+      return res.json({code: 2, msg: '请配置公众号'});
+    }
     req.file('Filedata').upload({
       maxBytes: 2048000
     }, function (err, uploadedFiles) {
@@ -177,6 +180,9 @@ module.exports = {
   sendDo: function (req, res) {
     sails.log.debug(req.body);
     var wxid = req.body.wxid || '';
+    if(!wxid||wxid=='0'){
+      return res.json({code: 1, msg: '请配置公众号'});
+    }
     var type = req.body.type || '';//text  news
     var content = req.body.content || '';//news==ids
     var scope = req.body.scope || '';//some==ids

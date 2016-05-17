@@ -17,7 +17,12 @@ module.exports = {
             return res.send(config_txt);
             break;
           case 'uploadimage':
-
+            if(!wxid||wxid=='0'){
+              return res.json({
+                state: 'FAIL',
+                url: ''
+              });
+            }
             req.file('Filedata').upload({
               maxBytes: config.imageMaxSize
             }, function (err, uploadedFiles) {

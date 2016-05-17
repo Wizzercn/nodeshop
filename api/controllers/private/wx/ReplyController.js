@@ -58,6 +58,9 @@ module.exports = {
     var content = body.content;
     var type = body.type;
     var wxid = body.wxid;
+    if(!wxid||wxid=='0'){
+      return res.json({code: 2, msg: '请配置公众号'});
+    }
     var keyword = body.keyword;
     body.createdBy = req.session.user.id;
     if (type == 'follow') {//如果是关注事件，则需判断是否已存在(关注只可设置一条自动回复)
