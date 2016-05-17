@@ -59,7 +59,10 @@ module.exports = {
     });
   },
   down: function (req, res) {
-    var wxid = req.body.wxid;
+    var wxid = req.body.wxid||'';
+    if(!wxid){
+      return res.json({code: 1, msg: '同步失败,请配置公众号号'});
+    }
     WechatService.init(req, res, function (api) {
       if (api) {
         Wx_user.getFollow('',api, 0,wxid);
