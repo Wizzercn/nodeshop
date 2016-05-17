@@ -1957,7 +1957,7 @@ margin-left:12px;
 
 
 /*微信QQ*/
-.izl-rmenu{position:fixed; right:0;margin-right:10px; bottom:20px; padding-bottom:20px; background:url(../images/r_b.png) 0px bottom no-repeat; z-index:999; }
+.izl-rmenu{position:fixed; right:0;margin-right:10px; bottom:20px; padding-bottom:20px;  z-index:999; }
 .izl-rmenu .btn{width:72px; height:73px; margin-bottom:1px; cursor:pointer; position:relative;}
 .izl-rmenu .btn-qq{background-image:url(../img/r_qq.png);background-size:100%; background-color:#6da9de;}
 .izl-rmenu .btn-qq:hover{background-color:#488bc7;}

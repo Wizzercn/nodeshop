@@ -57,9 +57,9 @@
     </li>
   <li style="display: <%=order.payType=='pay_money'?'block':'none'%>;height: 50px;margin-top: 20px;line-height: 22px;font-size: 14px;" class="g_zhifu ml20" id="sendMsgLi">
     <div style="">
-      <span style="margin-left:30px; color:#333;">账户余额：</span><span class="score_num" style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>
+      <span style="margin-left:-200px; color:#333;">账户余额：</span><span class="score_num" style="color:#2C9C74">￥<%=StringUtil.setPrice(dbMember.money)||'0.00'%></span>
     </div>
-    <div style="margin-left:30px;">
+    <div style="margin-left:430px;">
       <span style="float: left"><input placeholder="短信验证码" style="height: 30px;" type="text" id="smscode" maxlength="6" />
       <input id="btnSms" type="button" class="<%=order.finishAmount<=dbMember.money?'btn_shiyong_yes':'btn_shiyong_no'%>"
              value="发送验证码" <%-order.finishAmount<=dbMember.money?'onclick="sendMsg()"':''%>/>
