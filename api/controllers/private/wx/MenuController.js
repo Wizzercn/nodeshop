@@ -190,7 +190,7 @@ module.exports = {
   },
   pushMenu: function (req, res) {
     var wxid = req.body.wxid || '';
-    if(!wxid){
+    if(!wxid||wxid=='0'){
       return res.json({code: 1, msg: '请配置公众号'});
     }
     Wx_menu.find({
