@@ -4,7 +4,7 @@
 module.exports.mysql = {
   host: '127.0.0.1',
   user: 'root',
-  password: 'root',
+  password: '123456',
   database: 'nodeshop',
   pool: true,
   connectionLimit: 50,
