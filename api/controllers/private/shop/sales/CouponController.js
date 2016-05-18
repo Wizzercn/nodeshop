@@ -43,6 +43,7 @@ module.exports = {
     });
   },
   add: function (req, res) {
+    req.data.moment = moment;
     return res.view('private/shop/sales/coupon/add', req.data);
   },
   addDo: function (req, res) {
@@ -61,6 +62,7 @@ module.exports = {
     Shop_sales_coupon.findOne({id: id}).exec(function (err, obj) {
       req.data.obj = obj;
       req.data.StringUtil = StringUtil;
+      req.data.moment = moment;
       return res.view('private/shop/sales/coupon/edit', req.data);
     });
   },

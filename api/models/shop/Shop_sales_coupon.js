@@ -47,6 +47,10 @@ module.exports = {
     score:{
       type:'integer'
     },
+    endAt:{
+      type:'string',
+      size:20
+    },
     createBy:{
       type: 'integer'
     },

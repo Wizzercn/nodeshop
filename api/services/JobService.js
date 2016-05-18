@@ -23,22 +23,56 @@ module.exports = {
         if(name=='backupDb'){
           self.backupDb(0,function(err){
             if(err){
-              Sys_job.update({name:'backupDb'},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
+              Sys_job.update({name:name},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
             }else{
-              Sys_job.update({name:'backupDb'},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
+              Sys_job.update({name:name},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
             }
           });
         }else if(name=='deleteLog'){
           self.deleteLog(-3,function(err){
             if(err){
-              Sys_job.update({name:'deleteLog'},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
+              Sys_job.update({name:name},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
             }else{
-              Sys_job.update({name:'deleteLog'},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
+              Sys_job.update({name:name},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
+            }
+          });
+        }else if(name=='disableCoupon'){
+          self.disableCoupon(function(err){
+            if(err){
+              Sys_job.update({name:name},{updateTxt:JSON.stringify(err),updateStatus:false,updateAt:moment().format('X')}).exec(function(e,o){});
+            }else{
+              Sys_job.update({name:name},{updateTxt:'',updateStatus:true,updateAt:moment().format('X')}).exec(function(e,o){});
             }
           });
         }
       });
     }
+  },
+  /**
+   * 定时设置设置优惠券失效
+   * @param cb
+   */
+  disableCoupon:function(cb){
+    var day = moment().format('X');
+    Shop_sales_coupon.find({disabled:false}).exec(function(e,l){
+      if (e)
+        return cb(e);
+      if(l.length>0){
+        var i=0;
+        l.forEach(function(o){
+          i++;
+          var tmp=moment(o.endAt).format('X');
+          if(day>tmp){
+            Shop_sales_coupon.update(o.id,{disabled:true}).exec(function(eu,ou){});
+            Shop_member_coupon.update({couponId:o.id},{status:2}).exec(function(eu,ou){});
+          }
+          if(i== l.length)
+            return cb(null);
+        });
+      }else{
+        return cb(null);
+      }
+    });
   },
   /**
    * 定时删除日志

@@ -16,7 +16,7 @@
         <th>所需积分</th>
         <th>积分兑换</th>
         <th>状态</th>
-        <th>创建时间</th>
+        <th>过期时间</th>
         <th>操作</th>
     </table>
   </div>
@@ -74,7 +74,7 @@
         "data": function (d) {
         }
       },
-      "order": [[6, "desc"]],
+      "order": [[1, "desc"]],
       "columns": [
         {"data": "name", "bSortable": true},
         {"data": "price", "bSortable": true},
@@ -82,7 +82,7 @@
         {"data": "score", "bSortable": true},
         {"data": "is_score", "bSortable": true},
         {"data": "disabled", "bSortable": true},
-        {"data": "createdAt", "bSortable": true}
+        {"data": "endAt", "bSortable": true}
       ],
       "columnDefs": [
         {
@@ -112,12 +112,6 @@
             }
           },
           "targets": 5
-        },
-        {
-          "render": function (data, type, row) {
-            return new Date(data*1000).Format('yyyy-MM-dd hh:mm:ss');
-          },
-          "targets": 6
         },
         {
           "render": function (data, type, row) {
