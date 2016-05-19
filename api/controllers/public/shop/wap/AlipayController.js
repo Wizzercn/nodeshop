@@ -89,6 +89,7 @@ module.exports = {
                               payAmount: order.finishAmount,
                               payStatus: 1,//0 待付款 1已付款 2申请退款 3已退款
                               payType: 'pay_alipay',
+                              payAt: moment().format('X'),
                               updateAt: moment().format('X')
                             }).exec(function (e5, o5) {
                               if (e2 || e3 || e4 || e5) {
