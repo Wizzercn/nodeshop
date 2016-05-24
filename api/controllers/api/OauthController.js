@@ -27,11 +27,11 @@ module.exports = {
           },
           sails.config.system.MyConfig.jwtTokenSecret||''
         );
-        return res.json({
+        return res.json({code:0,msg:'success',data:{
           token : token,
           expires : expires,
           appid : o.id
-        });
+        }});
       });
     } catch (err) {
       return res.json({code: 4, msg: 'params error'});
