@@ -4,7 +4,7 @@ module.exports = function (grunt) {
 		'jst:dev',
 		'less:dev',
 		'copy:dev',
-		'coffee:dev',
-    'apidoc:myapp' // <-- This will now run every time your assets are compiled
+		'coffee:dev'
+    //'apidoc:myapp' // <-- This will now run every time your assets are compiled
 	]);
 };

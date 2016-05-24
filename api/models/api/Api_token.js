@@ -1,6 +1,7 @@
 /**
  * Created by wizzer on 2016/5/23.
  */
+var StringUtil = require('../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   schema: true,
@@ -39,5 +40,29 @@ module.exports = {
         return false;
       }
     }
+  },
+  getClient_id: function (cb) {
+    var n = StringUtil.getUuid(20, 62);
+    Api_token.findOne({client_id:n}).exec(function (e, o) {
+      if (o) {
+        Api_token.getClient_id(function (ss) {
+          return cb(ss);
+        });
+      } else {
+        return cb(n);
+      }
+    });
+  },
+  getClient_secret: function (cb) {
+    var n = StringUtil.getUuid(32, 62);
+    Api_token.findOne({client_secret:n}).exec(function (e, o) {
+      if (o) {
+        Api_token.getClient_secret(function (ss) {
+          return cb(ss);
+        });
+      } else {
+        return cb(n);
+      }
+    });
   }
 };

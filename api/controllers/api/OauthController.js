@@ -10,7 +10,7 @@ module.exports = {
       var client_id = req.body.client_id || '';
       var client_secret = req.body.client_secret || '';
       Api_token.findOne({client_id: client_id}).exec(function (e, o) {
-        if (e) {
+        if (e||!o) {
           return res.json({code: 1, msg: 'client_id has error'});
         }
         if (o.disabled) {
