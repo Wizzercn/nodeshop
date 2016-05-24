@@ -15,7 +15,7 @@ module.exports = {
     name:{
       type: 'string'
     },
-    loginname: {
+    client_id: {
       type: 'string',
       unique: true,
       size: 100,
@@ -23,7 +23,7 @@ module.exports = {
       maxLength: 100,
       index: true
     },
-    password: {
+    client_secret: {
       type: 'string',
       required: true
     },

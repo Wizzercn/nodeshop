@@ -7,17 +7,17 @@ var jwt = require('jwt-simple');
 module.exports = {
   token: function (req, res) {
     try {
-      var loginname = req.body.loginname || '';
-      var password = req.body.password || '';
-      Api_token.findOne({loginname: loginname}).exec(function (e, o) {
+      var client_id = req.body.client_id || '';
+      var client_secret = req.body.client_secret || '';
+      Api_token.findOne({client_id: client_id}).exec(function (e, o) {
         if (e) {
-          return res.json({code: 1, msg: 'loginname has error'});
+          return res.json({code: 1, msg: 'client_id has error'});
         }
         if (o.disabled) {
-          return res.json({code: 2, msg: 'loginname has disabled'});
+          return res.json({code: 2, msg: 'client_id has disabled'});
         }
-        if (StringUtil.password(password,loginname, o.createdAt) != o.password) {
-          return res.json({code: 3, msg: 'password has error'});
+        if (client_secret != o.client_secret) {
+          return res.json({code: 3, msg: 'client_secret has error'});
         }
         var expires = moment().add(1,'days').valueOf();
         var token = jwt.encode(
