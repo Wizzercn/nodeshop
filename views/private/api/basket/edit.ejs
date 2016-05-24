@@ -37,6 +37,7 @@
     btn.button("loading");
     $.post("/private/api/basket/editDo", {
       id:<%=obj.id||0%>,
+      appid:<%=obj.appid||0%>,
       name:$("#name").val()
     }, function (data) {
       if (data.code == 0) {

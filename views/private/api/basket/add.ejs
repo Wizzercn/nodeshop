@@ -36,7 +36,8 @@
     }
     btn.button("loading");
     $.post("/private/api/basket/addDo", {
-      name:$("#name").val()
+      name:$("#name").val(),
+      appid:<%=appid||0%>
     }, function (data) {
       if (data.code == 0) {
         Toast.success("提交成功");
