@@ -1,0 +1,38 @@
+/**
+ * @api {POST} /api/product/basket Basket
+ * @apiName Basket
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取商品池
+ * @apiPermission token
+ *
+ * @apiParam {string} [client_id] client_id
+ * @apiParam {string} [client_secret] client_secret
+ *
+ * @apiParamExample {json} Request Example
+ *   POST /api/oauth/token
+ *   {
+ *      "client_id": "client_id",
+ *      "client_secret": "client_secret"
+ *   }
+ *
+ * @apiSuccess (成功) {string} token Token
+ * @apiSuccess (成功) {number} expires 失效时间
+ * @apiSuccess (成功) {number} appid AppId
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NDA4MDcwODQ2M30.1dHqnOMFVRHwCY7mDx0O9P3ghXW6UA2O2dqGV-hGea8",
+ *     "expires": 1464080708463,
+ *     "appid":1,
+ *   }
+ *
+ * @apiError (Response x) {number} code x>0
+ * @apiError (Response x) {string} [msg] error description
+ * @apiErrorExample {json} Response Error Example
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": x
+ *     "msg": ""
+ *   }
+ */
