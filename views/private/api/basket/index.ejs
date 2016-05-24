@@ -1,19 +1,32 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/api/token/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加授信</a>
+    <a class="btn btn-primary navbar-btn" href="/private/api/basket/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加商品池</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <a href="/private/api/basket/index/<%=appid%>" data-pjax id="_reload"></a>
+  </div>
+  <div class="btn-group">
+    <div >
+      <select id="appid" name="appid" class="form-control">
+        <% if(list){
+          list.forEach(function(o){
+        %>
+        <option value="<%= o.id %>" <%if(o.id==appid){%>selected<%}%>><%- o.name %></option>
+        <%
+        });
+        } %>
+      </select>
+    </div>
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
-    <input id="unitid" type="hidden">
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
         <th>ID</th>
-        <th>client_id</th>
-        <th>client_secret</th>
-        <th>状态</th>
+        <th>名称</th>
+        <th>商品数量</th>
+        <th>创建时间</th>
         <th>操作</th>
     </table>
   </div>
@@ -47,24 +60,6 @@
 </div>
 <script language="JavaScript">
   var datatable;
-  function enable(id) {
-    $.post("/private/api/token/enable/" + id, {}, function (data) {
-      if (data.code == 0) {
-        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
-      } else {
-        Toast.error(data.msg);
-      }
-    }, "json");
-  }
-  function disable(id) {
-    $.post("/private/api/token/disable/" + id, {}, function (data) {
-      if (data.code == 0) {
-        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
-      } else {
-        Toast.error(data.msg);
-      }
-    }, "json");
-  }
   function initDatatable() {
     datatable = $('.datatable').DataTable({
       "dom": '<"toolbar">frtip',
@@ -83,26 +78,26 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/api/token/data",
+        "url": "/private/api/basket/data",
         "type": "post",
         "data": function (d) {
+          d.appid=$("#appid").val()
         }
       },
       "order": [[0, "desc"]],
       "columns": [
         {"data": "id", "bSortable": true},
-        {"data": "client_id", "bSortable": true},
-        {"data": "client_secret", "bSortable": true},
-        {"data": "disabled", "bSortable": true}
+        {"data": "name", "bSortable": true},
+        {"data": "num", "bSortable": true},
+        {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
         {
           "render": function (data, type, row) {
-            if (!data) {
-              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
-            } else {
-              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+            if (data) {
+              return new Date(data*1000).Format("yyyy-MM-dd hh:mm:ss");
             }
+            return '';
           },
           "targets": 3
         },
@@ -110,11 +105,8 @@
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/api/token/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
+              '<li><a href="/private/api/basket/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
-              '<li class="divider"></li>'+
-              '<li><a href="javascript:;" onclick="enable(' + row.id + ')">启用</a></li>' +
-              '<li><a href="javascript:;" onclick="disable(' + row.id + ')">禁用</a></li>'+
               '</ul></div>';
           },
           "targets": 4
@@ -176,6 +168,10 @@
   }
   $(function () {
     initDatatable();
+    $("#appid").on("change",function(){
+      $("#_reload").attr("href","/private/api/basket/index/"+$(this).val());
+      $("#_reload").trigger("click");
+    });
     $("#dialogDetail").on("hidden.bs.modal", function() {
       $(this).removeData("bs.modal");
     });

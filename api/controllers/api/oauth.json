@@ -17,7 +17,7 @@
  *   }
  *
  * @apiSuccess (成功) {number} code 0
- * @apiSuccess (成功) {msg} msg success
+ * @apiSuccess (成功) {string} msg success
  * @apiSuccess (成功) {Object} data Token对象
  * @apiSuccess (成功) {string} data.token Token
  * @apiSuccess (成功) {number} data.expires 失效时间(24小时)请保存若失效重新获取

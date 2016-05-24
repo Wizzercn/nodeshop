@@ -4,7 +4,7 @@
       <section class="panel panel-primary no-b">
         <header class="panel-heading clearfix brtl brtr">
           <div class="overflow-hidden">
-            <a href="javascript:;" class="h4 show no-m pt5">第三方授信</a>
+            <a href="javascript:;" class="h4 show no-m pt5">商品池</a>
           </div>
         </header>
         <div class="row mb10" style="text-align: center;padding-top: 10px;">
@@ -13,20 +13,6 @@
               <td width="30%" align="right"><span style="color: red">*</span>名称：</td>
               <td width="70%" align="left">
                 <input type="text" id="name" value="<%=obj.name||''%>" class="control-group" style="width: 200px;" maxlength="20">
-              </td>
-            </tr>
-            <tr style="height: 30px;">
-              <td width="30%" align="right"><span style="color: red">*</span>client_id：</td>
-              <td width="70%" align="left">
-                <input type="text" id="client_id"  value="<%=obj.client_id||''%>" class="control-group" style="width: 200px;" maxlength="20">
-                <input type="button" onclick="getId()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成">
-              </td>
-            </tr>
-            <tr style="height: 30px;">
-              <td width="30%" align="right"><span style="color: red">*</span>client_secret：</td>
-              <td width="70%" align="left">
-                <input type="text" id="client_secret"  value="<%=obj.client_secret||''%>" class="control-group" style="width: 200px;" maxlength="50">
-                <input type="button" onclick="getSecret()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成">
               </td>
             </tr>
           </table>
@@ -41,33 +27,17 @@
   <button onclick="doSave()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
 </div>
 <script type="text/javascript">
-  function getId(){
-    $.post("/private/api/token/getClient_id", {}, function (data) {
-      if (data.code == 0) {
-        $("#client_id").val(data.str);
-      }
-    }, "json");
-  }
-  function getSecret(){
-    $.post("/private/api/token/getClient_secret", {}, function (data) {
-      if (data.code == 0) {
-        $("#client_secret").val(data.str);
-      }
-    }, "json");
-  }
   function doSave(){
     var btn = $("#ok");
     var dialog = $("#dialogDetail");
-    if($('#name').val()==''||$('#client_id').val()==''||$('#client_secret').val()==''){
-      Toast.error("名称 & client_id & client_secret 不可为空");
+    if($('#name').val()==''){
+      Toast.error("名称不可为空");
       return false;
     }
     btn.button("loading");
-    $.post("/private/api/token/editDo", {
+    $.post("/private/api/basket/editDo", {
       id:<%=obj.id||0%>,
-      name:$("#name").val(),
-      client_id:$("#client_id").val(),
-      client_secret:$("#client_secret").val()
+      name:$("#name").val()
     }, function (data) {
       if (data.code == 0) {
         Toast.success("提交成功");

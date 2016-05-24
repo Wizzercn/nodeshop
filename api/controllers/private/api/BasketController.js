@@ -5,7 +5,15 @@ var moment = require('moment');
 var StringUtil = require('../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
-    return res.view('private/api/basket/index', req.data);
+    var appid = req.params.id || '';
+    Api_token.find().exec(function (err, list) {
+      if (!appid && list && list.length > 0) {
+        appid = list[0].id;
+      }
+      req.data.list = list;
+      req.data.appid = appid;
+      return res.view('private/api/basket/index', req.data);
+    });
   },
   data: function (req, res) {
     var pageSize = parseInt(req.body.length);
