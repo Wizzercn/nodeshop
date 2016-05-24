@@ -25,6 +25,24 @@ module.exports = {
           done(null, obj);
         });
       },
+      products:function(done){
+        Shop_goods_products.find({goodsid:id,disabled:false,spec:{'!':''}}).exec(function(err,list){
+          if(list && list.length > 0){
+            var specList = {};
+            list.forEach(function(p){
+              var oneList = {};
+              oneList['id'] = p.id;
+              oneList['price'] = p.price;
+              oneList['priceMarket'] = p.priceMarket;
+              oneList['stock'] = p.stock;
+              specList[p.spec] = oneList;
+            })
+            done(null,specList);
+          }else{
+            done(null,{})
+          }
+        });
+      },
       goods:function(done){
         Shop_goods.findOne(id).populate('classid').populate('products', {where:{is_default:true},sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
           if (obj) {
@@ -77,10 +95,25 @@ module.exports = {
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.hotGoodsList = result.hotGoodsList || {};
+      req.data.products = result.products || {};
       req.data.goods = result.goods || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/goods/'+id;
+      var specObj = [];
+      var specHas = [];
+      if(result.goods.is_spec){
+        result.goods.spec.forEach(function(j){
+          j.forEach(function(y){
+            specObj.push(j[0]['spec_name']+':'+y.spec_value_name);
+          })
+        });
+        for(var i in result.products){
+          specHas.push(i);
+        }
+      }
+      req.data.specObj = specObj;
+      req.data.specHas = specHas;
       if(result.goods){
       req.data.siteTitle = result.goods.name+'_' + req.data.siteTitle;
         if(result.goods.disabled==true){
@@ -90,6 +123,7 @@ module.exports = {
       }else {
         return res.notFound('无此商品');
       }
+      //return res.send(specObj);
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
 
     });

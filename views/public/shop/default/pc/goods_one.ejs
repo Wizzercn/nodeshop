@@ -1,248 +1,316 @@
 <div class="slidmenu">
-  <% include common_top.ejs %>
-  <% include common_banner.ejs %>
+<% include common_top.ejs %>
+<% include common_banner.ejs %>
 
 </div>
 <div id="schedule">
-  <div class="schedule_h">
-    <span class="schedule_hf">当前位置:</span>
-    <div class="schedule_hs"><a href="/">首页</a>  > <a href="/goods/<%=goods.id%>" class="color_y">产品详情</a></div>
-  </div>
+<div class="schedule_h">
+<span class="schedule_hf">当前位置:</span>
+<div class="schedule_hs"><a href="/">首页</a>  > <a href="/goods/<%=goods.id%>" class="color_y">产品详情</a></div>
+</div>
 </div>
 
 <div class="schedule_im">
-  <div class="scrolltabm">
-    <div class="ban-barmlm">
-      <ul class="ulBigPicm">
-        <%if(goods.images){goods.images.forEach(function(o){%>
-        <li>
-          <a href="javascript:;"><img src="<%=o.imgurl%>?type=m" width="420" height="420"/></a>
-        </li>
-        <%});}%>
-      </ul>
-    </div>
-    <div class="dSmallPicBoxm">
-      <div class="dSmallPicm">
-        <ul class="ulSmallPicm" style="width:2646px;left:0px" rel="stop">
-          <%
-            var img_i=0;
-            if(goods.images){goods.images.forEach(function(o){%>
-          <li <%=img_i==0?'class=liSelectedm':''%>>
-            <a href="javascript:;"><img src="<%=o.imgurl%>?type=m" width="69" height="69"/></a>
-          </li>
-          <%
-            img_i++;
-          });}%>
+<div class="scrolltabm">
+<div class="ban-barmlm">
+<ul class="ulBigPicm">
+<%if(goods.images){goods.images.forEach(function(o){%>
+<li>
+<a href="javascript:;"><img src="<%=o.imgurl%>?type=m" width="420" height="420"/></a>
+</li>
+<%});}%>
+</ul>
+</div>
+<div class="dSmallPicBoxm">
+<div class="dSmallPicm">
+<ul class="ulSmallPicm" style="width:2646px;left:0px" rel="stop">
+<%
+var img_i=0;
+if(goods.images){goods.images.forEach(function(o){%>
+<li <%=img_i==0?'class=liSelectedm':''%>>
+<a href="javascript:;"><img src="<%=o.imgurl%>?type=m" width="69" height="69"/></a>
+</li>
+<%
+img_i++;
+});}%>
 
 
-        </ul>
-      </div>
-      <span id="sLeftBtnBm" class="sLeftBtnBm"></span>
-      <span id="sRightBtnBm" class="sRightBtnBm"></span>
-    </div>
+</ul>
+</div>
+<span id="sLeftBtnBm" class="sLeftBtnBm"></span>
+<span id="sRightBtnBm" class="sRightBtnBm"></span>
+</div>
 
-  </div>
-  <%
-  //计算会员价
-  var lv=goods.lvprice;
-  var hyprice=0;
-  var is_lv=false;//是否启用会员价
-  var hyname='';
-  if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
-    is_lv=true;
-    hyname=lv.member_lv.name;
-    if(lv.product_lv&&lv.product_lv.price>0){
-      hyprice=lv.product_lv.price;
-    }else {
-      hyprice = goods.price>100?Math.ceil(goods.price * lv.member_lv.dis_count / 100):goods.price;
+</div>
+<%
+//计算会员价
+var lv=goods.lvprice;
+var hyprice=0;
+var is_lv=false;//是否启用会员价
+var hyname='';
+if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
+is_lv=true;
+hyname=lv.member_lv.name;
+if(lv.product_lv&&lv.product_lv.price>0){
+hyprice=lv.product_lv.price;
+}else {
+hyprice = goods.price>100?Math.ceil(goods.price * lv.member_lv.dis_count / 100):goods.price;
+
+}
+}
+%>
+
+<div style="display: none;" <%if(goods&&!goods.is_spec&&ShopConfig.list_quick_buy){%>class="top-float-menu-placeholder"<%}%>>
+<div class="top-float-menu-panel">
+<div class="top-float-menu">
+<ul>
+<span class="title"><img id="thumblist" src="<%=goods.imgurl||''%>?type=s" width="70" height="70" style="margin-top: 5px;">
+<%=goods.name||''%></span>
+<div class="top-float-menu-right">
+<span class="jia_gea" style="padding-right: 30px;">￥<%=hyprice>0?StringUtil.setPrice(hyprice):StringUtil.setPrice(goods.price)%></span>
+<span class="jiarua"><input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','')"  type="button" value="加入购物车"></span>
+</div>
+</ul>
+</div>
+</div>
+</div>
+
+<ul class="schedule_hdm">
+<li class="schedule_hd1m">
+<span class="schedule_hd1am"><%=goods.name||''%></span>
+<span class="schedule_hd1sm"><%=goods.info||''%></span>
+</li>
+<li class="schedule_hd2m cf clear">
+<div class="guige_add">
+<span class="jia_ge">销售价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(goods.price)%></i><span class="jia_scj"><s>￥<%=StringUtil.setPrice(goods.priceMarket)%></s></span></div>
+
+</li>
+<%if(is_lv){%>
+<li class="schedule_hd4m cf clear">
+<div class="guige_add">
+<span class="jia_ge">会员价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(hyprice)%></i>(您的会员分组:<%=hyname||''%>)</div>
+
+</li>
+<%}%>
+<li class="schedule_hd4m cf clear">
+<div class="guige_add"><span class="jia_ge">重&nbsp;&nbsp;&nbsp;量：</span><%=goods.weight||'0'%>克</div>
+</li>
+<li class="schedule_hd5m cf clear">
+<div class="guige_add"><span class="jia_ge">计量单位：</span><%=goods.unit||''%></div>
+</li>
+<%if(goods.is_spec){%>
+<%goods.spec.forEach(function(e){%>
+<li class="t_size cf2"><span class="t_sizea"><%=e[0]['spec_name']%>：</span>
+<span class="t_sizem">
+<input type="hidden" id="spec<%=e.id%>" value="" class="spec_store" data-spec='<%=e[0]['spec_name']%>' data-idstr="">
+<%e.forEach(function(o){%>
+<span class="specselect t_sizep t_sizeb" data-id="<%=o.spec_value_id%>" data-sid="<%=o.spec_id%>" data-value="<%=o.spec_value_name%>" data-checkclick="2" data-imgurl="<%=o.spec_value_imgurl || ''%>">
+<%=o.spec_value_name%><img src="<%=CssPath%>/pc/img/icon/duiga.png" class="t_sized"/></span>
+<%})%>
+</span>
+</li>
+<%})%>
+<%}%>
+
+<style>
+.addr_add_c span{display: none}
+</style>
+<li class="song cf2">
+<span class="song_l">配送范围：</span>
+<div class="song_r"><span class="song_ra" style="background:#F4F4F4;z-index:2">查看具体范围<img src="<%=CssPath%>/pc/img/icon/song_x.jpg" class="song_i"/></span>
+<div class="slideTxtBox c_hide" style="z-index:1">
+<div class="hd cf2">
+
+
+<span class="arrow"><a class="next"></a><a class="prev"></a></span>
+<div class="addr_add_c">
+<span id="province_chose"></span>
+<span id="city_chose"></span>
+<span id="county_chose"></span>
+</div>
+</div>
+<div class="bd">
+<ul class="song_bot" id="s_province_s">
+</ul>
+<ul class="song_bot" id="s_city_s" style="display: none">
+</ul>
+<ul class="song_bot" id="s_county_s" style="display: none">
+</ul>
+</div>
+</div></div>
+</li>
+
+<li class="schedulehd4">
+<div class="schedulehd4_h">选择数量:</div>
+<div class="schedulehd4z"><a id="buy_sub" href="javascript:void(0);" title="减1" class="schedulehd4_a">—</a>
+<input id="buy_num" type="text" class="schedulehd4_s" value="1" maxlength="4" title="请输入购买量">
+<a id="buy_add" href="javascript:void(0);" title="加1" class="schedulehd4_a">+</a>
+<span class="schedulehd4_d">(库存<%=goods.products[0].stock||0%>件)</span>
+
+</div>
+</li>
+
+<li class="schedule_hd6m">
+<div class="schedule_hd6n">
+<input id="cart-btn" type="button" value="立即购买" class="schedulehd4_g">
+<%if(goods.is_spec){%>
+<input onclick="checkSpec()" type="button" value="加入购物车" class="schedulehd4_f">
+<%}else{%>
+<input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','0',$('#buy_num').val())" type="button" value="加入购物车" class="schedulehd4_f">
+<%}%>
+</div>
+</li>
+</ul>
+</div>
+<div class="s_pinjia cf">
+<div class="hot_sell">
+<div class="hot_sella"><span>热销商品</span></div>
+<%hotGoodsList.data.forEach(function(ho){%>
+<dl class="hot_sells">
+<a href="/goods/<%=ho.id%>" target="_blank">
+<dt><img src="<%=ho.imgurl%>"></dt>
+<dd><%=ho.name%><p style="font-size: 14px;">￥<%=StringUtil.setPrice(ho.price)%> <s style="color: #ccc;font-size: 9px;">￥<%=StringUtil.setPrice(ho.priceMarket)%></s></p>
+</dd>
+</a>
+</dl>
+<%});%>
+</div>
+<div class="fr">
+<div id="s_detail">
+<ul class="s_detail">
+<a id="tab1" href="javascript:void(0);" class="s_details s_detaila">
+<li>详情</li>
+</a>
+<a id="tab2" href="javascript:void(0);" class="s_details">
+<li>评价</li>
+</a>
+<a id="tab3" href="javascript:void(0);" class="s_details">
+<li>咨询</li>
+</a>
+</ul>
+</div>
+
+<div class="s_detaild cf clear">
+<div id="xq" class="ml20 mt10 s_detaildf">
+<%if(goods.prop&&goods.prop.length>0){%>
+<div class="s_detaildf_sx">
+<%goods.prop.forEach(function(p){%>
+<li><%=p.name%>: <%=p.value%></li>
+<%});%>
+
+</div>
+<%}%>
+<div style="height: 20px;"></div>
+<div>
+<%-goods.note||''%>
+</div>
+</div>
+<div id="pj" class="cf clear" style="display: none">
+<div class="tab3">
+<span style="width:160px;line-height:58px;display:inline-block;text-align:center;"><span
+style="font-size:14px;color:#333;">好评率:</span><i id="goodRate" style="font-size:24px;color:#e4003c;">100%</i></span>
+<a href="javascript:;" data-id="0" class="on3">全部(<span id="c0">1</span>)</a>
+<a href="javascript:;" data-id="3">好评(<span id="c3">1</span>)</a>
+<a href="javascript:;" data-id="2">中评(<span id="c2">1</span>)</a>
+<a href="javascript:;" data-id="1">差评(<span id="c1">1</span>)</a>
+</div>
+<div id="pj_list" style="text-align: center">
+
+
+</div>
+<div id="page1" class="s_page cf clear tcdPageCode"></div>
+</div>
+<div id="zx" class="cf clear" style="display: none">
+<div>
+<ul class="zixun">
+<li class="z_zixun">
+<span class="z_zixuna">
+<input type="button" value="我要咨询" id="goCon">
+</span>
+</li>
+<li class="z_zixunf" style="display:none" id="showCon">
+<span class="z_zixunf1">我要咨询</span>
+<span class="z_zixunf3" style="margin-top: 1rem">
+<textarea placeholder="欢迎发表咨询，最多400字" id="c_content" maxlength="400" onKeyDown="LimitTextArea(this)" onKeyUp="LimitTextArea(this)" onkeypress="LimitTextArea(this)"></textarea>
+<span id="nww">0</span>/400
+</span>
+<span class="z_zixunf4">联系方式：<input type="text" id="c_contact" maxlength="40"><i>可以是电话、email、qq等</i></span>
+<span class="z_zixunf5"><a href="javascript:;" onclick="createConsult('<%=goods.id%>')">提交咨询</a></span>
+</li>
+</ul>
+</div>
+<div id="zx_list" style="text-align: center">
+
+</div>
+<div id="page2" class="s_page cf clear tcdPageCode"></div>
+</div>
+</div>
+</div>
+</div>
+<div id="tip" style="display:none">
+<div class="oc_pro_bg"></div>
+<div class="oc_pro_m">
+<span class="oc_pro_b">提示</span>
+<span class="oc_pro_a"></span>
+<span class="oc_pro_cl"><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
+</div>
+</div>
+<script>
+var goodsid=<%=goods.id%>;
+var productid=<%=goods.products[0].id%>;
+var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
+var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
+<%if(goods.is_spec){%>
+var specObj = <%-JSON.stringify(specObj)%>;
+var specHas = <%-JSON.stringify(specHas)%>;
+var specList = <%-JSON.stringify(products)%>;
+<%}%>
+</script>
+<script>
+$('.specselect').on('click',function(){
+  /*
+  if($(this).data('checkclick') == 2){
+    if($(this).hasClass('t_sizebon')){
+      $(this).parent().find('input').val('');
+      $(this).removeClass('t_sizebon').addClass('t_sizeb');
+    }else{
 
     }
   }
-  %>
-
-  <div style="display: none;" <%if(goods&&!goods.is_spec&&ShopConfig.list_quick_buy){%>class="top-float-menu-placeholder"<%}%>>
-    <div class="top-float-menu-panel">
-      <div class="top-float-menu">
-        <ul>
-        <span class="title"><img id="thumblist" src="<%=goods.imgurl||''%>?type=s" width="70" height="70" style="margin-top: 5px;">
-          <%=goods.name||''%></span>
-        <div class="top-float-menu-right">
-          <span class="jia_gea" style="padding-right: 30px;">￥<%=hyprice>0?StringUtil.setPrice(hyprice):StringUtil.setPrice(goods.price)%></span>
-          <span class="jiarua"><input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','')"  type="button" value="加入购物车"></span>
-        </div>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <ul class="schedule_hdm">
-      <li class="schedule_hd1m">
-        <span class="schedule_hd1am"><%=goods.name||''%></span>
-        <span class="schedule_hd1sm"><%=goods.info||''%></span>
-      </li>
-     <li class="schedule_hd2m cf clear">
-       <div class="guige_add">
-         <span class="jia_ge">销售价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(goods.price)%></i><span class="jia_scj"><s>￥<%=StringUtil.setPrice(goods.priceMarket)%></s></span></div>
-
-    </li>
-    <%if(is_lv){%>
-    <li class="schedule_hd4m cf clear">
-      <div class="guige_add">
-        <span class="jia_ge">会员价：</span><i class="jia_gea">¥<%=StringUtil.setPrice(hyprice)%></i>(您的会员分组:<%=hyname||''%>)</div>
-
-    </li>
-    <%}%>
-    <li class="schedule_hd4m cf clear">
-      <div class="guige_add"><span class="jia_ge">重&nbsp;&nbsp;&nbsp;量：</span><%=goods.weight||'0'%>克</div>
-    </li>
-    <li class="schedule_hd5m cf clear">
-      <div class="guige_add"><span class="jia_ge">计量单位：</span><%=goods.unit||''%></div>
-    </li>
-  <style>
-    .addr_add_c span{display: none}
-  </style>
-    <li class="song cf2">
-      <span class="song_l">配送范围：</span>
-      <div class="song_r"><span class="song_ra" style="background:#F4F4F4;z-index:2">查看具体范围<img src="<%=CssPath%>/pc/img/icon/song_x.jpg" class="song_i"/></span>
-        <div class="slideTxtBox c_hide" style="z-index:1">
-          <div class="hd cf2">
-
-
-            <span class="arrow"><a class="next"></a><a class="prev"></a></span>
-          <div class="addr_add_c">
-            <span id="province_chose"></span>
-            <span id="city_chose"></span>
-            <span id="county_chose"></span>
-          </div>
-          </div>
-          <div class="bd">
-            <ul class="song_bot" id="s_province_s">
-            </ul>
-            <ul class="song_bot" id="s_city_s" style="display: none">
-            </ul>
-            <ul class="song_bot" id="s_county_s" style="display: none">
-            </ul>
-          </div>
-        </div></div>
-    </li>
-
-    <li class="schedulehd4">
-      <div class="schedulehd4_h">选择数量:</div>
-      <div class="schedulehd4z"><a id="buy_sub" href="javascript:void(0);" title="减1" class="schedulehd4_a">—</a>
-        <input id="buy_num" type="text" class="schedulehd4_s" value="1" maxlength="4" title="请输入购买量">
-        <a id="buy_add" href="javascript:void(0);" title="加1" class="schedulehd4_a">+</a>
-        <span class="schedulehd4_d">(库存<%=goods.products[0].stock||0%>件)</span>
-
-      </div>
-    </li>
-
-    <li class="schedule_hd6m">
-      <div class="schedule_hd6n">
-        <input id="cart-btn" type="button" value="立即购买" class="schedulehd4_g">
-        <input onclick="addToCarShop($('#thumblist'),'<%=goods.id%>','0',$('#buy_num').val())" type="button" value="加入购物车" class="schedulehd4_f"></div>
-
-    </li>
-  </ul>
-</div>
-<div class="s_pinjia cf">
-  <div class="hot_sell">
-    <div class="hot_sella"><span>热销商品</span></div>
-    <%hotGoodsList.data.forEach(function(ho){%>
-    <dl class="hot_sells">
-      <a href="/goods/<%=ho.id%>" target="_blank">
-        <dt><img src="<%=ho.imgurl%>"></dt>
-        <dd><%=ho.name%><p style="font-size: 14px;">￥<%=StringUtil.setPrice(ho.price)%> <s style="color: #ccc;font-size: 9px;">￥<%=StringUtil.setPrice(ho.priceMarket)%></s></p>
-        </dd>
-      </a>
-    </dl>
-    <%});%>
-  </div>
-  <div class="fr">
-    <div id="s_detail">
-      <ul class="s_detail">
-        <a id="tab1" href="javascript:void(0);" class="s_details s_detaila">
-          <li>详情</li>
-        </a>
-        <a id="tab2" href="javascript:void(0);" class="s_details">
-          <li>评价</li>
-        </a>
-        <a id="tab3" href="javascript:void(0);" class="s_details">
-          <li>咨询</li>
-        </a>
-      </ul>
-    </div>
-
-    <div class="s_detaild cf clear">
-      <div id="xq" class="ml20 mt10 s_detaildf">
-        <%if(goods.prop&&goods.prop.length>0){%>
-        <div class="s_detaildf_sx">
-        <%goods.prop.forEach(function(p){%>
-        <li><%=p.name%>: <%=p.value%></li>
-        <%});%>
-
-        </div>
-        <%}%>
-        <div style="height: 20px;"></div>
-        <div>
-        <%-goods.note||''%>
-        </div>
-      </div>
-      <div id="pj" class="cf clear" style="display: none">
-        <div class="tab3">
-          <span style="width:160px;line-height:58px;display:inline-block;text-align:center;"><span
-              style="font-size:14px;color:#333;">好评率:</span><i id="goodRate" style="font-size:24px;color:#e4003c;">100%</i></span>
-          <a href="javascript:;" data-id="0" class="on3">全部(<span id="c0">1</span>)</a>
-          <a href="javascript:;" data-id="3">好评(<span id="c3">1</span>)</a>
-          <a href="javascript:;" data-id="2">中评(<span id="c2">1</span>)</a>
-          <a href="javascript:;" data-id="1">差评(<span id="c1">1</span>)</a>
-        </div>
-        <div id="pj_list" style="text-align: center">
-
-
-        </div>
-        <div id="page1" class="s_page cf clear tcdPageCode"></div>
-      </div>
-      <div id="zx" class="cf clear" style="display: none">
-        <div>
-          <ul class="zixun">
-            <li class="z_zixun">
-              <span class="z_zixuna">
-                <input type="button" value="我要咨询" id="goCon">
-              </span>
-            </li>
-            <li class="z_zixunf" style="display:none" id="showCon">
-            <span class="z_zixunf1">我要咨询</span>
-            <span class="z_zixunf3" style="margin-top: 1rem">
-              <textarea placeholder="欢迎发表咨询，最多400字" id="c_content" maxlength="400" onKeyDown="LimitTextArea(this)" onKeyUp="LimitTextArea(this)" onkeypress="LimitTextArea(this)"></textarea>
-              <span id="nww">0</span>/400
-            </span>
-            <span class="z_zixunf4">联系方式：<input type="text" id="c_contact" maxlength="40"><i>可以是电话、email、qq等</i></span>
-            <span class="z_zixunf5"><a href="javascript:;" onclick="createConsult('<%=goods.id%>')">提交咨询</a></span>
-            </li>
-          </ul>
-        </div>
-        <div id="zx_list" style="text-align: center">
-
-        </div>
-        <div id="page2" class="s_page cf clear tcdPageCode"></div>
-      </div>
-    </div>
-  </div>
-</div>
-<div id="tip" style="display:none">
-  <div class="oc_pro_bg"></div>
-  <div class="oc_pro_m">
-    <span class="oc_pro_b">提示</span>
-    <span class="oc_pro_a"></span>
-    <span class="oc_pro_cl"><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
-  </div>
-</div>
-<script>
-  var goodsid=<%=goods.id%>;
-  var productid=<%=goods.products[0].id%>;
-  var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
-  var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
+  */
+  $(this).addClass("t_sizebon").siblings().removeClass("t_sizebon");
+  $(this).removeClass("t_sizeb").siblings().addClass("t_sizeb");
+  var specvalue = $(this).data('value');
+  $(this).parent().find('input').val(specvalue);
+  var specChose = {};
+  $(".spec_store").each(function(){
+    if($(this).val() != ''){
+      specChose.push($(this).data('spec')+':'+$(this).val());
+    }
+  })
+  console.log(specChose)
+})
 </script>
-
+<script>
+function checkSpec(){
+  var checkselect = 1;
+  var specStr = '';
+  $(".spec_store").each(function(){
+    if($(this).val() != ''){
+      specStr += $(this).data('spec')+':'+$(this).val() + '*';
+    }else{
+      checkselect = 0;
+    }
+  })
+  if(checkselect == 0){
+    alert('请先选择完整的规格');
+  }else{
+    specStr = specStr.substring(0,specStr.length-1);
+    var productId = specList[specStr]['id'];
+    addToCarShop($('#thumblist'),goodsid,productId,$('#buy_num').val());
+  }
+}
+</script>
+<script src="<%=TplPath%>/js_pc/spec.js"></script>
 <script src="<%=TplPath%>/js_pc/goods.js"></script>
 <% include common_buttom.ejs %>

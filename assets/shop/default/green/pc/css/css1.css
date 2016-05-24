@@ -2017,3 +2017,16 @@ margin-left:12px;
     .addr_add_c span img{position:absolute;top:-7px;right:-6px;}
 .addr_add_c span i{position:absolute;top:-7px;right:-6px;display:inline-block;width:16px;height:16px;border:1px solid #ddd;background:#fff;border-radius: 8px;text-align:center;line-height:14px;font-size:10px;}
 
+
+/*t-size*/
+.t_size{width:100%;padding-bottom:25px;}
+.t_sizea{display:inline-block;width:80px;text-align:left;font-size:14px;float: left;padding-top:12px;}
+.t_sizeb{float:left;display:inline-block;min-width: 50px;padding-left:8px;padding-right:8px;min-height:30px;line-height:28px;border:1px solid #ddd;margin-right:10px;cursor: pointer;text-align:center;}
+.t_sizeb .t_sizee{height:34px;vertical-align: middle;padding-top:2px;padding-bottom: 2px;}
+.t_sizec{float:left;display:inline-block;min-width: 50px;padding-left:8px;padding-right:8px;min-height:30px;line-height:28px;border:1px dashed #ddd;opacity: 0.8;margin-right:10px;color:#666;cursor: not-allowed;text-align:center;}
+.t_sizec .t_sizee{height:34px;vertical-align: middle;padding-top:2px;padding-bottom: 2px;}
+.t_sizebon{position:relative;float:left;display:inline-block;min-width: 50px;padding-left:8px;padding-right:8px;min-height:28px;line-height:26px;margin-right:10px;cursor: pointer;text-align:center;border:2px solid #00A650;}
+.t_sized{position:absolute;bottom:-1px;right:-1px;}
+.t_sizebon .t_sizee{height:32px;vertical-align: middle;padding-top:2px;padding-bottom: 2px;}
+.t_sizec .t_sized,.t_sizeb .t_sized{display:none;}
+.t_sizem{display:inline-block;}

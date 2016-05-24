@@ -85,6 +85,11 @@ function showCartList(){
       if(count>0){
         var html='';
         $.each(data.list,function(i,o){
+          var spec = o.spec;
+          if(o.spec != '' && o.spec.indexOf('*') > 0){
+            spec = spec.split('*');
+            spec = spec.join('<br/>');
+          }
           html+='<ul class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
             '<li class="shop_f1so">'+
             '<table><tr><td width="30"><span class="set-btn"><input name="ids" type="checkbox" checked></span></td>'+
@@ -92,6 +97,7 @@ function showCartList(){
           '<td><span class="shop-title"><a href="/goods/'+o.goodsId+'" target="_blank">'+o.name+'</a></span></td></tr></table>'+
           '</li>'+
           '<li class="z_guige">'+
+            spec +
           '</li>'+
           ' <li class="shop_f1st">'+(o.weight*o.num/1000)+'kg</li>'+
           ' <li class="shop_f1st">￥'+o.showPrice+'</li>'+
