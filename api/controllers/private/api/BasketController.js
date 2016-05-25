@@ -199,19 +199,37 @@ module.exports = {
   },
   productAddDo:function(req,res){
     var goods=req.body.goods;
+    var basketid=req.body.basketid;
     Api_basket_products.create(JSON.parse(goods)).exec(function(e,obj){
       if (e)return res.json({code: 1, msg: sails.__('add.fail')});
-      return res.json({code: 0, msg: sails.__('add.ok')});
+      Api_basket_products.count({basketid:basketid}).exec(function(err,count){
+        Api_basket.update(basketid,{num:count}).exec(function(err2,obj2){
+          return res.json({code: 0, msg: sails.__('add.ok')});
+        });
+      });
     });
   },
   productDelete: function (req, res) {
     var ids = req.params.id || req.body.ids;
-    Api_basket_products.destroy({id: ids}).exec(function (err) {
-      if (err) {
+    var basketid=req.body.basketid;
+    Api_basket_products.destroy({id: ids}).exec(function (e) {
+      if (e) {
         return res.json({code: 1, msg: sails.__('delete.fail')});
       } else {
-        return res.json({code: 0, msg: sails.__('delete.ok')});
+        Api_basket_products.count({basketid:basketid}).exec(function(err,count){
+          Api_basket.update(basketid,{num:count}).exec(function(err2,obj2){
+            return res.json({code: 0, msg: sails.__('delete.ok')});
+          });
+        });
       }
+    });
+  },
+  price: function (req, res) {
+    var id = req.body.pk || '0';
+    var value = req.body.value || '0';
+    var name = req.body.name || '';
+    Api_basket_products.update(id, {price: StringUtil.getPrice(value)}).exec(function (err, obj) {
+      return res.json({name: name, pk: id, value: value});
     });
   }
 };

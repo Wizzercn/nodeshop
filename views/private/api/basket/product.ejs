@@ -153,7 +153,7 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/api/basket/productDelete", {ids: ids}, function (data) {
+        $.post("/private/api/basket/productDelete", {ids: ids,basketid:<%=obj.id%>}, function (data) {
           if (data.code == 0) {
             datatable.ajax.reload(null,false);
           } else {

@@ -155,7 +155,7 @@
     var btn = $("#ok");
     var dialog = $("#dialogDetail");
     btn.button("loading");
-    $.post("/private/api/basket/productAddDo", {goods:JSON.stringify(post_data)}, function (data) {
+    $.post("/private/api/basket/productAddDo", {basketid:<%=obj.id%>,goods:JSON.stringify(post_data)}, function (data) {
       if (data.code == 0) {
         Toast.success("提交成功");
         dialog.modal("hide");
