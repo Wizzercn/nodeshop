@@ -15,6 +15,19 @@
                 <input type="text" id="name" name="" class="control-group" style="width: 200px;" maxlength="20">
               </td>
             </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>折扣(%)：</td>
+              <td width="70%" align="left">
+                <input type="text" id="dis_count" value="0" class="control-group" style="width: 150px;" maxlength="20">
+                请填写0-99整数，0为不启用。
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"></td>
+              <td width="70%" align="left">
+                注意：折扣只用于向商品池添加商品时计算默认协议价，更改此值不影响已添加商品的协议价。
+              </td>
+            </tr>
           </table>
         </div>
       </section>
@@ -32,11 +45,20 @@
     var dialog = $("#dialogDetail");
     if($('#name').val()==''){
       Toast.error("名称不可为空");
+      $('#name').focus();
+      return false;
+    }
+    var myreg =/^(99|[1-9]\d|\d)$/;
+    if(!myreg.test($("#dis_count").val()))
+    {
+      Toast.error("请输入0-99");
+      $('#dis_count').focus();
       return false;
     }
     btn.button("loading");
     $.post("/private/api/basket/addDo", {
       name:$("#name").val(),
+      dis_count:$("#dis_count").val(),
       appid:<%=appid||0%>
     }, function (data) {
       if (data.code == 0) {

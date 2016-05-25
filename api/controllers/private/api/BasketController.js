@@ -22,10 +22,14 @@ module.exports = {
     var draw = parseInt(req.body.draw);
     var order = req.body.order || [];
     var columns = req.body.columns || [];
+    var appid = req.body.appid;
     var sort = {};
     var where = {};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
+    }
+    if (appid) {
+      where.appid = appid;
     }
     Api_basket.count(where).exec(function (err, count) {
       if (!err && count > 0) {
@@ -102,10 +106,14 @@ module.exports = {
     var draw = parseInt(req.body.draw);
     var order = req.body.order || [];
     var columns = req.body.columns || [];
+    var basketid = req.body.basketid;
     var sort = {};
     var where = {};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
+    }
+    if (basketid) {
+      where.basketid = basketid;
     }
     Api_basket_products.count(where).exec(function (err, count) {
       if (!err && count > 0) {
@@ -117,6 +125,64 @@ module.exports = {
               "draw": draw,
               "recordsTotal": pageSize,
               "recordsFiltered": count,
+              "data": list
+            });
+          });
+      } else {
+        return res.json({
+          "draw": draw,
+          "recordsTotal": pageSize,
+          "recordsFiltered": 0,
+          "data": []
+        });
+      }
+    });
+  },
+  productAdd: function (req, res) {
+    var basketid = req.params.id;
+    req.data.basketid=basketid;
+    Shop_goods_class.find().exec(function (e, l) {
+      req.data.clist = l || [];
+      Api_basket.findOne(basketid).exec(function (e, o) {
+        req.data.obj = o || {};
+        return res.view('private/api/basket/productAdd', req.data);
+      });
+    });
+  },
+  productList: function (req, res) {
+    var pageSize = parseInt(req.body.length);
+    var start = parseInt(req.body.start);
+    var page = start / pageSize + 1;
+    var draw = parseInt(req.body.draw);
+    var order = req.body.order || [];
+    var name = req.body.name;
+    var classid = req.body.classid;
+    var appid = req.body.appid;
+    var columns = req.body.columns || [];
+    var sort = {};
+    var sql=' FROM shop_goods_products WHERE id NOT IN (SELECT b.productid FROM api_basket_products b WHERE b.appid='+appid+') ';
+    var where = {};
+    if (name) {
+      where.name = {'like': '%' + name + '%'};
+      sql+=' and name like \'%'+name+'\'% ';
+    }
+    if (classid) {
+      where.classid = classid;
+      sql+=' and classid='+classid;
+    }
+    Shop_goods_products.query('select count(*) as num '+sql,[],function (err, obj) {
+      if (order.length > 0) {
+        sort[columns[order[0].column].data] = order[0].dir;
+        sql+=' order by '+columns[order[0].column].data+' '+order[0].dir;
+      }
+      sql+=' limit '+start+','+pageSize;
+      sails.log.debug('sql:::'+sql);
+      if (!err && obj[0].num > 0) {
+        Shop_goods_products.query('select * '+sql,[],function (err, list) {
+            return res.json({
+              "draw": draw,
+              "recordsTotal": pageSize,
+              "recordsFiltered": obj[0].num,
               "data": list
             });
           });

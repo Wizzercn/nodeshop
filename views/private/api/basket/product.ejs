@@ -1,9 +1,11 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/api/basket/productAdd" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加商品</a>
-    <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <a class="btn btn-primary navbar-btn" href="/private/api/basket/productAdd/<%=obj.id%>" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加商品</a>
+    <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除商品</button>
     <a class="btn btn-primary navbar-btn" href="/private/api/basket/index/<%=obj.appid||''%>" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    <div class="btn-group" style="padding-top: 16px;">商品池：<%=obj.name%></div>
   </div>
+
 </header>
 <div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
@@ -42,8 +44,8 @@
   </div>
 </div>
 <div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  <div class="modal-dialog" style="min-width: 1000px;">
+    <div class="modal-content" style="min-width: 1000px;">
     </div>
   </div>
 </div>
@@ -67,17 +69,19 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/api/basket/data",
+        "url": "/private/api/basket/productData",
         "type": "post",
         "data": function (d) {
-          d.appid=$("#appid").val()
+          d.basketid=<%=obj.id%>
         }
       },
       "order": [[0, "desc"]],
       "columns": [
-        {"data": "id", "bSortable": true},
-        {"data": "name", "bSortable": true},
-        {"data": "num", "bSortable": true},
+        {"data": "sku", "bSortable": true},
+        {"data": "sku", "bSortable": true},
+        {"data": "sku", "bSortable": true},
+        {"data": "sku", "bSortable": true},
+        {"data": "price", "bSortable": true},
         {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
@@ -88,7 +92,7 @@
             }
             return '';
           },
-          "targets": 3
+          "targets": 5
         },
         {
           "render": function (data, type, row) {
@@ -99,7 +103,7 @@
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 4
+          "targets": 6
         }
       ]
     });
@@ -117,7 +121,7 @@
     dialog.find("#ok").bind("click", function (event) {
       var btn = $(this);
       btn.button("loading");
-      $.post("/private/api/token/delete/" + id, {}, function (data) {
+      $.post("/private/api/basket/productDelete/" + id, {}, function (data) {
         if (data.code == 0) {
           datatable.ajax.reload(null,false);
         } else {
@@ -142,7 +146,7 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/api/token/delete", {ids: ids}, function (data) {
+        $.post("/private/api/basket/productDelete", {ids: ids}, function (data) {
           if (data.code == 0) {
             datatable.ajax.reload(null,false);
           } else {
@@ -158,10 +162,6 @@
   }
   $(function () {
     initDatatable();
-    $("#appid").on("change",function(){
-      $("#_reload").attr("href","/private/api/basket/index/"+$(this).val());
-      $("#_reload").trigger("click");
-    });
     $("#dialogDetail").on("hidden.bs.modal", function() {
       $(this).removeData("bs.modal");
     });

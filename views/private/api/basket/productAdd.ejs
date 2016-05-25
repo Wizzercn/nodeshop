@@ -1,0 +1,143 @@
+<header class="header navbar bg-white shadow" style="padding-top: 10px;">
+  <div class="btn-group tool-button">
+    <select id="classid">
+      <option value="">商品分类</option>
+      <%clist.forEach(function(o){%>
+      <option value="<%=o.id%>"><%=o.name%></option>
+      <%});%>
+    </select>
+    <input type="text" id="name" value="" class="" placeholder="商品名称">
+    <input type="button" id="searchBtn" value="查询">
+  </div>
+
+</header>
+<div class=panel-body style="padding-top: 50px;">
+  <div class="table-responsive no-border">
+    <table id="goods" class="table table-bordered table-striped mg-t datatable">
+      <thead>
+      <tr>
+        <th>SKU</th>
+        <th>商品名称</th>
+        <th>规格</th>
+        <th>商城价</th>
+        <th>上架状态</th>
+        <th>协议价</th>
+    </table>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+  <button onclick="doSave()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+</div>
+<script language="JavaScript">
+  var goods;
+  function initGoods() {
+    goods = $('#goods').DataTable({
+      "dom": '<"toolbar">frtip',
+      "searching": false,
+      "processing": false,
+      "serverSide": true,
+      "select": true,
+      "ordering": true,
+      "language": {
+        "url": "/plugins/datatables/cn.json"
+      },
+      "preDrawCallback": function () {
+      },
+      "drawCallback": function () {
+      },
+      "ajax": {
+        "url": "/private/api/basket/productList",
+        "type": "post",
+        "data": function (d) {
+          d.name=$("#name").val();
+          d.classid=$("#classid").val();
+          d.appid=<%=obj.appid%>;
+        }
+      },
+      "order": [[0, "desc"]],
+      "columns": [
+        {"data": "gn", "bSortable": true},
+        {"data": "name", "bSortable": true},
+        {"data": "spec", "bSortable": true},
+        {"data": "price", "bSortable": true},
+        {"data": "disabled", "bSortable": true},
+        {"data": "price", "bSortable": true}
+      ],
+      "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if (data) {
+              return setPrice(data);
+            }
+            return '';
+          },
+          "targets": 3
+        },
+        {
+          "render": function (data, type, row) {
+            if (!data) {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+            } else {
+              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+            }
+          },
+          "targets": 4
+        },
+        {
+          "render": function (data, type, row) {
+            var dis_count=<%=obj.dis_count||0%>;
+            var price=row.price;
+            var xyPrice=price;
+            if(dis_count>0&&price>100){
+              xyPrice= Math.ceil(price*dis_count / 100);
+            }
+            return '<input id="nego_'+row.id+'" type="text" value="'+setPrice(xyPrice)+'">';
+          },
+          "targets": 5
+        }
+      ]
+    });
+    goods.on('click', 'tr', function () {
+      $(this).toggleClass('selected');
+    });
+    $("#searchBtn").on('click', function () {
+      goods.ajax.reload();
+    });
+  }
+  function getPrice(str) {
+    if (typeof str == 'undefined' || str == '' || str == null || str == 'null' || str == 'undefined') {
+      return 0;
+    }
+    if (str.indexOf('.') > 0) {
+      var s = str.substring(0, str.indexOf('.'));
+      var p = str.substring(str.indexOf('.') + 1);
+      if (p.length > 1) {
+        return parseInt(s + p.substring(0, 2));
+      } else if (p.length == 1) {
+        return parseInt(s + p + '0');
+      } else {
+        return parseInt(s + '00');
+      }
+    } else {
+      return parseInt(str + '00');
+    }
+  }
+  function doSave(){
+    var chks = goods.rows('.selected').data();
+    var data=[];
+    if (chks.length > 0) {
+      $.each(chks,function(i,o){
+        o.negoPrice=getPrice($("#nego_"+ o.id).val());
+        data.push(o);
+      });
+    }else{
+      Toast.warning("请先选择商品！");
+    }
+    console.log(chks);
+    console.log(data);
+  }
+  $(function () {
+    initGoods();
+  });
+</script>

@@ -19,6 +19,12 @@ module.exports = {
       type: 'string',
       size: 50
     },
+    dis_count:{
+      type: 'integer',
+      defaultsTo: function () {
+        return 0;
+      }
+    },
     num:{
       type: 'integer',
       defaultsTo: function () {

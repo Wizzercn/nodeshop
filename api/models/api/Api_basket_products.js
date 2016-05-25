@@ -27,7 +27,8 @@ module.exports = {
     sku:{
       type: 'string',
       size: 100,
-      required: true
+      required: true,
+      index:true
     },
     price:{
       type:'integer',
