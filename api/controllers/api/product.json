@@ -16,7 +16,7 @@
  *
  * @apiSuccess (成功) {number} code 0
  * @apiSuccess (成功) {string} msg success
- * @apiSuccess (成功) {Object[]} data 数组对象
+ * @apiSuccess (成功) {Object[]} data 对象数组
  * @apiSuccess (成功) {number} data.id 商品池编号
  * @apiSuccess (成功) {string} data.name 商品池名称
  * @apiSuccess (成功) {number} data.num 商品数量(不固定)
@@ -68,7 +68,7 @@
  *
  * @apiSuccess (成功) {number} code 0
  * @apiSuccess (成功) {string} msg success
- * @apiSuccess (成功) {String[]} data sku数组
+ * @apiSuccess (成功) {String[]} data 字符串数组
  * @apiSuccessExample {json} 示例
  *   HTTP/1.1 200 OK
  *   {
