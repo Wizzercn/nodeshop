@@ -119,6 +119,7 @@ module.exports = {
       if (!err && count > 0) {
         Api_basket_products.find(where)
           .sort(sort)
+          .populate('productid')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({
@@ -193,6 +194,23 @@ module.exports = {
           "recordsFiltered": 0,
           "data": []
         });
+      }
+    });
+  },
+  productAddDo:function(req,res){
+    var goods=req.body.goods;
+    Api_basket_products.create(JSON.parse(goods)).exec(function(e,obj){
+      if (e)return res.json({code: 1, msg: sails.__('add.fail')});
+      return res.json({code: 0, msg: sails.__('add.ok')});
+    });
+  },
+  productDelete: function (req, res) {
+    var ids = req.params.id || req.body.ids;
+    Api_basket_products.destroy({id: ids}).exec(function (err) {
+      if (err) {
+        return res.json({code: 1, msg: sails.__('delete.fail')});
+      } else {
+        return res.json({code: 0, msg: sails.__('delete.ok')});
       }
     });
   }

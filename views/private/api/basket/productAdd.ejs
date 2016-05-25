@@ -1,15 +1,18 @@
 <header class="header navbar bg-white shadow" style="padding-top: 10px;">
   <div class="btn-group tool-button">
-    <select id="classid">
+    <select id="classid" class="form-control">
       <option value="">商品分类</option>
       <%clist.forEach(function(o){%>
       <option value="<%=o.id%>"><%=o.name%></option>
       <%});%>
     </select>
-    <input type="text" id="name" value="" class="" placeholder="商品名称">
-    <input type="button" id="searchBtn" value="查询">
   </div>
-
+  <div class="btn-group tool-button">
+    <input type="text" id="name" value="" class="form-control" placeholder="商品名称">
+  </div>
+  <div class="btn-group tool-button">
+    <input type="button" id="searchBtn" class="btn btn-primary" value="查询">
+  </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
@@ -67,6 +70,15 @@
       "columnDefs": [
         {
           "render": function (data, type, row) {
+            if(data){
+              return '<a href="/goods/'+row.goodsid+'" style="color: #3367ac;" target="_blank">'+data+'</a>';
+            }
+            return '';
+          },
+          "targets": 1
+        },
+        {
+          "render": function (data, type, row) {
             if (data) {
               return setPrice(data);
             }
@@ -92,7 +104,7 @@
             if(dis_count>0&&price>100){
               xyPrice= Math.ceil(price*dis_count / 100);
             }
-            return '<input id="nego_'+row.id+'" type="text" value="'+setPrice(xyPrice)+'">';
+            return '<input id="nego_'+row.id+'" class="form-control" style="width:100px !important;height:26px;padding:2px 3px;" type="text" value="'+setPrice(xyPrice)+'">';
           },
           "targets": 5
         }
@@ -125,17 +137,35 @@
   }
   function doSave(){
     var chks = goods.rows('.selected').data();
-    var data=[];
+    var post_data=[];
     if (chks.length > 0) {
       $.each(chks,function(i,o){
-        o.negoPrice=getPrice($("#nego_"+ o.id).val());
-        data.push(o);
+        var obj={};
+        obj.appid=<%=obj.appid%>;
+        obj.basketid=<%=obj.id%>;
+        obj.goodsid= o.goodsid;
+        obj.productid= o.id;
+        obj.sku= o.gn;
+        obj.price=getPrice($("#nego_"+ o.id).val());
+        post_data.push(obj);
       });
     }else{
       Toast.warning("请先选择商品！");
     }
-    console.log(chks);
-    console.log(data);
+    var btn = $("#ok");
+    var dialog = $("#dialogDetail");
+    btn.button("loading");
+    $.post("/private/api/basket/productAddDo", {goods:JSON.stringify(post_data)}, function (data) {
+      if (data.code == 0) {
+        Toast.success("提交成功");
+        dialog.modal("hide");
+        datatable.ajax.reload();
+      } else {
+        Toast.error(data.msg);
+      }
+      btn.button("reset");
+
+    }, "json");
   }
   $(function () {
     initGoods();

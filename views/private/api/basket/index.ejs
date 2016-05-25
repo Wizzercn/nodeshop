@@ -25,6 +25,7 @@
       <tr>
         <th>ID</th>
         <th>名称</th>
+        <th>折扣率</th>
         <th>商品数量</th>
         <th>创建时间</th>
         <th>操作</th>
@@ -88,10 +89,20 @@
       "columns": [
         {"data": "id", "bSortable": true},
         {"data": "name", "bSortable": true},
+        {"data": "dis_count", "bSortable": true},
         {"data": "num", "bSortable": true},
         {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
+        {
+          "render": function (data, type, row) {
+            if (data>0) {
+              return data+'%';
+            }
+            return '不启用';
+          },
+          "targets": 2
+        },
         {
           "render": function (data, type, row) {
             if (data) {
@@ -99,7 +110,7 @@
             }
             return '';
           },
-          "targets": 3
+          "targets": 4
         },
         {
           "render": function (data, type, row) {
@@ -110,7 +121,7 @@
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 4
+          "targets": 5
         }
       ]
     });
