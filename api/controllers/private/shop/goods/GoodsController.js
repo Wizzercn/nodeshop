@@ -165,6 +165,7 @@ module.exports = {
           p.spec = sobj.spec;
           p.is_default = sobj.is_default;
           p.lvprice = sobj.lvprice;
+          p.disabled=sobj.disabled=='1';
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);
@@ -407,7 +408,7 @@ module.exports = {
           p.spec = sobj.spec;
           p.lvprice = sobj.lvprice;
           p.is_default = sobj.is_default;
-
+          p.disabled=sobj.disabled=='1';
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);

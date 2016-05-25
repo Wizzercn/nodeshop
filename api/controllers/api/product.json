@@ -6,33 +6,86 @@
  * @apiDescription 获取商品池
  * @apiPermission token
  *
- * @apiParam {string} [client_id] client_id
- * @apiParam {string} [client_secret] client_secret
+ * @apiParam {string} token token
  *
- * @apiParamExample {json} Request Example
- *   POST /api/oauth/token
+ * @apiParamExample {json} 示例
+ *   POST /api/product/basket
  *   {
- *      "client_id": "client_id",
- *      "client_secret": "client_secret"
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0"
  *   }
  *
- * @apiSuccess (成功) {string} token Token
- * @apiSuccess (成功) {number} expires 失效时间
- * @apiSuccess (成功) {number} appid AppId
+ * @apiSuccess (成功) {number} code =0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object[]} data 数组对象
+ * @apiSuccess (成功) {number} data.id 商品池编号
+ * @apiSuccess (成功) {string} data.name 商品池名称
+ * @apiSuccess (成功) {number} data.num 商品数量(不固定)
  * @apiSuccessExample {json} 示例
  *   HTTP/1.1 200 OK
  *   {
- *     "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NDA4MDcwODQ2M30.1dHqnOMFVRHwCY7mDx0O9P3ghXW6UA2O2dqGV-hGea8",
- *     "expires": 1464080708463,
- *     "appid":1,
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *        {
+ *          "id": 1,
+ *          "name": "办公用品",
+ *          "num": 2
+ *         },
+ *        {
+ *          "id": 2,
+ *          "name": "电器",
+ *          "num": 14
+ *        }
+ *      ]
  *   }
  *
- * @apiError (Response x) {number} code x>0
- * @apiError (Response x) {string} [msg] error description
- * @apiErrorExample {json} Response Error Example
+ * @apiError (失败) {number} code >0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
  *   HTTP/1.1 200 OK
  *   {
- *     "code": x
- *     "msg": ""
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+ * @api {POST} /api/product/sku Sku
+ * @apiName Sku
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取SKU
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {number} basketid 商城池编号
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/sku
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "basketid":2
+ *   }
+ *
+ * @apiSuccess (成功) {number} code =0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {String[]} data sku数组
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *       "P1605000008",
+ *       "P1605000005"
+ *      ]
+ *   }
+ *
+ * @apiError (失败) {number} code >0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
  *   }
  */
