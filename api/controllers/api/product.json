@@ -14,7 +14,7 @@
  *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0"
  *   }
  *
- * @apiSuccess (成功) {number} code =0
+ * @apiSuccess (成功) {number} code 0
  * @apiSuccess (成功) {string} msg success
  * @apiSuccess (成功) {Object[]} data 数组对象
  * @apiSuccess (成功) {number} data.id 商品池编号
@@ -39,7 +39,7 @@
  *      ]
  *   }
  *
- * @apiError (失败) {number} code >0
+ * @apiError (失败) {number} code 不为0
  * @apiError (失败) {string} msg 错误文字描述
  * @apiErrorExample {json} 示例
  *   HTTP/1.1 200 OK
@@ -66,7 +66,7 @@
  *      "basketid":2
  *   }
  *
- * @apiSuccess (成功) {number} code =0
+ * @apiSuccess (成功) {number} code 0
  * @apiSuccess (成功) {string} msg success
  * @apiSuccess (成功) {String[]} data sku数组
  * @apiSuccessExample {json} 示例
@@ -80,7 +80,7 @@
  *      ]
  *   }
  *
- * @apiError (失败) {number} code >0
+ * @apiError (失败) {number} code 不为0
  * @apiError (失败) {string} msg 错误文字描述
  * @apiErrorExample {json} 示例
  *   HTTP/1.1 200 OK
