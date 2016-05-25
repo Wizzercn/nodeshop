@@ -5,8 +5,8 @@ var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
 module.exports = {
   index: function (req, res) {
-    req.data.stock=req.query.stock||0;
-    req.data.disabled=req.query.disabled||'';
+    req.data.stock = req.query.stock || 0;
+    req.data.disabled = req.query.disabled || '';
     return res.view('private/shop/goods/goods/index', req.data);
   },
   add: function (req, res) {
@@ -165,7 +165,7 @@ module.exports = {
           p.spec = sobj.spec;
           p.is_default = sobj.is_default;
           p.lvprice = sobj.lvprice;
-          p.disabled=sobj.disabled=='1';
+          p.disabled = sobj.disabled == '1';
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);
@@ -324,10 +324,8 @@ module.exports = {
       });
     }, function (goods, cb) {
       Shop_images.destroy({goodsid: id}).exec(function (de1) {
-        Shop_goods_products.destroy({goodsid: id}).exec(function (de2) {
-          Shop_goods_lv_price.destroy({goodsid: id}).exec(function (de3) {
-            cb(null, goods);
-          });
+        Shop_goods_lv_price.destroy({goodsid: id}).exec(function (de3) {
+          cb(null, goods);
         });
       });
     }, function (goods, cb) {
@@ -362,6 +360,7 @@ module.exports = {
       });
       goods.imgurl = imgurl;
       goods.is_spec = false;
+      var no_del_productIds = [];
       if (!is_spec) {
         var sobj = specs[0];
         goods.price = StringUtil.getPrice(sobj.price);
@@ -372,6 +371,7 @@ module.exports = {
         goods.buyMin = StringUtil.getInt(sobj.buyMin);
         goods.buyMax = StringUtil.getInt(sobj.buyMax);
         var p = {};
+        p.goodsid = StringUtil.getInt(id);
         p.price = StringUtil.getPrice(sobj.price);
         p.priceMarket = StringUtil.getPrice(sobj.priceMarket);
         p.priceCost = StringUtil.getPrice(sobj.priceCost);
@@ -388,10 +388,13 @@ module.exports = {
         p.spec = sobj.spec;
         p.is_default = sobj.is_default;
         p.lvprice = sobj.lvprice;
+        p.id = sobj.id;
+        no_del_productIds.push(p.id);
         products.push(p);
       } else {
         specs.forEach(function (sobj) {
           var p = {};
+          p.goodsid = StringUtil.getInt(id);
           p.price = StringUtil.getPrice(sobj.price);
           p.priceMarket = StringUtil.getPrice(sobj.priceMarket);
           p.priceCost = StringUtil.getPrice(sobj.priceCost);
@@ -408,7 +411,9 @@ module.exports = {
           p.spec = sobj.spec;
           p.lvprice = sobj.lvprice;
           p.is_default = sobj.is_default;
-          p.disabled=sobj.disabled=='1';
+          p.disabled = sobj.disabled == '1';
+          p.id = sobj.id;
+          no_del_productIds.push(p.id);
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);
@@ -424,46 +429,74 @@ module.exports = {
           goods.is_spec = true;
         }
       }
-      Shop_goods.update(id, goods).exec(function (e1, o1) {
-        if (o1) {
-          var i = 0;
+      Shop_goods_products.destroy({id: {'!': no_del_productIds}, goodsid: id}).exec(function (e_del) {
 
-          products.forEach(function (sobj) {
-            sobj.goodsid = id;
-            sobj.location = i;
-            sobj.updatedBy = req.session.user.id;
-            sobj.updatedAt = moment().format('X');
-            sobj.upAt = moment().format('X');
-            Shop_goods_products.create(sobj).exec(function (e2, o2) {
-              //sails.log.warn('e2::'+JSON.stringify(e2));
-              if (o2) {
-                var lvprice = sobj.lvprice || [];
-                lvprice.forEach(function (lv) {
-                  Shop_goods_lv_price.create({
-                    goodsid: id,
-                    productid: o2.id,
-                    lvid: lv.lv_id,
-                    price: StringUtil.getPrice(lv.lv_price)
-                  }).exec(function (e3, o3) {
-                  });
+
+        Shop_goods.update(id, goods).exec(function (e1, o1) {
+          if (o1) {
+            var i = 0;
+            var no_del_productIds = [];
+            products.forEach(function (sobj) {
+              no_del_productIds.push(sobj.id);
+              sobj.goodsid = id;
+              sobj.location = i;
+              sobj.updatedBy = req.session.user.id;
+              sobj.updatedAt = moment().format('X');
+              sobj.upAt = moment().format('X');
+              if (sobj.id) {
+                sails.log.debug('sobj::' + JSON.stringify(sobj));
+
+                Shop_goods_products.update({id: sobj.id}, sobj).exec(function (e2, o2) {
+                  sails.log.debug('o2::' + JSON.stringify(o2));
+                  if (o2.length > 0) {
+                    var lvprice = sobj.lvprice || [];
+                    lvprice.forEach(function (lv) {
+                      Shop_goods_lv_price.create({
+                        goodsid: id,
+                        productid: o2[0].id,
+                        lvid: lv.lv_id,
+                        price: StringUtil.getPrice(lv.lv_price)
+                      }).exec(function (e3, o3) {
+                      });
+                    });
+                  }
                 });
+                i++;
+              } else {
+                Shop_goods_products.create(sobj).exec(function (e2, o2) {
+                  //sails.log.debug('e2::'+JSON.stringify(e2));
+                  if (o2) {
+                    var lvprice = sobj.lvprice || [];
+                    lvprice.forEach(function (lv) {
+                      Shop_goods_lv_price.create({
+                        goodsid: id,
+                        productid: o2.id,
+                        lvid: lv.lv_id,
+                        price: StringUtil.getPrice(lv.lv_price)
+                      }).exec(function (e3, o3) {
+                      });
+                    });
+                  }
+                });
+                i++;
               }
-            });
-            i++;
-          });
 
-          dbimgs.forEach(function (imgurl) {
-            var imgobj = {};
-            imgobj.imgurl = imgurl;
-            imgobj.goodsid = id;
-            Shop_images.create(imgobj).exec(function (e3, o3) {
             });
-          });
 
-          cb(e1, id);
-        } else {
-          cb(e1, 0);
-        }
+            dbimgs.forEach(function (imgurl) {
+              var imgobj = {};
+              imgobj.imgurl = imgurl;
+              imgobj.goodsid = id;
+              Shop_images.create(imgobj).exec(function (e3, o3) {
+              });
+            });
+            if (i == products.length) {
+              return cb(e1, id);
+            }
+          } else {
+            return cb(e1, 0);
+          }
+        });
       });
     }], function (err, goodsid) {
       if (err) {
@@ -543,11 +576,11 @@ module.exports = {
     if (name) {
       where.name = {like: '%' + name + '%'};
     }
-    if(disabled=='true'){
-      where.disabled=true;
+    if (disabled == 'true') {
+      where.disabled = true;
     }
-    if(disabled=='false'){
-      where.disabled=false;
+    if (disabled == 'false') {
+      where.disabled = false;
     }
     async.waterfall([function (cb) {
       var goodsids = [];
