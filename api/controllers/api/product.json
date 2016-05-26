@@ -110,6 +110,8 @@
  * @apiSuccess (成功) {number} code 0
  * @apiSuccess (成功) {string} msg success
  * @apiSuccess (成功) {Object} data 商品对象
+ * @apiSuccess (成功) {string} data.sku 商品编号
+ * @apiSuccess (成功) {string} data.url 商品链接
  * @apiSuccess (成功) {number} data.weight 重量(单位:g)
  * @apiSuccess (成功) {string} data.imagePath 主图地址(不带参数为原始图片，带参数?type=s为列表缩略图，带参数?type=m为相册中图)
  * @apiSuccess (成功) {number} data.state 1为上架，0为下架
@@ -125,6 +127,8 @@
  *     "code": 0,
  *     "msg": "success",
  *     "data": {
+ *       "sku": "P1605000010-1",
+ *       "url": "http://127.0.0.1/goods/2",
  *       "weight": 500,
  *       "imagePath": "http://127.0.0.1/open/image/file/5af370c2cb6b495a862434fdce67998e.png",
  *       "state": 1,

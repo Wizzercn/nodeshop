@@ -39,7 +39,12 @@ module.exports = {
           return res.json({code: 1, msg: 'err:' + e});
         }
         var obj = {};
-        obj.sku = o.sku;
+        obj.sku = sku;
+        if(o.goodsid){
+          obj.url='http://' + sails.config.system.AppDomain +'/goods/'+ o.goodsid.id;
+        }else{
+          obj.url='';
+        }
         obj.weight = o.weight;
         if (o.goodsid && o.goodsid.imgurl) {
           obj.imagePath = 'http://' + sails.config.system.AppDomain + o.goodsid.imgurl;

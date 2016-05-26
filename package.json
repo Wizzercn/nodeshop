@@ -1,11 +1,11 @@
 {
-  "name": "Sunshop",
+  "name": "Sunchn-shop",
   "private": true,
   "version": "1.0.0",
-  "description": "Node.js shop",
+  "description": "shop",
   "keywords": [],
   "apidoc": {
-    "title": "Sunshop"
+    "title": "Sunchn-shop"
   },
   "dependencies": {
     "apidoc": "^0.16.1",
