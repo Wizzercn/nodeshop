@@ -1,5 +1,5 @@
 /**
- * @api {POST} /api/oauth/token Token
+ * @api {POST} /api/oauth/token 01.Token
  * @apiName Token
  * @apiGroup Oauth
  * @apiVersion 1.0.0
