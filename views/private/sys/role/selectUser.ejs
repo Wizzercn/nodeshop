@@ -97,7 +97,6 @@
       });
       $.post("/private/sys/role/pushUser", {ids: ids,roleid: $('#roleid').val()}, function (data) {
         if (data.code == 0) {
-          datatable_select.ajax.reload();
           datatable.ajax.reload();
         } else {
           Toast.error(data.msg);
