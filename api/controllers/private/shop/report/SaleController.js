@@ -3,6 +3,7 @@
 */
 var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
+var exportExcel = require('excel-export');
 module.exports = {
   index: function (req, res) {
 
@@ -46,46 +47,38 @@ module.exports = {
       return res.json(data);
     });
   },
-  data: function (req,res) {
-    var pageSize = parseInt(req.body.length);
-    var start = parseInt(req.body.start);
-    var page = start / pageSize + 1;
-    var draw = parseInt(req.body.draw);
-    var order = req.body.order || [];
-    var columns = req.body.columns || [];
-    var sort = {};
-    var where = {};
-    var status = req.body.status||'0';
-    if(req.body.id){
-      where.id = req.body.id;
+  export:function(req,res){
+      var conf ={};
+    // uncomment it for style example
+    // conf.stylesXmlFile = "styles.xml";
+      conf.cols = [{
+          caption:'订单号',
+          captionStyleIndex: 1,
+          type:'string',
+          beforeCellWrite:function(row, cellData){
+               return cellData.toUpperCase();
+          }
+          , width:15
+      },{
+          caption:'货品编号',
+          type:'string',
+          width:20.85
+      },{
+          caption:'状态',
+          type:'bool'
+      },{
+          caption:'数量',
+          type:'number',
+          width:30
+      }];
+      conf.rows = [
+        ['1', 001, true, 3],
+        ["2", 002, false, 215163],
+        ["3", 003, false, 148]
+      ];
+    var result = exportExcel.execute(conf);
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+    res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+    res.end(result, 'binary');
     }
-    // var where = {shipStatus:orderStatus};
-    if (order.length > 0) {
-      sort[columns[order[0].column].data] = order[0].dir;
-    }
-    Shop_order.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        Shop_order.find(where)
-        .sort(sort)
-        .sort('createdAt desc')
-        .paginate({page: page, limit: pageSize})
-        .exec(function (err, list) {
-          return res.json({
-            "draw": draw,
-            "recordsTotal": pageSize,
-            "recordsFiltered": count,
-            "data": list
-          });
-        });
-      } else {
-        return res.json({
-          "draw": draw,
-          "recordsTotal": pageSize,
-          "recordsFiltered": 0,
-          "data": []
-        });
-      }
-    });
-
-}
 };

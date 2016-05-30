@@ -1,7 +1,7 @@
 /**
- * 支付宝支付异步通知处理
- * Created by root on 3/22/16.
- */
+* 支付宝支付异步通知处理
+* Created by root on 3/22/16.
+*/
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
@@ -93,10 +93,10 @@ module.exports = {
                             }).exec(function (e5, o5) {
                               if (e2 || e3 || e4 || e5) {
                                 /*订单日志表
-                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                                 opType:admin,member
-                                 opResult:ok,fail
-                                 */
+                                opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                opType:admin,member
+                                opResult:ok,fail
+                                */
                                 Shop_order_log.create({
                                   orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
                                   opId: order.memberId,
@@ -108,10 +108,10 @@ module.exports = {
                                 return res.send("fail");
                               } else {
                                 /*订单日志表
-                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                                 opType:admin,member
-                                 opResult:ok,fail
-                                 */
+                                opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                opType:admin,member
+                                opResult:ok,fail
+                                */
                                 Shop_order_log.create({
                                   orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
                                   opId: order.memberId,
@@ -153,6 +153,49 @@ module.exports = {
           else {
             //验证失败
             return res.send("fail");
+          }
+        });
+      }
+    });
+  },
+  aliNotify: function(req, res){
+    AlipayService.init_refund(function (err, alipay) {
+      if (err) {
+        return res.send("fail");
+      } else {
+        alipay.refund_fastpay_by_platform_pwd_notify(req, function (verify_result) {
+          sails.log.debug('verify_result::' + verify_result);
+          sails.log.debug('req.body::' + JSON.stringify(req.body));
+          if (verify_result && req.body.seller_id == alipay.alipay_config.partner) {//验证成功
+            var result_details = verify_result.result_details.split('^');
+            if (result_details[2]=='SUCCESS'){
+              Shop_history_refunds.count({trade_no: result_details[0]}).exec(function (err, count) {
+                if (!err && count > 0) {
+                  return res.send("success");
+                }else {
+                  shop_history_payments.findOne({trade_no: result_details[0]}).exec(function (e1,payment){
+                    sails.log.debug(payment);
+                    Shop_history_refunds.create({
+                      orderId: payment.orderId,
+                      memberId: payment.memberId,
+                      money: payment.money,
+                      payType: payment.payType,
+                      payName: payment.payType,
+                      payAccount: payment.payType,
+                      payIp: req.ip,
+                      payAt: moment().format('X'),
+                      memo: '支付宝退款：￥' + StringUtil.setPrice(result_details[1]),
+                      finishAt: moment().format('X'),
+                      disabled: false
+                    }).exec(function (e3, o3) {
+                      return res.send("success");
+                    });
+                  });
+                }
+              });
+            }else {
+              return res.send("fail");
+            }
           }
         });
       }
