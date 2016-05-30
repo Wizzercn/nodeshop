@@ -16,7 +16,7 @@ module.exports = {
     try {
       var basketid = req.body.basketid;
       var skus = [];
-      Api_basket_products.find({select: ['sku'], where: {basketid: basketid,appid: req.appid}}).exec(function (e, l) {
+      Api_basket_products.find({select: ['sku'], where: {basketid: basketid, appid: req.appid}}).exec(function (e, l) {
         if (e) {
           return res.json({code: 1, msg: 'err:' + e});
         }
@@ -40,10 +40,10 @@ module.exports = {
         }
         var obj = {};
         obj.sku = sku;
-        if(o.goodsid){
-          obj.url='http://' + sails.config.system.AppDomain +'/goods/'+ o.goodsid.id;
-        }else{
-          obj.url='';
+        if (o.goodsid) {
+          obj.url = 'http://' + sails.config.system.AppDomain + '/goods/' + o.goodsid.id;
+        } else {
+          obj.url = '';
         }
         obj.weight = o.weight;
         if (o.goodsid && o.goodsid.imgurl) {
@@ -108,12 +108,13 @@ module.exports = {
       }
       skus.forEach(function (gn) {
         Shop_goods_products.findOne({select: ['id', 'gn', 'disabled'], where: {gn: gn}}).exec(function (e, o) {
+          var obj = {};
+          obj.sku = gn;
+          obj.state = 0;
           if (o) {
-            var obj = {};
-            obj.sku = gn;
             obj.state = o.disabled == true ? 0 : 1;//1为上架 0为下架
-            states.push(obj);
           }
+          states.push(obj);
           i++;
           if (i == skus.length) {
             return res.json({code: 0, msg: 'success', data: states});
@@ -138,34 +139,45 @@ module.exports = {
           select: ['id', 'gn', 'disabled', 'goodsid'],
           where: {gn: gn}
         }).exec(function (e, o) {
-          Shop_goods.findOne({select: ['id', 'imgurl'], where: {id: o.goodsid}}).exec(function (eg, og) {
-            Shop_images.find({goodsid: o.goodsid}).sort({id: 'asc'}).exec(function (ei, img) {
-              if (img && img.length > 0) {
-                var j = 0;
-                var r = [];
-                img.forEach(function (m) {
-                  var obj = {};
-                  obj.path = 'http://' + sails.config.system.AppDomain + m.imgurl;
-                  if (og && og.imgurl == m.imgurl) {
-                    obj.isPrimary = 1;
-                  } else {
-                    obj.isPrimary = 0;
-                  }
-                  obj.orderSort = j;
-                  r.push(obj);
-                  j++;
-                });
-                var s = {};
-                s.sku = gn;
-                s.images = r;
-                images.push(s);
-              }
-              i++;
-              if (i == skus.length) {
-                return res.json({code: 0, msg: 'success', data: images});
-              }
+          if (o) {
+            Shop_goods.findOne({select: ['id', 'imgurl'], where: {id: o.goodsid}}).exec(function (eg, og) {
+              Shop_images.find({goodsid: o.goodsid}).sort({id: 'asc'}).exec(function (ei, img) {
+                if (img && img.length > 0) {
+                  var j = 0;
+                  var r = [];
+                  img.forEach(function (m) {
+                    var obj = {};
+                    obj.path = 'http://' + sails.config.system.AppDomain + m.imgurl;
+                    if (og && og.imgurl == m.imgurl) {
+                      obj.isPrimary = 1;
+                    } else {
+                      obj.isPrimary = 0;
+                    }
+                    obj.orderSort = j;
+                    r.push(obj);
+                    j++;
+                  });
+                  var s = {};
+                  s.sku = gn;
+                  s.images = r;
+                  images.push(s);
+                }
+                i++;
+                if (i == skus.length) {
+                  return res.json({code: 0, msg: 'success', data: images});
+                }
+              });
             });
-          });
+          } else {
+            var s = {};
+            s.sku = gn;
+            s.images = [];
+            images.push(s);
+            i++;
+            if (i == skus.length) {
+              return res.json({code: 0, msg: 'success', data: images});
+            }
+          }
         });
       });
     } catch (err) {
@@ -223,6 +235,13 @@ module.exports = {
               });
             });
           } else {
+            var obj = {};
+            obj.sku = gn;
+            obj.goodRate = 100;
+            obj.generalRate = 0;
+            obj.poorRate =  0;
+            obj.averageScore = '5颗星';
+            goodwill.push(obj);
             i++;
             if (i == skus.length) {
               return res.json({code: 0, msg: 'success', data: goodwill});
@@ -258,6 +277,10 @@ module.exports = {
               return res.json({code: 0, msg: 'success', data: prices});
             }
           } else {
+            var obj = {};
+            obj.sku = gn;
+            obj.price = StringUtil.setPrice(0);
+            prices.push(obj);
             i++;
             if (i == skus.length) {
               return res.json({code: 0, msg: 'success', data: prices});
@@ -281,15 +304,15 @@ module.exports = {
       skus.forEach(function (gn) {
         Api_basket_products.findOne({
           select: ['id', 'sku', 'productid', 'price'],
-          where: {sku: gn,appid: req.appid}
+          where: {sku: gn, appid: req.appid}
         }).populate('productid').exec(function (e, o) {
           if (o) {
             var obj = {};
             obj.sku = gn;
             obj.negoprice = StringUtil.setPrice(o.price);
-            if(o.productid&& o.productid.price){
+            if (o.productid && o.productid.price) {
               obj.price = StringUtil.setPrice(o.productid.price);
-            }else{
+            } else {
               obj.price = StringUtil.setPrice(o.productid.price);
             }
             prices.push(obj);
@@ -298,6 +321,11 @@ module.exports = {
               return res.json({code: 0, msg: 'success', data: prices});
             }
           } else {
+            var obj = {};
+            obj.sku = gn;
+            obj.negoprice = StringUtil.setPrice(0);
+            obj.price = StringUtil.setPrice(0);
+            prices.push(obj);
             i++;
             if (i == skus.length) {
               return res.json({code: 0, msg: 'success', data: prices});
@@ -326,9 +354,9 @@ module.exports = {
           if (o) {
             var obj = {};
             obj.sku = gn;
-            if(o.stock>0){
+            if (o.stock > 0) {
               obj.stock = '有货';
-            }else{
+            } else {
               obj.stock = '无货';
             }
             stocks.push(obj);
@@ -337,6 +365,10 @@ module.exports = {
               return res.json({code: 0, msg: 'success', data: stocks});
             }
           } else {
+            var obj = {};
+            obj.sku = gn;
+            obj.stock = '无货';
+            stocks.push(obj);
             i++;
             if (i == skus.length) {
               return res.json({code: 0, msg: 'success', data: stocks});
