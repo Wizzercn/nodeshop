@@ -239,7 +239,7 @@ module.exports = {
             obj.sku = gn;
             obj.goodRate = 100;
             obj.generalRate = 0;
-            obj.poorRate =  0;
+            obj.poorRate = 0;
             obj.averageScore = '5颗星';
             goodwill.push(obj);
             i++;
@@ -267,24 +267,17 @@ module.exports = {
           select: ['id', 'gn', 'goodsid', 'price'],
           where: {gn: gn}
         }).exec(function (e, o) {
+          var obj = {};
+          obj.sku = gn;
           if (o) {
-            var obj = {};
-            obj.sku = gn;
             obj.price = StringUtil.setPrice(o.price);
-            prices.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: prices});
-            }
           } else {
-            var obj = {};
-            obj.sku = gn;
             obj.price = StringUtil.setPrice(0);
-            prices.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: prices});
-            }
+          }
+          prices.push(obj);
+          i++;
+          if (i == skus.length) {
+            return res.json({code: 0, msg: 'success', data: prices});
           }
         });
       });
@@ -306,30 +299,22 @@ module.exports = {
           select: ['id', 'sku', 'productid', 'price'],
           where: {sku: gn, appid: req.appid}
         }).populate('productid').exec(function (e, o) {
+          var obj = {};
+          obj.sku = gn;
           if (o) {
-            var obj = {};
-            obj.sku = gn;
             obj.negoprice = StringUtil.setPrice(o.price);
-            if (o.productid && o.productid.price) {
-              obj.price = StringUtil.setPrice(o.productid.price);
-            } else {
-              obj.price = StringUtil.setPrice(o.productid.price);
-            }
-            prices.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: prices});
-            }
           } else {
-            var obj = {};
-            obj.sku = gn;
             obj.negoprice = StringUtil.setPrice(0);
+          }
+          if (o && o.productid && o.productid.price) {
+            obj.price = StringUtil.setPrice(o.productid.price);
+          } else {
             obj.price = StringUtil.setPrice(0);
-            prices.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: prices});
-            }
+          }
+          prices.push(obj);
+          i++;
+          if (i == skus.length) {
+            return res.json({code: 0, msg: 'success', data: prices});
           }
         });
       });
@@ -351,28 +336,17 @@ module.exports = {
           select: ['id', 'gn', 'stock'],
           where: {gn: gn}
         }).exec(function (e, o) {
-          if (o) {
-            var obj = {};
-            obj.sku = gn;
-            if (o.stock > 0) {
-              obj.stock = '有货';
-            } else {
-              obj.stock = '无货';
-            }
-            stocks.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: stocks});
-            }
+          var obj = {};
+          obj.sku = gn;
+          if (o && o.stock > 0) {
+            obj.stock = '有货';
           } else {
-            var obj = {};
-            obj.sku = gn;
             obj.stock = '无货';
-            stocks.push(obj);
-            i++;
-            if (i == skus.length) {
-              return res.json({code: 0, msg: 'success', data: stocks});
-            }
+          }
+          stocks.push(obj);
+          i++;
+          if (i == skus.length) {
+            return res.json({code: 0, msg: 'success', data: stocks});
           }
         });
       });
