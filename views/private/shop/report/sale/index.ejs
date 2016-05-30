@@ -46,6 +46,9 @@ canvas{
   <button class="btn btn-default  navbar-btn" onclick="thisDay()">今日</button>
   <button class="btn btn-default  navbar-btn" onclick="lastWeek()">上周</button>
   <button class="btn btn-default  navbar-btn" onclick="thisWeek()">本周</button>
+  <div class="pull-right">
+    <a class="btn btn-primary navbar-btn" id="export" href="/private/shop/report/Sale/export" data-pjax><i class="ti-plus"></i> 导出</a>
+  </div>
   <!-- <div class="pull-right">
   <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
   class="fa fa-sliders"></i> 筛选
@@ -218,4 +221,11 @@ canvas{
       $('#endDayPick').val(endDay);
       initChart();
     }
+
+    $('#export').bind('click',function(e){
+      var tmpHref = $(this).attr('href');
+      var beginDay = $('#beginDate').val();
+      var endDay = $('#endDate').val();
+      $(this).attr('href',tmpHref+"?beginDay="+beginDay+"&endDay="+endDay);     
+    });
   </script>

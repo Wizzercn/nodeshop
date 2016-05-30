@@ -230,6 +230,7 @@
       <tr class="delivery_taba">
         <td width="120">商品编号</td>
         <td width="360">商品名称</td>
+        <td>规格</td>
         <td>单价</td>
         <td>数量</td>
         <td>小计</td>
@@ -239,6 +240,7 @@
       <tr>
         <td><%= o.gn||'' %>
         <td class="delivery_name"><p><%= o.name||'' %></p></td>
+        <td><p><%= o.spec||'' %></p></td>
         <td>&yen;<%= StringUtil.setPrice(o.price)||'0.00' %></td>
         <td><%= o.num||'' %></td>
         <td>&yen;<%= StringUtil.setPrice(o.amount)||'0.00' %></td>

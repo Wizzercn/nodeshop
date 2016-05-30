@@ -87,6 +87,10 @@ module.exports = {
       type: 'string',
       size: 100
     },
+    payAt:{
+      type: 'integer',
+      index: true
+    },
     //发货状态 0未发货 1已发货 2部分发货
     shipStatus: {
       type: 'integer',

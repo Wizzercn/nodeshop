@@ -52,11 +52,14 @@
             <tr style="height: 30px;">
               <td width="20%" align="right">发货方式：</td>
               <td width="30%" align="left">
+              物流发货
               <select id="shiptypeId" name="shiptypeId">
                 <%if(obj.ship){obj.ship.forEach(function(o){%>
                   <option value ="<%=o.id%>"><%=o.name%></option>
                 <%});}%>
               </select>
+              商家发货
+              <input type="checkbox" id="shopShip" name="shopShip">
             </td>  <td width="20%" align="right">物流单号：</td>
                 <td width="30%" align="left">
                   <input id="shiptypeNo" type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
@@ -104,11 +107,24 @@
   </div>
     <!--</form>-->
 <script>
+var shopShip = false;
 $('.order-chk').bind('change',function(e){
   $(this).parent().parent().toggleClass('order-item-select');
 });
 $('.order-item').bind('click',function(e){
   $(this).find('.order-chk').click();
+});
+$('#shopShip').bind('click',function(e){
+
+  console.log($(this));
+  if (this.checked==true) {
+    $('#shiptypeId').attr("disabled","disabled");
+    shopShip = true;
+  }else {
+      $('#shiptypeId').removeAttr("disabled");
+      shopShip = false;
+  }
+
 });
 $('#send').on('click',function(e){
   var ids = [];
@@ -118,7 +134,7 @@ $('#send').on('click',function(e){
   var shiptypeId = $('#shiptypeId').val();
   var shiptypeNo = $('#shiptypeNo').val();
 
-  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo}, function (data) {
+  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
     console.log(data);
     if (data.code == 0) {
       console.log(data);

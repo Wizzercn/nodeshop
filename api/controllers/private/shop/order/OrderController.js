@@ -144,13 +144,20 @@ module.exports = {
     });
   },
   doSend: function (req, res) {
-    if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
-    if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
+    console.log(req.body);
+    if(!req.body.shopShip){
+      if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
+      if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
+    }
 
     var shiptypeId =  req.body.shiptypeId;
     var shiptypeNo = req.body.shiptypeNo;
     var orderList = req.body.orderlist;
     var i = 0;
+    if(req.body.shopShip){
+      var shiptypeId =  -1;
+      var shiptypeNo = "'商家自发货'";
+    }
     orderList.forEach(function (orderId) {
       var ssql = 'update Shop_order o,Shop_order_goods og ';
       ssql = ssql + 'set o.shipStatus=1,o.shiptypeId=' + shiptypeId;
