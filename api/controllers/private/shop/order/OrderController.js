@@ -274,6 +274,7 @@ module.exports = {
       refund_log(order,'pay_money','余额支付','退款到账户余额:￥');
       upd_pay_status(order,'3');
       order_log(order,'ok');
+      return res.json({code:0});
     };
 
     //现金
@@ -282,6 +283,7 @@ module.exports = {
       refund_log(order,'pay_cash','货到付款','货到付款退款:￥');
       upd_pay_status(order,'3');
       order_log(order,'ok');
+      return res.json({code:0});
     };
 
     //微信
@@ -305,6 +307,7 @@ module.exports = {
               refund_log(order,'pay_wxpay','微信支付',result.refund_id);
               upd_pay_status(order,'3');
               order_log(order,'ok');
+              return res.json({code:0});
             }else {
               return res.json({msg:'微信退款失败，请手动处理'});
             }
@@ -326,6 +329,7 @@ module.exports = {
             detail_data: detailData
           };
           var result = alipay.refund_fastpay_by_platform_pwd(data, res);
+          return res.json({code: 'alipay', msg: result});
         });
       });
     };
@@ -363,7 +367,6 @@ module.exports = {
             return res.json({msg: '退款失败!'});
           }
         }
-        return res.json({code:0});
       }
     });
   },

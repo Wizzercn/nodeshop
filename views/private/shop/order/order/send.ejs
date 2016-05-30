@@ -68,10 +68,11 @@
           <div style="float:left">
           <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="" value="<%=obj.id%>"><%=obj.id%>
         </div>
-          <table width="80%" style="padding: 10px;margin-left: 25px;">
+          <table width="80%" style="padding: 10px;margin-left: 25px;margin-top: 30px;">
             <thead>
               <tr>
-                <td width="50%" align="center">商品名称</td>
+                <td width="30%" align="center">商品名称</td>
+                <td width="20%" align="center">规格</td>
                 <td width="20%" align="center">单价</td>
                 <!-- <td width="10%" align="center">数量</td> -->
                 <td width="30%" align="center">订单数量</td>
@@ -80,7 +81,8 @@
             <tbody>
               <%if(obj.goods){obj.goods.forEach(function(o){%>
                 <tr>
-                  <td width="50%" align="left"><%=o.name||''%></td>
+                  <td width="30%" align="left"><%=o.name||''%></td>
+                  <td width="20%" align="center"><%=o.spec||''%></td>
                   <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
                   <!-- <td width="10%" align="center">
                     <input type="number" name="num" min="0" max="<%=o.num||0%>" value="<%=o.num||''%>" style="width:50px">
