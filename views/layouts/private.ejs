@@ -108,9 +108,10 @@
 
 
       <a href="/sysadmin/home"  data-pjax class="navbar-brand">
-        <img src="/img/logo.png" alt="">
-                <span class="heading-font">
-                <%= sails.config.system.AppShrotName||'' %>
+        <img src="/img/logo.png" alt="" class="o_img o_hide">
+                <span class="heading-font o_img">
+		            <img src="/img/logoa.png">
+                <!--<%= sails.config.system.AppShrotName||'' %>-->
                 </span>
       </a>
 
@@ -367,6 +368,9 @@
     }
     $('#homeDetail').on('hidden.bs.modal',function(){
       $(this).removeData("bs.modal");
+    });
+    $(".toggle-sidebar").click(function(){
+      $(".o_img").toggleClass("o_hide");
     });
   });
 
