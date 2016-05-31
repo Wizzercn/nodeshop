@@ -1,7 +1,7 @@
 /**
- * 支付宝支付异步通知处理
- * Created by root on 3/22/16.
- */
+* 支付宝支付异步通知处理
+* Created by root on 3/22/16.
+*/
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
@@ -93,10 +93,10 @@ module.exports = {
                             }).exec(function (e5, o5) {
                               if (e2 || e3 || e4 || e5) {
                                 /*订单日志表
-                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                                 opType:admin,member
-                                 opResult:ok,fail
-                                 */
+                                opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                opType:admin,member
+                                opResult:ok,fail
+                                */
                                 Shop_order_log.create({
                                   orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
                                   opId: order.memberId,
@@ -108,10 +108,10 @@ module.exports = {
                                 return res.send("fail");
                               } else {
                                 /*订单日志表
-                                 opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-                                 opType:admin,member
-                                 opResult:ok,fail
-                                 */
+                                opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+                                opType:admin,member
+                                opResult:ok,fail
+                                */
                                 Shop_order_log.create({
                                   orderId: order.id, opTag: 'payment', opContent: '订单付款:支付宝支付', opType: 'member',
                                   opId: order.memberId,
@@ -157,5 +157,139 @@ module.exports = {
         });
       }
     });
+  },
+  aliNotify: function(req, res){
+    AlipayService.init_refund(function (err, alipay) {
+      if (err) {
+        return res.send("fail");
+      } else {
+        alipay.refund_fastpay_by_platform_pwd_notify(req, function (verify_result) {
+          sails.log.debug('verify_result::' + verify_result);
+          sails.log.debug('req.body::' + JSON.stringify(req.body));
+          if (verify_result && req.body.seller_id == alipay.alipay_config.partner) {//验证成功
+            var result_details = verify_result.result_details.split('^');
+            if (result_details[2]=='SUCCESS'){
+              Shop_history_refunds.count({trade_no: result_details[0]}).exec(function (err, count) {
+                if (!err && count > 0) {
+                  return res.send("success");
+                }else {
+                  shop_history_payments.findOne({trade_no: result_details[0]}).exec(function (e1,payment){
+                    sails.log.debug(payment);
+                    Shop_history_refunds.create({
+                      orderId: payment.orderId,
+                      memberId: payment.memberId,
+                      money: payment.money,
+                      payType: payment.payType,
+                      payName: payment.payType,
+                      payAccount: payment.payType,
+                      payIp: req.ip,
+                      payAt: moment().format('X'),
+                      memo: '支付宝退款：￥' + StringUtil.setPrice(result_details[1]),
+                      finishAt: moment().format('X'),
+                      disabled: false
+                    }).exec(function (e3, o3) {
+                      return res.send("success");
+                    });
+                  });
+                }
+              });
+            }else {
+              return res.send("fail");
+            }
+          }
+        });
+      }
+    });
+  },
+  aliRefund:function(req,res){
+    sails.log.debug(req.body);
+    var upd_pay_status = function(order,payStatus){
+      Shop_order.update({id: order.id}, {
+        payStatus: payStatus,
+        updateAt: moment().format('X')
+      }).exec(function (e, o) {});
+    };
+
+    //更新库存
+    var upd_stock = function(order){
+      Shop_order_goods.find({orderId: order.id}).exec(function (orderErr, orderGoogs) {
+        var i = 0;
+        orderGoogs.forEach(function (goodsObj) {
+          var ssql = "UPDATE shop_goods_products SET stock=stock+"+StringUtil.getInt(goodsObj.num);
+          ssql += " WHERE goodsId="+goodsObj.goodsId+" and id="+goodsObj.productId;
+          Shop_goods_products.query(ssql, function (e, o) {});
+        });
+      });
+    };
+
+    var upd_score = function(order){
+      Shop_member.update(order.memberId.id, {
+        score: order.memberId.score - order.score
+      }).exec(function (e4, o4) {
+        Shop_member_score_log.create({
+          memberId: order.memberId.id,
+          orderId: order.id,
+          oldScore: order.memberId.score,
+          newScore: order.memberId.score - order.score,
+          diffScore: order.score,
+          note: '取消订单:' + order.id,
+          createdBy: 0,
+          createdAt: moment().format('X')
+        }).exec(function (err, obj) { });
+      });
+    };
+
+    var order_log = function (order,result) {
+      Shop_order_log.create({
+        orderId: order.id,
+        opTag: 'cancel',
+        opContent: '取消订单',
+        opType: 'admin',
+        opId: '0',
+        opNickname: order.memberId.nickname,
+        opAt: moment().format('X'),
+        opResult: result
+      }).exec(function (e, obj) {});
+    };
+
+    //退款操作日志
+    var refund_log = function(order,vPayType,vPayName,vMemo){
+      Shop_history_refunds.create({
+        orderId: order.id,
+        memberId: order.memberId.id,
+        money: order.finishAmount,
+        payType: vPayType,
+        payName: vPayName,
+        payAccount: order.memberId.nickname,
+        payIp: req.ip,
+        payAt: moment().format('X'),
+        memo: vMemo + StringUtil.setPrice(order.finishAmount),
+        finishAt: moment().format('X'),
+        disabled: false
+      }).exec(function (e3, o3) { });
+    };
+
+    var result_details = req.body.result_details.split("^");
+    if (result_details[2]=='SUCCESS') {
+      Shop_history_refunds.count({trade_no: result_details[0]}).exec(function (err, count) {
+        if (!err && count > 0) {
+          return res.send("success");
+        }else {
+          Shop_history_payments.findOne({trade_no: result_details[0]}).exec(function (e1,payment){
+            sails.log.debug(payment);
+
+            Shop_order.findOne(payment.orderId)
+            .populate('memberId')
+            .exec(function (e, order) {
+              upd_score(order);
+              refund_log(order,'pay_alipay','支付宝退款',result_details[1]+":"+result_details[0]);
+              upd_pay_status(order,'3');
+              order_log(order,'ok');
+              return res.send("success");
+            });
+          });
+        }
+      });
+    }
   }
 };

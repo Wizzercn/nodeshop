@@ -3,12 +3,13 @@
 */
 var moment = require('moment');
 var StringUtil = require('../../../../common/StringUtil');
+var exportExcel = require('excel-export');
 module.exports = {
   index: function (req, res) {
 
-      req.data.moment = moment;
-      req.data.StringUtil = StringUtil;
-      return res.view('private/shop/report/sale/index', req.data);
+    req.data.moment = moment;
+    req.data.StringUtil = StringUtil;
+    return res.view('private/shop/report/sale/index', req.data);
   },
   saleDate: function (req,res) {
     var beginDay = req.body.beginDay?moment(req.body.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
@@ -46,46 +47,109 @@ module.exports = {
       return res.json(data);
     });
   },
-  data: function (req,res) {
-    var pageSize = parseInt(req.body.length);
-    var start = parseInt(req.body.start);
-    var page = start / pageSize + 1;
-    var draw = parseInt(req.body.draw);
-    var order = req.body.order || [];
-    var columns = req.body.columns || [];
-    var sort = {};
-    var where = {};
-    var status = req.body.status||'0';
-    if(req.body.id){
-      where.id = req.body.id;
-    }
-    // var where = {shipStatus:orderStatus};
-    if (order.length > 0) {
-      sort[columns[order[0].column].data] = order[0].dir;
-    }
-    Shop_order.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        Shop_order.find(where)
-        .sort(sort)
-        .sort('createdAt desc')
-        .paginate({page: page, limit: pageSize})
-        .exec(function (err, list) {
-          return res.json({
-            "draw": draw,
-            "recordsTotal": pageSize,
-            "recordsFiltered": count,
-            "data": list
-          });
-        });
-      } else {
-        return res.json({
-          "draw": draw,
-          "recordsTotal": pageSize,
-          "recordsFiltered": 0,
-          "data": []
-        });
+  export:function(req,res){
+    var conf ={};
+    // uncomment it for style example
+    // conf.stylesXmlFile = "styles.xml";
+    conf.cols = [
+    {
+      caption:'订单号',
+      captionStyleIndex: 1,
+      type:'string',
+      beforeCellWrite:function(row, cellData){
+        return cellData.toUpperCase();
       }
+      , width:15
+    },{
+      caption:'用户名',
+      type:'string',
+      width:20.85
+    },{
+      caption:'下单时间',
+      type:'string',
+      width:20.85
+    },{
+      caption:'订单状态',
+      type:'string',
+      width:20.85
+    },{
+      caption:'订单金额',
+      type:'string',
+      width:20.85
+    },{
+      caption:'支付方式',
+      type:'string',
+      width:20.85
+    },{
+      caption:'支付时间',
+      type:'string',
+      width:20.85
+    },{
+      caption:'商品总额',
+      type:'string',
+      width:20.85
+    },{
+      caption:'运费',
+      type:'string',
+      width:20.85
+    },{
+      caption:'收货人',
+      type:'string',
+      width:20.85
+    },{
+      caption:'收货人手机',
+      type:'string',
+      width:20.85
+    },{
+      caption:'收货地址',
+      type:'string',
+      width:20.85
+    },{
+      caption:'备注',
+      type:'string',
+      width:20.85
+    }];
+    conf.rows = [
+      // ['1', 001, true, 3],
+      // ["2", 002, false, 215163],
+      // ["3", 003, false, 148]
+    ];
+    var beginDay = req.query.beginDay?moment(req.query.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
+    var endDay = req.query.endDay?moment(req.query.endDay).format('X'):endDay = moment().format('X');
+    Shop_order.find({
+      disabled:0,
+      status:{'!':'dead'},
+      payStatus:1,
+      payAt:{'>=':beginDay},
+      payAt:{'<=':endDay}
+    }).populate('memberId')
+    .exec(function(err,obj){
+      console.log(err);
+      obj.forEach(function (orderId) {
+        conf.rows.push(
+          [
+              row.id,
+              row.memberId.nickname || '',
+              row.createdAt,
+              row.status,
+              row.finishAmount,
+              row.payType,
+              row.payAt,
+              row.goodsAmount,
+              row.freightAmount,
+              row.addrName,
+              row.addrAddr,
+              row.memo
+          ]
+        );
+      });
+      var result = exportExcel.execute(conf);
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+      res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+      res.end(result, 'binary');
     });
 
-}
+
+
+  }
 };

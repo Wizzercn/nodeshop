@@ -126,8 +126,8 @@ Alipay.prototype.refund_fastpay_by_platform_pwd = function(data, res){
 
     _input_charset	: this.alipay_config['input_charset'].toLowerCase().trim()
   };
-
   var html_text = alipaySubmit.buildRequestForm(parameter,"get", "确认");
+  sails.log.debug(html_text);
   return html_text;
   // return res.send(html_text);
 };
