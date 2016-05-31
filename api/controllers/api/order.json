@@ -1,0 +1,51 @@
+/**
+ * @api {POST} /api/order/create 01.Create
+ * @apiName Create
+ * @apiGroup Order
+ * @apiVersion 1.0.0
+ * @apiDescription 创建订单
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {Object[]} products 商品列表
+ * @apiParam {string} products.sku 商品sku
+ * @apiParam {string} products.num 商品数量
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/order/create
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+        "products": [
+          {
+            "sku": "P1605000006",
+            "num": 1
+          },
+          {
+            "sku": "P1605000010-1",
+            "num": 2
+          }
+        ]
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {string} orderId 创建订单号
+ * @apiSuccess (成功) {string} amount 订单金额
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code"   : 0,
+ *     "msg"    : "success",
+ *     "orderId": "160429174146508",
+ *     "amount" : "6899.04"
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code" : 1
+ *     "msg"  : "err::"
+ *   }
+ */

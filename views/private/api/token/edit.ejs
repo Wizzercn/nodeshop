@@ -16,6 +16,13 @@
               </td>
             </tr>
             <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>绑定会员</td>
+              <td width="70%" align="left">
+                <input type="text" id="member" value="<%=obj.memberId.id||''%>" name="" class="control-group" style="width: 200px;" maxlength="50">
+                <!-- <input type="button" onclick="getSecret()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成"> -->
+              </td>
+            </tr>
+            <tr style="height: 30px;">
               <td width="30%" align="right"><span style="color: red">*</span>client_id：</td>
               <td width="70%" align="left">
                 <input type="text" id="client_id"  value="<%=obj.client_id||''%>" class="control-group" style="width: 200px;" maxlength="20">
@@ -66,6 +73,7 @@
     $.post("/private/api/token/editDo", {
       id:<%=obj.id||0%>,
       name:$("#name").val(),
+      memberId:$("#member").val(),
       client_id:$("#client_id").val(),
       client_secret:$("#client_secret").val()
     }, function (data) {

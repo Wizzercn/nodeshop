@@ -16,6 +16,9 @@ module.exports = {
     name:{
       type: 'string'
     },
+    memberId:{
+      model: 'Shop_member'
+    },
     client_id: {
       type: 'string',
       unique: true,
