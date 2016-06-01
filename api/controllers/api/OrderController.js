@@ -7,7 +7,7 @@ var jwt = require('jwt-simple');
 
 module.exports = {
   create: function (req, res) {
-    if(req.body.products.length>=100){
+    if(req.body.products.length>100){
       return res.json({code: 900, msg: 'err:good count more than 100' });
     }
     var ShopConfig = sails.config.system.ShopConfig;
@@ -55,6 +55,10 @@ module.exports = {
           .populate('goodsid')
           .populate('productid')
           .exec(function(err,obj){
+            if(!obj){
+                var err = {orderId:orderId,sku:o.sku };
+                return cb(911,err);            
+            }
             var goods = {};
             goods.orderId = orderId;
             goods.goodsId = obj.productid.goodsid;
@@ -83,6 +87,7 @@ module.exports = {
                 });
               }
             });
+
           });
         });
       },
@@ -133,7 +138,15 @@ module.exports = {
       }
     ],function(err, order) {
       if(err){
-        return res.json({code: 1, msg: 'err:' +err});
+        switch (err) {
+          case 911:
+            Shop_order_goods.destroy({orderId:order.orderId}).exec(function(err,obj){
+              return res.json({code: 911, msg: 'err:SKU not exists::'+order.sku});
+            });
+            break;
+          default:
+          return res.json({code: 1, msg: 'err:' +err});
+        }
       }
       return res.json({code: 0, msg: 'success', data: {orderId:order.id}});
     }
@@ -149,6 +162,7 @@ price:function(req,res){
     .populate('goodsid')
     .populate('productid')
     .exec(function(err,obj){
+      if (obj) {
       allPrice += o.num * obj.price;
       weight += o.num * obj.productid.weight;
       i++;
@@ -167,6 +181,9 @@ price:function(req,res){
         }
         return res.json({code: 0, msg: 'success', data: {goodsAmount:allPrice,freightAmount:yunMoney}});
       }
+    }else {
+        return res.json({code: 911, msg: 'err:SKU not exists::'+o.sku});
+    }
     });
   });
 },

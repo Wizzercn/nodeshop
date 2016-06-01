@@ -136,6 +136,7 @@ module.exports = {
               row.goodsAmount+'',
               row.freightAmount+'',
               row.addrName,
+              row.addrMobile,
               row.addrAddr,
               row.memo|| '无'
           ]
