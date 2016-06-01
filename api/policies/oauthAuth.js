@@ -11,10 +11,8 @@ module.exports = function (req, res, next) {
       if (decoded.exp <= Date.now()) {
         // Api_token.findOne({client_id})
 
-        console.log(decoded);
         return res.json({code:1,msg:'token has expired'});
       }
-      console.log(decoded);
       req.appid = decoded.iss;
       return next()
     } catch (err) {

@@ -54,12 +54,8 @@ module.exports = {
     conf.cols = [
     {
       caption:'订单号',
-      captionStyleIndex: 1,
       type:'string',
-      beforeCellWrite:function(row, cellData){
-        return cellData.toUpperCase();
-      }
-      , width:15
+      width:15
     },{
       caption:'用户名',
       type:'string',
@@ -120,36 +116,40 @@ module.exports = {
       disabled:0,
       status:{'!':'dead'},
       payStatus:1,
-      payAt:{'>=':beginDay},
-      payAt:{'<=':endDay}
+      payAt:{'>=':beginDay,'<=':endDay},
     }).populate('memberId')
     .exec(function(err,obj){
-      console.log(err);
-      obj.forEach(function (orderId) {
+      var i = 1;
+      obj.forEach(function (row) {
+        if(!row.memberId){
+          row.memberId={};
+        }
         conf.rows.push(
           [
               row.id,
               row.memberId.nickname || '',
-              row.createdAt,
+              moment.unix(row.createdAt).format("YYYY-MM-DD HH:mm:ss"),
               row.status,
-              row.finishAmount,
+              row.finishAmount+'',
               row.payType,
-              row.payAt,
-              row.goodsAmount,
-              row.freightAmount,
+              moment.unix(row.payAt).format("YYYY-MM-DD HH:mm:ss"),
+              row.goodsAmount+'',
+              row.freightAmount+'',
               row.addrName,
               row.addrAddr,
-              row.memo
+              row.memo|| '无'
           ]
         );
+
+        if (i == obj.length){
+          console.log(conf);
+          var result = exportExcel.execute(conf);
+          res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+          res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+          res.end(result, 'binary');
+        }
+        i++;
       });
-      var result = exportExcel.execute(conf);
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-      res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
-      res.end(result, 'binary');
     });
-
-
-
   }
 };

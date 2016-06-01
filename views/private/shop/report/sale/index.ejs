@@ -117,7 +117,7 @@ canvas{
         if(saleDate.countOrder==0){
           $('#custPrice').html('&yen;'+ (0.00));
         }else {
-          $('#custPrice').html('&yen;'+ (saleDate.payment/saleDate.countOrder));
+          $('#custPrice').html('&yen;'+ (saleDate.payment/saleDate.countOrder).toFixed(2));
         }
         var config = {
           type: 'line',
@@ -226,6 +226,6 @@ canvas{
       var tmpHref = $(this).attr('href');
       var beginDay = $('#beginDate').val();
       var endDay = $('#endDate').val();
-      $(this).attr('href',tmpHref+"?beginDay="+beginDay+"&endDay="+endDay);     
+      $(this).attr('href',tmpHref+"?beginDay="+beginDay+"&endDay="+endDay);
     });
   </script>
