@@ -226,7 +226,7 @@ module.exports = {
     //订单来源
     source: {
       type: 'string',
-      enum: ['pc', 'wap', 'weixin'],
+      enum: ['pc', 'wap', 'weixin','api'],
       size: 10
     },
     //删除订单

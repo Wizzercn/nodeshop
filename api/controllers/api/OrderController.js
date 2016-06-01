@@ -1,26 +1,42 @@
 /**
- * Created by wizzer on 2016/5/23.
- */
+* Created by wizzer on 2016/5/23.
+*/
 var StringUtil = require('../../common/StringUtil');
 var moment = require('moment');
 var jwt = require('jwt-simple');
 
 module.exports = {
   create: function (req, res) {
-    sails.log.debug(req.appid);
+    if(req.body.products.length>=100){
+      return res.json({code: 900, msg: 'err:good count more than 100' });
+    }
     var ShopConfig = sails.config.system.ShopConfig;
-    var member = req.appid;
+    var member = '';
     var list = req.body.list || [];
-    var addrId = req.body.addrId || '0';
-    var payType = req.body.payType || '';
+    var addrId = '0';
+    var payType = 'pay_cash';
     var receivedTime = req.body.receivedTime || '0';
-    var couponId = req.body.couponId || '0';
     var memo = req.body.memo || '';
     var fapiao = req.body.fapiao || {};
     async.waterfall([
       function (cb) {
+        Api_token.findOne({id:req.appid}).exec(function (err,obj) {
+          if(obj){
+            member = obj.memberId;
+            return cb(null);
+          }else {
+            return res.json({code: 901, msg: 'err:unknow member' });
+          }
+        });
+      },
+      function (cb) {
         Shop_member_addr.findOne({memberId:member}).exec(function(err,obj){
-          addrId = obj.id;
+
+          if(obj){
+            addrId = obj.id;
+          }else {
+            return res.json({code: 902, msg: 'err:no address'});
+          }
           return cb(null);
         });
       },
@@ -30,99 +46,149 @@ module.exports = {
         });
       },
       function (orderId, cb) {
-          var allPrice = 0;
-          var count = 0;
-          var weight = 0;
-          var i = 0;
-          Shop_member.findOne(member).exec(function (mmbErr, mmb) {
-            Shop_member_lv.findOne(mmb.lv_id).exec(function (elv, olv) {
-              //计算会员价
-              var lv = {member_lv: olv || {}};
-              list.forEach(function (obj) {
-                Shop_goods_products.findOne({
-                  select: ['id', 'name', 'gn', 'spec', 'price', 'stock', 'buyMin', 'buyMax', 'weight', 'goodsid'],
-                  where: {disabled: false, id: obj.productId, goodsid: obj.goodsId}
-                }).populate('goodsid', {
-                  select: ['id', 'imgurl']
-                }).exec(function (e, o) {
-                  if (o) {
-                    var goods = {};
-                    goods.orderId = orderId;
-                    goods.goodsId = obj.goodsId;
-                    goods.productId = obj.productId;
-                    goods.num = StringUtil.getInt(obj.num);
-                    goods.name = o.name;
-                    goods.gn = o.gn;
-                    goods.name = o.name;
-                    goods.spec = o.spec;
-                    goods.gprice = o.price;
-                    goods.price = o.price;
-                    goods.weight = o.weight;
-                    goods.imgurl = o.goodsid.imgurl;
-                    if (goods.num > o.stock) {
-                      cb({code: 3, msg: o.name}, null);
-                    }
-                    if (o.buyMin > 0 && goods.num < o.buyMin) {
-                      cb({code: 4, msg: o.name, num: o.buyMin}, null);
-                    }
-                    if (o.buyMax > 0 && goods.num > o.buyMax) {
-                      cb({code: 5, msg: o.name, num: o.buyMax}, null);
-                    }
-                    Shop_goods_lv_price.findOne({
-                      lvid: mmb.lv_id,
-                      productId: obj.productId,
-                      goodsid: obj.goodsId
-                    }).exec(function (es, os) {
-                      lv.product_lv = os || {};
-                      var hyprice = o.price;
-                      if (lv && lv.member_lv && lv.member_lv.disabled == false) {
-                        if (lv.product_lv && lv.product_lv.price > 0) {
-                          hyprice = lv.product_lv.price;
-                        } else {
-                          hyprice = o.price > 100 ? Math.ceil(o.price * lv.member_lv.dis_count / 100) : o.price;
-
-                        }
-                        goods.price = hyprice;
-                      }
-                      //...
-                      count += goods.num;
-                      allPrice += goods.num * goods.price;
-                      weight += goods.num * goods.weight;
-                      goods.amount = goods.num * goods.price;
-                      goods.score = Math.floor(goods.amount / 100);
-                      Shop_order_goods.create(goods).exec(function (err1, obj1) {
-
-                      });
-                      i++;
-                      if (i == list.length) {
-                        return cb(null, {
-                          id: orderId,
-                          memberId: member.memberId,
-                          goodsAmount: allPrice,
-                          weight: weight
-                        });
-                      }
-                    });
-                  } else {
-                    return cb(null, {
-                      id: orderId,
-                      memberId: member.memberId,
-                      goodsAmount: allPrice,
-                      weight: weight
-                    });
-                  }
+        var allPrice = 0;
+        var count = 0;
+        var weight = 0;
+        var i = 0;
+        req.body.products.forEach(function(o){
+          Api_basket_products.findOne({appid:req.appid,sku:o.sku})
+          .populate('goodsid')
+          .populate('productid')
+          .exec(function(err,obj){
+            var goods = {};
+            goods.orderId = orderId;
+            goods.goodsId = obj.productid.goodsid;
+            goods.productId = obj.productid.id;
+            goods.num = o.num;
+            goods.name = obj.productid.name;
+            goods.gn = obj.productid.gn;
+            goods.spec = obj.productid.spec;
+            goods.gprice = obj.productid.price;
+            goods.price = obj.price;
+            goods.weight = obj.productid.weight;
+            goods.imgurl = obj.goodsid.imgurl;
+            goods.amount = goods.num * goods.price;
+            goods.score = Math.floor(goods.amount / 100);
+            Shop_order_goods.create(goods).exec(function (err1, obj1) {
+              count += goods.num;
+              allPrice += goods.num * goods.price;
+              weight += goods.num * goods.weight;
+              i++;
+              if (i >= req.body.products.length) {
+                return cb(null, {
+                  id: orderId,
+                  memberId: member,
+                  goodsAmount: allPrice,
+                  weight: weight
                 });
-              });
+              }
             });
           });
-        },
-
+        });
+      },
+      function (order, cb) {
+        Shop_member_addr.findOne(addrId).exec(function (e, o) {
+          order.addrId = addrId || 0;
+          order.addrProvince = o.province || '';
+          order.addrCity = o.city || '';
+          order.addrArea = o.area || '';
+          order.addrName = o.name || '';
+          order.addrMobile = o.mobile || '';
+          order.addrAddr = o.addr || '';
+          order.taxType = StringUtil.getInt(fapiao.taxType) || 0;
+          order.taxNo = fapiao.taxNo || '';
+          order.taxTitle = fapiao.taxTitle || '';
+          order.taxCentent = fapiao.taxCentent || '';
+          return cb(null, order);
+        });
+      },
+      function (order, cb) {
+        var yunMoney = 0;
+        if (ShopConfig.freight_disabled == false && order.goodsAmount > 0) {
+          if (ShopConfig.freight_type == 'price') {
+            if (order.goodsAmount < ShopConfig.freight_num * 100) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          } else if (ShopConfig.freight_type == 'weight') {
+            if (order.weight >= ShopConfig.freight_num) {
+              yunMoney = Math.ceil(order.weight / ShopConfig.freight_num) * ShopConfig.freight_price * 100;
+            }
+          }
+        }
+        order.freightAmount = yunMoney;
+        return cb(null, order);
+      },
+      function (order, cb) {
+        order.finishAmount = order.goodsAmount + order.freightAmount;
+        order.memo = memo;
+        order.source = 'api';
+        order.createdIp = StringUtil.getIp(req);
+        order.status = 'active';//['active','dead','finish']
+        order.payStatus = 0;
+        order.payType = payType;
+        order.receivedTime = receivedTime;
+        Shop_order.create(order).exec(function (e, o) {
+          return cb(e, order);
+        });
+      }
     ],function(err, order) {
       if(err){
         return res.json({code: 1, msg: 'err:' +err});
       }
-      return res.json({code: 1, msg: 'err:' +err});
+      return res.json({code: 0, msg: 'success', data: {orderId:order.id}});
     }
-    );
-  }
+  );
+},
+price:function(req,res){
+  var allPrice = 0;
+  var weight = 0;
+  var i = 0;
+  var ShopConfig = sails.config.system.ShopConfig;
+  req.body.products.forEach(function(o){
+    Api_basket_products.findOne({appid:req.appid,sku:o.sku})
+    .populate('goodsid')
+    .populate('productid')
+    .exec(function(err,obj){
+      allPrice += o.num * obj.price;
+      weight += o.num * obj.productid.weight;
+      i++;
+      if (i >= req.body.products.length) {
+        var yunMoney = 0;
+        if (ShopConfig.freight_disabled == false && allPrice > 0) {
+          if (ShopConfig.freight_type == 'price') {
+            if (allPrice < ShopConfig.freight_num * 100) {
+              yunMoney = ShopConfig.freight_price * 100;
+            }
+          } else if (ShopConfig.freight_type == 'weight') {
+            if (weight >= ShopConfig.freight_num) {
+              yunMoney = Math.ceil(weight / ShopConfig.freight_num) * ShopConfig.freight_price * 100;
+            }
+          }
+        }
+        return res.json({code: 0, msg: 'success', data: {goodsAmount:allPrice,freightAmount:yunMoney}});
+      }
+    });
+  });
+},
+status:function(req,res){
+  Api_token.findOne({id:req.appid})
+  .exec(function(err,t){
+
+    Shop_order.findOne({
+      id:req.body.orderId,
+      memberId:t.memberId
+    })
+    .exec(function (err,obj) {
+      if(obj){
+        var data ={};
+        data.orderId = obj.id;
+        data.status = obj.status;
+        data.shipStatus = obj.shipStatus;
+        return res.json({code: 0, msg: 'success', data: data});
+      }else {
+        return res.json({code: 910, msg: 'err::order not exists'});
+      }
+    });
+  });
+}
 }

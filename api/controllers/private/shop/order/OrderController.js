@@ -154,7 +154,7 @@ module.exports = {
     var shiptypeNo = req.body.shiptypeNo;
     var orderList = req.body.orderlist;
     var i = 0;
-    if(req.body.shopShip){
+    if(req.body.shopShip==true){
       var shiptypeId =  -1;
       var shiptypeNo = "'商家自发货'";
     }

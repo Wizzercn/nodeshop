@@ -2,6 +2,7 @@
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/api/token/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加授信</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <!-- <button class="btn btn-danger navbar-btn" onclick="testCheck()"><i class="ti-close"></i>测试</button> -->
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -190,4 +191,30 @@
       $(this).removeData("bs.modal");
     });
   });
+  function testCheck(){
+
+    $.post("/api/order/price",
+    {
+      token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NDc2NDYxMTI4Nn0.LQ3E6zldvjmM54s2ljLsJepKdTVcMmQAOlZT1VL2LDA",
+      // orderId:"160601134950858"
+      products: [
+        {
+        'sku':'P1605000008',
+        'num':12
+        },
+        {
+          'sku':'P1605000007',
+          'num':13
+        }]
+
+    }
+    , function (data) {
+      console.log(data);
+      if (data.code == 0) {
+        datatable.ajax.reload(null,false);
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+}
 </script>
