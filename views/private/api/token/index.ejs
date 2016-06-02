@@ -95,7 +95,7 @@
       "columns": [
         {"data": "id", "bSortable": true},
         {"data": "name", "bSortable": true},
-        {"data": "memberId.nickname", "bSortable": true},
+        {"data": "memberId", "bSortable": true},
         {"data": "client_id", "bSortable": true},
         {"data": "client_secret", "bSortable": true},
         {"data": "disabled", "bSortable": true}
@@ -111,12 +111,16 @@
           },
           "targets": 5
         },
-        // {
-        //   "render": function (data, type, row) {
-        //     return row.nickname;
-        //   },
-        //   "targets": 2
-        // },
+        {
+          "render": function (data, type, row) {
+            if(!data){
+                    return '';
+            }else{
+              return data.nickname;
+            }
+          },
+          "targets": 2
+        },
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
