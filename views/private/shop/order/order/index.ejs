@@ -54,7 +54,7 @@
         <th>收货地址</th>
         <th>收货人</th>
         <th>联系电话</th>
-        <th>更新时间</th>
+        <th>支付时间</th>
         <th>操作</th>
       </tr>
     </table>
@@ -126,7 +126,7 @@
         {"data": "addrProvince", "bSortable": true},
         {"data": "addrName", "bSortable": true},
         {"data": "addrMobile", "bSortable": true},
-        {"data": "updateAt", "bSortable": true},
+        {"data": "payAt", "bSortable": true},
       ],
       "columnDefs": [
         {
@@ -201,7 +201,12 @@
         },
         {
           "render": function (data, type, row) {
-            return new Date(data * 1000).Format('yyyy-MM-dd hh:mm:ss');
+            if (data) {
+              return new Date(data * 1000).Format('yyyy-MM-dd hh:mm:ss');
+
+            }else {
+              return '未支付';
+            }
           },
           "targets": 9
         },
@@ -289,7 +294,6 @@
         if (data.code == 0) {
           datatable.ajax.reload(null, false);
         } else if (data.code == 'alipay') {
-          console.log(data.msg);
           var obj = window.open("about:blank");
           var refundHtml = '<html lang="zh-CN"><body>';
           refundHtml += data.msg;

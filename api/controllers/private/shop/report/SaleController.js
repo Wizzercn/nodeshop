@@ -146,6 +146,8 @@ module.exports = {
       payAt:{'>=':beginDay,'<=':endDay},
     }).populate('memberId')
     .exec(function(err,obj){
+      console.log(obj);
+      if(obj.length>0){
       var i = 1;
       obj.forEach(function (row) {
         if(!row.memberId){
@@ -168,7 +170,7 @@ module.exports = {
               row.memo|| '无'
           ]
         );
-        if (i == obj.length){
+        if (i >= obj.length){
           var result = exportExcel.execute(conf);
           var fireName = "order"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
           res.setHeader('Content-Type', 'application/vnd.openxmlformats');
@@ -177,6 +179,14 @@ module.exports = {
         }
         i++;
       });
+    }else {
+      console.log(1231111111111111111111111111111111111);
+      var result = exportExcel.execute(conf);
+      var fireName = "order"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+      res.setHeader("Content-Disposition", "attachment; filename=" + fireName);
+      res.end(result, 'binary');
+    }
     });
   },
   goodsexport:function(req,res){
@@ -218,6 +228,7 @@ module.exports = {
       ssql += " and o.payAt>=" + beginDay;
       ssql += " GROUP BY p.gn,p.name,p.spec,p.price";
       Shop_order_goods.query(ssql,function(err,obj){
+        if(obj.length>0){
         var i = 1;
         obj.forEach(function (row) {
           conf.rows.push(
@@ -231,7 +242,7 @@ module.exports = {
             ]
           );
 
-          if (i == obj.length){
+          if (i >= obj.length){
             var result = exportExcel.execute(conf);
             var fireName = "goods"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
             res.setHeader('Content-Type', 'application/vnd.openxmlformats');
@@ -240,6 +251,13 @@ module.exports = {
           }
           i++;
         });
+      }else {
+        var result = exportExcel.execute(conf);
+        var fireName = "goods"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
+        res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+        res.setHeader("Content-Disposition", "attachment; filename="+fireName);
+        res.end(result, 'binary');
+      }
       });
     }
   };

@@ -27,6 +27,6 @@ module.exports.models = {
   * See http://sailsjs.org/#!/documentation/concepts/ORM/model-settings.html  *
   *                                                                          *
   ***************************************************************************/
-   migrate: 'safe'//safe:不创建表结构  alter:无则创建有则不  drop:重新创建
+   migrate: 'alter'//safe:不创建表结构  alter:无则创建有则不  drop:重新创建
 
 };
