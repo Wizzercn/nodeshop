@@ -20,6 +20,16 @@
               </td>
             </tr>
             <tr style="height: 30px;">
+              <td width="20%" align="right">运费：</td>
+              <td width="30%" align="left">
+                  &yen;<%=StringUtil.setPrice(obj.freightAmount)||'0.00'%>
+              </td>
+              <td width="20%" align="right">折扣：</td>
+              <td width="30%" align="left">
+                &yen;<%=StringUtil.setPrice(obj.discountAmount)||'0.00'%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
               <td width="30%" align="left">
                 <%var nickname = obj.memberId?obj.memberId.nickname:'' %>

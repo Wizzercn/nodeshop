@@ -159,7 +159,7 @@ module.exports = {
           return res.json({code: 1, msg: 'err:' +err});
         }
       }
-      return res.json({code: 0, msg: 'success', data: {orderId:order.id}});
+      return res.json({code: 0, msg: 'success', data: {orderId:order.id,amount:order.finishAmount}});
     }
   );
 },

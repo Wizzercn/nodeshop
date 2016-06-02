@@ -207,7 +207,7 @@ module.exports = {
 
           if (i == obj.length){
             var result = exportExcel.execute(conf);
-            var fireName = "goods"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay)add(-1,'day').format("YYYYMMDD")+".xlsx";
+            var fireName = "goods"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
             res.setHeader('Content-Type', 'application/vnd.openxmlformats');
             res.setHeader("Content-Disposition", "attachment; filename="+fireName);
             res.end(result, 'binary');

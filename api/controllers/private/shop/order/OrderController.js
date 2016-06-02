@@ -144,8 +144,7 @@ module.exports = {
     });
   },
   doSend: function (req, res) {
-    console.log(req.body);
-    if(!req.body.shopShip){
+    if(req.body.shopShip!='true'){
       if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
       if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
     }

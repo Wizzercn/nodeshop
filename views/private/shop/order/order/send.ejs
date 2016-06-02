@@ -84,7 +84,7 @@
             <tbody>
               <%if(obj.goods){obj.goods.forEach(function(o){%>
                 <tr>
-                  <td width="30%" align="left"><%=o.name||''%></td>
+                  <td width="30%" align="center"><%=o.name||''%></td>
                   <td width="20%" align="center"><%=o.spec||''%></td>
                   <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
                   <!-- <td width="10%" align="center">
