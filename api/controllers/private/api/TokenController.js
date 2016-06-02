@@ -25,7 +25,7 @@ module.exports = {
           .sort(sort)
           .populate('memberId')
           .paginate({page: page, limit: pageSize})
-          .exec(function (err, list) {
+          .exec(function (err, list) {            
             return res.json({
               "draw": draw,
               "recordsTotal": pageSize,

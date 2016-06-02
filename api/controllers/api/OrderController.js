@@ -159,7 +159,7 @@ module.exports = {
           return res.json({code: 1, msg: 'err:' +err});
         }
       }
-      return res.json({code: 0, msg: 'success', data: {orderId:order.id,amount:order.finishAmount}});
+      return res.json({code: 0, msg: 'success', data: {orderId:order.id}});
     }
   );
 },
@@ -190,7 +190,15 @@ price:function(req,res){
             }
           }
         }
-        return res.json({code: 0, msg: 'success', data: {goodsAmount:allPrice,freightAmount:yunMoney}});
+        return res.json({
+            code: 0,
+            msg: 'success',
+            data: {
+              goodsAmount:StringUtil.setPrice(allPrice),
+              freightAmount:StringUtil.setPrice(yunMoney),
+              finishAmount:StringUtil.setPrice(allPrice+yunMoney)
+            }
+        });
       }
     }else {
         return res.json({code: 911, msg: 'err:SKU not exists::'+o.sku});
