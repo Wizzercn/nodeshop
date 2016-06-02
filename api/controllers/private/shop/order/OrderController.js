@@ -154,7 +154,7 @@ module.exports = {
     var shiptypeNo = req.body.shiptypeNo;
     var orderList = req.body.orderlist;
     var i = 0;
-    if(req.body.shopShip){
+    if(req.body.shopShip=='true'){
       var shiptypeId =  -1;
       var shiptypeNo = "'商家自发货'";
     }
@@ -177,6 +177,42 @@ module.exports = {
         });
       }
     );
+  },
+
+  pay: function (req, res) {
+    Shop_order.findOne(req.params.id)
+      .populate('memberId')
+      .populate('goods')
+      .exec(function (err, obj) {
+        req.data.obj = obj || {};
+        req.data.moment = moment;
+        req.data.StringUtil = StringUtil;
+        return res.view('private/shop/order/order/pay', req.data);
+      });
+  },
+  doPay: function (req, res) {
+    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = ' + req.body.id;
+    Shop_order.query(ssql, function (err, list) {
+      Shop_order.findOne({id: req.body.id}).exec(function (err, order) {
+        Shop_history_payments.create({
+          orderId: order.id,
+          memberId: order.memberId,
+          money: order.payAmount,
+          payType: 'pay_cash',
+          payName: '货到付款',
+          payAccount: '管理员支付',
+          payIp: req.ip,
+          payAt: moment().format('X'),
+          memo: '货到付款支付:￥' + StringUtil.setPrice(order.payAmount),
+          finishAt: moment().format('X'),
+          disabled: false,
+          trade_no: ''
+        }).exec(function (er, obj) {
+          if(er){return res.json({msg: '订单不存在'});}
+          return res.json({code: 0});
+        });
+      });
+    });
   },
   cancel: function (req,res) {
 

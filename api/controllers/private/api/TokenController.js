@@ -23,6 +23,7 @@ module.exports = {
       if (!err && count > 0) {
         Api_token.find(where)
           .sort(sort)
+          .populate('memberId')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({
@@ -55,7 +56,7 @@ module.exports = {
   },
   edit: function (req, res) {
     var id = req.params.id;
-    Api_token.findOne({id: id}).exec(function (err, obj) {
+    Api_token.findOne({id: id}).populate('memberId').exec(function (err, obj) {
       req.data.obj = obj;
       return res.view('private/api/token/edit', req.data);
     });

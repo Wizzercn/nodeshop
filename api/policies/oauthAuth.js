@@ -7,8 +7,10 @@ module.exports = function (req, res, next) {
   var token = (req.body && req.body.token) || req.query.token || req.headers["x-token"];
   if (token) {
     try {
-      var decoded = jwt.decode(token, sails.config.system.MyConfig.jwtTokenSecret||'');
+      var decoded = jwt.decode(token, sails.config.system.MyConfig.jwtTokenSecret||'RrRO6ZNVLayReZD4KwaBQ7J3uM94Wk6D');
       if (decoded.exp <= Date.now()) {
+        // Api_token.findOne({client_id})
+
         return res.json({code:1,msg:'token has expired'});
       }
       req.appid = decoded.iss;

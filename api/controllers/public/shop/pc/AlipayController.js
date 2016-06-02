@@ -263,7 +263,7 @@ module.exports = {
         payAccount: order.memberId.nickname,
         payIp: req.ip,
         payAt: moment().format('X'),
-        memo: vMemo + StringUtil.setPrice(order.finishAmount),
+        memo: vMemo,
         finishAt: moment().format('X'),
         disabled: false
       }).exec(function (e3, o3) { });
@@ -282,7 +282,7 @@ module.exports = {
             .populate('memberId')
             .exec(function (e, order) {
               upd_score(order);
-              refund_log(order,'pay_alipay','支付宝退款',result_details[1]+":"+result_details[0]);
+              refund_log(order,'pay_alipay','支付宝退款','支付宝支付退款:￥'+result_details[0]+',单号：'+result_details[1]);
               upd_pay_status(order,'3');
               order_log(order,'ok');
               return res.send("success");

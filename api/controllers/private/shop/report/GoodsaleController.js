@@ -24,7 +24,6 @@ module.exports = {
     //   sort[columns[order[0].column].data] = order[0].dir;
     // }
 
-    console.log(req.body);
     Shop_order.count(where).exec(function (err, count) {
       if (!err && count > 0) {
         var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
@@ -37,7 +36,6 @@ module.exports = {
         ssql += " group by og.name order by sum(og.amount) desc";
         var list = [];
         Shop_order_goods.query(ssql, function (err, obj) {
-          console.log(obj);
           for (var i = 0; i < obj.length; i++) {
             list.push({index: i + 1, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
           }
