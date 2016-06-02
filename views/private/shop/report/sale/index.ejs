@@ -47,7 +47,9 @@ canvas{
   <button class="btn btn-default  navbar-btn" onclick="lastWeek()">上周</button>
   <button class="btn btn-default  navbar-btn" onclick="thisWeek()">本周</button>
   <div class="pull-right">
-    <a class="btn btn-primary navbar-btn" id="export" href="/private/shop/report/Sale/export" data-pjax><i class="ti-plus"></i> 导出</a>
+    <button class="btn btn-primary navbar-btn" id="orderexport" >导出订单销售</button>
+    <button class="btn btn-primary navbar-btn" id="goodsexport" >导出商品销售</button>
+    <!-- <a class="btn btn-primary navbar-btn" id="export" href="/private/shop/report/Sale/export" data-pjax><i class="ti-plus"></i> 导出</a> -->
   </div>
   <!-- <div class="pull-right">
   <button class="btn btn-primary navbar-btn" onclick="sublime.toggleFilter('.cd-panel')"><i
@@ -222,10 +224,19 @@ canvas{
       initChart();
     }
 
-    $('#export').bind('click',function(e){
-      var tmpHref = $(this).attr('href');
+    $('#orderexport').bind('click',function(e){
+      var tmpHref = '/private/shop/report/Sale/orderexport';
       var beginDay = $('#beginDate').val();
       var endDay = $('#endDate').val();
-      $(this).attr('href',tmpHref+"?beginDay="+beginDay+"&endDay="+endDay);
+      var url = tmpHref+"?beginDay="+beginDay+"&endDay="+endDay;
+      window.open(url);
+    });
+
+    $('#goodsexport').bind('click',function(e){
+      var tmpHref = '/private/shop/report/Sale/goodsexport';
+      var beginDay = $('#beginDate').val();
+      var endDay = $('#endDate').val();
+      var url = tmpHref+"?beginDay="+beginDay+"&endDay="+endDay;
+      window.open(url);
     });
   </script>

@@ -13,7 +13,7 @@ module.exports = {
   },
   saleDate: function (req,res) {
     var beginDay = req.body.beginDay?moment(req.body.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
-    var endDay = req.body.endDay?moment(req.body.endDay).format('X'):endDay = moment().format('X');
+    var endDay = req.body.endDay?moment(req.body.endDay).add(1, 'days').format('X'):endDay = moment().format('X');
     var ssql = "select FROM_UNIXTIME(o.createdAt,'%Y%m%d') as date,IFNULL(sum(o.finishAmount),0) as amount,";
     ssql += "sum(IFNULL(hp.money,0)) as payment,sum(IFNULL(hr.money,0)) as refund,IFNULL(count(1),0) as countOrder"
     ssql += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
@@ -47,7 +47,7 @@ module.exports = {
       return res.json(data);
     });
   },
-  export:function(req,res){
+  orderexport:function(req,res){
     var conf ={};
     // uncomment it for style example
     // conf.stylesXmlFile = "styles.xml";
@@ -111,7 +111,7 @@ module.exports = {
       // ["3", 003, false, 148]
     ];
     var beginDay = req.query.beginDay?moment(req.query.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
-    var endDay = req.query.endDay?moment(req.query.endDay).format('X'):endDay = moment().format('X');
+    var endDay = req.query.endDay?moment(req.query.endDay).add(1, 'days').format('X'):endDay = moment().format('X');
     Shop_order.find({
       disabled:0,
       status:{'!':'dead'},
@@ -143,14 +143,77 @@ module.exports = {
         );
 
         if (i == obj.length){
-          console.log(conf);
           var result = exportExcel.execute(conf);
+          var fireName = "order"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
           res.setHeader('Content-Type', 'application/vnd.openxmlformats');
-          res.setHeader("Content-Disposition", "attachment; filename=" + "Report.xlsx");
+          res.setHeader("Content-Disposition", "attachment; filename=" + fireName);
           res.end(result, 'binary');
         }
         i++;
       });
     });
-  }
-};
+  },
+  goodsexport:function(req,res){
+    var conf ={};
+    conf.cols = [
+      {
+        caption:'货品编号',
+        type:'string',
+        width:20.85
+      },
+      {
+        caption:'商品名称',
+        type:'string',
+        width:20.85
+      },{
+        caption:'规格',
+        type:'string',
+        width:20.85
+      },{
+        caption:'单价',
+        type:'string',
+        width:20.85
+      },{
+        caption:'数量',
+        type:'string',
+        width:20.85
+      },{
+        caption:'总额',
+        type:'string',
+        width:20.85
+      }];
+      conf.rows = [];
+      var beginDay = req.query.beginDay?moment(req.query.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
+      var endDay = req.query.endDay?moment(req.query.endDay).add(1,'day').format('X'):endDay = moment().format('X');
+      var ssql = "SELECT p.gn,p.name,p.spec,p.price,SUM(p.num) AS num,SUM(p.amount) AS amount ";
+      ssql += "FROM shop_order_goods p,shop_order o ";
+      ssql += "WHERE  o.status!='dead' AND o.payStatus=1 AND o.disabled=0 ";
+      ssql += " and o.createdAt<=" + endDay;
+      ssql += " and o.createdAt>=" + beginDay;
+      ssql += " GROUP BY p.gn,p.name,p.spec,p.price";
+      Shop_order_goods.query(ssql,function(err,obj){
+        var i = 1;
+        obj.forEach(function (row) {
+          conf.rows.push(
+            [
+              row.gn+"",
+              row.name || '',
+              row.spec+"",
+              row.price+"",
+              row.num+"",
+              row.amount+""
+            ]
+          );
+
+          if (i == obj.length){
+            var result = exportExcel.execute(conf);
+            var fireName = "goods"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay)add(-1,'day').format("YYYYMMDD")+".xlsx";
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats');
+            res.setHeader("Content-Disposition", "attachment; filename="+fireName);
+            res.end(result, 'binary');
+          }
+          i++;
+        });
+      });
+    }
+  };

@@ -41,6 +41,21 @@ module.exports = {
         });
       },
       function (cb) {
+        var i = 0;
+        req.body.products.forEach(function(o){
+          Api_basket_products.findOne({appid:req.appid,sku:o.sku})
+          .exec(function(err,obj){
+              if(!obj){
+                return res.json({code: 911, msg: 'err:SKU not exists::'+o.sku});
+              }
+              i++;
+              if (i == req.body.products.length) {
+                cb(null);
+              }
+          });
+        });
+      },
+      function (cb) {
         Shop_order.getOrderId(function (orderId) {
           return cb(null, orderId);
         });
@@ -55,10 +70,6 @@ module.exports = {
           .populate('goodsid')
           .populate('productid')
           .exec(function(err,obj){
-            if(!obj){
-                var err = {orderId:orderId,sku:o.sku };
-                return cb(911,err);            
-            }
             var goods = {};
             goods.orderId = orderId;
             goods.goodsId = obj.productid.goodsid;
@@ -166,7 +177,7 @@ price:function(req,res){
       allPrice += o.num * obj.price;
       weight += o.num * obj.productid.weight;
       i++;
-      if (i >= req.body.products.length) {
+      if (i == req.body.products.length) {
         var yunMoney = 0;
         if (ShopConfig.freight_disabled == false && allPrice > 0) {
           if (ShopConfig.freight_type == 'price') {
