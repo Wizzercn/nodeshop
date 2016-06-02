@@ -190,7 +190,7 @@ module.exports = {
       });
   },
   doPay: function (req, res) {
-    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = ' + req.body.id;
+    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
     Shop_order.query(ssql, function (err, list) {
       Shop_order.findOne({id: req.body.id}).exec(function (err, order) {
         Shop_history_payments.create({
