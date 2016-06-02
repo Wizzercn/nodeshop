@@ -14,16 +14,42 @@ module.exports = {
   saleDate: function (req,res) {
     var beginDay = req.body.beginDay?moment(req.body.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
     var endDay = req.body.endDay?moment(req.body.endDay).add(1, 'days').format('X'):endDay = moment().format('X');
-    var ssql = "select FROM_UNIXTIME(o.createdAt,'%Y%m%d') as date,IFNULL(sum(o.finishAmount),0) as amount,";
+    var ssql = "select FROM_UNIXTIME(o.createdAt,'%Y%m%d') as date,IFNULL(sum(o.payAmount),0) as amount,";
     ssql += "sum(IFNULL(hp.money,0)) as payment,sum(IFNULL(hr.money,0)) as refund,IFNULL(count(1),0) as countOrder"
     ssql += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
     ssql += " left join shop_history_refunds hr on o.id=hr.orderId";
-    ssql += " where o.status!='dead' and o.payStatus=1 and o.disabled=0";
-    ssql += " and o.createdAt<=" + endDay;
-    ssql += " and o.createdAt>=" + beginDay;
+    ssql += " where o.disabled=0 and o.payStatus<>0";
+    ssql += " and o.payAt<=" + endDay;
+    ssql += " and o.payAt>=" + beginDay;
     ssql += " group by FROM_UNIXTIME(createdAt,'%Y%m%d')";
     Shop_order.query(ssql,function (err,obj) {
+      var ssqlpay = "select o.payType,sum(IFNULL(hp.money,0))-sum(IFNULL(hr.money,0)) payAmount";
+      ssqlpay += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
+      ssqlpay += " left join shop_history_refunds hr on o.id=hr.orderId";
+      ssqlpay += " where o.disabled=0 and o.payStatus<>0";
+      ssqlpay += " and o.payAt<=" + endDay;
+      ssqlpay += " and o.payAt>=" + beginDay;
+      ssqlpay += " group by o.payType";
       var data = {};
+      Shop_order.query(ssqlpay,function (e,opay) {
+        for (var i = 0; i < opay.length; i++) {
+          switch (opay[i].payType) {
+            case 'pay_alipay':
+              data.pay_alipay = StringUtil.setPrice(opay[i].payAmount);
+              break;
+            case 'pay_wxpay':
+              data.pay_wxpay = StringUtil.setPrice(opay[i].payAmount);
+              break;
+            case 'pay_money':
+              data.pay_money = StringUtil.setPrice(opay[i].payAmount);
+              break;
+            case 'pay_cash':
+              data.pay_cash = StringUtil.setPrice(opay[i].payAmount);
+              break;
+            default:
+
+          }
+        }
       var sale = [];
       var day = [];
       var payment = 0;
@@ -45,6 +71,7 @@ module.exports = {
       data.refund =  StringUtil.setPrice(refund);
       data.countOrder = countOrder;
       return res.json(data);
+      });
     });
   },
   orderexport:function(req,res){
@@ -70,7 +97,7 @@ module.exports = {
       width:20.85
     },{
       caption:'订单金额',
-      type:'string',
+      type:'number',
       width:20.85
     },{
       caption:'支付方式',
@@ -82,11 +109,11 @@ module.exports = {
       width:20.85
     },{
       caption:'商品总额',
-      type:'string',
+      type:'number',
       width:20.85
     },{
       caption:'运费',
-      type:'string',
+      type:'number',
       width:20.85
     },{
       caption:'收货人',
@@ -130,18 +157,17 @@ module.exports = {
               row.memberId.nickname || '',
               moment.unix(row.createdAt).format("YYYY-MM-DD HH:mm:ss"),
               row.status,
-              row.finishAmount+'',
+              StringUtil.setPrice(row.finishAmount),
               row.payType,
               moment.unix(row.payAt).format("YYYY-MM-DD HH:mm:ss"),
-              row.goodsAmount+'',
-              row.freightAmount+'',
+              StringUtil.setPrice(row.goodsAmount),
+              StringUtil.setPrice(row.freightAmount),
               row.addrName,
               row.addrMobile,
               row.addrAddr,
               row.memo|| '无'
           ]
         );
-
         if (i == obj.length){
           var result = exportExcel.execute(conf);
           var fireName = "order"+moment.unix(beginDay).format("YYYYMMDD")+"-"+moment.unix(endDay).add(-1,'day').format("YYYYMMDD")+".xlsx";
@@ -171,15 +197,15 @@ module.exports = {
         width:20.85
       },{
         caption:'单价',
-        type:'string',
+        type:'number',
         width:20.85
       },{
         caption:'数量',
-        type:'string',
+        type:'number',
         width:20.85
       },{
         caption:'总额',
-        type:'string',
+        type:'number',
         width:20.85
       }];
       conf.rows = [];
@@ -187,9 +213,9 @@ module.exports = {
       var endDay = req.query.endDay?moment(req.query.endDay).add(1,'day').format('X'):endDay = moment().format('X');
       var ssql = "SELECT p.gn,p.name,p.spec,p.price,SUM(p.num) AS num,SUM(p.amount) AS amount ";
       ssql += "FROM shop_order_goods p,shop_order o ";
-      ssql += "WHERE  o.status!='dead' AND o.payStatus=1 AND o.disabled=0 ";
-      ssql += " and o.createdAt<=" + endDay;
-      ssql += " and o.createdAt>=" + beginDay;
+      ssql += "WHERE o.payStatus=1 AND o.disabled=0 ";
+      ssql += " and o.payAt<=" + endDay;
+      ssql += " and o.payAt>=" + beginDay;
       ssql += " GROUP BY p.gn,p.name,p.spec,p.price";
       Shop_order_goods.query(ssql,function(err,obj){
         var i = 1;
@@ -199,9 +225,9 @@ module.exports = {
               row.gn+"",
               row.name || '',
               row.spec+"",
-              row.price+"",
-              row.num+"",
-              row.amount+""
+              StringUtil.setPrice(row.price),
+              row.num,
+              StringUtil.setPrice(row.amount)
             ]
           );
 

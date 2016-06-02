@@ -59,12 +59,11 @@ canvas{
 </header>
 <div class=panel-body style="padding-top: 55px;">
   <table class="table table-bordered table-striped mg-t" style="background: #fff;">
-    <thead>
       <tr>
         <th>销售额</th>
         <th>退款金额</th>
-        <th>收入</th>
         <th>客单价</th>
+        <th>收入</th>
       </tr>
       <tr style="font-size:16px;color:red">
 
@@ -72,9 +71,25 @@ canvas{
         </td>
         <td><span id='refundAmont'>&yen;0</span>
         </td>
+        <td><span id='custPrice'>&yen;0</span>
+        </td>
         <td><span id='money'>&yen;0</span>
         </td>
-        <td><span id='custPrice'>&yen;0</span>
+      </tr>
+      <tr>
+        <th>支付宝</th>
+        <th>微信</th>
+        <th>预存款</th>
+        <th>货到付款</th>
+      </tr>
+      <tr style="font-size:16px;color:red">
+        <td><span id='alipay'>&yen;0</span>
+        </td>
+        <td><span id='wxpay'>&yen;0</span>
+        </td>
+        <td><span id='moneypay'>&yen;0</span>
+        </td>
+        <td><span id='cashpay'>&yen;0</span>
         </td>
       </tr>
     </table>
@@ -115,12 +130,21 @@ canvas{
 
         $('#payAmont').html('&yen;'+ saleDate.payment);
         $('#refundAmont').html('&yen;'+ saleDate.refund);
-        $('#money').html('&yen;'+ (saleDate.payment-saleDate.refund));
+        $('#money').html('&yen;'+ (saleDate.payment-saleDate.refund).toFixed(2));
         if(saleDate.countOrder==0){
           $('#custPrice').html('&yen;'+ (0.00));
         }else {
           $('#custPrice').html('&yen;'+ (saleDate.payment/saleDate.countOrder).toFixed(2));
         }
+        var pay_alipay_amount = saleDate.pay_alipay||0.00;
+        var pay_wxpay_amount = saleDate.pay_wxpay||0.00;
+        var pay_moneypay_amount = saleDate.pay_money||0.00;
+        var pay_cashpay_amount = saleDate.pay_cash||0.00;
+        $('#alipay').html('&yen;'+ pay_alipay_amount);
+        $('#wxpay').html('&yen;'+ pay_wxpay_amount);
+        $('#moneypay').html('&yen;'+ pay_moneypay_amount);
+        $('#cashpay').html('&yen;'+ pay_cashpay_amount);
+        console.log(saleDate);
         var config = {
           type: 'line',
           data: {
