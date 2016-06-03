@@ -10,21 +10,44 @@
  * @apiParam {Object[]} products 商品列表
  * @apiParam {string} products.sku 商品sku
  * @apiParam {number} products.num 商品数量
+ * @apiParam {string} province 一级地址
+ * @apiParam {string} city 二级地址
+ * @apiParam {string} area 三级地址
+ * @apiParam {string} addr 四级地址
+ * @apiParam {string} name 收货人姓名
+ * @apiParam {string} mobile 收货人电话
+ * @apiParam {Object} invoice 发票
+ * @apiParam {number} invoice.taxType 发票类型[1:企业 2:个人]
+ * @apiParam {number} invoice.taxNo 企业税务号
+ * @apiParam {string} invoice.taxTitle 发票抬头[如taxType字段为1,则此字段必填]
+ * @apiParam {string} invoice.Centent 发票内容
  *
  * @apiParamExample {json} 示例
  *   POST /api/order/create
  *   {
  *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
-        "products": [
-          {
-            "sku": "P1605000006",
-            "num": 1
-          },
-          {
-            "sku": "P1605000010-1",
-            "num": 2
-          }
-        ]
+ *      "products": [
+ *        {
+ *          "sku": "P1605000006",
+ *          "num": 1
+ *        },
+ *        {
+ *          "sku": "P1605000010-1",
+ *          "num": 2
+ *        }
+ *       ],
+ *       "province": "安徽省",
+ *       "city": "合肥市",
+ *       "area": "蜀山区",
+ *       "addr": "蜀山区肥西路66号汇金大厦608室",
+ *       "name": "大鲨鱼",
+ *       "mobile": "13912341234",
+ *       "invoice": {
+ *            "taxType": 1,
+ *            "taxNo":340120200000001,
+ *            "taxTitle": "单位名称",
+ *            "taxCentent":"发票内容"
+ *        }
  *   }
  *
  * @apiSuccess (成功) {number} code 0
@@ -68,16 +91,16 @@
   *   POST /api/order/create
   *   {
   *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
-         "products": [
-           {
-             "sku": "P1605000006",
-             "num": 1
-           },
-           {
-             "sku": "P1605000010-1",
-             "num": 2
-           }
-         ]
+  *       "products": [
+  *         {
+  *           "sku": "P1605000006",
+  *           "num": 1
+  *       },
+  *       {
+  *           "sku": "P1605000010-1",
+  *           "num": 2
+  *         }
+  *       ]
   *   }
   *
   * @apiSuccess (成功) {number} code 0
