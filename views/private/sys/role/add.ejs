@@ -3,11 +3,11 @@
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/sys/role" data-pjax><i class="ti-angle-left"></i> 返回</a>
   </div>
-  <div class="pull-right">
-    <div class="btn-group tool-button">
-      <button class="btn btn-primary navbar-btn" onclick="complete()"><i class="ti-share"></i> 立即完成</button>
-    </div>
-  </div>
+  <!--<div class="pull-right">-->
+    <!--<div class="btn-group tool-button">-->
+      <!--<button class="btn btn-primary navbar-btn" onclick="complete()"><i class="ti-share"></i> 立即完成</button>-->
+    <!--</div>-->
+  <!--</div>-->
 </header>
 <div class="content-wrap">
   <div class="wrapper">
@@ -157,11 +157,7 @@
             jsTreeMenu = $("#jsTreeMenu").jstree({
               plugins: ["wholerow", "checkbox"],
               core: {
-                data: {
-                  url: function (node) {
-                    return node.id === "#" ? "/private/sys/role/menuTree" : "/private/sys/role/menuTree?pid=" + node.id
-                  }
-                }
+                data: <%-JSON.stringify(menu)%>
               },
               checkbox: {
                 three_state: false,
@@ -246,7 +242,7 @@
   function each(node, tree, nodes) {
     var p = tree.get_parent(node);
     if (p.length > 1) {
-      if (!isExists(p, nodes))
+      if (nodes&&p&&nodes.indexOf(p)<0)
         nodes.push(p);
       each(p, tree, nodes);
     }

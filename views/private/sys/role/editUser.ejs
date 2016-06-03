@@ -16,7 +16,7 @@
     <div class="table-responsive no-border">
       <input id="unitid" type="hidden">
       <input id="roleid" type="hidden" value="<%=role.id%>">
-      <table class="table table-bordered table-striped mg-t datatable">
+      <table id="mydata" class="table table-bordered table-striped mg-t datatable">
         <thead>
         <tr>
           <th>用户名</th>
@@ -56,7 +56,7 @@
 <script language="JavaScript">
   var datatable;
   function initDatatable() {
-    datatable = $('.datatable').DataTable({
+    datatable = $('#mydata').DataTable({
       "dom": '<"toolbar">frtip',
       "searching":false,
       "processing": false,

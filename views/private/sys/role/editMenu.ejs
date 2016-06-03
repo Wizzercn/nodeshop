@@ -65,8 +65,22 @@
 
     });
   });
+  function each(node, tree, nodes) {
+    var p = tree.get_parent(node);
+    if (p.length > 1) {
+      if (nodes&&p&&nodes.indexOf(p)<0)
+        nodes.push(p);
+      each(p, tree, nodes);
+    }
+  }
   function complete() {
-    var ids = $("#jsTreeMenu").jstree("get_selected");
+    var tree = $.jstree.reference("#jsTreeMenu");
+    var ids = tree.get_selected();
+    //查询所选节点的所有父节点
+    for (var i = 0; i < ids.length; i++) {
+      var node = ids[i];
+      each(node, tree, ids);
+    }
     if (ids.length > 0) {
       $.post("/private/sys/role/editMenuDo", {ids: ids, roleid: <%=roleid%>}, function (data) {
         if (data.code == 0) {
