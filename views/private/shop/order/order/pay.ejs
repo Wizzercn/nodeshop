@@ -22,9 +22,11 @@
             </tr>
             <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
-              <td width="30%" align="left"><%- obj.memberId.nickname||'' %></td>
+              <td width="30%" align="left"><%var nickname = '';
+                if(obj.memberId){nickname = obj.memberId.nickname} %><%-nickname%></td>
               <td width="20%" align="right">手机号码：</td>
-              <td width="30%" align="left"><%- obj.memberId.mobile||'' %></td>
+              <td width="30%" align="left"><%var mobile = '';
+                if(obj.memberId){mobile = obj.memberId.mobile} %><%-mobile%></td>
             </tr>
             <tr style="height: 30px;">
               <td width="20%" align="right">收货人：</td>

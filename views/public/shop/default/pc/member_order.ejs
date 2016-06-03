@@ -13,7 +13,7 @@
 <% include member_left.ejs %>
   <div class="member_cr">
   <div class="member_crf"><img src="<%=CssPath%>/pc/img/icon/hui_p.jpg" />订单管理</div>
-    <div >
+    <div>
       <ul class="member_crs">
         <li class="cf2">
         <a data-id="all" href="/member/order?orderType=all" class="<%=orderType=='all'?'member_crsi':''%>">所有订单</a>
@@ -21,7 +21,6 @@
         <a data-id="ship" href="/member/order?orderType=ship" class="<%=orderType=='ship'?'member_crsi':''%>">已发货</a>
         <a data-id="finish" href="/member/order?orderType=finish" class="<%=orderType=='finish'?'member_crsi':''%>">已完成</a>
         <a data-id="dead" href="/member/order?orderType=dead" class="<%=orderType=='dead'?'member_crsi':''%>">已取消</a>
-
       </ul>
     <div class="content">
       <div class="contentl" style="display:block;">
@@ -39,7 +38,6 @@
               </table>
            </div>
           <div id="list" style="margin-bottom: 20px;">
-
           </div>
           <div class="s_page cf clear tcdPageCode"></div>
         </div>
@@ -55,8 +53,28 @@
     <span><input value="确定" type="button" class="oc_pro"/><input type="button" value="取消" class="oc_pro1"/></span>
   </div>
 </div>
+<style>
+  .ppost{width:700px;min-height:450px;position:fixed;top:50%;left:50%;
+    margin-top:-300px;margin-left:-350px;border-radius:4px;
+    border:4px solid #ddd;background:#fff;z-index:9999;display:none}
+    .podiv{width:700px;height:45px;cursor:pointer}
+    #pclose{float:left;width:50px;height:42px}
+</style>
+<div class="ppost" id="ppost">
+<div class="podiv"><span id="pcolse">关闭</span></div>
+<div></div>
+</div>
 <script>
   var orderType='<%=orderType%>';
+  function showpost(sid,sno){
+    $.post(
+      "/public/shop/pc/member/order/getPost",
+      {sid:sid,sno:sno},
+      function(datas){
+        console.log(datas.msg);
+      }
+    );
+  }
 </script>
 <script src="<%=TplPath%>/js_pc/member_order.js"></script>
 <% include common_buttom.ejs %>

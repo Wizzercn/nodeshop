@@ -45,5 +45,13 @@ module.exports = {
         return moment().format('X');
       }
     }
+  },
+  getProduct:function(appid,sku){
+    Api_basket_products.findOne({appid:appid,sku:sku})
+    .populate('productid')
+    .exec(function(err,obj){
+      console.log(obj);
+      return obj;
+    });
   }
 };

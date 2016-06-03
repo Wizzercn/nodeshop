@@ -33,5 +33,6 @@ module.exports.policies = {
   },
   'api/OauthController': 'none',
   'api/ProductController': 'oauthAuth',
+  'api/OrderController': 'oauthAuth',
   '*': 'sessionAuth'
 };

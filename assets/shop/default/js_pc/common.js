@@ -1,4 +1,24 @@
 var cart_is_change=true;
+if (!Array.prototype.indexOf)//IE8不支持indexOf属性
+{
+  Array.prototype.indexOf = function(elt /*, from*/)
+  {
+    var len = this.length >>> 0;
+    var from = Number(arguments[1]) || 0;
+    from = (from < 0)
+    ? Math.ceil(from)
+    : Math.floor(from);
+    if (from < 0)
+    from += len;
+    for (; from < len; from++)
+    {
+      if (from in this &&
+        this[from] === elt)
+        return from;
+      }
+      return -1;
+    };
+  }
 Date.prototype.Format = function (fmt) {
   var o = {
     "M+": this.getMonth() + 1, //月份

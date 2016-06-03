@@ -36,18 +36,20 @@ function picLunbo(){
   $('.ulBigPicm').css({width:$('.ulBigPicm>li>a>img').width()*$('.ulBigPicm>li').length});
   $('.ulSmallPicm').css({width:($('.ulSmallPicm>li').width()+30)*$('.ulSmallPicm>li').length});
   $('.ulSmallPicm>li').on('click',function(){
+    $('#fbigimg').hide();
     if(num==$(this).index()){return};
     num = $(this).index();
     slider.sliderInde();
   });
 
   $('.sRightBtnBm').on('click',function(){		//下一张
+    $('#fbigimg').hide();
     num++;
     slider.sliderInde();
   });
   $('.sLeftBtnBm').on('click',function(){//上一张
+    $('#fbigimg').hide();
     num--;
-
     slider.sliderInde();
   });
 }
@@ -252,7 +254,7 @@ function LimitTextArea(field){
 
 function loadProvince(){
   $.ajax({
-    type : "GET",
+    type : "POST",
     url : "/public/shop/pc/member/area/getArea",
     dataType : "json",
     success : function(data) {
@@ -267,9 +269,10 @@ function loadProvince(){
 
 function getCity(name){
     $.ajax({
-      type: "GET",
-      url: "/public/shop/pc/member/area/getArea?name=" + name,
+      type: "POST",
+      url: "/public/shop/pc/member/area/getArea",
       dataType: "json",
+      data:{name:name},
       success: function (data) {
         if (data.code == 0) {
           $("#s_city_s").empty();
@@ -279,18 +282,20 @@ function getCity(name){
           });
           $("#s_city_s").html(cityHtml).show().siblings().hide();
           $("#s_county_s").html("<h3>请先选择市</h3>");
-          $("#province_chose").html(name + '<i id="provinceClose" onclick="provinceClose()">X</i>').show().siblings().html('').hide();
+          $("#province_chose").html('<p>'+name +'</p>'+ '<i id="provinceClose" onclick="provinceClose()">X</i>').show().siblings().html('').hide();
         }
       }
     });
+
 };
 
 
 function getArea(name){
   $.ajax({
-    type : "GET",
-    url : "/public/shop/pc/member/area/getArea?name="+name,
+    type : "POST",
+    url : "/public/shop/pc/member/area/getArea",
     dataType : "json",
+    data:{name:name},
     success : function(data) {
       if(data.code==0){
         $("#s_county_s").empty();
@@ -299,7 +304,7 @@ function getArea(name){
           countyHtml += '<li><a href="javascript:;" class="s_county_s" onclick="getAreaNext(name)" name="' + o.name + '">'+ o.name+'</a></li>';
         });
         $("#s_county_s").html(countyHtml).show().siblings().hide();
-        $("#city_chose").html(name + '<i id="cityClose" onclick="cityClose()">X</i>').show();
+        $("#city_chose").html('<p>'+name + '</p>'+'<i id="cityClose" onclick="cityClose()">X</i>').show();
         $("#county_chose").html('').hide();
       }
     }
@@ -309,7 +314,8 @@ function getArea(name){
 function getAreaNext(name){
   $("a[name='"+name+"']").addClass('song_co');
   $("a[name='"+name+"']").parent().addClass('song_co').siblings().removeClass('song_co').find('a').removeClass('song_co');
-  $("#county_chose").html(name + '<i id="countyClose" onclick="countyClose()">X</i>').show();
+  $("#county_chose").html('<p>'+name+'</p>' + '<i id="countyClose" onclick="countyClose()">X</i>').show();
+  $('#song_d').html($('#province_chose p').text()+$('#city_chose p').text()+$('#county_chose p').text());
 };
 
 function provinceClose(){
@@ -375,6 +381,7 @@ $(function(){
       }
     });
   });
+
   $("#tab1").on("click",function(){
     $("#tab2,#tab3").removeClass("s_detaila");
     $("#tab1").addClass("s_detaila");
@@ -423,7 +430,8 @@ $(function(){
   commentCount(goodsid);
   commentLoad(goodsid,0);
   consultLoad(goodsid,0);
+  if(window.top === window){
   console.log("%c%s","color: red; background: yellow; font-size: 24px; font-weight: bold;","\u5b89\u5168\u8b66\u544a!");
   console.log("%c%s","color: black; font-size: 18px;","\u8bf7\u52ff\u5728\u6b64\u63a7\u5236\u53f0\u8f93\u5165\u6216\u7c98\u8d34\u4f60\u4e0d\u660e\u767d\u7684\u4ee3\u7801\uff0c\u4ee5\u907f\u514d\u653b\u51fb\u8005\u7a83\u53d6\u4f60\u7684\u4fe1\u606f\u6765\u5192\u5145\u4f60\u3002");
-
+}
 });

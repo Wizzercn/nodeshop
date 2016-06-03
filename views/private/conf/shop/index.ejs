@@ -421,8 +421,9 @@
           <div class="form-group">
             <label class="col-sm-3 control-label">AppName</label>
             <div class="col-sm-7" style="padding-bottom: 5px;">
-              <input id="lg_appname" type="text" class="form-control" value="<%if(obj.logistics_info){%><%=obj.logistics_info.lg_appname||''%><%}%>">
-
+              <select id="lg_appname"  class="form-control" >
+                <option value="kdn" <%if(obj.logistics_info){%><%=obj.logistics_info.lg_appname=='kdn'?'selected':''%><%}%>>快递鸟</option>
+              </select>
             </div>
           </div>
         </div>

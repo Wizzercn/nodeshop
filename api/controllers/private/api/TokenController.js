@@ -23,6 +23,7 @@ module.exports = {
       if (!err && count > 0) {
         Api_token.find(where)
           .sort(sort)
+          .populate('memberId')
           .paginate({page: page, limit: pageSize})
           .exec(function (err, list) {
             return res.json({

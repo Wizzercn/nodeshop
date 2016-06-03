@@ -67,18 +67,24 @@
     <td width="30"></td>
     <td align="center">商品名称</td>
     <td></td>
-    <td align="center"></td>
+    <td align="center">规格</td>
     <td align="center">单价</td>
     <td align="center">数量</td>
     <td align="center">小计</td>
   </tr>
-  <%cartGoods.list.forEach(function(o){%>
+  <%cartGoods.list.forEach(function(o){
+  var spec = o.spec;
+  if(o.spec != '' && o.spec.indexOf('*') > 0){
+    spec = spec.split('*');
+    spec = spec.join('<br/>');
+  }
+  %>
   <tr class="data" data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
     <td></td>
     <td><img src="<%=o.imgurl||''%>?type=s" height="70" width="70" class="second-img">
     </td>
     <td><span class="tab-txt"><%=o.name||''%></span></td>
-    <td><span class="tab-gui"></span></td>
+    <td><span class="tab-gui"><%-spec%></span></td>
     <td><span class="tab-num">&yen;<%=o.showPrice||'0.00'%></span></td>
     <td align="center"><span class="tab-deg"><%=o.num||'0'%></span></td>
     <td><span class="tad-l">&yen;<%=o.showSumPrice||'0.00'%></span></td>

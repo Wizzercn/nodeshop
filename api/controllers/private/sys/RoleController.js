@@ -20,7 +20,24 @@ module.exports = {
    */
   add: function (req, res) {
     var data = req.data;
-    return res.view('private/sys/role/add', data);
+    Sys_menu.find().sort('location asc').sort('path asc').exec(function (err, objs) {
+      var str = [];
+      if (objs) {
+        objs.forEach(function (o) {
+          var obj = {};
+          obj.id = o.id;
+          obj.text = o.name;
+          obj.icon = o.icon;
+          obj.data = o.url || '';
+          obj.parent = o.parentId == 0 ? "#" : o.parentId;
+          str.push(obj);
+        });
+      }
+      data.menu = str;
+      return res.view('private/sys/role/add', data);
+
+
+    });
   },
   /**
    * 提交添加,判断code是否存在

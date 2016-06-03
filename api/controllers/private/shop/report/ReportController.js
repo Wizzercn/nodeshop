@@ -29,10 +29,8 @@ module.exports = {
         ssql += " and o.createdAt<=" + endDay;
         ssql += " and o.createdAt>=" + beginDay;
         ssql += " group by m.nickname,m.lv_id order by sum(o.finishAmount) desc";
-        console.log(ssql);
         var list = [];
         Shop_order_goods.query(ssql, function (err, obj) {
-          console.log(obj);
           for (var i = 0; i < obj.length; i++) {
             list.push(
               {
@@ -43,7 +41,6 @@ module.exports = {
               }
             );
           }
-          console.log(list);
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,

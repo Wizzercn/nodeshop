@@ -28,10 +28,14 @@
       <%
       var sum=0;
       cartGoods.list.forEach(function(o){
+      var spec = '';
+      if(o.spec != ''){
+        spec = '('+o.spec+')';
+      }
         sum+=o.num;
       %>
       <li data-goodsid="<%=o.goodsId%>" data-productid="<%=o.productId%>" data-num="<%=o.num%>">
-        <a><img src="<%=o.imgurl||''%>?type=s" class="pic_100" /><%=o.name||''%></a>
+        <a><img src="<%=o.imgurl||''%>?type=s" class="pic_100" /><%=o.name||''%><%=spec%></a>
         <div class="count_pro_r"><ins class="black_text">&yen;<span class="ins_num"><%=o.showPrice||'0.00'%></span></ins><div>&#120;<span class="buy_num"><%=o.num||'0'%></span></div></div>
       </li>
       <%});%>
