@@ -115,6 +115,7 @@
 
     </li>
     <%}%>
+      <li style="height:12px"></li>
     <%if(ShopConfig.freight_disabled && ShopConfig.freight_type == 'weight'){%>
       <li class="schedule_hd4m cf clear">
       <div class="guige_add"><span class="jia_ge">重&nbsp;&nbsp;&nbsp;量：</span><%=goods.weight||'0'%>克</div>
@@ -351,7 +352,6 @@
                               break;
                             }
                           }
-                          //specStr = specStr.substring(0,specStr.length-1);
                           var productid = xxid;
                           addToCarShop($('#thumblist'),goodsid,productid,$('#buy_num').val());
                         }
@@ -373,7 +373,6 @@
                               break;
                             }
                           }
-                          //specStr = specStr.substring(0,specStr.length-1);
                           var productid = xxid;
                           $.ajax({
                             type : "POST",

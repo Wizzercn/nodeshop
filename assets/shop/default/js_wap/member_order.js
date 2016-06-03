@@ -92,7 +92,9 @@ function list(type){
             }else if(o.status=='active'&&o.receivedStatus==0){
               str+='<a href="javascript:receive(\'' + o.id + '\')" class="green_btn">确认收货</a>';
             }
-            //str += '<a href="javascript:showpost(\'' + o.id + '\')" class="white_btn">查看物流</a>';
+            if(o.status=='active'&&o.shipStatus == 1){
+              str += '<a href="/wap/member/order/showPost?sid='+o.shiptypeId+'&sno='+o.shiptypeNo+'"'+' class="green_btn">查看物流</a>';
+            }
             if(o.status=='dead'){
               str += '<a href="javascript:del(\'' + o.id + '\')" class="white_btn">删除</a>';
             }

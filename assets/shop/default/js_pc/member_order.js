@@ -82,7 +82,9 @@ function list(type,start){
                   if(o.status=='active'&&o.payStatus==0&&o.payType!='pay_cash'){
                   str+='<a href="/shopcart/order/'+ o.id+'" target="_blank" class="bor_o bg00aa30 mt10">去支付</a>';
                   }
-                  //str += '<a href="javascript:showpost(o.shiptypeId+','+o.shiptypeNo)" class="bor_o bg00aa30 mt10">查看物流</a>';
+                  if(o.status=='active'&&o.shipStatus == 1){
+                    str += '<a href="/member/order/showPost?sid='+o.shiptypeId+'&sno='+o.shiptypeNo+'"'+' class="bor_o bg00aa30 mt10" target="_blank">查看物流</a>';
+                  }
                   if(o.status=='active'&&o.shipStatus==0) {
                     //未支付并且未发货，可以取消订单（注意：货到付款也是未支付状态）
                     str += '<a href="javascript:dead(\'' + o.id + '\')" class="mo-del">取消</a>';

@@ -145,7 +145,7 @@
             price:xprice
           },
           function(data){
-            $('.hyj').html('&yen;'+data.msg+unit);
+            $('.hyj').html('&yen;'+data.msg);
           }
         );
       }
