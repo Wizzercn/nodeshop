@@ -23,26 +23,31 @@ module.exports = {
     // if (order.length > 0) {
     //   sort[columns[order[0].column].data] = order[0].dir;
     // }
-
-    Shop_order.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
-        var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
-        endDay += 1000 * 3600 * 24 - 1;
-        var ssql = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
-        ssql += "where o.id=og.orderId and  o.status <> 'dead' and o.disabled=0";
-        ssql += " and o.createdAt<=" + endDay;
-        ssql += " and o.createdAt>=" + beginDay;
-        ssql += " group by og.name order by sum(og.amount) desc";
+    var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
+    var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
+    endDay += 1000 * 3600 * 24 - 1;
+    var ssql = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
+    ssql += "where o.id=og.orderId and  o.status <> 'dead' and o.disabled=0";
+    ssql += " and o.createdAt<=" + endDay;
+    ssql += " and o.createdAt>=" + beginDay;
+    ssql += " group by og.name order by sum(og.amount) desc"
+    Shop_order_goods.query(ssql,function (err, o) {
+      if (!err && o.length > 0) {
+        var ssql1 = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
+        ssql1 += "where o.id=og.orderId and  o.status <> 'dead' and o.disabled=0";
+        ssql1 += " and o.createdAt<=" + endDay;
+        ssql1 += " and o.createdAt>=" + beginDay;
+        ssql1 += " group by og.name order by sum(og.amount) desc"
+        ssql1 += " LIMIT "+pageSize+" OFFSET "+start;
         var list = [];
-        Shop_order_goods.query(ssql, function (err, obj) {
+        Shop_order_goods.query(ssql1, function (err, obj) {
           for (var i = 0; i < obj.length; i++) {
             list.push({index: i + 1, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
           }
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,
-            "recordsFiltered": obj.length,
+            "recordsFiltered": o.length,
             "data": list
           });
         });
