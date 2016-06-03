@@ -38,7 +38,7 @@ module.exports = {
               oneList['gn'] = p.gn;
               //oneList['hyprice'] = 0;
               specList[p.spec] = oneList;
-            })
+            });
             done(null,specList);
           }else{
             done(null,{})
