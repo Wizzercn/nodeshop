@@ -53,6 +53,35 @@
               </td>
             </tr>
           </table>
+          <%if (obj.taxType>0){%>
+          <hr />
+          <table width="80%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="20%" align="right">发票类型：</td>
+              <td width="30%" align="left">
+                <%if (obj.taxType==1){%>
+                  企业发票
+                <%}else{%>
+                  个人发票
+                <%}%>
+              </td>
+              <td width="20%" align="right">税号：</td>
+              <td width="30%" align="left">
+                <%=obj.taxNo%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">发票抬头：</td>
+              <td width="30%" align="left">
+                  <%=obj.taxTitle%>
+              </td>
+              <td width="20%" align="right">发票内容：</td>
+              <td width="30%" align="left">
+                  <%=obj.taxCentent%>
+              </td>
+            </tr>
+          </table>
+            <%}%>
           <hr />
           <table width="80%" style="padding: 10px;margin-left: 25px">
             <thead>
