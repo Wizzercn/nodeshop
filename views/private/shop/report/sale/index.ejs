@@ -24,15 +24,15 @@ canvas{
 </style>
 
 <header class="header navbar bg-white shadow" style="line-height: 50px;">
-  <div class="btn-group tool-button" style="width:600px">
-    <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="beginDate">
+  <div class="btn-group tool-button" style="width:300px">
+    <div class="input-group date form_datetime " style="width:150px;float:left;padding-left: 5px;padding-right: 5px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="beginDate">
       <input type="text" id='beginDayPick' size="16" readonly class="form-control" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" data-parsley-required="true">
       <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
     </div>
     <input type="hidden" id="beginDate" name="beginDate" value="<%=moment().add(-7, 'days').format('YYYY-MM-DD')%>" />
 
-    <div class="input-group date form_datetime " style="width:240px;float:left;padding-left: 16px;padding-right: 16px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="endDate">
+    <div class="input-group date form_datetime " style="width:150px;float:left;padding-left: 5px;padding-right: 5px" data-date="1979-09-16" data-date-format="dd MM yyyy" data-link-field="endDate">
       <input type="text" id='endDayPick' size="16" readonly class="form-control" value="<%=moment().format('YYYY-MM-DD')%>" data-parsley-required="true">
       <!-- <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span> -->
       <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
@@ -47,8 +47,8 @@ canvas{
   <button class="btn btn-default  navbar-btn" onclick="lastWeek()">上周</button>
   <button class="btn btn-default  navbar-btn" onclick="thisWeek()">本周</button>
   <div class="pull-right">
-    <button class="btn btn-primary navbar-btn" id="orderexport" >导出订单销售</button>
-    <button class="btn btn-primary navbar-btn" id="goodsexport" >导出商品销售</button>
+    <button class="btn btn-primary navbar-btn" id="orderexport" >导出订单</button>
+    <button class="btn btn-primary navbar-btn" id="goodsexport" >导出商品</button>
     <!-- <a class="btn btn-primary navbar-btn" id="export" href="/private/shop/report/Sale/export" data-pjax><i class="ti-plus"></i> 导出</a> -->
   </div>
   <!-- <div class="pull-right">

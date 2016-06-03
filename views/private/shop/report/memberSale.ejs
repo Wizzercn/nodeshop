@@ -98,13 +98,17 @@
       "columns": [
         {"data": "index", "bSortable": true},
         {"data": "nickname", "bSortable": true},
-        {"data": "lv_id", "bSortable": true},
+        {"data": "name", "bSortable": true},
         {"data": "amount", "bSortable": true},
       ],
       "columnDefs": [
         {
             "render": function (data, type, row){
-              return 'Lv.'+data;
+              if(data){
+                return data;
+              }else {
+                return '';
+              }
             },
             "targets": 2
         },

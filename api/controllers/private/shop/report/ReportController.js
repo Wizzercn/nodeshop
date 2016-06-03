@@ -24,19 +24,20 @@ module.exports = {
         var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
         var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
         endDay += 1000 * 3600 * 24 - 1;
-        var ssql = "select m.nickname nickname,m.lv_id,sum(o.finishAmount) amount from shop_member m,shop_order o ";
-        ssql += "where o.memberId=m.id and  o.status <> 'dead' and o.disabled=0";
+        var ssql = "select m.nickname nickname,l.name name,sum(o.finishAmount) amount from shop_member m,shop_order o,shop_member_lv l ";
+        ssql += " where o.memberId=m.id and m.lv_id=l.id and o.status <> 'dead' and o.disabled=0";
         ssql += " and o.createdAt<=" + endDay;
         ssql += " and o.createdAt>=" + beginDay;
-        ssql += " group by m.nickname,m.lv_id order by sum(o.finishAmount) desc";
+        ssql += " group by m.nickname,l.name order by sum(o.finishAmount) desc";
         var list = [];
         Shop_order_goods.query(ssql, function (err, obj) {
+          console.log(obj);
           for (var i = 0; i < obj.length; i++) {
             list.push(
               {
                 index: i + 1,
                 nickname: obj[i].nickname,
-                lv_id:obj[i].lv_id,
+                name:obj[i].name,
                 amount: StringUtil.setPrice(obj[i].amount)
               }
             );
