@@ -21,6 +21,7 @@ function buyNum(){
     if(s<10000)self.val(s);
   });
 }
+
 function view(goodsId){
   $.ajax({
     type : "GET",
@@ -215,6 +216,8 @@ function getCity(name){
   $("a[name='"+name+"']").addClass("add_auto_on").siblings().removeClass("add_auto_on");
   $(".add_autoa").addClass("trans");
   $(".add_autoa").removeClass("width_n");
+  $('#areaall').html('');
+  $('#areaall').append(name);
   $.ajax({
       type: "GET",
       url: "/public/shop/wap/member/area/getArea?name=" + name,
@@ -238,6 +241,7 @@ function getArea(name){
   $(".add_autob").addClass("trans");
   $(".add_autob").removeClass("width_n");
   $(".add_autoa").addClass("width_n");
+  $('#areaall').append(name);
   $.ajax({
     type : "GET",
     url : "/public/shop/wap/member/area/getArea?name="+name,
@@ -260,6 +264,8 @@ function getAreaNext(name){
   $(".add_tan").removeClass("trans");
   $(".add_tan").addClass("width_n");
   $(".add_autob").addClass("width_n");
+  $('#areaall').append(name);
+  $('#song_d').html($('#areaall').html());
 };
 
 $(function(){
@@ -269,6 +275,18 @@ $(function(){
   commentCount(goodsid);
   ajaxpage();
   con_ajaxpage();
+  $("#h_reduce").on("click",function(){
+    var self=$("#s_buynum");
+    var buy_num=parseInt(self.val());
+    var s=buy_num-1;
+    if(s>0)self.val(s);
+  });
+  $("#h_add").on("click",function(){
+    var self=$("#s_buynum");
+    var buy_num=parseInt(self.val());
+    var s=buy_num+1;
+    if(s<10000)self.val(s);
+  });
   $("#pj").find("a").each(function(){
     var self=$(this);
     self.on("click",function(){

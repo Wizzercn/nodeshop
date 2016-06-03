@@ -1,8 +1,11 @@
 /**
- * Created by root on 3/23/16.
- */
+* Created by root on 3/23/16.
+*/
 var StringUtil = require('../../../../../common/StringUtil');
 var moment = require('moment');
+var md5 = require('md5');
+var http = require('http');
+var querystring = require('querystring');
 module.exports = {
   index: function (req, res) {
     var m = req.session.member;
@@ -70,6 +73,10 @@ module.exports = {
       return res.json({code: 0, msg: '', data: obj});
     });
   },
+  showPost:function(req,res){
+
+
+  },
   dead: function (req, res) {
     var m = req.session.member;
     if (!m || m.memberId < 1) {
@@ -95,10 +102,10 @@ module.exports = {
         }).exec(function (e, o) {
           if (e) {
             /*订单日志表
-             opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-             opType:admin,member
-             opResult:ok,fail
-             */
+            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+            opType:admin,member
+            opResult:ok,fail
+            */
             Shop_order_log.create({
               orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
               opId: member.id,
@@ -118,10 +125,10 @@ module.exports = {
             });
             if (order.payStatus == 1) {
               /*订单日志表
-               opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-               opType:admin,member
-               opResult:ok,fail
-               */
+              opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+              opType:admin,member
+              opResult:ok,fail
+              */
               Shop_order_log.create({
                 orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
                 opId: member.id,
@@ -191,10 +198,10 @@ module.exports = {
               }
             } else {
               /*订单日志表
-               opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-               opType:admin,member
-               opResult:ok,fail
-               */
+              opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+              opType:admin,member
+              opResult:ok,fail
+              */
               Shop_order_log.create({
                 orderId: id, opTag: 'cancel', opContent: '取消订单', opType: 'member',
                 opId: member.id,
@@ -225,10 +232,10 @@ module.exports = {
       }).exec(function (e, o) {
         if (e) {
           /*订单日志表
-           opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
-           opType:admin,member
-           opResult:ok,fail
-           */
+          opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel
+          opType:admin,member
+          opResult:ok,fail
+          */
           Shop_order_log.create({
             orderId: id, opTag: 'receive', opContent: '确认收货', opType: 'member',
             opId: member.id,
@@ -272,10 +279,10 @@ module.exports = {
         }).exec(function (e, o) {
           if (e) {
             /*订单日志表
-             opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel,delete
-             opType:admin,member
-             opResult:ok,fail
-             */
+            opTag:create,update,payment,refund,delivery,receive,reship,complete,finish,cancel,delete
+            opType:admin,member
+            opResult:ok,fail
+            */
             Shop_order_log.create({
               orderId: id, opTag: 'delete', opContent: '删除订单', opType: 'member',
               opId: member.id,
