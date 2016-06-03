@@ -45,7 +45,8 @@ module.exports = function (req, res, next) {
       return res.redirect('/private/login/login');
     }
   } else {
-    var deviceAgent = req.get('user-agent').toLowerCase();
+    var userAgent=req.get('user-agent')||'';
+    var deviceAgent = userAgent.toLowerCase();
     var agentID = deviceAgent.match(/(iphone|ipod|ipad|android|mobile)/);
     var browse_is_mobile=false;
     var browse_is_weixin=false;
