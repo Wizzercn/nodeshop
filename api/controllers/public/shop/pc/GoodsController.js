@@ -66,17 +66,21 @@ module.exports = {
               },function(speclist,cb){
                 //查会员价
                 var member=req.session.member;
-                var productId=obj.products[0].id;
-                if(member&&member.memberId>0){
-                  Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb){
-                    Shop_goods_lv_price.findOne({lvid:mmb.lv_id,productId:productId,goodsid:id}).exec(function(es,os){
-                      Shop_member_lv.findOne(mmb.lv_id).exec(function(elv,olv){
-                        obj.lvprice={member_lv:olv||{},product_lv:os||{}};
-                        cb(null, speclist);
+                if(obj.products&&obj.products.length>0){
+                  var productId=obj.products[0].id;
+                  if(member&&member.memberId>0){
+                    Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb){
+                      Shop_goods_lv_price.findOne({lvid:mmb.lv_id,productId:productId,goodsid:id}).exec(function(es,os){
+                        Shop_member_lv.findOne(mmb.lv_id).exec(function(elv,olv){
+                          obj.lvprice={member_lv:olv||{},product_lv:os||{}};
+                          cb(null, speclist);
+                        });
                       });
                     });
-                  });
-                }else {
+                  }else {
+                    cb(null, speclist);
+                  }
+                } else {
                   cb(null, speclist);
                 }
               }], function (err, o) {
