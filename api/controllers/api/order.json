@@ -1,5 +1,62 @@
 /**
- * @api {POST} /api/order/create 01.Create
+  * @api {POST} /api/order/price 01.Price
+  * @apiName Price
+  * @apiGroup Order
+  * @apiVersion 1.0.0
+  * @apiDescription 计算订单金额
+  * @apiPermission token
+  *
+  * @apiParam {string} token token
+  * @apiParam {Object[]} products 商品列表
+  * @apiParam {string} products.sku 商品sku
+  * @apiParam {number} products.num 商品数量
+  *
+  * @apiParamExample {json} 示例
+  *   POST /api/order/create
+  *   {
+  *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+  *       "products": [
+  *         {
+  *           "sku": "P1605000006",
+  *           "num": 1
+  *       },
+  *       {
+  *           "sku": "P1605000010-1",
+  *           "num": 2
+  *         }
+  *       ]
+  *   }
+  *
+  * @apiSuccess (成功) {number} code 0
+  * @apiSuccess (成功) {string} msg success
+  * @apiSuccess (成功) {Object} data 计算结果
+  * @apiSuccess (成功) {number} data.goodsAmount 商品金额
+  * @apiSuccess (成功) {number} data.freightAmount 订单运费
+  * @apiSuccess (成功) {number} data.finishAmount 订单总额
+  * @apiSuccessExample {json} 示例
+  *   HTTP/1.1 200 OK
+  *   {
+  *     "code"   : 0,
+  *     "msg"    : "success",
+  *     "data"   :
+  *        {
+  *          "goodsAmount": "6844.6",
+  *          "freightAmount" : "20.0",
+  *          "finishAmount" : "6864.6"
+  *        }
+  *   }
+  *
+  * @apiError (失败) {number} code 不为0
+  * @apiError (失败) {string} msg 错误文字描述
+  * @apiErrorExample {json} 示例
+  *   HTTP/1.1 200 OK
+  *   {
+  *     "code" : 1
+  *     "msg"  : "err::"
+  *   }
+  */
+  /**
+ * @api {POST} /api/order/create 02.Create
  * @apiName Create
  * @apiGroup Order
  * @apiVersion 1.0.0
@@ -74,63 +131,6 @@
  *     "msg"  : "err::"
  *   }
  */
- /**
-  * @api {POST} /api/order/price 02.Price
-  * @apiName Price
-  * @apiGroup Order
-  * @apiVersion 1.0.0
-  * @apiDescription 查询订单所需金额
-  * @apiPermission token
-  *
-  * @apiParam {string} token token
-  * @apiParam {Object[]} products 商品列表
-  * @apiParam {string} products.sku 商品sku
-  * @apiParam {number} products.num 商品数量
-  *
-  * @apiParamExample {json} 示例
-  *   POST /api/order/create
-  *   {
-  *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
-  *       "products": [
-  *         {
-  *           "sku": "P1605000006",
-  *           "num": 1
-  *       },
-  *       {
-  *           "sku": "P1605000010-1",
-  *           "num": 2
-  *         }
-  *       ]
-  *   }
-  *
-  * @apiSuccess (成功) {number} code 0
-  * @apiSuccess (成功) {string} msg success
-  * @apiSuccess (成功) {Object} data 订单信息
-  * @apiSuccess (成功) {number} data.goodsAmount 商品金额
-  * @apiSuccess (成功) {number} data.freightAmount 运费
-  * @apiSuccess (成功) {number} data.finishAmount 订单金额
-  * @apiSuccessExample {json} 示例
-  *   HTTP/1.1 200 OK
-  *   {
-  *     "code"   : 0,
-  *     "msg"    : "success",
-  *     "data"   :
-  *        {
-  *          "goodsAmount": "6844.6",
-  *          "freightAmount" : "20.0",
-  *          "finishAmount" : "6864.6"
-  *        }
-  *   }
-  *
-  * @apiError (失败) {number} code 不为0
-  * @apiError (失败) {string} msg 错误文字描述
-  * @apiErrorExample {json} 示例
-  *   HTTP/1.1 200 OK
-  *   {
-  *     "code" : 1
-  *     "msg"  : "err::"
-  *   }
-  */
   /**
    * @api {POST} /api/order/status 03.Status
    * @apiName Status
@@ -154,7 +154,7 @@
    * @apiSuccess (成功) {Object} data 订单信息
    * @apiSuccess (成功) {string} data.orderId 订单号
    * @apiSuccess (成功) {string} data.status 订单状态 [active:活动订单,dead:已取消订单,finish:已完成订单]
-   * @apiSuccess (成功) {string} data.shipStatus 发货状态 [0:未发货,1:已发货]
+   * @apiSuccess (成功) {number} data.shipStatus 发货状态 [0:未发货,1:已发货]
    * @apiSuccessExample {json} 示例
    *   HTTP/1.1 200 OK
    *   {
@@ -164,7 +164,7 @@
    *        {
    *          "orderId": "160429174146508",
    *          "status" : "active",
-   *          "shipStatus": "1"
+   *          "shipStatus": 1
    *        }
    *   }
    *
