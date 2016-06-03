@@ -2,7 +2,7 @@
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/api/token/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加授信</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
-    <button class="btn btn-danger navbar-btn" onclick="testCheck()"><i class="ti-close"></i>测试</button>
+    <!-- <button class="btn btn-danger navbar-btn" onclick="testCheck()"><i class="ti-close"></i>测试</button> -->
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -10,215 +10,226 @@
     <input id="unitid" type="hidden">
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
-      <tr>
-        <th>ID</th>
-        <th>名称</th>
-        <th>会员</th>
-        <th>client_id</th>
-        <th>client_secret</th>
-        <th>状态</th>
-        <th>操作</th>
-    </table>
-  </div>
-</div>
-<div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title">删除</h4>
+        <tr>
+          <th>ID</th>
+          <th>名称</th>
+          <th>会员</th>
+          <th>client_id</th>
+          <th>client_secret</th>
+          <th>状态</th>
+          <th>操作</th>
+        </table>
       </div>
-      <div class="modal-body">
-        <div class="row">
-          <div class="col-xs-12">
-            删除后无法恢复，确定删除吗？ <br/>
+    </div>
+    <div id="dialogDelete" class="modal fade bs-modal-sm" tabindex="-2" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">删除</h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12">
+                删除后无法恢复，确定删除吗？ <br/>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+            <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button id="ok" type="button" class="btn btn-primary" data-loading-text="正在删除...">确 定</button>
+    </div>
+    <div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    </div>
-  </div>
-</div>
-<script language="JavaScript">
-  var datatable;
-  function enable(id) {
-    $.post("/private/api/token/enable/" + id, {}, function (data) {
-      if (data.code == 0) {
-        $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
-      } else {
-        Toast.error(data.msg);
-      }
-    }, "json");
-  }
-  function disable(id) {
-    $.post("/private/api/token/disable/" + id, {}, function (data) {
-      if (data.code == 0) {
-        $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
-      } else {
-        Toast.error(data.msg);
-      }
-    }, "json");
-  }
-  function initDatatable() {
-    datatable = $('.datatable').DataTable({
-      "dom": '<"toolbar">frtip',
-      "searching": false,
-      "processing": false,
-      "serverSide": true,
-      "select": true,
-      "ordering": true,
-      "language": {
-        "url": "/plugins/datatables/cn.json"
-      },
-      "preDrawCallback": function () {
-        sublime.showLoadingbar($(".main-content"));
-      },
-      "drawCallback": function () {
-        sublime.closeLoadingbar($(".main-content"));
-      },
-      "ajax": {
-        "url": "/private/api/token/data",
-        "type": "post",
-        "data": function (d) {
-        }
-      },
-      "order": [[0, "desc"]],
-      "columns": [
-        {"data": "id", "bSortable": true},
-        {"data": "name", "bSortable": true},
-        {"data": "memberId.nickname", "bSortable": true},
-        {"data": "client_id", "bSortable": true},
-        {"data": "client_secret", "bSortable": true},
-        {"data": "disabled", "bSortable": true}
-      ],
-      "columnDefs": [
-        {
-          "render": function (data, type, row) {
-            if (!data) {
-              return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
-            } else {
-              return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
-            }
-          },
-          "targets": 5
-        },
-        // {
-        //   "render": function (data, type, row) {
-        //     return row.nickname;
-        //   },
-        //   "targets": 2
-        // },
-        {
-          "render": function (data, type, row) {
-            return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-              ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/api/token/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
-              '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
-              '<li class="divider"></li>'+
-              '<li><a href="javascript:;" onclick="enable(' + row.id + ')">启用</a></li>' +
-              '<li><a href="javascript:;" onclick="disable(' + row.id + ')">禁用</a></li>'+
-              '</ul></div>';
-          },
-          "targets": 6
-        }
-      ]
-    });
-    datatable.on('click', 'tr', function () {
-      $(this).toggleClass('selected');
-    });
-    $("#searchBtn").on('click', function () {
-      datatable.ajax.reload();
-    });
-  }
-  function del(id) {
-    var dialog = $("#dialogDelete");
-    dialog.modal("show");
-    dialog.find("#ok").unbind("click");
-    dialog.find("#ok").bind("click", function (event) {
-      var btn = $(this);
-      btn.button("loading");
-      $.post("/private/api/token/delete/" + id, {}, function (data) {
-        if (data.code == 0) {
-          datatable.ajax.reload(null,false);
-        } else {
-          Toast.error(data.msg);
-        }
-        //重置按钮状态，关闭提示框
-        btn.button("reset");
-        dialog.modal("hide");
-      }, "json");
-    });
-  }
-  function delCheck() {
-    var chks = datatable.rows('.selected').data();
-    if (chks.length > 0) {
-      var ids = [];
-      $.each(datatable.rows('.selected').data(), function (i, n) {
-        ids.push(n.id);
-      });
-      var dialog = $("#dialogDelete");
-      dialog.modal("show");
-      dialog.find("#ok").unbind("click");
-      dialog.find("#ok").bind("click", function (event) {
-        var btn = $(this);
-        btn.button("loading");
-        $.post("/private/api/token/delete", {ids: ids}, function (data) {
+    <script language="JavaScript">
+      var datatable;
+      function enable(id) {
+        $.post("/private/api/token/enable/" + id, {}, function (data) {
           if (data.code == 0) {
-            datatable.ajax.reload(null,false);
+            $("#disable_" + id).attr("class", "fa fa-circle text-success ml5");
           } else {
             Toast.error(data.msg);
           }
-          btn.button("reset");
-          dialog.modal("hide");
         }, "json");
-      });
-    } else {
-      Toast.warning("请先选择要删除的项！");
-    }
-  }
-  $(function () {
-    initDatatable();
-    $("#dialogDetail").on("hidden.bs.modal", function() {
-      $(this).removeData("bs.modal");
-    });
-  });
-  function testCheck(){
-
-    $.post("/api/order/create",
-    {
-      token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NDg1OTY5MjcwM30.fWlxjcg6EKZ7rLsOpImhehRm1Y5P7n_kKmAOZ-qux7A",
-      // orderId:"160601134950858"
-      products: [
-        {
-        'sku':'P1605000008',
-        'num':12
-        },
-        {
-        'sku':'P160500000812312452142',
-        'num':12
-        },
-        {
-          'sku':'P1605000007',
-          'num':13
-        }]
-
-    }
-    , function (data) {
-      console.log(data);
-      if (data.code == 0) {
-        datatable.ajax.reload(null,false);
-      } else {
-        Toast.error(data.msg);
       }
-    }, "json");
-}
-</script>
+      function disable(id) {
+        $.post("/private/api/token/disable/" + id, {}, function (data) {
+          if (data.code == 0) {
+            $("#disable_" + id).attr("class", "fa fa-circle text-danger ml5");
+          } else {
+            Toast.error(data.msg);
+          }
+        }, "json");
+      }
+      function initDatatable() {
+        datatable = $('.datatable').DataTable({
+          "dom": '<"toolbar">frtip',
+          "searching": false,
+          "processing": false,
+          "serverSide": true,
+          "select": true,
+          "ordering": true,
+          "language": {
+            "url": "/plugins/datatables/cn.json"
+          },
+          "preDrawCallback": function () {
+            sublime.showLoadingbar($(".main-content"));
+          },
+          "drawCallback": function () {
+            sublime.closeLoadingbar($(".main-content"));
+          },
+          "ajax": {
+            "url": "/private/api/token/data",
+            "type": "post",
+            "data": function (d) {
+            }
+          },
+          "order": [[0, "desc"]],
+          "columns": [
+          {"data": "id", "bSortable": true},
+          {"data": "name", "bSortable": true},
+          {"data": "memberId", "bSortable": true},
+          {"data": "client_id", "bSortable": true},
+          {"data": "client_secret", "bSortable": true},
+          {"data": "disabled", "bSortable": true}
+          ],
+          "columnDefs": [
+          {
+            "render": function (data, type, row) {
+              if (!data) {
+                return '<i id="disable_' + row.id + '" class="fa fa-circle text-success ml5"></i>';
+              } else {
+                return '<i id="disable_' + row.id + '" class="fa fa-circle text-danger ml5"></i>';
+              }
+            },
+            "targets": 5
+          },
+          {
+            "render": function (data, type, row) {
+              if(!data){
+                return '';
+              }else{
+                return data.nickname;
+              }
+            },
+            "targets": 2
+          },
+          {
+            "render": function (data, type, row) {
+              return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
+                  '<li><a href="/private/api/token/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
+                  '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
+                  '<li class="divider"></li>'+
+                  '<li><a href="javascript:;" onclick="enable(' + row.id + ')">启用</a></li>' +
+                  '<li><a href="javascript:;" onclick="disable(' + row.id + ')">禁用</a></li>'+
+                  '</ul></div>';
+                },
+                "targets": 6
+              }
+              ]
+            });
+            datatable.on('click', 'tr', function () {
+              $(this).toggleClass('selected');
+            });
+            $("#searchBtn").on('click', function () {
+              datatable.ajax.reload();
+            });
+          }
+          function del(id) {
+            var dialog = $("#dialogDelete");
+            dialog.modal("show");
+            dialog.find("#ok").unbind("click");
+            dialog.find("#ok").bind("click", function (event) {
+              var btn = $(this);
+              btn.button("loading");
+              $.post("/private/api/token/delete/" + id, {}, function (data) {
+                if (data.code == 0) {
+                  datatable.ajax.reload(null,false);
+                } else {
+                  Toast.error(data.msg);
+                }
+                //重置按钮状态，关闭提示框
+                btn.button("reset");
+                dialog.modal("hide");
+              }, "json");
+            });
+          }
+          function delCheck() {
+            var chks = datatable.rows('.selected').data();
+            if (chks.length > 0) {
+              var ids = [];
+              $.each(datatable.rows('.selected').data(), function (i, n) {
+                ids.push(n.id);
+              });
+              var dialog = $("#dialogDelete");
+              dialog.modal("show");
+              dialog.find("#ok").unbind("click");
+              dialog.find("#ok").bind("click", function (event) {
+                var btn = $(this);
+                btn.button("loading");
+                $.post("/private/api/token/delete", {ids: ids}, function (data) {
+                  if (data.code == 0) {
+                    datatable.ajax.reload(null,false);
+                  } else {
+                    Toast.error(data.msg);
+                  }
+                  btn.button("reset");
+                  dialog.modal("hide");
+                }, "json");
+              });
+            } else {
+              Toast.warning("请先选择要删除的项！");
+            }
+          }
+          $(function () {
+            initDatatable();
+            $("#dialogDetail").on("hidden.bs.modal", function() {
+              $(this).removeData("bs.modal");
+            });
+          });
+          function testCheck(){
+
+            $.post("/api/order/create",
+            {
+              token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NTAwNzc3NzEwM30.RXryQvKVWFhPsyXA2K5H9MFeMCzeuoO56LV02sDaj1A",
+              // orderId:"160601134950858"
+              products: [
+              {
+                sku:"P1605000008",
+                num:12
+              },
+              {
+                sku:"P1605000007",
+                num:13
+              }],
+              province: "安徽省",
+              city: "合肥市",
+              area: "蜀山区",
+              addr: "蜀山区肥西路66号汇金大厦608室",
+              name: "大鲨鱼",
+              mobile: "13912341234",
+              invoice: {
+                taxType: 1,
+                taxNo:340120200000001,
+                taxTitle: "单位名称",
+                taxCentent:"发票内容"
+              }
+            }
+            , function (data) {
+              console.log(data);
+              if (data.code == 0) {
+                datatable.ajax.reload(null,false);
+              } else {
+                Toast.error(data.msg);
+              }
+            }, "json");
+          }
+        </script>
