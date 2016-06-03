@@ -52,11 +52,14 @@
             <tr style="height: 30px;">
               <td width="20%" align="right">发货方式：</td>
               <td width="30%" align="left">
+              物流发货
               <select id="shiptypeId" name="shiptypeId">
                 <%if(obj.ship){obj.ship.forEach(function(o){%>
                   <option value ="<%=o.id%>"><%=o.name%></option>
                 <%});}%>
               </select>
+              商家发货
+              <input type="checkbox" id="shopShip" name="shopShip">
             </td>  <td width="20%" align="right">物流单号：</td>
                 <td width="30%" align="left">
                   <input id="shiptypeNo" type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
@@ -68,10 +71,11 @@
           <div style="float:left">
           <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="" value="<%=obj.id%>"><%=obj.id%>
         </div>
-          <table width="80%" style="padding: 10px;margin-left: 25px;">
+          <table width="80%" style="padding: 10px;margin-left: 25px;margin-top: 30px;">
             <thead>
               <tr>
-                <td width="50%" align="center">商品名称</td>
+                <td width="30%" align="center">商品名称</td>
+                <td width="20%" align="center">规格</td>
                 <td width="20%" align="center">单价</td>
                 <!-- <td width="10%" align="center">数量</td> -->
                 <td width="30%" align="center">订单数量</td>
@@ -80,7 +84,8 @@
             <tbody>
               <%if(obj.goods){obj.goods.forEach(function(o){%>
                 <tr>
-                  <td width="50%" align="left"><%=o.name||''%></td>
+                  <td width="30%" align="left"><%=o.name||''%></td>
+                  <td width="20%" align="center"><%=o.spec||''%></td>
                   <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
                   <!-- <td width="10%" align="center">
                     <input type="number" name="num" min="0" max="<%=o.num||0%>" value="<%=o.num||''%>" style="width:50px">
@@ -102,11 +107,24 @@
   </div>
     <!--</form>-->
 <script>
+var shopShip = false;
 $('.order-chk').bind('change',function(e){
   $(this).parent().parent().toggleClass('order-item-select');
 });
 $('.order-item').bind('click',function(e){
   $(this).find('.order-chk').click();
+});
+$('#shopShip').bind('click',function(e){
+
+  console.log($(this));
+  if (this.checked==true) {
+    $('#shiptypeId').attr("disabled","disabled");
+    shopShip = true;
+  }else {
+      $('#shiptypeId').removeAttr("disabled");
+      shopShip = false;
+  }
+
 });
 $('#send').on('click',function(e){
   var ids = [];
@@ -116,7 +134,7 @@ $('#send').on('click',function(e){
   var shiptypeId = $('#shiptypeId').val();
   var shiptypeNo = $('#shiptypeNo').val();
 
-  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo}, function (data) {
+  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
     console.log(data);
     if (data.code == 0) {
       console.log(data);

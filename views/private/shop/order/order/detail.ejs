@@ -43,22 +43,25 @@
               </td>
             </tr>
           </table>
-          <table width="80%" style="padding: 10px;margin-left: 25px;">
+          <hr />
+          <table width="80%" style="padding: 10px;margin-left: 25px">
             <thead>
               <tr>
-                <td width="50%" align="left">商品名称</td>
-                <td width="10%" align="right">数量</td>
-                <td width="20%" align="right">单价</td>
-                <td width="20%" align="right">小计</td>
+                <td width="40%" align="left">商品名称</td>
+                <td width="25%" align="left">规格</td>
+                <td width="5%" align="right">数量</td>
+                <td width="15%" align="right">单价</td>
+                <td width="15%" align="right">小计</td>
               </tr>
             </thead>
             <tbody>
               <%if(obj.goods){obj.goods.forEach(function(o){%>
                 <tr>
-                  <td width="50%" align="left"><%=o.name||''%></td>
-                  <td width="10%" align="right"><%=o.num||''%></td>
-                  <td width="20%" align="right">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
-                  <td width="20%" align="right">&yen;<%=StringUtil.setPrice(o.amount)||'0.00'%></td>
+                  <td width="40%" align="left"><%=o.name||''%></td>
+                  <td width="25%" align="left"><%=o.spec||''%></td>
+                  <td width="5%" align="right"><%=o.num||''%></td>
+                  <td width="15%" align="right">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
+                  <td width="15%" align="right">&yen;<%=StringUtil.setPrice(o.amount)||'0.00'%></td>
                 </tr>
               <%});}%>
             </tbody>

@@ -1,0 +1,461 @@
+/**
+ * @api {POST} /api/product/basket 01.Basket
+ * @apiName Basket
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取商品池
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/basket
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0"
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object[]} data 对象数组
+ * @apiSuccess (成功) {number} data.id 商品池编号
+ * @apiSuccess (成功) {string} data.name 商品池名称
+ * @apiSuccess (成功) {number} data.num 商品数量(不固定)
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *        {
+ *          "id": 1,
+ *          "name": "办公用品",
+ *          "num": 2
+ *         },
+ *        {
+ *          "id": 2,
+ *          "name": "电器",
+ *          "num": 14
+ *        }
+ *      ]
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+ * @api {POST} /api/product/sku 02.Sku
+ * @apiName Sku
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取SKU
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {number} basketid 商品池编号
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/sku
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "basketid": 2
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {String[]} data 字符串数组
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *       "P1605000008",
+ *       "P1605000005"
+ *      ]
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+ * @api {POST} /api/product/detail 03.Detail
+ * @apiName Detail
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取商品详情
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {string} sku 商品编号
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/detail
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "sku": "P1605000010-1"
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object} data 商品对象
+ * @apiSuccess (成功) {string} data.sku 商品编号
+ * @apiSuccess (成功) {string} data.url 商品链接
+ * @apiSuccess (成功) {number} data.weight 重量(单位:g)
+ * @apiSuccess (成功) {string} data.imagePath 主图地址(不带参数为原始图片，带参数?type=s为列表缩略图，带参数?type=m为相册中图)
+ * @apiSuccess (成功) {number} data.state 1为上架，0为下架
+ * @apiSuccess (成功) {string} data.brandName 品牌名称
+ * @apiSuccess (成功) {string} data.name 商品名称(含规格)
+ * @apiSuccess (成功) {string} data.category 商品类别
+ * @apiSuccess (成功) {string} data.saleUnit 销售单位
+ * @apiSuccess (成功) {string} data.introduction 商品介绍(文章中图片无缩略图)
+ * @apiSuccess (成功) {string} data.param 参数属性
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": {
+ *       "sku": "P1605000010-1",
+ *       "url": "http://127.0.0.1/goods/2",
+ *       "weight": 500,
+ *       "imagePath": "http://127.0.0.1/open/image/file/5af370c2cb6b495a862434fdce67998e.png",
+ *       "state": 1,
+ *       "brandName": "苹果",
+ *       "name": "iPhone (存储大小:16G*颜色:灰色)",
+ *       "category": "",
+ *       "saleUnit": "百大",
+ *       "introduction": "html",
+ *       "param": "html"
+ *     }
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+ * @api {POST} /api/product/state 04.State
+ * @apiName State
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取商品上架状态
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持100个商品)
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/state
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "sku": "P1605000008,P1605000010-6"
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+ * @apiSuccess (成功) {string} data.sku 商品编号
+ * @apiSuccess (成功) {number} data.state 1为上架，0为下架
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *       {
+ *         "sku": "P1605000008",
+ *         "state": 1
+ *       },
+ *       {
+ *         "sku": "P1605000010-6",
+ *         "state": 0
+ *       }
+ *     ]
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+ * @api {POST} /api/product/image 05.Image
+ * @apiName Image
+ * @apiGroup Product
+ * @apiVersion 1.0.0
+ * @apiDescription 获取商品上架状态
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持100个商品)
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/product/image
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "sku": "P1605000010-6"
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+ * @apiSuccess (成功) {string} data.sku 商品编号
+ * @apiSuccess (成功) {Object[]} data.images 商品相册
+ * @apiSuccess (成功) {string} data.images.path 图片路径(不带参数为原始图片，带参数?type=s为列表缩略图，带参数?type=m为相册中图)
+ * @apiSuccess (成功) {number} data.images.isPrimary 1是主图，0不是主图
+ * @apiSuccess (成功) {number} data.images.orderSort 排序字段
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *       {
+ *         "sku": "P1605000010-6",
+ *         "images": [
+ *           {
+ *             "path": "http://127.0.0.1/open/image/file/b42c3c7ad1c949bb9238304f428a7b49.png",
+ *             "isPrimary": 0,
+ *             "orderSort": 0
+ *           },
+ *           {
+ *             "path": "http://127.0.0.1/open/image/file/5af370c2cb6b495a862434fdce67998e.png",
+ *             "isPrimary": 1,
+ *             "orderSort": 1
+ *           }
+ *         ]
+ *       }
+ *     ]
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */
+/**
+* @api {POST} /api/product/goodwill 06.Goodwill
+* @apiName Goodwill
+* @apiGroup Product
+* @apiVersion 1.0.0
+* @apiDescription 获取商品好评度
+* @apiPermission token
+*
+* @apiParam {string} token token
+* @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持50个商品)
+*
+* @apiParamExample {json} 示例
+*   POST /api/product/goodwill
+*   {
+*      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+*      "sku": "P1605000010-6"
+*   }
+*
+* @apiSuccess (成功) {number} code 0
+* @apiSuccess (成功) {string} msg success
+* @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+* @apiSuccess (成功) {string} data.sku 商品编号
+* @apiSuccess (成功) {number} data.goodRate 好评度(大于0小于100正整数)
+* @apiSuccess (成功) {number} data.generalRate 中评度(大于0小于100正整数)
+* @apiSuccess (成功) {number} data.poorRate 差评度(大于0小于100正整数)
+* @apiSuccess (成功) {string} data.averageScore 几颗星
+* @apiSuccessExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 0,
+*     "msg": "success",
+*     "data": [
+*       {
+*         "sku": "P1605000006",
+*         "goodRate": 100,
+*         "generalRate": 0,
+*         "poorRate": 0,
+*         "averageScore": "5颗星"
+*       }
+*     ]
+*   }
+*
+* @apiError (失败) {number} code 不为0
+* @apiError (失败) {string} msg 错误文字描述
+* @apiErrorExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 1
+*     "msg": "err::"
+*   }
+*/
+/**
+* @api {POST} /api/product/price 07.Price
+* @apiName Price
+* @apiGroup Product
+* @apiVersion 1.0.0
+* @apiDescription 获取商品商城价
+* @apiPermission token
+*
+* @apiParam {string} token token
+* @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持100个商品)
+*
+* @apiParamExample {json} 示例
+*   POST /api/product/price
+*   {
+*      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+*      "sku": "P1605000008,P1605000010-1"
+*   }
+*
+* @apiSuccess (成功) {number} code 0
+* @apiSuccess (成功) {string} msg success
+* @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+* @apiSuccess (成功) {string} data.sku 商品编号
+* @apiSuccess (成功) {string} data.price 商品价格
+* @apiSuccessExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 0,
+*     "msg": "success",
+*     "data": [
+*       {
+*         "sku": "P1605000008",
+*         "price": "208.00"
+*       },
+*       {
+*         "sku": "P1605000010-1",
+*         "price": "3555.00"
+*       }
+*     ]
+*   }
+*
+* @apiError (失败) {number} code 不为0
+* @apiError (失败) {string} msg 错误文字描述
+* @apiErrorExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 1
+*     "msg": "err::"
+*   }
+*/
+/**
+* @api {POST} /api/product/negoprice 08.NegoPrice
+* @apiName NegoPrice
+* @apiGroup Product
+* @apiVersion 1.0.0
+* @apiDescription 获取商品协议价
+* @apiPermission token
+*
+* @apiParam {string} token token
+* @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持100个商品)
+*
+* @apiParamExample {json} 示例
+*   POST /api/product/negoprice
+*   {
+*      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+*      "sku": "P1605000008,P1605000010-1"
+*   }
+*
+* @apiSuccess (成功) {number} code 0
+* @apiSuccess (成功) {string} msg success
+* @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+* @apiSuccess (成功) {string} data.sku 商品编号
+* @apiSuccess (成功) {string} data.negoprice 商品协议价格
+* @apiSuccess (成功) {string} data.price 商品价格
+* @apiSuccessExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 0,
+*     "msg": "success",
+*     "data": [
+*       {
+*         "sku": "P1605000008",
+*         "negoprice": "208.00",
+*         "price": "208.00"
+*       },
+*       {
+*         "sku": "P1605000010-1",
+*         "negoprice": "2670.00",
+*         "price": "3555.00"
+*       }
+*     ]
+*   }
+*
+* @apiError (失败) {number} code 不为0
+* @apiError (失败) {string} msg 错误文字描述
+* @apiErrorExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 1
+*     "msg": "err::"
+*   }
+*/
+/**
+* @api {POST} /api/product/stock 09.Stock
+* @apiName Stock
+* @apiGroup Product
+* @apiVersion 1.0.0
+* @apiDescription 获取商品库存
+* @apiPermission token
+*
+* @apiParam {string} token token
+* @apiParam {string} sku 商品编号(单个或多个sku，以,分割，最大支持100个商品)
+*
+* @apiParamExample {json} 示例
+*   POST /api/product/stock
+*   {
+*      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+*      "sku": "P1605000008,P1605000010-1"
+*   }
+*
+* @apiSuccess (成功) {number} code 0
+* @apiSuccess (成功) {string} msg success
+* @apiSuccess (成功) {Object[]} data 结果集(注意:结果顺序不固定)
+* @apiSuccess (成功) {string} data.sku 商品编号
+* @apiSuccess (成功) {string} data.stock 有货，无货
+* @apiSuccessExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 0,
+*     "msg": "success",
+*     "data": [
+*         {
+*           "sku": "P1605000008",
+*           "stock": "有货"
+*         },
+*         {
+*           "sku": "P1605000010-1",
+*           "stock": "有货"
+*         }
+*     ]
+*   }
+*
+* @apiError (失败) {number} code 不为0
+* @apiError (失败) {string} msg 错误文字描述
+* @apiErrorExample {json} 示例
+*   HTTP/1.1 200 OK
+*   {
+*     "code": 1
+*     "msg": "err::"
+*   }
+*/

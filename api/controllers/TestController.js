@@ -4,5 +4,8 @@
 module.exports = {
   login: function (req, res) {
     return res.view('private/login.ejs',{layout: 'layouts/login'});
+  },
+  orderapi:function(req,res){
+    return '123';
   }
 };

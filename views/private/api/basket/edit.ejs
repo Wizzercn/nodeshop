@@ -1,0 +1,79 @@
+<div class="modal-body no-p">
+  <div class="row">
+    <div class="col-xs-12">
+      <section class="panel panel-primary no-b">
+        <header class="panel-heading clearfix brtl brtr">
+          <div class="overflow-hidden">
+            <a href="javascript:;" class="h4 show no-m pt5">商品池</a>
+          </div>
+        </header>
+        <div class="row mb10" style="text-align: center;padding-top: 10px;">
+          <table width="90%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>名称：</td>
+              <td width="70%" align="left">
+                <input type="text" id="name" value="<%=obj.name||''%>" class="control-group" style="width: 200px;" maxlength="20">
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>折扣(%)：</td>
+              <td width="70%" align="left">
+                <input type="text" id="dis_count" value="<%=obj.dis_count||0%>" class="control-group" style="width: 150px;" maxlength="20">
+                请填写0-99整数，0为不启用。
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"></td>
+              <td width="70%" align="left">
+                注意：折扣只用于向商品池添加商品时计算默认协议价，更改此值不影响已添加商品的协议价。
+              </td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+  <button onclick="doSave()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+</div>
+<script type="text/javascript">
+  function doSave(){
+    var btn = $("#ok");
+    var dialog = $("#dialogDetail");
+    if($('#name').val()==''){
+      Toast.error("名称不可为空");
+      $('#name').focus();
+      return false;
+    }
+    var myreg =/^(99|[1-9]\d|\d)$/;
+    if(!myreg.test($("#dis_count").val()))
+    {
+      Toast.error("请输入0-99");
+      $('#dis_count').focus();
+      return false;
+    }
+    btn.button("loading");
+    $.post("/private/api/basket/editDo", {
+      id:<%=obj.id||0%>,
+      appid:<%=obj.appid||0%>,
+      name:$("#name").val(),
+      dis_count:$("#dis_count").val()
+    }, function (data) {
+      if (data.code == 0) {
+        Toast.success("提交成功");
+        dialog.modal("hide");
+        datatable.ajax.reload();
+      } else {
+        Toast.error(data.msg);
+      }
+      btn.button("reset");
+
+    }, "json");
+  }
+  $(function(){
+
+  });
+</script>

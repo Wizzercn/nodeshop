@@ -29,8 +29,6 @@ module.exports = {
         .paginate({page: page, limit: pageSize})
         .sort('bn asc')
         .exec(function (err, list) {
-          console.log(err);
-          console.log(list);
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,
@@ -55,7 +53,6 @@ module.exports = {
       var body = req.body;
       var logisticsBn = body.bn;
       var logisticsName = body.name;
-      console.log(body);
       Shop_logistics.findOne({bn: logisticsBn}).exec(function (err, obj) {
         if (obj) {
           return res.json({code: 1, msg: '编码重复'});

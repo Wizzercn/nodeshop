@@ -215,6 +215,7 @@
 
                     <div class="col-sm-8">
                       <input type="text" id="pbn" class="form-control" name="pbn[]" placeholder="货号(不填则自动生成)" value="<%=goods.products[0].gn%>">
+                      <input type="hidden" value="<%=goods.products[0].id%>" name="pid[]" >
 
                     </div>
                   </div>
@@ -498,7 +499,7 @@
                   }
                 });
                 %>
-                <tr><td><%=p.spec%></td>
+                <tr><td><%=p.spec%><input name="pid[]" type="hidden" value="<%=p.id%>"></td>
                   <td><input name="pbn[]" type="text" class="form-control" value="<%=p.gn%>" style="height: 22px;width: 80px;padding: 0 2px;"></td>
                   <td><input name="up[]" type="checkbox" <%=p.disabled==true?'':'checked'%>></td>
                   <td><input name="stock[]" type="text" value="<%=p.stock%>" class="form-control" style="height: 22px;width: 60px;padding: 0 2px;"></td>
@@ -721,7 +722,7 @@
           if(pbn!=""){
             bn=pbn+"-"+i;
           }
-          str+="<td>"+name+"</td>";
+          str+="<td>"+name+"<input name='pid[]' value='hidden' type='text'></td>";
           str+="<td><input name='pbn[]' type='text' class='form-control'  value='"+bn+"' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
           str+="<td><input name='up[]' type='checkbox' checked></td>";
           str+="<td><input name='stock[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
@@ -793,6 +794,7 @@
             var self=$(this);
             var spec=self.find("td:first").text();
             specs_name+=spec+"|";
+            var id=self.find("input[name='pid[]']").val();
             var gn=self.find("input[name='pbn[]']").val();
             var disabled=self.find("input[name='up[]']").prop("checked")==false;
             var stock=self.find("input[name='stock[]']").val();
@@ -804,7 +806,7 @@
             var priceCost=self.find("input[name='priceCost[]']").val();
             var weight=self.find("input[name='weight[]']").val();
             var is_default=self.find("input[name='is_default[]']").prop("checked")==true;
-            specs.push({'spec':spec,'gn':gn,'disabled':disabled,'stock':stock,'buyMin':buyMin,'buyMax':buyMax,'price':price,
+            specs.push({'id':id,'spec':spec,'gn':gn,'disabled':disabled,'stock':stock,'buyMin':buyMin,'buyMax':buyMax,'price':price,
               'lvprice':JSON.parse(lvprice),'priceMarket':priceMarket,'priceCost':priceCost,'weight':weight,'is_default':is_default});
           });
           $("#is_spec").val("true");
@@ -1091,6 +1093,7 @@
         var specs = [];
         var self = $("#sp");
         var spec = "";
+        var id = self.find("input[name='pid[]']").val();
         var gn = self.find("input[name='pbn[]']").val();
         var disabled = false;
         var stock = self.find("input[name='stock[]']").val();
@@ -1103,6 +1106,7 @@
         var weight = self.find("input[name='weight[]']").val();
         var is_default = true;
         specs.push({
+          'id':id,
           'spec': spec,
           'gn': gn,
           'disabled': disabled,

@@ -82,7 +82,7 @@
   </div>
 </div>
 <div id="dialogDetail" class="modal fade bs-modal-sm" tabindex="-3" role="dialog" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog" style="min-width:1024px">
     <div class="modal-content">
 
     </div>
@@ -293,7 +293,7 @@
           var obj = window.open("about:blank");
           var refundHtml = '<html lang="zh-CN"><body>';
           refundHtml += data.msg;
-          refundHtml += '</body><html>'
+          refundHtml += '</body><html>';
           obj.document.write(data.msg);
         } else {
           Toast.error(data.msg);

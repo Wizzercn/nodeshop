@@ -31,5 +31,8 @@ module.exports.policies = {
     'captcha':'login',
     'logout':'login'
   },
+  'api/OauthController': 'none',
+  'api/ProductController': 'oauthAuth',
+  'api/OrderController': 'oauthAuth',
   '*': 'sessionAuth'
 };

@@ -1,17 +1,33 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
-    <a class="btn btn-primary navbar-btn" href="/private/shop/goods/spec/add" data-pjax><i class="ti-plus"></i> 添加规格</a>
+    <a class="btn btn-primary navbar-btn" href="/private/api/basket/add/<%=appid%>" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加商品池</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
+    <a href="/private/api/basket/index/<%=appid%>" data-pjax id="_reload"></a>
+  </div>
+  <div class="btn-group">
+    <div >
+      <select id="appid" name="appid" class="form-control">
+        <% if(list){
+          list.forEach(function(o){
+        %>
+        <option value="<%= o.id %>" <%if(o.id==appid){%>selected<%}%>><%- o.name %></option>
+        <%
+        });
+        } %>
+      </select>
+    </div>
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
   <div class="table-responsive no-border">
-    <input id="unitid" type="hidden">
     <table class="table table-bordered table-striped mg-t datatable">
       <thead>
       <tr>
-        <th>规格名称</th>
-        <th>类型</th>
+        <th>ID</th>
+        <th>名称</th>
+        <th>折扣率</th>
+        <th>商品数量</th>
+        <th>创建时间</th>
         <th>操作</th>
     </table>
   </div>
@@ -37,6 +53,12 @@
     </div>
   </div>
 </div>
+<div id="dialogDetail" class="modal fade bs-modal" tabindex="-3" role="dialog" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
 <script language="JavaScript">
   var datatable;
   function initDatatable() {
@@ -57,35 +79,49 @@
         sublime.closeLoadingbar($(".main-content"));
       },
       "ajax": {
-        "url": "/private/shop/goods/spec/data",
+        "url": "/private/api/basket/data",
         "type": "post",
         "data": function (d) {
+          d.appid=$("#appid").val()
         }
       },
       "order": [[0, "desc"]],
       "columns": [
+        {"data": "id", "bSortable": true},
         {"data": "name", "bSortable": true},
-        {"data": "type", "bSortable": true}
+        {"data": "dis_count", "bSortable": true},
+        {"data": "num", "bSortable": true},
+        {"data": "createdAt", "bSortable": true}
       ],
       "columnDefs": [
         {
           "render": function (data, type, row) {
-            if(1==data){
-              return '图片';
+            if (data>0) {
+              return data+'%';
             }
-            return '文字';
+            return '不启用';
           },
-          "targets": 1
+          "targets": 2
+        },
+        {
+          "render": function (data, type, row) {
+            if (data) {
+              return new Date(data*1000).Format("yyyy-MM-dd hh:mm:ss");
+            }
+            return '';
+          },
+          "targets": 4
         },
         {
           "render": function (data, type, row) {
             return '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
               ' <i class="ti-settings"></i> <span class="ti-angle-down"></span></button><ul class="dropdown-menu" role="menu">' +
-              '<li><a href="/private/shop/goods/spec/edit/' + row.id + '" data-pjax>修改</a></li>' +
+              '<li><a href="/private/api/basket/product/' + row.id + '" data-pjax>管理商品</a></li>' +
+              '<li><a href="/private/api/basket/edit/' + row.id + '" data-toggle="modal" data-target="#dialogDetail">修改</a></li>' +
               '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
               '</ul></div>';
           },
-          "targets": 2
+          "targets": 5
         }
       ]
     });
@@ -103,7 +139,7 @@
     dialog.find("#ok").bind("click", function (event) {
       var btn = $(this);
       btn.button("loading");
-      $.post("/private/shop/goods/spec/delete/" + id, {}, function (data) {
+      $.post("/private/api/basket/delete/" + id, {}, function (data) {
         if (data.code == 0) {
           datatable.ajax.reload(null,false);
         } else {
@@ -128,7 +164,7 @@
       dialog.find("#ok").bind("click", function (event) {
         var btn = $(this);
         btn.button("loading");
-        $.post("/private/shop/goods/spec/delete", {ids: ids}, function (data) {
+        $.post("/private/api/basket/delete", {ids: ids}, function (data) {
           if (data.code == 0) {
             datatable.ajax.reload(null,false);
           } else {
@@ -144,5 +180,12 @@
   }
   $(function () {
     initDatatable();
+    $("#appid").on("change",function(){
+      $("#_reload").attr("href","/private/api/basket/index/"+$(this).val());
+      $("#_reload").trigger("click");
+    });
+    $("#dialogDetail").on("hidden.bs.modal", function() {
+      $(this).removeData("bs.modal");
+    });
   });
 </script>

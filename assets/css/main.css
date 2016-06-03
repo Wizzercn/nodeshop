@@ -69,12 +69,26 @@ body{background:#515e72;color:#59595a;line-height:1.5;direction:ltr;-webkit-font
   padding-top: 0;
   padding-bottom: 0;
   line-height: 50px;
+  padding-left:25px;
 }
 .header .brand .navbar-brand img {
   max-height: 25px;
-  margin-right: 5px;
-  margin-top: -5px;
+  margin-right: 6px;
+  margin-top: 12px;
+  display: inline-block;
+  float: left;
 }
+.header .brand .navbar-brand .heading-font {
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 12px;
+  display: inline-block;
+  width: 92px;
+  font-style: italic;
+  float: left;
+  margin-top: 4px;
+}
+.o_hide{display:none !important;}
 .header .navbar-nav {
   margin: 0;
 }

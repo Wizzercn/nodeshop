@@ -1,0 +1,93 @@
+<div class="modal-body no-p">
+  <div class="row">
+    <div class="col-xs-12">
+      <section class="panel panel-primary no-b">
+        <header class="panel-heading clearfix brtl brtr">
+          <div class="overflow-hidden">
+            <a href="javascript:;" class="h4 show no-m pt5">第三方授信</a>
+          </div>
+        </header>
+        <div class="row mb10" style="text-align: center;padding-top: 10px;">
+          <table width="90%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>名称：</td>
+              <td width="70%" align="left">
+                <input type="text" id="name" name="" class="control-group" style="width: 200px;" maxlength="20">
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>绑定会员</td>
+              <td width="70%" align="left">
+                <input type="text" id="member" value="<%=obj.memberId.id||''%>" name="" class="control-group" style="width: 200px;" maxlength="50">
+                <!-- <input type="button" onclick="getSecret()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成"> -->
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>client_id：</td>
+              <td width="70%" align="left">
+                <input type="text" id="client_id" name="" class="control-group" style="width: 200px;" maxlength="20">
+                <input type="button" onclick="getId()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成">
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="30%" align="right"><span style="color: red">*</span>client_secret：</td>
+              <td width="70%" align="left">
+                <input type="text" id="client_secret" name="" class="control-group" style="width: 200px;" maxlength="50">
+                <input type="button" onclick="getSecret()" class="btn btn-default" style="height: 26px;padding: 0 5px 0 5px;" value="生成">
+              </td>
+            </tr>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+  <button onclick="doSave()" id="ok" type="button" class="btn btn-primary" data-loading-text="正在提交...">确 定</button>
+</div>
+<script type="text/javascript">
+  function getId(){
+    $.post("/private/api/token/getClient_id", {}, function (data) {
+      if (data.code == 0) {
+        $("#client_id").val(data.str);
+      }
+    }, "json");
+  }
+  function getSecret(){
+    $.post("/private/api/token/getClient_secret", {}, function (data) {
+      if (data.code == 0) {
+        $("#client_secret").val(data.str);
+      }
+    }, "json");
+  }
+  function doSave(){
+    var btn = $("#ok");
+    var dialog = $("#dialogDetail");
+    if($('#name').val()==''||$('#client_id').val()==''||$('#client_secret').val()==''){
+      Toast.error("名称 & client_id & client_secret 不可为空");
+      return false;
+    }
+    btn.button("loading");
+    $.post("/private/api/token/addDo", {
+      name:$("#name").val(),      
+      memberId:$("#member").val(),
+      client_id:$("#client_id").val(),
+      client_secret:$("#client_secret").val()
+    }, function (data) {
+      if (data.code == 0) {
+        Toast.success("提交成功");
+        dialog.modal("hide");
+        datatable.ajax.reload();
+      } else {
+        Toast.error(data.msg);
+      }
+      btn.button("reset");
+
+    }, "json");
+  }
+  $(function(){
+
+  });
+</script>

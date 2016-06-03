@@ -1,4 +1,4 @@
-<%//后台登陆页页面布局%>
+﻿<%//后台登陆页页面布局%>
 <!DOCTYPE html>
 <html class="signin no-js" lang="zh-CN">
 <head>
@@ -7,7 +7,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
   <meta name="description" content="<%= sails.config.system.AppName %>">
-  <meta name="keywords" content="wizzer,node,nodejs,shop">
   <title><%= sails.config.system.AppName %></title>
   <% if (sails.config.environment === 'production') { %>
   <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
@@ -109,9 +108,10 @@
 
 
       <a href="/sysadmin/home"  data-pjax class="navbar-brand">
-        <img src="/img/logo.png" alt="">
-                <span class="heading-font">
-                <%= sails.config.system.AppShrotName||'' %>
+        <img src="/img/logo.png" alt="" class="o_img o_hide">
+                <span class="heading-font o_img">
+		            <img src="/img/logoa.png">
+                <!--<%= sails.config.system.AppShrotName||'' %>-->
                 </span>
       </a>
 
@@ -369,8 +369,9 @@
     $('#homeDetail').on('hidden.bs.modal',function(){
       $(this).removeData("bs.modal");
     });
-    if (console)
-      console.log("%c^_^ Wizzer.cn","color:red;font-size:14px;");
+    $(".toggle-sidebar").click(function(){
+      $(".o_img").toggleClass("o_hide");
+    });
   });
 
 </script>

@@ -12,6 +12,7 @@
 module.exports.http = {
   customMiddleware: function (app) {
     app.use('/upload', require('express')['static'](require('path').normalize(__dirname + '/../upload')));
+    app.use('/apidoc', require('express')['static'](require('path').normalize(__dirname + '/../apidoc')));
   },
 
   /****************************************************************************
