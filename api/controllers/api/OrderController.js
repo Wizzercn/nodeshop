@@ -10,6 +10,9 @@ module.exports = {
     if(req.body.products.length>100){
       return res.json({code: 900, msg: 'err:good count more than 100' });
     }
+    if(req.body.products.length<0){
+      return res.json({code: 901, msg: 'err:none SKU' });
+    }
     var ShopConfig = sails.config.system.ShopConfig;
     var member = '';
     var list = req.body.list || [];
@@ -21,7 +24,7 @@ module.exports = {
     async.waterfall([
       function (cb) {
         Api_token.findOne({id:req.appid}).exec(function (err,obj) {
-          if(obj){
+          if(obj.memberId){
             member = obj.memberId;
             return cb(null);
           }else {
@@ -29,15 +32,35 @@ module.exports = {
           }
         });
       },
+      // function (cb) {
+      //   Shop_member_addr.findOne({memberId:member}).exec(function(err,obj){
+      //
+      //     if(obj){
+      //       addrId = obj.id;
+      //     }else {
+      //       return res.json({code: 902, msg: 'err:no address'});
+      //     }
+      //     return cb(null);
+      //   });
+      // },
       function (cb) {
-        Shop_member_addr.findOne({memberId:member}).exec(function(err,obj){
-
-          if(obj){
-            addrId = obj.id;
-          }else {
-            return res.json({code: 902, msg: 'err:no address'});
-          }
-          return cb(null);
+        var i = 0;
+        var nosku = '';
+        req.body.products.forEach(function(o){
+          Api_basket_products.findOne({appid:req.appid,sku:o.sku})
+          .exec(function(err,obj){
+            if(!obj){
+              nosku = o.sku;
+            }
+            i++;
+            if (i >= req.body.products.length) {
+              if(nosku){
+                return res.json({code: 911, msg: 'err:SKU not exists::'+o.sku});
+              }else {
+                return cb(null);
+              }
+            }
+          });
         });
       },
       function (cb) {
@@ -55,10 +78,6 @@ module.exports = {
           .populate('goodsid')
           .populate('productid')
           .exec(function(err,obj){
-            if(!obj){
-                var err = {orderId:orderId,sku:o.sku };
-                return cb(911,err);            
-            }
             var goods = {};
             goods.orderId = orderId;
             goods.goodsId = obj.productid.goodsid;
@@ -92,20 +111,24 @@ module.exports = {
         });
       },
       function (order, cb) {
-        Shop_member_addr.findOne(addrId).exec(function (e, o) {
-          order.addrId = addrId || 0;
-          order.addrProvince = o.province || '';
-          order.addrCity = o.city || '';
-          order.addrArea = o.area || '';
-          order.addrName = o.name || '';
-          order.addrMobile = o.mobile || '';
-          order.addrAddr = o.addr || '';
-          order.taxType = StringUtil.getInt(fapiao.taxType) || 0;
-          order.taxNo = fapiao.taxNo || '';
-          order.taxTitle = fapiao.taxTitle || '';
-          order.taxCentent = fapiao.taxCentent || '';
-          return cb(null, order);
-        });
+        // Shop_member_addr.findOne(addrId).exec(function (e, o) {
+        order.addrId = addrId || 0;
+        order.addrProvince = req.body.province || '';
+        order.addrCity = req.body.city || '';
+        order.addrArea = req.body.area || '';
+        order.addrName = req.body.name || '';
+        order.addrMobile = req.body.mobile || '';
+        order.addrAddr = req.body.addr || '';
+        if(req.body.invoice){
+          order.taxType = StringUtil.getInt(req.body.invoice.taxType) || 0;
+          order.taxNo = req.body.invoice.taxNo || '';
+          order.taxTitle = req.body.invoice.taxTitle || '';
+          order.taxCentent = req.body.invoice.taxCentent || '';
+        }else {
+          order.taxType = 0;
+        }
+        return cb(null, order);
+        // });
       },
       function (order, cb) {
         var yunMoney = 0;
@@ -140,10 +163,10 @@ module.exports = {
       if(err){
         switch (err) {
           case 911:
-            Shop_order_goods.destroy({orderId:order.orderId}).exec(function(err,obj){
-              return res.json({code: 911, msg: 'err:SKU not exists::'+order.sku});
-            });
-            break;
+          Shop_order_goods.destroy({orderId:order.orderId}).exec(function(err,obj){
+            return res.json({code: 911, msg: 'err:SKU not exists::'+order.sku});
+          });
+          break;
           default:
           return res.json({code: 1, msg: 'err:' +err});
         }
@@ -163,27 +186,35 @@ price:function(req,res){
     .populate('productid')
     .exec(function(err,obj){
       if (obj) {
-      allPrice += o.num * obj.price;
-      weight += o.num * obj.productid.weight;
-      i++;
-      if (i >= req.body.products.length) {
-        var yunMoney = 0;
-        if (ShopConfig.freight_disabled == false && allPrice > 0) {
-          if (ShopConfig.freight_type == 'price') {
-            if (allPrice < ShopConfig.freight_num * 100) {
-              yunMoney = ShopConfig.freight_price * 100;
-            }
-          } else if (ShopConfig.freight_type == 'weight') {
-            if (weight >= ShopConfig.freight_num) {
-              yunMoney = Math.ceil(weight / ShopConfig.freight_num) * ShopConfig.freight_price * 100;
+        allPrice += o.num * obj.price;
+        weight += o.num * obj.productid.weight;
+        i++;
+        if (i == req.body.products.length) {
+          var yunMoney = 0;
+          if (ShopConfig.freight_disabled == false && allPrice > 0) {
+            if (ShopConfig.freight_type == 'price') {
+              if (allPrice < ShopConfig.freight_num * 100) {
+                yunMoney = ShopConfig.freight_price * 100;
+              }
+            } else if (ShopConfig.freight_type == 'weight') {
+              if (weight >= ShopConfig.freight_num) {
+                yunMoney = Math.ceil(weight / ShopConfig.freight_num) * ShopConfig.freight_price * 100;
+              }
             }
           }
+          return res.json({
+            code: 0,
+            msg: 'success',
+            data: {
+              goodsAmount:StringUtil.setPrice(allPrice),
+              freightAmount:StringUtil.setPrice(yunMoney),
+              finishAmount:StringUtil.setPrice(allPrice+yunMoney)
+            }
+          });
         }
-        return res.json({code: 0, msg: 'success', data: {goodsAmount:allPrice,freightAmount:yunMoney}});
-      }
-    }else {
+      }else {
         return res.json({code: 911, msg: 'err:SKU not exists::'+o.sku});
-    }
+      }
     });
   });
 },

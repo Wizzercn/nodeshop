@@ -144,8 +144,7 @@ module.exports = {
     });
   },
   doSend: function (req, res) {
-    console.log(req.body);
-    if(!req.body.shopShip){
+    if(req.body.shopShip!='true'){
       if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
       if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
     }
@@ -191,7 +190,7 @@ module.exports = {
       });
   },
   doPay: function (req, res) {
-    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1 where id = ' + req.body.id;
+    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
     Shop_order.query(ssql, function (err, list) {
       Shop_order.findOne({id: req.body.id}).exec(function (err, order) {
         Shop_history_payments.create({

@@ -28,12 +28,12 @@
             <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
               <td width="30%" align="left">
-                <%var nickname = obj.memberId?obj.memberId.nickname:'' %>
-                <%=nickname%>
+                <%var nickname = obj.memberId?obj.memberId.nickname?obj.memberId.nickname:'':'' %>
+                <%-nickname%>
               </td>
               <td width="20%" align="right">会员手机：</td>
               <td width="30%" align="left">
-                <%var mobile = obj.memberId?obj.memberId.mobile:''%>
+                <%var mobile = obj.memberId?obj.memberId.mobile?obj.memberId.mobile:'':''%>
                 <%= mobile %>
               </td>
             </tr>
@@ -84,7 +84,7 @@
             <tbody>
               <%if(obj.goods){obj.goods.forEach(function(o){%>
                 <tr>
-                  <td width="30%" align="left"><%=o.name||''%></td>
+                  <td width="30%" align="center"><%=o.name||''%></td>
                   <td width="20%" align="center"><%=o.spec||''%></td>
                   <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
                   <!-- <td width="10%" align="center">

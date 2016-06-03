@@ -56,7 +56,7 @@ module.exports = {
   },
   edit: function (req, res) {
     var id = req.params.id;
-    Api_token.findOne({id: id}).populate('memberId').exec(function (err, obj) {
+    Api_token.findOne({id: id}).exec(function (err, obj) {
       req.data.obj = obj;
       return res.view('private/api/token/edit', req.data);
     });

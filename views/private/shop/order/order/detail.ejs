@@ -20,13 +20,23 @@
               </td>
             </tr>
             <tr style="height: 30px;">
+              <td width="20%" align="right">运费：</td>
+              <td width="30%" align="left">
+                  &yen;<%=StringUtil.setPrice(obj.freightAmount)||'0.00'%>
+              </td>
+              <td width="20%" align="right">折扣：</td>
+              <td width="30%" align="left">
+                &yen;<%=StringUtil.setPrice(obj.discountAmount)||'0.00'%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
               <td width="30%" align="left">
-                <%var nickname = obj.memberId?obj.memberId.nickname:'' %>
+                <%var nickname = obj.memberId?obj.memberId.nickname?obj.memberId.nickname:'':'' %>
                 <%-nickname%></td>
               <td width="20%" align="right">手机号码：</td>
               <td width="30%" align="left">
-                <%var mobile = obj.memberId?obj.memberId.mobile:''%>
+                <%var mobile = obj.memberId?obj.memberId.mobile?obj.memberId.mobile:'':''%>
                 <%= mobile %>
               </td>
             </tr>
@@ -43,6 +53,35 @@
               </td>
             </tr>
           </table>
+          <%if (obj.taxType>0){%>
+          <hr />
+          <table width="80%" style="padding: 10px;">
+            <tr style="height: 30px;">
+              <td width="20%" align="right">发票类型：</td>
+              <td width="30%" align="left">
+                <%if (obj.taxType==1){%>
+                  企业发票
+                <%}else{%>
+                  个人发票
+                <%}%>
+              </td>
+              <td width="20%" align="right">税号：</td>
+              <td width="30%" align="left">
+                <%=obj.taxNo%>
+              </td>
+            </tr>
+            <tr style="height: 30px;">
+              <td width="20%" align="right">发票抬头：</td>
+              <td width="30%" align="left">
+                  <%=obj.taxTitle%>
+              </td>
+              <td width="20%" align="right">发票内容：</td>
+              <td width="30%" align="left">
+                  <%=obj.taxCentent%>
+              </td>
+            </tr>
+          </table>
+            <%}%>
           <hr />
           <table width="80%" style="padding: 10px;margin-left: 25px">
             <thead>
