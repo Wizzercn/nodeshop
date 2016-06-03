@@ -32,11 +32,11 @@
             <tr style="height: 30px;">
               <td width="20%" align="right">会员昵称：</td>
               <td width="30%" align="left">
-                <%var nickname = obj.memberId?obj.memberId.nickname:'' %>
+                <%var nickname = obj.memberId?obj.memberId.nickname?obj.memberId.nickname:'':'' %>
                 <%-nickname%></td>
               <td width="20%" align="right">手机号码：</td>
               <td width="30%" align="left">
-                <%var mobile = obj.memberId?obj.memberId.mobile:''%>
+                <%var mobile = obj.memberId?obj.memberId.mobile?obj.memberId.mobile:'':''%>
                 <%= mobile %>
               </td>
             </tr>
