@@ -18,9 +18,10 @@ function loadProvince(){
       return false;
     }
     $.ajax({
-      type : "GET",
-      url : "/public/shop/pc/member/area/getArea?name="+$(this).val(),
+      type : "POST",
+      url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
+      data:{name:$(this).val()},
       success : function(data) {
         if(data.code==0){
           $("#_city").empty();
@@ -38,9 +39,10 @@ function loadProvince(){
       return false;
     }
     $.ajax({
-      type : "GET",
-      url : "/public/shop/pc/member/area/getArea?name="+$(this).val(),
+      type : "POST",
+      url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
+      data:{name:$(this).val()},
       success : function(data) {
         if(data.code==0){
           $("#_area").empty();

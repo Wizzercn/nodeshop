@@ -1,11 +1,11 @@
 /**
- * Created by root on 3/13/16.
- */
+* Created by root on 3/13/16.
+*/
 var StringUtil = require('../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   one: function (req, res) {
-    var id=req.params.id;
+    var id= req.params.id;
     async.parallel({
       //获取cms栏目分类
       channelList: function (done) {
@@ -32,9 +32,11 @@ module.exports = {
             list.forEach(function(p){
               var oneList = {};
               oneList['id'] = p.id;
-              oneList['price'] = p.price;
-              oneList['priceMarket'] = p.priceMarket;
+              oneList['price'] = StringUtil.setPrice(p.price);
+              oneList['priceMarket'] = StringUtil.setPrice(p.priceMarket);
               oneList['stock'] = p.stock;
+              oneList['gn'] = p.gn;
+              //oneList['hyprice'] = 0;
               specList[p.spec] = oneList;
             })
             done(null,specList);
@@ -68,11 +70,11 @@ module.exports = {
                 if(member&&member.memberId>0){
                   Shop_member.findOne(member.memberId).exec(function(mmbErr,mmb){
                     Shop_goods_lv_price.findOne({lvid:mmb.lv_id,productId:productId,goodsid:id}).exec(function(es,os){
-                    Shop_member_lv.findOne(mmb.lv_id).exec(function(elv,olv){
-                      obj.lvprice={member_lv:olv||{},product_lv:os||{}};
-                      cb(null, speclist);
+                      Shop_member_lv.findOne(mmb.lv_id).exec(function(elv,olv){
+                        obj.lvprice={member_lv:olv||{},product_lv:os||{}};
+                        cb(null, speclist);
+                      });
                     });
-                  });
                   });
                 }else {
                   cb(null, speclist);
@@ -82,40 +84,23 @@ module.exports = {
                 obj.speclist = o || [];
                 done(null, obj);
               });
-
-
             });
-
           }
           else
-            done('undefined', null);
+          done('undefined', null);
         });
       }
     }, function (err, result) {
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.hotGoodsList = result.hotGoodsList || {};
-      req.data.products = result.products || {};
       req.data.goods = result.goods || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/goods/'+id;
-      var specObj = [];
-      var specHas = [];
-      if(result.goods.is_spec){
-        result.goods.spec.forEach(function(j){
-          j.forEach(function(y){
-            specObj.push(j[0]['spec_name']+':'+y.spec_value_name);
-          })
-        });
-        for(var i in result.products){
-          specHas.push(i);
-        }
-      }
-      req.data.specObj = specObj;
-      req.data.specHas = specHas;
+      req.data.products = result.products || {};
       if(result.goods){
-      req.data.siteTitle = result.goods.name+'_' + req.data.siteTitle;
+        req.data.siteTitle = result.goods.name+'_' + req.data.siteTitle;
         if(result.goods.disabled==true){
           //未上架商品报404
           return res.notFound('商品未上架');
@@ -123,10 +108,26 @@ module.exports = {
       }else {
         return res.notFound('无此商品');
       }
-      //return res.send(specObj);
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
 
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/goods_one', req.data);
     });
+  },
+  getLvPrice:function(req,res){
+    var productid = req.body.productid;
+    var lvid = req.body.lvid;
+    var pprice = req.body.price;
+    var dis_count = req.body.dis_count;
+    pprice = pprice*100;
+    Shop_goods_lv_price.findOne({productid:productid,lvid:lvid}).exec(function(err,obj){
+      if(obj && obj.price > 0){
+        var hyprice = StringUtil.setPrice(obj.price);
+        return res.json({code:0,msg:hyprice})
+      }else{
+        var hyprice = pprice>100?Math.ceil(pprice*dis_count / 100):pprice;
+        hyprice = StringUtil.setPrice(hyprice);
+        return res.json({code:0,msg:hyprice});
+      }
+    })
   },
   view:function(req,res){
     var id=req.params.id||0;

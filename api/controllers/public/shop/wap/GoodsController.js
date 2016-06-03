@@ -7,6 +7,26 @@ module.exports = {
   one: function (req, res) {
     var id=req.params.id;
     async.parallel({
+      products:function(done){
+        Shop_goods_products.find({goodsid:id,disabled:false,spec:{'!':''}}).exec(function(err,list){
+          if(list && list.length > 0){
+            var specList = {};
+            list.forEach(function(p){
+              var oneList = {};
+              oneList['id'] = p.id;
+              oneList['price'] = StringUtil.setPrice(p.price);
+              oneList['priceMarket'] = StringUtil.setPrice(p.priceMarket);
+              oneList['stock'] = p.stock;
+              oneList['gn'] = p.gn;
+              //oneList['hyprice'] = 0;
+              specList[p.spec] = oneList;
+            })
+            done(null,specList);
+          }else{
+            done(null,{})
+          }
+        });
+      },
       goods:function(done){
         Shop_goods.findOne(id).populate('classid').populate('products', {where:{is_default:true},sort: {location: 'asc'}}).populate('images', {sort: {id: 'asc'}}).exec(function (error, obj) {
           if (obj) {
@@ -57,6 +77,7 @@ module.exports = {
       }
     }, function (err, result) {
       req.data.goods = result.goods || {};
+      req.data.products = result.products || {};
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.r = '/goods/'+id;
@@ -71,6 +92,23 @@ module.exports = {
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/goods_one', req.data);
 
     });
+  },
+  getLvPrice:function(req,res){
+    var productid = req.body.productid;
+    var lvid = req.body.lvid;
+    var pprice = req.body.price;
+    var dis_count = req.body.dis_count;
+    pprice = pprice*100;
+    Shop_goods_lv_price.findOne({productid:productid,lvid:lvid}).exec(function(err,obj){
+      if(obj && obj.price > 0){
+        var hyprice = StringUtil.setPrice(obj.price);
+        return res.json({code:0,msg:hyprice})
+      }else{
+        var hyprice = pprice>100?Math.ceil(pprice*dis_count / 100):pprice;
+        hyprice = StringUtil.setPrice(hyprice);
+        return res.json({code:0,msg:hyprice});
+      }
+    })
   },
   view:function(req,res){
     var id=req.params.id||0;

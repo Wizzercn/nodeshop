@@ -74,8 +74,12 @@ function list(type){
               '<div class="data_dl">订单编号：<div class="wbw">'+ o.id+'</div><span class="orange_text">' + enumStatus[o.status] + '</span></div>'+
               '<ul class="count_pro">';
             $.each(o.goods,function(j,goods) {
+              var spec = '';
+              if(goods.spec != ''){
+                spec = '('+goods.spec+')';
+              }
               str+='<li>' +
-              '<a><img src="'+goods.imgurl+'?type=s" class="pic_100" />'+goods.name+'</a>' +
+              '<a><img src="'+goods.imgurl+'?type=s" class="pic_100" />'+goods.name+spec+'</a>' +
               '<div class="count_pro_r"><ins class="black_text">&yen;<span class="ins_num">'+setPrice(goods.price)+'</span></ins><div>&#120;<span class="buy_num">'+goods.num+'</span></div></div>' +
               '</li>';
             });
@@ -88,6 +92,7 @@ function list(type){
             }else if(o.status=='active'&&o.receivedStatus==0){
               str+='<a href="javascript:receive(\'' + o.id + '\')" class="green_btn">确认收货</a>';
             }
+            //str += '<a href="javascript:showpost(\'' + o.id + '\')" class="white_btn">查看物流</a>';
             if(o.status=='dead'){
               str += '<a href="javascript:del(\'' + o.id + '\')" class="white_btn">删除</a>';
             }

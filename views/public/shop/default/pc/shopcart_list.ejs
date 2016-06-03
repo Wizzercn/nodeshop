@@ -1,8 +1,13 @@
 <div class="slidmenu">
   <% include common_top.ejs %>
   <% include common_banner.ejs %>
-
 </div>
+<script>
+  var weightshow = false;
+  <%if(ShopConfig.freight_disabled && ShopConfig.freight_type == 'weight'){%>
+    weightshow = true;
+  <%}%>
+</script>
 <div class="w1200 shop_f1">
   <div class="shop_f2">我的购物车</div>
   <ul class="shop_f">
@@ -11,20 +16,20 @@
     <li class="tian3">3、成功提交订单</li>
   </ul>
 </div>
-
 <div>
   <ul  class="w1200 shop_f1a mt40">
   <li class="s_quan"></li>
   <li class="shop_f1af">商品名称</li>
   <li class="z_guigek">规格</li>
+  <%if(ShopConfig.freight_disabled && ShopConfig.freight_type == 'weight'){%>
     <li class="shop_f1as">重量</li>
+  <%}%>
     <li class="shop_f1as">单价</li>
   <li class="shop_f1at">数量</li>
   <li class="shop_f1afo">小计</li>
   <li class="shop_f1afi">操作</li>
   </ul>
 </div>
-
 <div id="cart_list">
 </div>
 <div class="w1200 zongji">
