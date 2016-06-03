@@ -99,10 +99,10 @@ function listAddr(){
 }
 function loadProvince(){
   $.ajax({
-    type : "GET",
+    type : "POST",
     url : "/public/shop/pc/member/area/getArea",
     dataType : "json",
-    success : function(data) {
+    success : function(data){ 
       if(data.code==0){
         $.each(data.list,function(i,o){
           $("#_province").append('<option value="'+ o.name+'">'+ o.name+'</option>');
@@ -116,12 +116,14 @@ function loadProvince(){
       $("#_area").val('');
       return false;
     }
+    var name = $(this).val();
     $.ajax({
       type : "POST",
       url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
-      data:{name:$(this).val()},
+      data:{name:name},
       success : function(data) {
+
         if(data.code==0){
           $("#_city").empty();
           $("#_city").append('<option value="">请选择市</option>');
@@ -137,11 +139,12 @@ function loadProvince(){
       $("#_area").val('');
       return false;
     }
+    var name = $(this).val();
     $.ajax({
       type : "POST",
       url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
-      data:{name:$(this).val()},
+      data:{name:name},
       success : function(data) {
         if(data.code==0){
           $("#_area").empty();

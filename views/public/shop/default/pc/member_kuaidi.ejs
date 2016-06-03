@@ -1,0 +1,62 @@
+<div class="slidmenu">
+  <% include common_top.ejs %>
+  <% include common_banner.ejs %>
+</div>
+<div id="schedule">
+  <div class="schedule_h">
+    <span class="schedule_hf">当前位置:</span>
+    <div class="schedule_hs" style="width:420px"><a href="/">首页</a>&gt;<a href="#">会员中心</a>  &gt; <a href="/member" class="color_y">会员中心</a> &gt; <a href="/member" class="color_y">查看物流</a></div>
+  </div>
+</div>
+<%if(shipdetail.checkid == 0){%>
+<div class="member_cm clear cf">
+	<div class="f_wuliu">
+		物流信息
+	</div>
+	<div class="f_wulium">
+		<p class="f_wuliua">您的包裹已发货</p>
+		<table class="f_wuliub">
+    <%shipdetail.sdetail.data.Traces.forEach(function(list){%>
+			<tr align="top" style="border-bottom:1px solid #ddd">
+				<td class="f_wuliuba" valign="top"><%=list.AcceptTime%></td>
+				<td class="f_wuliube"><p><%=list.AcceptStation%></p></td>
+			</tr>
+      <%})%>
+		</table>
+	</div>
+
+	<div class="f_wuliuc">
+		<span>运单号:<i><strong><%=goods.shiptypeNo%></strong></i></span>
+		<span>物流公司：<i><strong><%=shipdetail.sname%></strong></i></span>
+		<span>收获地址：<i><font><%=goods.addrProvince%><%=goods.addrCity%><%=goods.addrArea%><%=goods.addrAddr%></font>
+    </i></span>
+    <span>收货人：<i><strong><%=goods.addrName%></strong></i></span>
+    <span>电话：<i><strong><%=goods.addrMobile%></strong></i></span>
+	</div>
+</div>
+<%}else{%>
+  <div class="member_cm clear cf">
+  	<div class="f_wuliu">
+  		包裹信息
+  	</div>
+  	<div class="f_wulium">
+  		<p class="f_wuliua">您的包裹已发货</p>
+  		<table class="f_wuliub">
+  			<tr align="top">
+  				<td class="f_wuliube"><p>商家自有物流</p></td>
+  			</tr>
+  		</table>
+  	</div>
+  	<div class="f_wuliuc">
+  		<span>收获地址：<i><font><%=goods.addrProvince%><%=goods.addrCity%><%=goods.addrArea%></font>
+      </i></span>
+      <span>收货人：<i><strong><%=goods.addrName%></strong></i></span>
+      <span>电话：<i><strong><%=goods.addrMobile%></strong></i></span>
+  	</div>
+  </div>
+<%}%>
+<script>
+  var imgPath2 = "<%=CssPath%>/pc/img/icon/detail2.jpg";
+  var imgPath3 = "<%=CssPath%>/pc/img/icon/detail3.jpg";
+</script>
+<% include common_buttom.ejs %>

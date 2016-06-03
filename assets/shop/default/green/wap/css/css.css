@@ -272,7 +272,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .coupon_state_0{position: absolute; top: 0; bottom: 0; left: 0; right: 0; display: block; display: flex; display: -webkit-box; align-items: center; -webkit-box-align: center; text-align: center; font-size: 2.4rem; color: #fff; z-index: 3;}
 .coupon_state_0_text{flex: 1; -webkit-box-flex: 1;}
 .coupon_list a, .coupon_list a:visited{color: #fff;}
-.coupon_list a:active{background-color: #613f35; box-shadow: 0 0 .6rem rgba(0,0,0,.3);}
+.coupon_list a:active{background-color: #788a40; box-shadow: 0 0 .6rem rgba(0,0,0,.3);}
 .coupon_list .wbc{min-height: 8rem; background-color: #00aa3a;}
 .coupon_list .wbw{padding: .5rem 1rem;}
 .coupon_num{position: relative; margin-right: 1rem; display: inline-block; width: 7rem; text-align: center; font-size: 2.4rem; vertical-align: top;}
@@ -537,8 +537,8 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .pri_size_a{font-size:1.8rem;}
 /*---有货、快递添加css样式---*/
 .price{padding:1rem;}
-.pri_size{padding:1rem;color:#333;background:#fff;display:block;border-top:2px solid #ddd;border-bottom:1px solid #ddd;margin-top: 5px}
-.pri_size i{width:1rem;height:1rem;border-top:1px solid #333333;border-left:1px solid #333333; transform:rotate(135deg); -webkit-transform:rotate(135deg);display:inline-block;position:absolute;right:1rem;color:#ececec;}
+.pri_size{padding:1rem;color:#333;background:#ececec;display:block;position:relative;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
+.pri_size i{width:1rem;height:1rem;border-top:1px solid #333333;border-left:1px solid #333333; transform:rotate(135deg); -webkit-transform:rotate(135deg);display:inline-block;position:absolute;right:1rem;color:#ececec;top:1.3rem;}
 
 /*规格弹窗*/
 .popup,.popups{z-index:100;height:100%;background:rgba(0,0,0,0.5);position:fixed;;bottom:0px;margin-top:-6rem;display:block;width:100%;color:#333;padding:0;}
@@ -576,7 +576,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .add_detaila .btn_box a{margin:0 0.5rem 0 0;}
 /*--我要咨询--*/
 .tit_zi{padding:1rem 0;text-align:right;color:#fe6000;font-size:1.4rem}
-.tit_zi:after{width:0.8rem;height:0.8rem;border-top:0.1rem solid #dddddd;border-left:0.1rem solid #dddddd;transform:rotate(135deg);-webkit-transform:rotate(135deg);display:inline-block;content:"";margin-left:0.5rem;}
+.tit_zi:after{width:0.8rem;height:0.8rem;border-top:0.1rem solid #dddddd;border-left:0.1rem solid #dddddd;left:1px;transform:rotate(135deg);-webkit-transform:rotate(135deg);display:inline-block;content:"";margin-left:0.5rem;}
 .tit_bot{width:100%;position:fixed;bottom:0px;background:#eee;}
 .add_more{display:block;}
 .add_more:after{width:0.8rem;height:0.8rem;border-top:1px solid #ddd;border-left:1px solid #ddd;transform:rotate(135deg);-webkit-transform:rotate(135deg);content:"";display:block;float:right;position:relative;top:-2.5rem;left:3rem;}
@@ -791,7 +791,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .pinfo{font-size:1.2rem;padding-top:0.2rem;line-height:1.6rem;}
 .scut_list>li.k_scut_list{margin-top:-1px;margin-bottom:0; background-color: #fff; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;}
 .k_nav{background:#fff;padding:1rem 0.5rem;border-bottom:1px solid #ddd;border-top:1px solid #ddd;display: flex;display: -webkit-box;margin-bottom:0.5rem;}
-.k_nav a{display:block;border-left:1px solid #ddd;flex: 1; -webkit-box-flex: 1;text-align: center;margin:0;padding:0;float:left;padding:0.5rem 0;font-size:1.4rem;border-left:1px solid #ddd;color:#333;position:relative;}
+.k_nav a{display:block;border-left:1px solid #ddd;flex: 1; -webkit-box-flex: 1;text-align: center;margin:0;padding:0;float:left;padding:0.5rem 0;font-size:1.3rem;border-left:1px solid #ddd;color:#333;position:relative;}
 .k_nav a:first-child{border-left:none;}
 .more_pg_add{margin: -0.8rem 0 1rem !important; background-color: #fff; }
 .more_pg_add>li{border-bottom: 1px solid #ddd;}
@@ -822,19 +822,6 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .width_n{left:100%;}
 .trans{ transition:all .3s linear;-moz-transition:all .3s linear;-ms-transition:all .3s linear;-o-transition:all .3s linear;-webkit-transition:all .3s linear;}
 
-/*底部上城信息*/
-.f_txt{height:4.3rem;background:#f4f4f4;text-align:center;position:relative;top:0.8rem;color:#999;opacity: 0.5;border-top:1px solid #ddd;}
-.f_txt h2{font-size:1.4rem;padding-top:0.8rem;}
-.f_txt p{font-size:1.2rem;}
-.f_txt img{height:1rem;padding-top:0.8rem;padding-bottom:0.5rem;}
-.f_heigh{width:100%;}
-
-.f_relative{position:absolute;margin-top:-3px;}
-.f_fix{position:fixed;bottom:6rem;}
-
-.big_green_btn{background:none;border:1px solid #ddd;color:#333 !important;}
-
-
 
 /*规格*/
 .size_tan{height:100%;background:rgba(0,0,0,0.5);position:fixed;top:0px;display:block;width:100%;color:#333;padding:0;z-index:16;}
@@ -856,3 +843,32 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .size_btnl{text-align: center;color: #fff;border-radius: .5rem;background-color:#00aa3a;margin:0 1rem 0 0; display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;}
 .size_btnr{text-align: center; border-radius: .5rem;background-color: #fff;border: 1px solid #ddd;display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;position: relative;}
 .popupon{display:none;}
+
+/*物流*/
+.h_wuliu{background:#fff;padding:1.2rem 1rem;}
+.h_wuliul{width:6rem;height:6rem;float:left;position:relative;margin-right:1rem;}
+.h_wuliul img{width:6rem;height:6rem;}
+.h_wuliul p{background:rgba(0,0,0,0.4);position:absolute;bottom:0px;width:100%;color:#fff;text-align: center;}
+.h_wuliur{line-height:1.8rem;margin-top:0.4rem;}
+.h_wuliura{font-size:1.2rem;color:#000;}
+.h_wuliura i{padding-left:0.5rem;}
+.h_wulium{margin:1rem 0;padding:1rem;background:#fff;}
+.h_wuliuma{font-size:1.4rem;height:2.8rem;border-bottom:1px solid #ddd;}
+.h_wuliumb{border-left:1px solid #ddd;margin-top:1rem;margin-left:1.4rem;}
+.h_wuliumb span{position:relative;display:inline-block;margin-left:1rem;margin-right:0.5rem;padding-top:0.8rem;font-size:1.2rem;padding-bottom:1rem;border-bottom:1px solid #ddd;}
+.h_wuliumb span:before{display:block;content:"";position:absolute;top:0rem;left:-1.3rem;background:#ddd;width:0.6rem;height:0.6rem;border-radius:0.3rem;}
+.h_wuliumb span:first-child:before{display:block;content:"";position:absolute;top:0rem;left:-1.4rem;background:#00aa3a;width:0.8rem;height:0.8rem;border-radius:0.4rem;box-shadow: 0 0 3px #00aa3a;}
+.h_wuliumb span:first-child{color:#00aa3a;}
+
+/*底部上城信息*/
+.f_txt{height:3rem;text-align:center;position:relative;top:0rem;color:#999;}
+.f_txt h2{font-size:1.4rem;padding-top:0.8rem;}
+.f_txt p{font-size:1.2rem;opacity: 0.6;}
+.f_txt img{height:1.4rem;vertical-align: middle;}
+.f_heigh{width:100%;}
+
+.f_relative{position:absolute;margin-top:1.1rem;}
+.f_fix{position:fixed;bottom:5rem;}
+
+
+.big_green_btn{background:none;border:1px solid #ddd;color:#333 !important;}
