@@ -55,6 +55,51 @@ module.exports = {
       return res.json({code: 0, msg: '', data: obj});
     });
   },
+  showPost:function(req,res){
+    var LogisticCode = req.query.sno;
+    var id = req.query.sid;
+    var oid = req.query.oid;
+    async.parallel({
+      channelList: function (done) {
+        Cms_channel.getChannel(function (list) {
+          done(null, list);
+        });
+      },
+      //获取所有商品分类
+      allClassList: function (done) {
+        Shop_goods_class.getAllClass(function (list) {
+          done(null, list);
+        });
+      },
+      shipdetail:function(done){
+        if(id > 0){
+          Shop_order_ship.findOne({id:id}).exec(function(err,obj){
+            if(obj){
+              var ShipperCode = obj.bn;
+              KuaidiService.init(ShipperCode, LogisticCode,function(b){
+                var rebak = {'sdetail':b,'sname':obj.name,'checkid':0};
+                done(null,rebak);
+              })
+            }
+          })
+        }else{
+          var rebak = {'checkid':1};
+          done(null,rebak);
+        }
+      },
+      goods:function(done){
+        Shop_order.findOne({id:oid}).exec(function(err,obj){
+          done(null,obj)
+        })
+      }
+    },function (err,result){
+      req.data.channelList = result.channelList || [];
+      req.data.allClassList = result.allClassList || [];
+      req.data.goods = result.goods || {};
+      req.data.shipdetail = result.shipdetail || {};
+      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/member_kuaidi', req.data);
+    })
+  },
   dead: function (req, res) {
     var m = req.session.member;
     if (!m || m.memberId < 1) {

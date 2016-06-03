@@ -78,9 +78,9 @@ function list(type){
               if(goods.spec != ''){
                 spec = '('+goods.spec+')';
               }
-              str+='<li>' +
-              '<a><img src="'+goods.imgurl+'?type=s" class="pic_100" />'+goods.name+spec+'</a>' +
-              '<div class="count_pro_r"><ins class="black_text">&yen;<span class="ins_num">'+setPrice(goods.price)+'</span></ins><div>&#120;<span class="buy_num">'+goods.num+'</span></div></div>' +
+              str+='<li style="position:relative;">' +
+              '<a><img src="'+goods.imgurl+'?type=s" class="pic_100" /><span style="width:70%;display:inline-block;line-height:1.6rem;">'+goods.name+spec+'</span></a>' +
+              '<div class="count_pro_r"  style="position:absolute;right:0.5rem;top:1rem;"><ins class="black_text">&yen;<span class="ins_num">'+setPrice(goods.price)+'</span></ins><div>&#120;<span class="buy_num">'+goods.num+'</span></div></div>' +
               '</li>';
             });
             str+='</ul>'+
@@ -93,7 +93,7 @@ function list(type){
               str+='<a href="javascript:receive(\'' + o.id + '\')" class="green_btn">确认收货</a>';
             }
             if(o.status=='active'&&o.shipStatus == 1){
-              str += '<a href="/wap/member/order/showPost?sid='+o.shiptypeId+'&sno='+o.shiptypeNo+'"'+' class="green_btn">查看物流</a>';
+              str += '<a href="/wap/member/showPost?sid='+o.shiptypeId+'&sno='+o.shiptypeNo+'&oid='+o.id+'"'+' class="green_btn">查看物流</a>';
             }
             if(o.status=='dead'){
               str += '<a href="javascript:del(\'' + o.id + '\')" class="white_btn">删除</a>';
