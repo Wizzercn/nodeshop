@@ -5,7 +5,8 @@ var StringUtil = require('../../../../../common/StringUtil');
 var moment = require('moment');
 module.exports = {
   getArea: function (req, res) {
-    var name = req.query.name;
+    //var name = req.query.name;
+    var name = req.body.name;
     if (name) {
       Shop_area.findOne({name: name}).exec(function (e, o) {
         Shop_area.find({

@@ -93,11 +93,14 @@ function showCartList(){
       if(count>0){
         var html='';
         $.each(data.list,function(i,o){
-
+          var spec = '';
+          if(o.spec != ''){
+            spec = '('+o.spec+')';
+          }
           html+='<div id="g_'+i+'" class="w1200 shop_f1s cf2" data-goodsid="'+o.goodsId+'" data-productid="'+o.productId+'" data-num="'+o.num+'">'+
             '<li class="wb"><input name="ids" type="checkbox" class="i_select" checked/>'+
             '<img onclick="clk('+i+')" src="'+o.imgurl+'?type=s" class="pic_160">'+
-            '<section class="wbw"><h3>'+o.name+'</h3>'+
+            '<section class="wbw"><h3>'+o.name+spec+'</h3>'+
             '<div class="num_item">数量：<span class="numbox">'+
             '<i class="reduce_num" onclick="changeNumList('+o.goodsId+','+o.productId+',-1)"></i>'+
             '<input class="num_text" value="'+o.num+'" readonly="readonly" type="text">'+

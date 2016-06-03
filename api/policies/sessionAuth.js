@@ -3,6 +3,7 @@
  * Created by root on 9/9/15.
  */
 module.exports = function (req, res, next) {
+  if (req.url.lastIndexOf('/pie.htc')>0)return res.end('');
   if (req.options.controller.indexOf('private/') == 0 && req.options.controller.indexOf('private/login') < 0) {
     if (req.url == '/favicon.ico')return res.end('');
     if (req.session.auth && !req.session.user.disabled) {
@@ -45,7 +46,8 @@ module.exports = function (req, res, next) {
       return res.redirect('/private/login/login');
     }
   } else {
-    var deviceAgent = req.get('user-agent').toLowerCase();
+    var userAgent=req.get('user-agent')||'';
+    var deviceAgent = userAgent.toLowerCase();
     var agentID = deviceAgent.match(/(iphone|ipod|ipad|android|mobile)/);
     var browse_is_mobile=false;
     var browse_is_weixin=false;

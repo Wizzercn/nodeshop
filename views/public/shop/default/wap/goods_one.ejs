@@ -20,6 +20,20 @@
   <div class="hd"><ul></ul></div>
 </div>
 <%
+var specObj = [];
+var specHas = [];
+if(goods.is_spec){
+  goods.spec.forEach(function(j){
+    j.forEach(function(y){
+      specObj.push(j[0]['spec_name']+':'+y.spec_value_name);
+    })
+  });
+  for(var i in products){
+    specHas.push(i);
+  }
+}
+%>
+<%
 //计算会员价
 var lv=goods.lvprice;
 var hyprice=0;
@@ -32,20 +46,20 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
     hyprice=lv.product_lv.price;
   }else {
     hyprice = goods.price>100?Math.ceil(goods.price * lv.member_lv.dis_count / 100):goods.price;
-
   }
 }
 %>
 <div class="pro_info">
   <h2 class="pro_info_tit pro_info_tit_a"><%=goods.name||''%></h2>
-  <ul class="pri li_2"><li><span class="green_text">销售价：</span><ins class="pri_size_a">&yen;<%=StringUtil.setPrice(goods.price)%></ins></li><li>市场价：<del>&yen;<%=StringUtil.setPrice(goods.priceMarket)%></del></li></ul>
+  <ul class="pri li_2"><li><span class="green_text">销售价：</span><ins class="pri_size_a xsj">&yen;<%=StringUtil.setPrice(goods.price)%></ins></li>
+  <li>市场价：<del id="scj">&yen;<%=StringUtil.setPrice(goods.priceMarket)%></del></li></ul>
   <%if(is_lv){%>
-  <ul class="pri li_2"><span class="green_text">会员价：</span><ins class="pri_size_a">&yen;<%=StringUtil.setPrice(hyprice)%></ins><span class="ml_30">(您的会员分组:<%=hyname||''%>)</span></ul>
+  <ul class="pri li_2"><span class="green_text">会员价：</span><ins class="pri_size_a hyj">&yen;<%=StringUtil.setPrice(hyprice)%></ins><span class="ml_30">(您的会员分组:<%=hyname||''%>)</span></ul>
   <%}%>
   <!---显示配送范围start-->
   <dl class="d_adress">
-    <dt class="d_adressl">配送范围：</dt>
-    <dd class="d_adressr"><span>查看具体范围</span><img src="<%=CssPath%>/wap/images/icon_public/adress.png"></dd>
+    <dt class="d_adressl">配送至：</dt>
+    <dd class="d_adressr"><span id="song_d">选择具体范围</span><img src="<%=CssPath%>/wap/images/icon_public/adress.png"></dd>
   </dl>
   <div class="add_tan width_n">
   	<ul class="add_tana">
@@ -60,9 +74,92 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
 
    		</li>
   	</ul>
+    <span id="areaall" style="display:none"></span>
   </div>
   <!---显示配送范围end-->
-  <div><span>重量：<span><%=goods.weight||'0'%>克</span></span><span class="ml_30">库存：<span><%=goods.products[0].stock||0%><%=goods.unit||''%></span></span></div>
+  <div>
+  <%if(ShopConfig.freight_disabled && ShopConfig.freight_type == 'weight'){%>
+  <span>重量：<span><%=goods.weight||'0'%>克</span></span>
+  <%}%>
+  <span class="ml_30 kus">库存：<span><%=goods.products[0].stock||0%><%=goods.unit||''%></span></span></div>
+
+  <!---spec start--->
+  <%if(goods.is_spec){ var speccheck = [];%>
+  <%
+  var specvalueurl = {};
+  var specquerystr = '';
+  goods.speclist.forEach(function(es){
+    specquerystr += es.name+',';
+    es.values.forEach(function(er){
+      specvalueurl[es.name+':'+er.spec_value] = er.spec_picurl;
+    })
+  });
+  specquerystr = specquerystr.substring(0,specquerystr.length-1);
+  %>
+  <span class="pri_size xzgg" style="font-size:1.5rem;background:#fff;">选择<%=specquerystr%><i></i></span>
+<div class="size_tan popupon" id="showspec">
+  <div class="size_wrap">
+    <div class="po-head">
+      <img src=""  class="po-head-img" id="po-head-img"/>
+      <span class="po-headt"><p>销售价：<ins class="buyprice xsj" style="font-size:1.4rem">&yen;<%=StringUtil.setPrice(goods.price)%></ins></p>
+      <%if(is_lv){%>
+      <p>会员价：<ins class="buyprice hyj" style="font-size:1.4rem">&yen;<%=StringUtil.setPrice(hyprice)%></ins></p>
+      <%}%>
+          <p>库存：&nbsp;&nbsp;&nbsp;<ins class="buystock kus"><%=goods.products[0].stock||0%><%=goods.unit||''%></ins></p></span>
+          <img src="<%=CssPath%>/wap/images/icon_public/end_s.png" class="po-close" id="po-close">
+      </div>
+          <ul class="size_main" style="overflow-y:auto">
+          <%var intimgurl = goods.images[0]['imgurl']+'?type=m';%>
+          <%goods.spec.forEach(function(e){var speccheckone = [];var speconevalue = '';%>
+            <li class="t_size">
+              <span class="t_sizea"><%=e[0]['spec_name']%>：</span>
+              <span class="t_sizem">
+              <%e.forEach(function(o){
+                var specname = e[0]['spec_name'] + ':' + o.spec_value_name;
+                var specstrname = goods.products[0]['spec'];
+                if(specstrname.indexOf(specname) > -1){
+                  speconevalue = specname;
+                }
+                speccheckone.push(specname);
+                if(o.spec_value_imgurl == null){
+                  o.spec_value_imgurl = specvalueurl[specname];
+                }
+                if(o.spec_value_imgurl != null && specstrname.indexOf(specname) > -1){
+                  intimgurl = o.spec_value_imgurl;
+                }
+                %>
+              <span class="specselect <%if(speconevalue == specname){%>t_sizebon<%}else{%>t_sizeb<%}%>" name="<%=specname%>" data-id="<%=o.spec_value_id%>" data-specvalue="<%=specname%>" data-sid="<%=o.spec_id%>" data-value="<%=o.spec_value_name%>" data-checkclick="2" data-imgurl="<%=o.spec_value_imgurl || ''%>">
+              <%=o.spec_value_name%>
+              </span>
+              <%})%>
+              <input type="hidden" id="" value="<%=speconevalue%>" data-speclist="<%-speccheckone%>" class="spec_store" data-spec='<%=e[0]['spec_name']%>' data-idstr="">
+              </span>
+            </li>
+            <%
+              speccheck.push(speccheckone);
+            })%>
+
+            <li class="size_num">
+              <dl class="wb lh_60"><dt style="font-size:1.5rem;margin-left:1rem;margin-bottom:2rem">购买数量：</dt>
+                  <dd class="wbw" style="margin-right:1.5rem"><span class="numbox2">
+                    <i class="reduce_num2 reduce" id="h_reduce">-</i>
+                    <input type="text" value="1" class="num_text2" readonly="true" id="s_buynum">
+                    <i class="add_num2 add" id="h_add">+</i>
+                  </span></dd></dl>
+            </li>
+            <li class="popup_but"><div class="btn_box">
+                <a id="savespec" href="javascript:;" class="big_green_btn" style="background:#F15A25;color:#fff">确&nbsp;&nbsp;定</a>
+                <a href="javascript:specbuynow();" class="size_btnl gochose">立即购买</a>
+                <a href="javascript:specincart();" class="size_btnr gochose" name="0">加入购物车</a>
+                </div></li>
+          </ul>
+  </div>
+</div>
+<input type="hidden" id="intimg" value="<%=intimgurl%>">
+<%}%>
+
+  <!---spec end--->
+
   <%
   var s='';
   if (ShopConfig.freight_disabled == false) {
@@ -154,21 +251,121 @@ if(lv&&lv.member_lv&&lv.member_lv.disabled==false){
     <a href="/wap/" class="shop_ka cf2">首页</a>
     <a id="cartDiv" href="/wap/shopcart/list" class="shop_kb cf2">购物车<i id="cartNum"></i></a>
     <div class="btn_box">
-
+    <%if(goods.is_spec){%>
+      <a href="javascript:specbuy();" class="big_orange_btn">立即购买</a>
+      <a href="javascript:speccart();" class="big_green_btn">加入购物车</a>
+      <%}else{%>
       <a href="javascript:buy();" class="big_orange_btn">立即购买</a>
       <a href="javascript:add();" class="big_green_btn">加入购物车</a>
+      <%}%>
     </div>
   </div>
 </nav>
 <input id="r" type="hidden" value="<%=r%>">
-
 <script type="text/javascript">
   var goodsid=<%=goods.id%>;
   var productid=<%=goods.products[0].id%>;
+  var isLvP = false;
+  var unit = "<%=goods.unit||''%>";
+  <%if(goods.is_spec){%>
+    var specObj = <%-JSON.stringify(specObj)%>;
+    var specHas = <%-JSON.stringify(specHas)%>;
+    var specList = <%-JSON.stringify(products)%>;
+    var specLength = <%=goods.spec.length%>;
+    var specchecklist = <%-JSON.stringify(speccheck)%>;
+    <%}%>
+    <%if(lv&&lv.member_lv&&lv.member_lv.disabled==false){%>
+      isLvP = true;
+      var lvid = <%=lv.member_lv.id%>;
+      var dis_count = <%=lv.member_lv.dis_count%>;
+      <%}%>
   $(function(){
     $('#goods-detail img').css('max-width', '100%').css('height', 'auto');
+    $('#po-close').on('click',function(){
+      $('#showspec').hide();
+    })
+    $('.xzgg').on('click',function(){
+      $('#showspec').show();
+      $('.gochose').show();
+      $('#savespec').hide();
+    })
+    $('#po-head-img').attr('src',$('#intimg').val());
   });
 </script>
+<%if(goods.is_spec){%>
+  <script>
+  function speccart(){
+    $("#showspec").show();
+    $('.gochose').hide();
+    $('#savespec').show();
+    $("#savespec").unbind("click").on("click",function(){
+      specincart();
+    });
+  }
+  function specbuy(){
+    $("#showspec").show();
+    $('.gochose').hide();
+    $('#savespec').show();
+    $("#savespec").unbind("click").on("click",function(){
+      specbuynow();
+    });
+  }
+
+  function returnpid(){
+    var specchoses = returnSelect();
+    if(specchoses.length < specLength){
+      return false;
+    }else{
+      for(var s in specList){
+        var hl = 0;
+        $.each(specchoses,function(m,n){
+          if(s.indexOf(n) > -1)hl++;
+        });
+        if(hl == specLength){
+          var xxid = specList[s]['id'];
+          break;
+        }
+      }
+      return xxid;
+    }
+  }
+
+  function specincart(){
+      var productid = returnpid();
+      if(productid && productid > 0){
+        addToCarData(goodsid,productid,$("#s_buynum").val());
+      }else{
+        tip('请选择完整规格');
+      }
+  };
+
+  function specbuynow(){
+    var productid = returnpid();
+    if(productid && productid > 0){
+      $.ajax({
+        type : "POST",
+        url : "/public/shop/wap/shopcart/save?goodsId="+goodsid+"&productId="+productid+"&num="+$("#s_buynum").val(),
+        data : {
+          list:[]
+        },
+        dataType : "json",
+        success : function(data) {
+          if(data.code==0){
+            window.location.href='/wap/shopcart/buy';
+          }else if(data.code==1){
+            window.location.href='/wap/login?r=/wap/goods/'+goodsid;
+          }else if(data.code==3){
+            tip(data.msg);
+          }
+        }
+      });
+    }else{
+      tip('请选择完整规格');
+    }
+}
+  </script>
+  <script src="<%=TplPath%>/js_wap/spec.js"></script>
+<%}%>
 <script src="<%=TplPath%>/js_wap/goods.js"></script>
 <div class="popups popupon" id="conshow" style="display:none">
   <div class="popup_m">

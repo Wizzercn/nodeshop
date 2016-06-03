@@ -45,11 +45,16 @@ function list(type,start){
           '<div class="member_cdf">订单编号：'+ o.id+'<span>  下单时间：'+new Date(o.createdAt*1000).Format("yyyy-MM-dd hh:mm:ss")+'</span></div>'+
           '<table class="t_main">';
             $.each(o.goods,function(j,goods) {
+              var spec = '';
+              if(goods.spec != ''){
+                spec = goods.spec.split('*');
+                spec = '<font style="color:#FFAA25">（'+spec.join(';')+'）</font>';
+              }
               str += '<tr class="t_second">' +
                 '<td>' +
                 '<dl class="member_cdss">' +
                 '<dt><img src="'+goods.imgurl+'?type=s"></dt>' +
-                '<dd><p><a href="/goods/'+goods.goodsId+'" target="_blank">'+goods.name+'</a></p></dd>' +
+                '<dd><p><a href="/goods/'+goods.goodsId+'" target="_blank">'+goods.name+spec+'</a></p></dd>' +
                 '</dl>' +
                 '</td>' +
                 '<td><span class="number_text">'+goods.num+'</span></td>' +
@@ -61,6 +66,9 @@ function list(type,start){
                   '<td rowspan="' + o.goods.length + '">';
                   if(o.payStatus==0&&o.payType!='pay_cash'){
                   str+='<a href="/shopcart/order/'+ o.id+'" target="_blank" class="bor_o bg00aa30 mt10">去支付</a>';
+                  }
+                  if(o.status=='active'&&o.shipStatus == 1){
+                    str += '<a href="/member/showPost?sid='+o.shiptypeId+'&sno='+o.shiptypeNo+'&oid='+o.id+'"'+' class="bor_o bg00aa30 mt10" target="_blank">查看物流</a>';
                   }
                   if(o.shipStatus==0) {
                     //未支付并且未发货，可以取消订单（注意：货到付款也是未支付状态）

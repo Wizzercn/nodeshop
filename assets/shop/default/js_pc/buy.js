@@ -99,10 +99,10 @@ function listAddr(){
 }
 function loadProvince(){
   $.ajax({
-    type : "GET",
+    type : "POST",
     url : "/public/shop/pc/member/area/getArea",
     dataType : "json",
-    success : function(data) {
+    success : function(data){ 
       if(data.code==0){
         $.each(data.list,function(i,o){
           $("#_province").append('<option value="'+ o.name+'">'+ o.name+'</option>');
@@ -116,11 +116,14 @@ function loadProvince(){
       $("#_area").val('');
       return false;
     }
+    var name = $(this).val();
     $.ajax({
-      type : "GET",
-      url : "/public/shop/pc/member/area/getArea?name="+$(this).val(),
+      type : "POST",
+      url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
+      data:{name:name},
       success : function(data) {
+
         if(data.code==0){
           $("#_city").empty();
           $("#_city").append('<option value="">请选择市</option>');
@@ -136,10 +139,12 @@ function loadProvince(){
       $("#_area").val('');
       return false;
     }
+    var name = $(this).val();
     $.ajax({
-      type : "GET",
-      url : "/public/shop/pc/member/area/getArea?name="+$(this).val(),
+      type : "POST",
+      url : "/public/shop/pc/member/area/getArea",
       dataType : "json",
+      data:{name:name},
       success : function(data) {
         if(data.code==0){
           $("#_area").empty();
@@ -253,7 +258,8 @@ $(function(){
     }
   });
   $("input[name=payType]").eq(0).prop("checked",true);
+  if(window.top === window){
   console.log("%c%s","color: red; background: yellow; font-size: 24px; font-weight: bold;","\u5b89\u5168\u8b66\u544a!");
   console.log("%c%s","color: black; font-size: 18px;","\u8bf7\u52ff\u5728\u6b64\u63a7\u5236\u53f0\u8f93\u5165\u6216\u7c98\u8d34\u4f60\u4e0d\u660e\u767d\u7684\u4ee3\u7801\uff0c\u4ee5\u907f\u514d\u653b\u51fb\u8005\u7a83\u53d6\u4f60\u7684\u4fe1\u606f\u6765\u5192\u5145\u4f60\u3002");
-
+  }
 });
