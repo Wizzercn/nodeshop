@@ -111,9 +111,10 @@
   });
   // $('.orderLink').bind("click",function(e){
   //   console.log(123);
-    function getOrder(id){
+  function getOrder(id){
       $('#dialogOrder #datatable_select_wrapper').load("/private/shop/order/detail/index/",
-      {id:$(id).text()},
+      {id:$(id).text(),
+      memberid:<%=id%>},
       function (data) {
         console.log(data);
       });
