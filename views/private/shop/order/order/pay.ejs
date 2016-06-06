@@ -80,6 +80,7 @@
     $.post("/private/shop/order/order/doPay", {id: <%=obj.id%>}, function (data) {
       if (data.code == 0) {
         datatable.ajax.reload(null,false);
+        Toast.success(data.msg);
       } else {
         Toast.error(data.msg);
       }

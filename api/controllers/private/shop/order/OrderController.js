@@ -174,7 +174,7 @@ module.exports = {
         }).exec(function (el1, ol1) {
         });
         if (orderList.length == ++i) {
-          return res.json({code: 0});
+          return res.json({code: 0,msg:"发货完成"});
         }
         });
       }
@@ -210,8 +210,8 @@ module.exports = {
           disabled: false,
           trade_no: ''
         }).exec(function (er, obj) {
-          if(er){return res.json({msg: '订单不存在'});}
-          return res.json({code: 0});
+          if(er){return res.json({code:1,msg: '订单不存在'});}
+          return res.json({code: 0,msg:"支付完成"});
         });
       });
     });

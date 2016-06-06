@@ -166,8 +166,8 @@
     $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
       console.log(data);
       if (data.code == 0) {
-        console.log(data);
         datatable.ajax.reload(null,false);
+          Toast.success(data.msg);
       } else {
         Toast.error(data.msg);
       }
