@@ -1,7 +1,7 @@
 FROM node:6.2
 # Author
-MAINTAINER wizzer<wizzer@qq.com>
-# Install imagemagick
+MAINTAINER wizzer "wizzer@qq.com"
+
 ENV MYSQL_HOST "192.168.1.11"
 ENV MYSQL_USER "root"
 ENV MYSQL_PASSWORD "root"
@@ -12,11 +12,11 @@ ENV REDIS_PASS "@#etpass"
 # production  development
 ENV NODE_ENV "production"
 ENV PORT 1337
+ENV LANG C.UTF-8
 
-
-#RUN apt-get update && apt-get install -y \
-#		imagemagick \
-#	--no-install-recommends && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+		imagemagick \
+	--no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /node/sunshop
 WORKDIR /node/sunshop
