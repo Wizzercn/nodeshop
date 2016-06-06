@@ -66,7 +66,9 @@
       "columnDefs": [
         {
           "render": function (data, type, row) {
-            return '<a style="color: #3367ac;" href="/private/shop/order/detail/'+data+'" target="_blank">'+data+'</a>';
+            // return data;
+            return '<a class="orderLink" style="color: #3367ac;" href="javascript:void(0);" onclick="getOrder(this);">'+data+'</a>';
+            // return '<a style="color: #3367ac;" href="/private/shop/order/detail/index/'+data+'" data-toggle="modal" data-target="#dialogDetail">'+data+'</a>';
           },
           "targets": 0
         },
@@ -107,5 +109,16 @@
   $(document).ready(function () {
     initdatatable_select();
   });
+  // $('.orderLink').bind("click",function(e){
+  //   console.log(123);
+    function getOrder(id){
+      $('#dialogOrder #datatable_select_wrapper').load("/private/shop/order/detail/index/",
+      {id:$(id).text()},
+      function (data) {
+        console.log(data);
+      });
+    }
+
+
 
 </script>
