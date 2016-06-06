@@ -25,7 +25,6 @@ module.exports = {
     // }
     var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
     var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
-    endDay += 1000 * 3600 * 24 - 1;
     var ssql = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
     ssql += "where o.id=og.orderId and  o.status <> 'dead' and o.disabled=0";
     ssql += " and o.createdAt<=" + endDay;
