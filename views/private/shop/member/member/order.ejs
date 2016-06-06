@@ -67,8 +67,8 @@
         {
           "render": function (data, type, row) {
             // return data;
-            return '<a class="orderLink" style="color: #3367ac;" href="javascript:void(0);" onclick="getOrder(this);">'+data+'</a>';
-            // return '<a style="color: #3367ac;" href="/private/shop/order/detail/index/'+data+'" data-toggle="modal" data-target="#dialogDetail">'+data+'</a>';
+            // return '<a class="orderLink" style="color: #3367ac;" href="javascript:void(0);" onclick="getOrder(this);">'+data+'</a>';
+            return '<a style="color: #3367ac;" href="/private/shop/order/detail/index/'+data+'" data-toggle="modal" data-target="#orderDetail">'+data+'</a>';
           },
           "targets": 0
         },
@@ -114,10 +114,7 @@
   function getOrder(id){
       $('#dialogOrder #datatable_select_wrapper').load("/private/shop/order/detail/index/",
       {id:$(id).text(),
-      memberid:<%=id%>},
-      function (data) {
-        console.log(data);
-      });
+      memberid:<%=id%>});
     }
 
 
