@@ -124,8 +124,8 @@ canvas{
 
       var beginDay = $('#beginDate').val();
       var endDay = $('#endDate').val();
-
-
+      $(".gallery-loader").fadeIn();
+      sublime.showLoadingbar($(".main-content"));
       $.post("/private/shop/report/sale/saleDate", {beginDay:beginDay,endDay:endDay}, function (saleDate) {
 
         $('#payAmont').html('&yen;'+ saleDate.payment);
@@ -144,7 +144,6 @@ canvas{
         $('#wxpay').html('&yen;'+ pay_wxpay_amount);
         $('#moneypay').html('&yen;'+ pay_moneypay_amount);
         $('#cashpay').html('&yen;'+ pay_cashpay_amount);
-        console.log(saleDate);
         var config = {
           type: 'line',
           data: {
@@ -197,6 +196,8 @@ canvas{
         var ctx = document.getElementById("canvas").getContext("2d");
         window.myLine = new Chart(ctx, config);
         // var myNewChart = new Chart(ctx).Line(data);
+        $(".gallery-loader").fadeOut();
+        sublime.closeLoadingbar($(".main-content"));
       }, "json");
     }
     function select(){
