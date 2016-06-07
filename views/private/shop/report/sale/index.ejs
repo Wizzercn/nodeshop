@@ -205,28 +205,43 @@ canvas{
     }
     function lastMonth() {
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       var tmpDay = new Date(now.getFullYear(),now.getMonth());
       var beginDay = new Date(now.getFullYear(),now.getMonth()-1);
-      var endDay = new Date(tmpDay-1);
+      var endDay = new Date(tmpDay-1000*60*60*24);
       setDatePicker(beginDay,endDay);
     }
     function thisMonth() {
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       var beginDay = new Date(now.getFullYear(),now.getMonth());
       var endDay = new Date(now);
       setDatePicker(beginDay,endDay);
     }
     function lastDay(){
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       var yesterday  = new Date(now-1000*60*60*24);
       setDatePicker(yesterday,yesterday);
     }
     function thisDay() {
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       setDatePicker(now,now);
     }
     function lastWeek() {
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       var tmpDay = now.getDay();
       var beginDay = new Date(now-(tmpDay+6)*1000*60*60*24);
       var endDay = new Date(now-tmpDay*1000*60*60*24);
@@ -234,6 +249,9 @@ canvas{
     }
     function thisWeek() {
       var now = new Date();
+      now.setHours(0);
+      now.setMinutes(0);
+      now.setSeconds(0);
       var tmpDay = now.getDay();
       var beginDay = new Date(now-(tmpDay-1)*1000*60*60*24);
       setDatePicker(beginDay,now);
@@ -246,6 +264,7 @@ canvas{
       $('#beginDayPick').val(beginDay);
       $('#endDate').val(endDay);
       $('#endDayPick').val(endDay);
+
       initChart();
     }
 
