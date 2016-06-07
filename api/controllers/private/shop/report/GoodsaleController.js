@@ -25,7 +25,6 @@ module.exports = {
     // }
     var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
     var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
-    endDay += 1000 * 3600 * 24 - 1;
     var ssql = "select og.name name,sum(og.amount) amount from shop_order_goods og,shop_order o ";
     ssql += "where o.id=og.orderId and  o.status <> 'dead' and o.disabled=0";
     ssql += " and o.createdAt<=" + endDay;
@@ -42,7 +41,7 @@ module.exports = {
         var list = [];
         Shop_order_goods.query(ssql1, function (err, obj) {
           for (var i = 0; i < obj.length; i++) {
-            list.push({index: i + 1, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
+            list.push({index: i + 1+(page-1)*pageSize, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
           }
           return res.json({
             "draw": draw,

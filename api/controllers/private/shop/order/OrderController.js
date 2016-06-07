@@ -104,8 +104,10 @@ module.exports = {
     //查出订单信息
     Shop_order.findOne(req.params.id)
     .populate('memberId')
+    .populate('goods')
     .exec(function (err, obj) {
       orderObj = obj || {};
+
       Shop_logistics.find().exec(function (err, obj) {
         var where = {
           disabled: false,
@@ -126,7 +128,8 @@ module.exports = {
           addrAddr: orderObj.addrAddr,
           addrName: orderObj.addrName,
           addrMobile: orderObj.addrMobile,
-          payStatus: orderObj.payStatus
+          payStatus: orderObj.payStatus,
+          id:{"!":req.params.id}
         };
         orderObj['ship'] = obj;
         //查找可合并发货订单
@@ -137,7 +140,7 @@ module.exports = {
           req.data.moment = moment;
           req.data.StringUtil = StringUtil;
           req.data.obj = orderObj;
-          sails.log.debug(req.data.obj);
+          sails.log.debug(req.data);
           return res.view('private/shop/order/order/send', req.data);
         });
       });
@@ -171,7 +174,7 @@ module.exports = {
         }).exec(function (el1, ol1) {
         });
         if (orderList.length == ++i) {
-          return res.json({code: 0});
+          return res.json({code: 0,msg:"发货完成"});
         }
         });
       }
@@ -207,8 +210,8 @@ module.exports = {
           disabled: false,
           trade_no: ''
         }).exec(function (er, obj) {
-          if(er){return res.json({msg: '订单不存在'});}
-          return res.json({code: 0});
+          if(er){return res.json({code:1,msg: '订单不存在'});}
+          return res.json({code: 0,msg:"支付完成"});
         });
       });
     });
