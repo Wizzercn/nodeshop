@@ -39,7 +39,7 @@ module.exports = {
           for (var i = 0; i < obj.length; i++) {
             list.push(
               {
-                index: i + 1,
+                index: i + 1+(page-1)*pageSize,
                 nickname: obj[i].nickname,
                 name:obj[i].name,
                 amount: StringUtil.setPrice(obj[i].amount)

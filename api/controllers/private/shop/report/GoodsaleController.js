@@ -41,7 +41,7 @@ module.exports = {
         var list = [];
         Shop_order_goods.query(ssql1, function (err, obj) {
           for (var i = 0; i < obj.length; i++) {
-            list.push({index: i + 1, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
+            list.push({index: i + 1+(page-1)*pageSize, name: obj[i].name, amount: StringUtil.setPrice(obj[i].amount)});
           }
           return res.json({
             "draw": draw,
