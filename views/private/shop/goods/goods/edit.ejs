@@ -39,10 +39,7 @@
   <div class="wrapper" style="min-height:500px;">
     <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
           action="/private/shop/goods/goods/editDo" method="post">
-      <%var is_spec=false;
-      if(goods.products.length>1){
-        is_spec=true;
-      }
+      <%var is_spec=goods.is_spec;
       %>
       <input type="hidden" name="id" id="id" value="<%=goods.id%>">
       <div class="box-tab tabs-left">
@@ -714,6 +711,8 @@
         var price=$("#price").val();
         var priceMarket=$("#priceMarket").val();
         var priceCost=$("#priceCost").val();
+        var buyMin=$("#buyMin").val();
+        var buyMax=$("#buyMax").val();
         var weight=$("#weight").val();
         $.each(product_name,function(i,name){
           i++;
@@ -722,12 +721,12 @@
           if(pbn!=""){
             bn=pbn+"-"+i;
           }
-          str+="<td>"+name+"<input name='pid[]' value='hidden' type='text'></td>";
+          str+="<td>"+name+"<input name='pid[]' type='hidden'></td>";
           str+="<td><input name='pbn[]' type='text' class='form-control'  value='"+bn+"' style='height: 22px;width: 80px;padding: 0 2px;'></td>";
           str+="<td><input name='up[]' type='checkbox' checked></td>";
           str+="<td><input name='stock[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
-          str+="<td><input name='buyMin[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
-          str+="<td><input name='buyMax[]' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+          str+="<td><input name='buyMin[]' value='"+buyMin+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
+          str+="<td><input name='buyMax[]' value='"+buyMax+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
           str+="<td style='text-align: left;width: 150px;'><div style='float: left'><input name='price[]' type='text' value='"+price+"' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></div><div style='float: left'>" +
             "<input name='lvprice[]' type='hidden' value='[]'><a class='member' href='javascript:;' style='color: #428bca'>会员价</a></div></td>";
           str+="<td><input name='priceMarket[]' value='"+priceMarket+"' type='text' class='form-control' style='height: 22px;width: 60px;padding: 0 2px;'></td>";
