@@ -12,8 +12,10 @@ web:
     "MYSQL_LIMIT": 50
     "REDIS_HOST": "redis"
     "REDIS_PASS": ""
-    "NODE_ENV": "production"
-  command: pm2 start app.js --no-daemon
+    "LOG_LEVEL": "verbose"
+    "PORT": 1337
+    "NODE_ENV": "development"
+  command: pm2 start /node/sunshop/app.js --no-daemon
   ports:
     - "1337:1337"
   volumes:

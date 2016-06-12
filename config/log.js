@@ -20,7 +20,7 @@ var logger = new(winston.Logger)({
       datePattern: 'yyyy-MM-dd',
       maxFiles: 7,
       maxsize: 100000000,
-      level: 'verbose',
+      level: process.env.LOG_LEVEL||'verbose',
       json: false,
       colorize: false
     })
@@ -40,6 +40,6 @@ module.exports.log = {
   *                                                                          *
   ***************************************************************************/
 
-   level: 'verbose',
+   level: process.env.LOG_LEVEL||'verbose',
    custom: logger
 };
