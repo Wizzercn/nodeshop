@@ -1,7 +1,7 @@
 <style>
-  .order-item-select {
-    border-color: #6AABE0 !important;
-  }
+.order-item-select {
+  border-color: #6AABE0 !important;
+}
 </style>
 <!--<form action="/private/shop/order/order/doSend" method="post">-->
 <div class="modal-body no-p">
@@ -16,61 +16,90 @@
         <div class="list-group" style="text-align: center;padding-top: 10px;">
           <table width="80%" style="padding: 10px;">
             <!-- <tr style="height: 30px;">
-              <td width="20%" align="right">订单号：</td>
-              <td width="30%" align="left">
-                <%=obj.id%>
-              </td>
-              <td width="20%" align="right">订单总额：</td>
-              <td width="30%" align="left">
-                &yen;<%=StringUtil.setPrice(obj.finishAmount)||'0.00'%>
-              </td>
-            </tr> -->
-            <tr style="height: 30px;">
-              <td width="20%" align="right">会员昵称：</td>
-              <td width="30%" align="left">
-                <%var nickname = obj.memberId?obj.memberId.nickname?obj.memberId.nickname:'':'' %>
-                <%-nickname%>
-              </td>
-              <td width="20%" align="right">会员手机：</td>
-              <td width="30%" align="left">
-                <%var mobile = obj.memberId?obj.memberId.mobile?obj.memberId.mobile:'':''%>
-                <%= mobile %>
-              </td>
+            <td width="20%" align="right">订单号：</td>
+            <td width="30%" align="left">
+            <%=obj.id%>
+          </td>
+          <td width="20%" align="right">订单总额：</td>
+          <td width="30%" align="left">
+          &yen;<%=StringUtil.setPrice(obj.finishAmount)||'0.00'%>
+        </td>
+      </tr> -->
+      <tr style="height: 30px;">
+        <td width="20%" align="right">会员昵称：</td>
+        <td width="30%" align="left">
+          <%var nickname = obj.memberId?obj.memberId.nickname?obj.memberId.nickname:'':'' %>
+          <%-nickname%>
+        </td>
+        <td width="20%" align="right">会员手机：</td>
+        <td width="30%" align="left">
+          <%var mobile = obj.memberId?obj.memberId.mobile?obj.memberId.mobile:'':''%>
+          <%= mobile %>
+        </td>
+      </tr>
+      <tr style="height: 30px;">
+        <td width="20%" align="right">收货人：</td>
+        <td width="30%" align="left"><%= obj.addrName||'未知'%></td>
+        <td width="20%" align="right">收货人手机：</td>
+        <td width="30%" align="left"><%=obj.addrMobile||'0'%></td>
+      </tr>
+      <tr style="height: 30px;">
+        <td width="20%" align="right">收货地址：</td>
+        <td width="80%" align="left" colspan="3">
+          <%-obj.addrProvince+obj.addrCity+obj.addrArea+obj.addrAddr%>
+        </td>
+      </tr>
+      <tr style="height: 30px;">
+        <td width="20%" align="right">发货方式：</td>
+        <td width="30%" align="left">
+          物流发货
+          <select id="shiptypeId" name="shiptypeId">
+            <%if(obj.ship){obj.ship.forEach(function(o){%>
+              <option value ="<%=o.id%>"><%=o.name%></option>
+              <%});}%>
+            </select>
+            商家发货
+            <input type="checkbox" id="shopShip" name="shopShip">
+          </td>  <td width="20%" align="right">物流单号：</td>
+          <td width="30%" align="left">
+            <input id="shiptypeNo" type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
+          </td>
+        </tr>
+      </table>
+      <div class=" order-item-select" style="border: solid 1px #CCC;margin: 5px 25px;padding: 5px;">
+        <div style="float:left">
+          <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="display:none" value="<%=obj.id%>"><%=obj.id%>
+        </div>
+        <table width="80%" style="padding: 10px;margin-left: 25px;margin-top: 30px;">
+          <thead>
+            <tr>
+              <td width="30%" align="center">商品名称</td>
+              <td width="20%" align="center">规格</td>
+              <td width="20%" align="center">单价</td>
+              <!-- <td width="10%" align="center">数量</td> -->
+              <td width="30%" align="center">订单数量</td>
             </tr>
-            <tr style="height: 30px;">
-              <td width="20%" align="right">收货人：</td>
-              <td width="30%" align="left"><%= obj.addrName||'未知'%></td>
-              <td width="20%" align="right">收货人手机：</td>
-              <td width="30%" align="left"><%=obj.addrMobile||'0'%></td>
+          </thead>
+          <tbody>
+            <%if(obj.goods){obj.goods.forEach(function(o){%>
+              <tr>
+                <td width="30%" align="center"><%=o.name||''%></td>
+                <td width="20%" align="center"><%=o.spec||''%></td>
+                <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
+                <!-- <td width="10%" align="center">
+                <input type="number" name="num" min="0" max="<%=o.num||0%>" value="<%=o.num||''%>" style="width:50px">
+              </td> -->
+              <td width="30%" align="center"><%=o.num||'0'%></td>
             </tr>
-            <tr style="height: 30px;">
-              <td width="20%" align="right">收货地址：</td>
-              <td width="80%" align="left" colspan="3">
-                <%-obj.addrProvince+obj.addrCity+obj.addrArea+obj.addrAddr%>
-              </td>
-            </tr>
-            <tr style="height: 30px;">
-              <td width="20%" align="right">发货方式：</td>
-              <td width="30%" align="left">
-              物流发货
-              <select id="shiptypeId" name="shiptypeId">
-                <%if(obj.ship){obj.ship.forEach(function(o){%>
-                  <option value ="<%=o.id%>"><%=o.name%></option>
-                <%});}%>
-              </select>
-              商家发货
-              <input type="checkbox" id="shopShip" name="shopShip">
-            </td>  <td width="20%" align="right">物流单号：</td>
-                <td width="30%" align="left">
-                  <input id="shiptypeNo" type="text" name="shiptypeNo" required='required' oninvalid="setCustomValidity('请填写物流单号')" oninput="setCustomValidity('')">
-                </td>
-            </tr>
-          </table>
-          <%if(obj.orderList){obj.orderList.forEach(function(obj){%>
+            <%});}%>
+          </tbody>
+        </table>
+      </div>
+      <%if(obj.orderList){obj.orderList.forEach(function(obj){%>
         <div class="order-item order-item-select" style="border: solid 1px #CCC;margin: 5px 25px;padding: 5px;">
           <div style="float:left">
-          <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="" value="<%=obj.id%>"><%=obj.id%>
-        </div>
+            <input type="checkbox" class='order-chk' name="orderlist[]" checked="checked" style="" value="<%=obj.id%>"><%=obj.id%>
+          </div>
           <table width="80%" style="padding: 10px;margin-left: 25px;margin-top: 30px;">
             <thead>
               <tr>
@@ -88,61 +117,61 @@
                   <td width="20%" align="center"><%=o.spec||''%></td>
                   <td width="20%" align="center">&yen;<%=StringUtil.setPrice(o.price)||'0.00'%></td>
                   <!-- <td width="10%" align="center">
-                    <input type="number" name="num" min="0" max="<%=o.num||0%>" value="<%=o.num||''%>" style="width:50px">
-                  </td> -->
-                  <td width="30%" align="center"><%=o.num||'0'%></td>
-                </tr>
-                <%});}%>
-              </tbody>
-            </table>
-          </div>
+                  <input type="number" name="num" min="0" max="<%=o.num||0%>" value="<%=o.num||''%>" style="width:50px">
+                </td> -->
+                <td width="30%" align="center"><%=o.num||'0'%></td>
+              </tr>
               <%});}%>
-          </div>
-        </section>
+            </tbody>
+          </table>
+        </div>
+        <%});}%>
       </div>
-    </div>
+    </section>
   </div>
-  <div class="modal-footer">
-    <button id="send" type="button" class="btn btn-primary btn-block" data-dismiss="modal">发货</button>
-  </div>
-    <!--</form>-->
+</div>
+</div>
+<div class="modal-footer">
+  <button id="send" type="button" class="btn btn-primary btn-block" data-dismiss="modal">发货</button>
+</div>
+<!--</form>-->
 <script>
-var shopShip = false;
-$('.order-chk').bind('change',function(e){
-  $(this).parent().parent().toggleClass('order-item-select');
-});
-$('.order-item').bind('click',function(e){
-  $(this).find('.order-chk').click();
-});
-$('#shopShip').bind('click',function(e){
+  var shopShip = false;
+  $('.order-chk').bind('change',function(e){
+    $(this).parent().parent().toggleClass('order-item-select');
+  });
+  $('.order-item').bind('click',function(e){
+    $(this).find('.order-chk').click();
+  });
+  $('#shopShip').bind('click',function(e){
 
-  console.log($(this));
-  if (this.checked==true) {
-    $('#shiptypeId').attr("disabled","disabled");
-    shopShip = true;
-  }else {
+    console.log($(this));
+    if (this.checked==true) {
+      $('#shiptypeId').attr("disabled","disabled");
+      shopShip = true;
+    }else {
       $('#shiptypeId').removeAttr("disabled");
       shopShip = false;
-  }
-
-});
-$('#send').on('click',function(e){
-  var ids = [];
-  $('.order-chk:checked').each(function(o){
-    ids.push($(this).val());
-  });
-  var shiptypeId = $('#shiptypeId').val();
-  var shiptypeNo = $('#shiptypeNo').val();
-
-  $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
-    console.log(data);
-    if (data.code == 0) {
-      console.log(data);
-      datatable.ajax.reload(null,false);
-    } else {
-      Toast.error(data.msg);
     }
-  }, "json");
 
-});
+  });
+  $('#send').on('click',function(e){
+    var ids = [];
+    $('.order-chk:checked').each(function(o){
+      ids.push($(this).val());
+    });
+    var shiptypeId = $('#shiptypeId').val();
+    var shiptypeNo = $('#shiptypeNo').val();
+
+    $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
+      console.log(data);
+      if (data.code == 0) {
+        datatable.ajax.reload(null,false);
+          Toast.success(data.msg);
+      } else {
+        Toast.error(data.msg);
+      }
+    }, "json");
+
+  });
 </script>

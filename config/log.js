@@ -9,7 +9,23 @@
  * For more information on the Sails logger, check out:
  * http://sailsjs.org/#!/documentation/concepts/Logging
  */
-
+var winston = require('winston');
+var DailyRotateFile = require('winston-daily-rotate-file');
+/*see the documentation for Winston:  https://github.com/flatiron/winston */
+var logger = new(winston.Logger)({
+  transports: [
+    new (winston.transports.Console)({}),
+    new (winston.transports.DailyRotateFile)({
+      filename: 'backup/log',
+      datePattern: 'yyyy-MM-dd',
+      maxFiles: 7,
+      maxsize: 100000000,
+      level: 'verbose',
+      json: false,
+      colorize: false
+    })
+  ]
+});
 module.exports.log = {
 
   /***************************************************************************
@@ -24,6 +40,6 @@ module.exports.log = {
   *                                                                          *
   ***************************************************************************/
 
-   level: 'verbose'
-
+   level: 'verbose',
+   custom: logger
 };

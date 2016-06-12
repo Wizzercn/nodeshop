@@ -19,23 +19,27 @@ module.exports = {
     var columns = req.body.columns || [];
     var sort = {};
     var where = {status: {'!': 'dead'}};
-    Shop_order.count(where).exec(function (err, count) {
-      if (!err && count > 0) {
-        var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
-        var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
-        endDay += 1000 * 3600 * 24 - 1;
-        var ssql = "select m.nickname nickname,l.name name,sum(o.finishAmount) amount from shop_member m,shop_order o,shop_member_lv l ";
-        ssql += " where o.memberId=m.id and m.lv_id=l.id and o.status <> 'dead' and o.disabled=0";
-        ssql += " and o.createdAt<=" + endDay;
-        ssql += " and o.createdAt>=" + beginDay;
-        ssql += " group by m.nickname,l.name order by sum(o.finishAmount) desc";
+    var beginDay = req.body.beginDay ? moment(req.body.beginDay).format('X') : beginDay = moment().add(-30, 'days').format('X');
+    var endDay = req.body.endDay ? moment(req.body.endDay).format('X') : endDay = moment().format('X');
+    var ssql = "select m.nickname nickname,l.name name,sum(o.finishAmount) amount from shop_member m,shop_order o,shop_member_lv l ";
+    ssql += " where o.memberId=m.id and m.lv_id=l.id and o.status <> 'dead' and o.disabled=0";
+    ssql += " and o.createdAt<=" + endDay;
+    ssql += " and o.createdAt>=" + beginDay;
+    ssql += " group by m.nickname,l.name order by sum(o.finishAmount) desc";
+    Shop_order_goods.query(ssql,function (err, o) {
+      if (!err && o.length > 0) {
+        var ssql1 = "select m.nickname nickname,l.name name,sum(o.finishAmount) amount from shop_member m,shop_order o,shop_member_lv l ";
+        ssql1 += " where o.memberId=m.id and m.lv_id=l.id and o.status <> 'dead' and o.disabled=0";
+        ssql1 += " and o.createdAt<=" + endDay;
+        ssql1 += " and o.createdAt>=" + beginDay;
+        ssql1 += " group by m.nickname,l.name order by sum(o.finishAmount) desc";
+        ssql1 += " LIMIT "+pageSize+" OFFSET "+start;
         var list = [];
-        Shop_order_goods.query(ssql, function (err, obj) {
-          console.log(obj);
+        Shop_order_goods.query(ssql1, function (err, obj) {
           for (var i = 0; i < obj.length; i++) {
             list.push(
               {
-                index: i + 1,
+                index: i + 1+(page-1)*pageSize,
                 nickname: obj[i].nickname,
                 name:obj[i].name,
                 amount: StringUtil.setPrice(obj[i].amount)
@@ -45,7 +49,7 @@ module.exports = {
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,
-            "recordsFiltered": obj.length,
+            "recordsFiltered": o.length,
             "data": list
           });
         });

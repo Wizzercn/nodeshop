@@ -1,0 +1,23 @@
+redis:
+  image: redis
+web:
+  image: wizzer/sunshop
+  links:
+    - redis
+  environment:
+    "MYSQL_HOST": "192.168.1.11"
+    "MYSQL_USER": "root"
+    "MYSQL_PASSWORD": "root"
+    "MYSQL_DATABASE": "nodeshop"
+    "MYSQL_LIMIT": 50
+    "REDIS_HOST": "redis"
+    "REDIS_PASS": ""
+    "NODE_ENV": "production"
+  command: pm2 start app.js --no-daemon
+  ports:
+    - "1337:1337"
+  volumes:
+    - "/node/sunshop/cert:/node/sunshop/cert"
+    - "/node/sunshop/upload:/node/sunshop/upload"
+    - "/node/sunshop/backup:/node/sunshop/backup"
+

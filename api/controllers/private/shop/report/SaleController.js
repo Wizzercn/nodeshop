@@ -14,14 +14,18 @@ module.exports = {
   saleDate: function (req,res) {
     var beginDay = req.body.beginDay?moment(req.body.beginDay).format('X'):beginDay = moment().add(-30, 'days').format('X');
     var endDay = req.body.endDay?moment(req.body.endDay).add(1, 'days').format('X'):endDay = moment().format('X');
-    var ssql = "select FROM_UNIXTIME(o.createdAt,'%Y%m%d') as date,IFNULL(sum(o.payAmount),0) as amount,";
+    endDay = endDay-1;
+    console.log("beginDay::::"+beginDay);
+    console.log("endDay::::"+endDay);
+    var ssql = "select FROM_UNIXTIME(o.payAt,'%Y%m%d') as date,IFNULL(sum(o.payAmount),0) as amount,";
     ssql += "sum(IFNULL(hp.money,0)) as payment,sum(IFNULL(hr.money,0)) as refund,IFNULL(count(1),0) as countOrder"
     ssql += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
     ssql += " left join shop_history_refunds hr on o.id=hr.orderId";
     ssql += " where o.disabled=0 and o.payStatus<>0";
     ssql += " and o.payAt<=" + endDay;
     ssql += " and o.payAt>=" + beginDay;
-    ssql += " group by FROM_UNIXTIME(createdAt,'%Y%m%d')";
+    ssql += " group by FROM_UNIXTIME(o.payAt,'%Y%m%d')";
+    ssql += " order by FROM_UNIXTIME(o.payAt,'%Y%m%d')";
     Shop_order.query(ssql,function (err,obj) {
       var ssqlpay = "select o.payType,sum(IFNULL(hp.money,0))-sum(IFNULL(hr.money,0)) payAmount";
       ssqlpay += " from shop_order o left join shop_history_payments hp on o.id=hp.orderId";
