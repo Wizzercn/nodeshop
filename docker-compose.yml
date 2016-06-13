@@ -24,8 +24,9 @@ web:
     "REDIS_HOST": "redis"
     "REDIS_PASS": ""
     "LOG_LEVEL": "verbose"
+    "LOG_SQL": "false"
     "PORT": 1337
-    "NODE_ENV": "development"
+    "NODE_ENV": "production"
   command: "pm2 start /node/sunshop/app.js --no-daemon"
   ports:
     - "1337:1337"
