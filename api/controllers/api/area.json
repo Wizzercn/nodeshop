@@ -1,0 +1,57 @@
+/**
+ * @api {POST} /api/area/getArea 01.GetArea
+ * @apiName GetArea
+ * @apiGroup Area
+ * @apiVersion 1.0.0
+ * @apiDescription 获取区域
+ * @apiPermission token
+ *
+ * @apiParam {string} token token
+ * @apiParam {number} pid 父节点ID(0获取一级区域)
+ *
+ * @apiParamExample {json} 示例
+ *   POST /api/area/getArea
+ *   {
+ *      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjIsImV4cCI6MTQ2NDI0ODk0MDY5OX0.fCQ8QPFDvyuYEFFylAC50x7qEMJ82E4FwoVPUXc6Qt0",
+ *      "pid":0
+ *   }
+ *
+ * @apiSuccess (成功) {number} code 0
+ * @apiSuccess (成功) {string} msg success
+ * @apiSuccess (成功) {Object[]} data 对象数组
+ * @apiSuccess (成功) {number} data.id 节点ID
+ * @apiSuccess (成功) {number} data.parentId 父节点ID
+ * @apiSuccess (成功) {string} data.path 树路径(4位一级)
+ * @apiSuccess (成功) {string} data.name 区域名称
+ * @apiSuccess (成功) {string} data.code 区域代码(预留字段)
+ * @apiSuccess (成功) {boolean} data.disabled 是否禁用(此接口获取的全是false)
+ * @apiSuccess (成功) {boolean} data.hasChildren 是否有子级
+ * @apiSuccess (成功) {number} data.location 排序(asc)
+ * @apiSuccessExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 0,
+ *     "msg": "success",
+ *     "data": [
+ *     {
+ *       "id": 2,
+ *       "parentId": 1,
+ *       "path": "00010001",
+ *       "name": "合肥市",
+ *       "code": null,
+ *       "disabled": false,
+ *       "hasChildren": true,
+ *       "location": 0
+ *      }
+ *    ]
+ *   }
+ *
+ * @apiError (失败) {number} code 不为0
+ * @apiError (失败) {string} msg 错误文字描述
+ * @apiErrorExample {json} 示例
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "code": 1
+ *     "msg": "err::"
+ *   }
+ */

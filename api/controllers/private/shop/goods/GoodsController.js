@@ -63,7 +63,7 @@ module.exports = {
   },
   addDo: function (req, res) {
     var body = req.body;
-    //sails.log.warn("body::" + JSON.stringify(body));
+    sails.log.warn("body::" + JSON.stringify(body));
     async.waterfall([function (cb) {
       var y = moment().format('YY');
       var m = moment().format('MM');
@@ -106,6 +106,7 @@ module.exports = {
       goods.updatedBy = req.session.user.id;
       goods.updatedAt = moment().format('X');
       goods.upAt = moment().format('X');
+      goods.is_spec=is_spec;
       var k = 0;
       images.forEach(function (o) {
         var url = o.url.substring(0, o.url.indexOf('?'));
@@ -177,9 +178,6 @@ module.exports = {
           }
           products.push(p);
         });
-        if (products.length > 1) {
-          goods.is_spec = true;
-        }
       }
       //console.log('goods:::'+JSON.stringify(goods));
       Shop_goods.create(goods).exec(function (e1, o1) {
@@ -349,6 +347,7 @@ module.exports = {
       goods.updatedBy = req.session.user.id;
       goods.updatedAt = moment().format('X');
       goods.upAt = moment().format('X');
+      goods.is_spec=is_spec;
       var k = 0;
       images.forEach(function (o) {
         var url = o.url.substring(0, o.url.indexOf('?'));
@@ -359,7 +358,6 @@ module.exports = {
         k++;
       });
       goods.imgurl = imgurl;
-      goods.is_spec = false;
       var no_del_productIds = [];
       if (!is_spec) {
         var sobj = specs[0];
@@ -388,8 +386,10 @@ module.exports = {
         p.spec = sobj.spec;
         p.is_default = sobj.is_default;
         p.lvprice = sobj.lvprice;
-        p.id = sobj.id;
-        no_del_productIds.push(p.id);
+        if(sobj.id) {
+          p.id = sobj.id;
+          no_del_productIds.push(p.id);
+        }
         products.push(p);
       } else {
         specs.forEach(function (sobj) {
@@ -412,8 +412,10 @@ module.exports = {
           p.lvprice = sobj.lvprice;
           p.is_default = sobj.is_default;
           p.disabled = sobj.disabled == '1';
-          p.id = sobj.id;
-          no_del_productIds.push(p.id);
+          if(sobj.id){
+            p.id = sobj.id;
+            no_del_productIds.push(p.id);
+          }
           if (sobj.is_default) {
             goods.price = StringUtil.getPrice(sobj.price);
             goods.priceMarket = StringUtil.getPrice(sobj.priceMarket);
@@ -425,78 +427,79 @@ module.exports = {
           }
           products.push(p);
         });
-        if (products.length > 1) {
-          goods.is_spec = true;
-        }
       }
-      Shop_goods_products.destroy({id: {'!': no_del_productIds}, goodsid: id}).exec(function (e_del) {
-
-
-        Shop_goods.update(id, goods).exec(function (e1, o1) {
-          if (o1) {
-            var i = 0;
-            var no_del_productIds = [];
-            products.forEach(function (sobj) {
-              no_del_productIds.push(sobj.id);
-              sobj.goodsid = id;
-              sobj.location = i;
-              sobj.updatedBy = req.session.user.id;
-              sobj.updatedAt = moment().format('X');
-              sobj.upAt = moment().format('X');
-              if (sobj.id) {
-                sails.log.debug('sobj::' + JSON.stringify(sobj));
-
-                Shop_goods_products.update({id: sobj.id}, sobj).exec(function (e2, o2) {
-                  sails.log.debug('o2::' + JSON.stringify(o2));
-                  if (o2.length > 0) {
-                    var lvprice = sobj.lvprice || [];
-                    lvprice.forEach(function (lv) {
-                      Shop_goods_lv_price.create({
-                        goodsid: id,
-                        productid: o2[0].id,
-                        lvid: lv.lv_id,
-                        price: StringUtil.getPrice(lv.lv_price)
-                      }).exec(function (e3, o3) {
-                      });
-                    });
-                  }
-                });
-                i++;
-              } else {
-                Shop_goods_products.create(sobj).exec(function (e2, o2) {
-                  //sails.log.debug('e2::'+JSON.stringify(e2));
-                  if (o2) {
-                    var lvprice = sobj.lvprice || [];
-                    lvprice.forEach(function (lv) {
-                      Shop_goods_lv_price.create({
-                        goodsid: id,
-                        productid: o2.id,
-                        lvid: lv.lv_id,
-                        price: StringUtil.getPrice(lv.lv_price)
-                      }).exec(function (e3, o3) {
-                      });
-                    });
-                  }
-                });
-                i++;
-              }
-
-            });
-
-            dbimgs.forEach(function (imgurl) {
-              var imgobj = {};
-              imgobj.imgurl = imgurl;
-              imgobj.goodsid = id;
-              Shop_images.create(imgobj).exec(function (e3, o3) {
-              });
-            });
-            if (i == products.length) {
-              return cb(e1, id);
-            }
-          } else {
-            return cb(e1, 0);
-          }
+      if(no_del_productIds.length>0){
+        Shop_goods_products.destroy({id: {'!': no_del_productIds}, goodsid: id}).exec(function (e_del) {
+          return cb(null,products,goods,dbimgs);
         });
+      }else{
+        Shop_goods_products.destroy({goodsid: id}).exec(function (e_del) {
+          return cb(null,products,goods,dbimgs);
+        });
+      }
+    }, function (products,goods,dbimgs, cb) {
+      Shop_goods.update(id, goods).exec(function (e1, o1) {
+        if (o1) {
+          var i = 0;
+          products.forEach(function (sobj) {
+            sobj.goodsid = id;
+            sobj.location = i;
+            sobj.updatedBy = req.session.user.id;
+            sobj.updatedAt = moment().format('X');
+            sobj.upAt = moment().format('X');
+            if (sobj.id) {
+              sails.log.debug('sobj::' + JSON.stringify(sobj));
+
+              Shop_goods_products.update({id: sobj.id}, sobj).exec(function (e2, o2) {
+                sails.log.debug('o2::' + JSON.stringify(o2));
+                if (o2.length > 0) {
+                  var lvprice = sobj.lvprice || [];
+                  lvprice.forEach(function (lv) {
+                    Shop_goods_lv_price.create({
+                      goodsid: id,
+                      productid: o2[0].id,
+                      lvid: lv.lv_id,
+                      price: StringUtil.getPrice(lv.lv_price)
+                    }).exec(function (e3, o3) {
+                    });
+                  });
+                }
+              });
+              i++;
+            } else {
+              Shop_goods_products.create(sobj).exec(function (e2, o2) {
+                //sails.log.debug('e2::'+JSON.stringify(e2));
+                if (o2) {
+                  var lvprice = sobj.lvprice || [];
+                  lvprice.forEach(function (lv) {
+                    Shop_goods_lv_price.create({
+                      goodsid: id,
+                      productid: o2.id,
+                      lvid: lv.lv_id,
+                      price: StringUtil.getPrice(lv.lv_price)
+                    }).exec(function (e3, o3) {
+                    });
+                  });
+                }
+              });
+              i++;
+            }
+
+          });
+
+          dbimgs.forEach(function (imgurl) {
+            var imgobj = {};
+            imgobj.imgurl = imgurl;
+            imgobj.goodsid = id;
+            Shop_images.create(imgobj).exec(function (e3, o3) {
+            });
+          });
+          if (i == products.length) {
+            return cb(e1, id);
+          }
+        } else {
+          return cb(e1, 0);
+        }
       });
     }], function (err, goodsid) {
       if (err) {
