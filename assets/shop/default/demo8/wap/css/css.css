@@ -31,7 +31,7 @@ i{font-style:normal;}
 .main{padding: 1rem 0 1rem 0;}
 
 body{background-color: #eee;}
-.has_bnav{padding-bottom: 10rem;}
+.has_bnav{padding-bottom: 9rem;}
 ::-webkit-scrollbar{display: none;}
 .f_pic{width: 100%; vertical-align: bottom;}
 ins{font-size: 1.3rem; color: #ee1c25; text-decoration: none;}
@@ -557,7 +557,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .cur_pur{min-width:20%;float:left;}
 .cur_pur i{ cursor:not-allowed;background: #eee;color: #666;padding:0.8rem 0.3rem;margin:0.5rem;display:block;text-align:center;}
 
-.popup_but{background:#ececec;width:100%;position:absolute;bottom:0px;}
+.popup_but{background:#ececec;width:100%;position:fixed;bottom:0px;}
 .popup_but input:first-child{background:#a33a42; content:"";appearance: textfield; -moz-appearance: textfield; -webkit-appearance: textfield;flex: 1 1 0%;display:block;width:100%;height:40px;color:#fff;border:none;border-radius:0.3rem;margin:0 0.5rem 0 1rem;}
 .popup_but input:last-child{background:#4d93b3;content:"";appearance: textfield; -moz-appearance: textfield; -webkit-appearance: textfield;flex: 1 1 0%;display:block;width:100%;height:40px;color:#fff;margin:0 1rem 0 0.5rem;border:none;border-radius:0.3rem;}
 
@@ -839,7 +839,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .t_sizebon{display:inline-block;padding:0.8rem 0.8rem;margin:0.5rem;background:#027f83;color:#fff;border-radius:0.3rem;min-width:2.4rem;text-align:center;}
 .t_sizec{cursor:not-allowed;display:inline-block;padding:0.8rem 0.8rem;margin:0.5rem;background:#eee;border-radius:0.3rem;min-width:2.4rem;text-align:center;}
 .size_num{margin-top:1.5rem;}
-.popup_but{background:#ececec;width:100%;position:absolute;bottom:0px;}
+.popup_but{background:#ececec;width:100%;position:fixed;bottom:0px;}
 .size_btnl{text-align: center;color: #fff;border-radius: .5rem;background-color:#027f83;margin:0 1rem 0 0; display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;}
 .size_btnr{text-align: center; border-radius: .5rem;background-color: #fff;border: 1px solid #ddd;display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;position: relative;}
 .popupon{display:none;}
@@ -873,4 +873,3 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 
 
 .big_green_btn{background:none;border:1px solid #ddd;color:#333 !important;}
-
