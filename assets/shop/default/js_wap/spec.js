@@ -135,7 +135,7 @@
         }
         $('.xsj').html('&yen;'+xprice);
         $('.scj').html('&yen;'+xpriceMarket);
-        $('.kus').html('(库存'+xstock+unit+')');
+        $('.kus').html(xstock+unit);
         if(isLvP){
           $.post("/public/shop/wap/goods/getLvPrice",
           {

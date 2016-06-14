@@ -31,7 +31,7 @@ i{font-style:normal;}
 .main{padding: 1rem 0 1rem 0;}
 
 body{background-color: #eee;}
-.has_bnav{padding-bottom: 10rem;}
+.has_bnav{padding-bottom: 9rem;}
 ::-webkit-scrollbar{display: none;}
 .f_pic{width: 100%; vertical-align: bottom;}
 ins{font-size: 1.3rem; color: #fe6000; text-decoration: none;}
@@ -538,7 +538,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 /*---有货、快递添加css样式---*/
 .price{padding:1rem;}
 .pri_size{padding:1rem;color:#333;background:#ececec;display:block;position:relative;border-top:1px solid #ddd;border-bottom:1px solid #ddd;}
-.pri_size i{width:1rem;height:1rem;border-top:1px solid #333333;border-left:1px solid #333333; transform:rotate(135deg); -webkit-transform:rotate(135deg);display:inline-block;position:absolute;right:1rem;color:#ececec;top:1.3rem;}
+.pri_size i{width:1rem;height:1rem;border-top:1px solid #333333;border-left:1px solid #333333; transform:rotate(135deg); -webkit-transform:rotate(135deg);display:inline-block;position:absolute;right:1rem;top:1.3rem;color:#ececec;}
 
 /*规格弹窗*/
 .popup,.popups{z-index:100;height:100%;background:rgba(0,0,0,0.5);position:fixed;;bottom:0px;margin-top:-6rem;display:block;width:100%;color:#333;padding:0;}
@@ -839,7 +839,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .t_sizebon{display:inline-block;padding:0.8rem 0.8rem;margin:0.5rem;background:#00aa3a;color:#fff;border-radius:0.3rem;min-width:2.4rem;text-align:center;}
 .t_sizec{cursor:not-allowed;display:inline-block;padding:0.8rem 0.8rem;margin:0.5rem;background:#eee;border-radius:0.3rem;min-width:2.4rem;text-align:center;}
 .size_num{margin-top:1.5rem;}
-.popup_but{background:#ececec;width:100%;position:absolute;bottom:0px;}
+.popup_but{background:#ececec;width:100%;position:fixed;bottom:0px;}
 .size_btnl{text-align: center;color: #fff;border-radius: .5rem;background-color:#00aa3a;margin:0 1rem 0 0; display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;}
 .size_btnr{text-align: center; border-radius: .5rem;background-color: #fff;border: 1px solid #ddd;display: block;height: 4rem;line-height: 4rem;font-size: 1.8rem;position: relative;}
 .popupon{display:none;}
@@ -867,7 +867,7 @@ input[type="search"], input[type="number"]{appearance: textfield; -moz-appearanc
 .f_txt img{height:1.4rem;vertical-align: middle;}
 .f_heigh{width:100%;}
 
-.f_relative{position:absolute;margin-top:1.1rem;}
+.f_relative{position:absolute;margin-top:0.9rem;}
 .f_fix{position:fixed;bottom:5rem;}
 
 
