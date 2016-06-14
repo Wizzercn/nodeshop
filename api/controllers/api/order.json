@@ -75,7 +75,7 @@
  * @apiParam {string} mobile 收货人电话
  * @apiParam {Object} invoice 发票
  * @apiParam {number} invoice.taxType 发票类型[1:企业 2:个人]
- * @apiParam {number} invoice.taxNo 企业税务号
+ * @apiParam {string} invoice.taxNo 企业税务号
  * @apiParam {string} invoice.taxTitle 发票抬头[如taxType字段为1,则此字段必填]
  * @apiParam {string} invoice.Centent 发票内容
  *
@@ -101,7 +101,7 @@
  *       "mobile": "13912341234",
  *       "invoice": {
  *            "taxType": 1,
- *            "taxNo":340120200000001,
+ *            "taxNo": "340120200000001",
  *            "taxTitle": "单位名称",
  *            "taxCentent":"发票内容"
  *        }
