@@ -227,7 +227,7 @@ module.exports = {
       var endDay = req.query.endDay?moment(req.query.endDay).add(1,'day').format('X'):endDay = moment().format('X');
       var ssql = "SELECT p.gn,p.name,p.spec,p.price,SUM(p.num) AS num,SUM(p.amount) AS amount ";
       ssql += "FROM shop_order_goods p,shop_order o ";
-      ssql += "WHERE o.payStatus=1 AND o.disabled=0 ";
+      ssql += "WHERE p.orderId=o.id and o.payStatus=1 AND o.disabled=0 ";
       ssql += " and o.payAt<=" + endDay;
       ssql += " and o.payAt>=" + beginDay;
       ssql += " GROUP BY p.gn,p.name,p.spec,p.price";
