@@ -42,25 +42,3 @@
   <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
 </nav>
 <% include common_buttom.ejs %>
-<a href="http://www.sunshop.cn/
-" class="f_heigh f_relative" id="f_heigh"
-><div class="f_txt">
-  <p><img src="<%=CssPath%>/wap/images/f_logp.png" /></p>
-</div></a>
-<script>
-$(document).ready(function() {
-  var w = $(window).height();
-
-  var i = parseInt(w-140)/1;
-  $("#list").each(function(){
-    $(this).css("min-height",i+"px");
-  });
-  var n = $("body").height();
-    if(n>w){
-        $("#f_heigh").addClass("f_relative");
-    }
-    else{
-        $("#f_heigh").addClass("f_fix");
-    }
-});
-</script>
