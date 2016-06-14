@@ -61,7 +61,6 @@ module.exports = {
         });
       }
     }, function (err, result) {
-
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.infoList = result.infoList || [];
@@ -70,7 +69,6 @@ module.exports = {
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
       req.data.siteTitle=channel.name+'_'+req.data.siteTitle;
-
       return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/pc/channel', req.data);
     });
   }
