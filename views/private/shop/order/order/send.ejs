@@ -132,7 +132,9 @@
 </div>
 </div>
 <div class="modal-footer">
-  <button id="send" type="button" class="btn btn-primary btn-block" data-dismiss="modal">发货</button>
+  <button data-dismiss="modal" class="btn btn-default" type="button">取 消</button>
+  <button id="send" data-loading-text="正在处理..." class="btn btn-primary"  data-dismiss="modal" type="button" >发 货</button>
+  <!-- <button id="send" type="button" class="btn btn-primary btn-block" data-dismiss="modal">发货</button> -->
 </div>
 <!--</form>-->
 <script>
@@ -144,8 +146,6 @@
     $(this).find('.order-chk').click();
   });
   $('#shopShip').bind('click',function(e){
-
-    console.log($(this));
     if (this.checked==true) {
       $('#shiptypeId').attr("disabled","disabled");
       shopShip = true;
@@ -162,9 +162,12 @@
     });
     var shiptypeId = $('#shiptypeId').val();
     var shiptypeNo = $('#shiptypeNo').val();
-
+    if(!shopShip&&!shiptypeNo){
+      Toast.error("物流发货请填写物流单号");
+       $('#shiptypeNo').focus();
+      return false;
+    }
     $.post("/private/shop/order/order/doSend", {orderlist: ids,shiptypeId:shiptypeId,shiptypeNo:shiptypeNo,shopShip:shopShip}, function (data) {
-      console.log(data);
       if (data.code == 0) {
         datatable.ajax.reload(null,false);
           Toast.success(data.msg);

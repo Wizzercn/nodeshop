@@ -60,6 +60,12 @@ module.exports = {
     if (req.body.id) {
       where.id = req.body.id;
     }
+    if (req.body.addrName) {
+      where.addrName = req.body.addrName;
+    }
+    if (req.body.addrMobile) {
+      where.addrMobile = req.body.addrMobile;
+    }
     // var where = {shipStatus:orderStatus};
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
