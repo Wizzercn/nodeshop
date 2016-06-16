@@ -21,7 +21,9 @@ module.exports = {
     var sort = {};
     var where = {};
     var orderStatus = req.body.orderStatus||'0';
-
+    if (req.body.id) {
+      where.orderId = req.body.id;
+    }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }

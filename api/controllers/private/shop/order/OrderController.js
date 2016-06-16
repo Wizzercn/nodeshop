@@ -174,7 +174,7 @@ module.exports = {
       Shop_order_goods.query(ssql, function () {
         Shop_order_ship_log.create({
           orderId: orderId,
-          shiptypeNo: req.body.shiptypeNo,
+          shiptypeNo: shiptypeNo,
           memo: '已发货',
           createAt: moment().format('X')
         }).exec(function (el1, ol1) {

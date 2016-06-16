@@ -12,7 +12,7 @@ module.exports = {
     return res.view('private/shop/order/payment/index', req.data);
   },
   data: function (req,res) {
-    
+
     var pageSize = parseInt(req.body.length);
     var start = parseInt(req.body.start);
     var page = start / pageSize + 1;
@@ -22,7 +22,9 @@ module.exports = {
     var sort = {};
     var where = {};
     var orderStatus = req.body.orderStatus||'0';
-
+    if (req.body.id) {
+      where.orderId = req.body.id;
+    }
     if (order.length > 0) {
       sort[columns[order[0].column].data] = order[0].dir;
     }
