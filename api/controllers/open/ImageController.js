@@ -20,7 +20,7 @@ module.exports = {
         if(o){
           var modi=req.get('If-Modified-Since');
           var up=moment(o.updatedAt*1000).toDate().toUTCString();
-          if(modi && modi== up){//缓存
+          if(modi == up){//缓存
             return res.send(304);
           }
           var path=o.src;
