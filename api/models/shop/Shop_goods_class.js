@@ -87,5 +87,11 @@ module.exports = {
     Shop_goods_class.find({disabled:false,parentId:id}).sort('location asc').sort('path asc').exec(function (err, list) {
       return cb(list);
     });
+  },
+  //获取下级商品分类
+  getChildrenClassByPath: function (path,cb) {
+    Shop_goods_class.find({disabled:false,path:path}).sort('location asc').sort('path asc').exec(function (err, list) {
+      return cb(list);
+    });
   }
 };

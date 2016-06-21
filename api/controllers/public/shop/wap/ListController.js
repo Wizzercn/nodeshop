@@ -30,7 +30,7 @@ module.exports = {
           goodsclassids.push(id);
           Shop_goods_class.findOne(id).exec(function (err, obj) {
             if (obj && obj.hasChildren) {
-              Shop_goods_class.find({parentId: obj.id,disabled:false}).exec(function (err2, list2) {
+              Shop_goods_class.find({path:{'like':obj.path+'_%'},disabled:false}).exec(function (err2, list2) {
                 var ii = 0;
                 list2.forEach(function (obj2) {
                   goodsclassids.push(obj2.id);
@@ -81,7 +81,7 @@ module.exports = {
       goodsclassids.push(id);
       Shop_goods_class.findOne(id).exec(function (err, obj) {
         if (obj && obj.hasChildren) {
-          Shop_goods_class.find({parentId: obj.id,disabled:false}).exec(function (err2, list2) {
+          Shop_goods_class.find({path:{'like':obj.path+'_%'},disabled:false}).exec(function (err2, list2) {
             var ii = 0;
             list2.forEach(function (obj2) {
               goodsclassids.push(obj2.id);

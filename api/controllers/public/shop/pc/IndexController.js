@@ -48,7 +48,7 @@ module.exports = {
                 var ids = [];
                 ids.push(obj.id);
                 if (obj.hasChildren) {
-                  Shop_goods_class.getChildrenClass(obj.id, function (clist) {
+                  Shop_goods_class.getChildrenClassByPath({'like':obj.path+'_%'}, function (clist) {
                     obj.children = clist;
                     var k = 0;
                     clist.forEach(function (cobj) {
