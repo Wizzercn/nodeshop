@@ -1,0 +1,37 @@
+/**
+ * Created by root on 11/5/15.
+ */
+module.exports = {
+  index: function (req, res) {
+    Sms_config.findOrCreate({id: 1}).exec(function (err, obj) {
+      req.data.obj = obj;
+      return res.view('private/conf/freight/index', req.data);
+    });
+  },
+  editDo: function (req, res) {
+    var body = req.body;
+    Sms_config.update({id: body.id}, body).exec(function (err, obj) {
+      if (err)return res.json({code: 1, msg: sails.__('update.fail')});
+      sails.config.system.SmsConfig=obj[0];
+      return res.json({code: 0, msg: sails.__('update.ok')});
+    });
+  },
+  add: function (req,res) {
+    var data = req.data;
+      Shop_area.find().sort('id asc').sort('path asc').exec(function (err, objs) {
+        var str = [];
+        if (objs) {
+          objs.forEach(function (o) {
+            var obj = {};
+            obj.id = o.id;
+            obj.text = o.name;
+            obj.data = o.id || '';
+            obj.parent = o.parentId == 0 ? "#" : o.parentId;
+            str.push(obj);
+          });
+        }
+        data.menu = str;
+    return res.view('private/conf/freight/add', data);
+  });
+  },
+};
