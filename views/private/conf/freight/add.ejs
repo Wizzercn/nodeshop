@@ -99,7 +99,7 @@
           <button type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFirstMenu()">全选</button>
         </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button type="button" class="btn btn-primary" onclick="selectParentMenu()">确认选择</button>
+        <button type="button" class="btn btn-primary" onclick="complete()">确认选择</button>
       </div>
     </div>
   </div>
@@ -153,28 +153,37 @@
       selectParentMenu();
     });
   }
-
   function complete() {
-    var tree = $.jstree.reference("#jsTreeMenu");
+    var tree = $.jstree.reference("#jsTreeParentUnit");
     var ids = tree.get_selected();
     //查询所选节点的所有父节点
-    for (var i = 0; i < ids.length; i++) {
-      var node = ids[i];
-      each(node, tree, ids);
-    }
+    // for (var i = 0; i < ids.length; i++) {
+    //   var node = ids[i];
+    //   each(node, tree, ids);
+    // }
     if (ids.length > 0) {
-      $.post("/private/sys/role/editMenuDo", {ids: ids, roleid: <%=roleid%>}, function (data) {
-        if (data.code == 0) {
-          Toast.success(data.msg);
-          setTimeout(function () {
-            $("#goback").trigger("click");
-          }, 1000);
-        } else {
-          Toast.error(data.msg);
-        }
+      $.post("/private/conf/freight/cityEdit", {ids: ids, fcId:'1'}, function (data) {
+        Toast.error(data.msg);
+        // if (data.code == 0) {
+        //   Toast.success(data.msg);
+        //   setTimeout(function () {
+        //     $("#goback").trigger("click");
+        //   }, 1000);
+        // } else {
+        //   Toast.error(data.msg);
+        // }
       }, "json");
     } else {
       Toast.warning("请先选择菜单！");
     }
   }
+  function each(node, tree, nodes) {
+    var p = tree.get_parent(node);
+    if (p.length > 1) {
+      if (nodes&&p&&nodes.indexOf(p)<0)
+        nodes.push(p);
+      each(p, tree, nodes);
+    }
+  }
+
 </script>

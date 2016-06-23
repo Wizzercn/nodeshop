@@ -400,6 +400,7 @@ module.exports = {
         if (order.payStatus==0) {
           upd_pay_status(order,'3');
           order_log(order,'ok');
+          return res.json({code:0});
         } else {
           switch (order.payType) {
             case 'pay_money':
