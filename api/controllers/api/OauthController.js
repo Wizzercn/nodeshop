@@ -25,7 +25,7 @@ module.exports = {
             iss: o.id,
             exp: expires
           },
-          sails.config.system.MyConfig.jwtTokenSecret||'RrRO6ZNVLayReZD4KwaBQ7J3uM94Wk6D'
+          sails.config.system.MyConfig.jwtTokenSecret||''
         );
         return res.json({code:0,msg:'success',data:{
           token : token,

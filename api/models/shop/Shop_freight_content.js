@@ -14,43 +14,30 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    parentId: {
+    freightId: {
+      model:'Shop_freight',
+      index: true
+    },
+    firstunit: {
       type: 'integer'
     },
-    path: {
+    continueunit: {
       type: 'string',
       size: 100,
       index:true
     },
-    name: {
+    firstprice: {
       type: 'string',
       size: 50,
       index: true
     },
-    code: {
+    continueprice: {
       type: 'string',
       size: 20
     },
-    disabled: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
-    },
-    hasChildren: {
-      type: 'boolean',
-      defaultsTo: function () {
-        return false;
-      }
-    },
-    location: {
-      type: 'integer',
-      size: 11
-    },
     freight: {
-      collection: 'Shop_freight_content',
+      collection: 'Shop_area',
       via: 'id'
     }
-
   }
 };

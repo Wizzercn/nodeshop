@@ -4,16 +4,18 @@
 var StringUtil = require('../../common/StringUtil');
 var moment = require('moment');
 var jwt = require('jwt-simple');
-
 module.exports = {
   create: function (req, res) {
+    if(!req.body){
+        return res.json({code: 900, msg: 'err:param is null' });
+    }
     if(req.body.products.length>100){
-      return res.json({code: 900, msg: 'err:good count more than 100' });
+      return res.json({code: 901, msg: 'err:good count more than 100' });
     }
     if(req.body.products.length<0){
-      return res.json({code: 901, msg: 'err:none SKU' });
+      return res.json({code: 902, msg: 'err:none SKU' });
     }
-    var ShopConfig = sails.config.system.ShopConfig;
+    var ShopConfig = sails.config.system.ShopConfig||'';
     var member = '';
     var list = req.body.list || [];
     var addrId = '0';
@@ -32,17 +34,6 @@ module.exports = {
           }
         });
       },
-      // function (cb) {
-      //   Shop_member_addr.findOne({memberId:member}).exec(function(err,obj){
-      //
-      //     if(obj){
-      //       addrId = obj.id;
-      //     }else {
-      //       return res.json({code: 902, msg: 'err:no address'});
-      //     }
-      //     return cb(null);
-      //   });
-      // },
       function (cb) {
         var i = 0;
         var nosku = '';
@@ -111,7 +102,6 @@ module.exports = {
         });
       },
       function (order, cb) {
-        // Shop_member_addr.findOne(addrId).exec(function (e, o) {
         order.addrId = addrId || 0;
         order.addrProvince = req.body.province || '';
         order.addrCity = req.body.city || '';
