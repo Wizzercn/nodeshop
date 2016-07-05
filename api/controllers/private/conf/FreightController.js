@@ -40,7 +40,7 @@ module.exports = {
     console.log(ids);
     console.log(freightContentId);
     Shop_freight.findOne({id:freightContentId}).exec(function (err, role) {
-      return res.json({msg:freightContentId});
+      return res.json({msg:role});
       // if (role && ids) {
       //   role.menus.remove(ids);
       //   role.menus.add(ids);

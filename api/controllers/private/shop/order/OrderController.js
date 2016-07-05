@@ -389,19 +389,18 @@ module.exports = {
     Shop_order.findOne(req.params.id)
     .populate('memberId')
     .exec(function (e, order) {
-      if (!order.memberId) return res.json({code: 3, msg: '错误，无对应用户!'});
+      if (!order.memberId) return res.json({code: 3, msg: '错误:无对应用户'});
       order.member = order.memberId;
       if(e||!order){
         return res.json({code: 3, msg: '订单不存在'});
       }else {
-        upd_stock(order);
-        upd_status(order,'dead');
-        upd_pay_status(order,'2');
         if (order.payStatus==0) {
-          upd_pay_status(order,'3');
+          upd_stock(order);
           order_log(order,'ok');
           return res.json({code:0});
         } else {
+          upd_pay_status(order,'2');
+          upd_status(order,'dead');
           switch (order.payType) {
             case 'pay_money':
             refund_pay_money(order);
