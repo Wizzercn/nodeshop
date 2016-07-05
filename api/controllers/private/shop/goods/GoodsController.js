@@ -329,6 +329,7 @@ module.exports = {
         });
       });
     }, function (goods, cb) {
+      console.log(body);
       var is_spec = body.is_spec == 'true';
       var specs = JSON.parse(body.specs);
       var images = JSON.parse(body.images);
@@ -388,6 +389,7 @@ module.exports = {
         p.spec = sobj.spec;
         p.is_default = sobj.is_default;
         p.lvprice = sobj.lvprice;
+        p.disabled = sobj.disabled == '1';
         p.id = sobj.id;
         no_del_productIds.push(p.id);
         products.push(p);
@@ -666,16 +668,25 @@ module.exports = {
   up: function (req, res) {
     var ids = req.params.id || req.body.ids;
     Shop_goods.update({id: ids}, {disabled: false, upAt: moment().format('X')}).exec(function (err, obj) {
-      return res.json({code: 0, msg: '操作成功'});
+      Shop_goods_products.update(
+        {goodsid:ids},
+        {disabled:false,upAt:moment().format('X')})
+        .exec(function (err, obj){
+          return res.json({code: 0, msg: '操作成功'});
+        });
 
     });
   },
   down: function (req, res) {
     var ids = req.params.id || req.body.ids;
     Shop_goods.update({id: ids}, {disabled: true, downAt: moment().format('X')}).exec(function (err, obj) {
-      return res.json({code: 0, msg: '操作成功'});
-
-    });
+      Shop_goods_products.update(
+        {goodsid:ids},
+        {disabled:true,upAt:moment().format('X')})
+        .exec(function (err, obj){
+          return res.json({code: 0, msg: '操作成功'});
+        });
+      });
   },
   delete: function (req, res) {
     var ids = req.params.id || req.body.ids;
