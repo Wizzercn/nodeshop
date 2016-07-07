@@ -1,0 +1,110 @@
+<style>
+/*视频*/
+.knews_list a:before{display: inline-block; content: "";}
+.knews_list li{margin: 1rem 0; background-color: #fff; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;}
+.knews_list a{position: relative; display: block; padding: 1rem 1rem; min-height: 5.6rem; font-size: 1.4rem; color: #666;}
+.knews_list img{float: left; margin-right: 1rem;}
+.knews_list a>div{display: table-cell; }
+.knews_list h3{margin-bottom: .5rem; font-size: 1.6rem; color: #323232;}
+.knews_list a:before{position: absolute; right: 1rem; top: 1.4rem;}
+.knews_list a:before{width: 1rem; height: 1rem; border-top: 2px solid #b5b5b5; border-right: 2px solid #b5b5b5; transform: rotate(45deg); -webkit-transform: rotate(45deg);}
+/*导航文字不换行*/
+.video{width:100%;overflow-y: auto;background: #fff;position:relative;top:1rem;border-top:1px solid #ddd;border-bottom:1px solid #ddd;text-align: center;}
+
+.video span{display:inline-block;word-break:keep-all;white-space:nowrap;text-align: center;}
+.video span a{display:inline-block;width:5rem;padding-left:0.5rem;padding-right:0.5rem;height:4rem;line-height:4rem;text-align:center;font-size:1.6rem;overflow: hidden;text-overflow:ellipsis;}
+/*lunbo*/
+.o_focus{position: relative;/*margin-top:-4.9rem;*/}
+.o_focus .bd img{width: 100%; vertical-align: bottom;}
+.o_focus .hd{position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 0; text-align: center; line-height: 1; background-color: rgba(360,360,360,.7); border-top: 1px solid #ddd; border-bottom: 1px solid #ddd;}
+.o_focus .hd li{margin: 0 .2rem; display: inline-block; width: .6rem; height: .6rem; line-height: 99px; overflow: hidden; border: 1px solid #00aa3a; border-radius: 50%; vertical-align: bottom;}
+.o_focus .hd .on{background-color: #00aa3a;}
+</style>
+<header class="header">
+  <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
+  <h1 class="head_tit">
+    <%-channelName%>
+  </h1>
+  <a href="/wap"><div class="header_r"><span class="header_cadd1"></span></div></a>
+
+</header>
+<div class="o_focus" id="focus">
+  <div class="bd">
+    <div class="tempWrap" style="overflow:hidden; position:relative;"><ul style="width: 1875px; position: relative; overflow: hidden; padding: 0px; margin: 0px; display: -webkit-box; transition-duration: 500ms; transform: translate(-1125px, 0px) translateZ(0px);">
+      <%videobanner.forEach(function(o){
+      %>
+      <li style="display: block; vertical-align: top; width: 375px;">
+        <img src="<%=o.picurl||CssPath+'/wap/images/pic/10.jpg'%>">
+      </li>
+      <%})%>
+    </ul></div>
+  </div>
+  <div class="hd"><ul></ul></div>
+</div>
+<div class="video"><span id="videolist">
+  <%channelList.forEach(function(channel2){
+%>
+  <a href="javascript:;" data-id="<%=channel2.id%>"><%=channel2.name%></a>
+  <%})%>
+</span></div>
+<section class="main">
+  <ul class="knews_list">
+  </ul>
+</section>
+<nav class="bnav">
+  <a href="/wap/" class="home_bnav">首页</a>
+  <a href="/wap/class" class="class_bnav">分类</a>
+  <a href="/wap/member" class="my_bnav">我的</a>
+  <a id="cartDiv" href="/wap/shopcart/list" class="cart_bnav">购物车<i id="cartNum"></i></a>
+</nav>
+<a href="http://www.sunshop.cn/" class="f_heigh f_relative" id="f_heigh"><div class="f_txt">
+  <p><img src="<%=CssPath%>/wap/images/f_logp.png" /></p>
+</div></a>
+<script>
+function ajaxone(id){
+  console.log(id)
+  $.post('/public/shop/wap/channel/ajaxone',
+    {id:id},
+    function(msg){
+      var datas = msg.datas;
+      var str = '';
+      for(var i in datas){
+        if(datas[i]['picurl'] == '' || datas[i]['picurl'] == null){
+          datas[i]['picurl'] = '<%=CssPath%>'+'/wap/images/pic/10.jpg';
+        }
+        str += '<li><a href="/wap/info/'+datas[i]['id']+'"><img src="'+datas[i]['picurl']+'" width="85" height="70" style="margin-right:1rem;">';
+        str += '<div><h3>'+datas[i]['title']+'</h3><p>'+datas[i]['info']+'</p></div></a></li>';
+      }
+      $('.knews_list').html(str);
+    },'json'
+  )
+}
+$(function(){
+  var id = $('#videolist').find('a').eq(0).data('id');
+  $('#videolist').find('a').eq(0).addClass('public_color');
+  if(id > 0){
+    ajaxone(id);
+  }
+  $('#videolist a').click(function(){
+    var id = $(this).data('id');
+    $(this).addClass('public_color').siblings().removeClass('public_color');
+    ajaxone(id);
+  })
+})
+</script>
+<script>
+$(document).ready(function() {
+  var w = $(window).height();
+  var i = parseInt(w-140)/1;
+  $("#list").each(function(){
+    $(this).css("min-height",i+"px");
+  });
+  var n = $("body").height();
+    if(n>w){
+        $("#f_heigh").addClass("f_relative");
+    }
+    else{
+        $("#f_heigh").addClass("f_fix");
+    }
+});
+</script>

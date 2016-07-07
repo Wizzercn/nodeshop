@@ -23,10 +23,16 @@ module.exports = {
   channelOne:function (req, res) {
     var id=req.query.id;
     var channelName=req.query.name || '';
+    var model = req.query.model || 0;
     async.parallel({
       //获取单个cms栏目分类
       channelList: function (done) {
         Cms_channel.getChannelById(id, function (list) {
+          done(null, list);
+        });
+      },
+      videobanner: function (done) {
+        Cms_linkClass.getLinkList('视频中心Banner', function (list) {
           done(null, list);
         });
       }
@@ -35,8 +41,19 @@ module.exports = {
       req.data.channelName = channelName;
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
-      return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
+      req.data.videobanner = result.videobanner.links || [];
+      if(model == 1){
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/video', req.data);
+      }else{
+        return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);
+      }
     });
+  },
+  ajaxone:function(req,res){
+    var id = req.body.id || 0;
+    Cms_article.find({channelId:id}).exec(function(err,list){
+      return res.json({'datas':list});
+    })
   },
   one: function (req, res) {
     var id = req.params.id || '';
