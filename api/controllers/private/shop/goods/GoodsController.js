@@ -387,16 +387,9 @@ module.exports = {
         p.spec = sobj.spec;
         p.is_default = sobj.is_default;
         p.lvprice = sobj.lvprice;
-<<<<<<< HEAD
-        if(sobj.id) {
-          p.id = sobj.id;
-          no_del_productIds.push(p.id);
-        }
-=======
         p.disabled = sobj.disabled == '1';
         p.id = sobj.id;
         no_del_productIds.push(p.id);
->>>>>>> ac1815c40a833dc56a0bf441fbd9f030babc3bbc
         products.push(p);
       } else {
         specs.forEach(function (sobj) {
