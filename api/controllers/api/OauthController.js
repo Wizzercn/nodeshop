@@ -20,12 +20,14 @@ module.exports = {
           return res.json({code: 3, msg: 'client_secret has error'});
         }
         var expires = moment().add(1,'days').valueOf();
+        console.log(o);
+        console.log(expires);
         var token = jwt.encode(
           {
             iss: o.id,
             exp: expires
           },
-          sails.config.system.MyConfig.jwtTokenSecret||''
+          sails.config.system.MyConfig.jwtTokenSecret||client_secret
         );
         return res.json({code:0,msg:'success',data:{
           token : token,

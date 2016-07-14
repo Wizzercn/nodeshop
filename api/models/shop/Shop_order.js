@@ -251,6 +251,8 @@ module.exports = {
     refunds: {
       collection: 'Shop_history_refunds',
       via: 'orderId'
+    },trade_no:{  //第三方订单号
+      type: 'string'
     }
   },
   getOrderId: function (cb) {

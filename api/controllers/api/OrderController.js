@@ -15,6 +15,9 @@ module.exports = {
     if(req.body.products.length<0){
       return res.json({code: 902, msg: 'err:none SKU' });
     }
+    if(!req.body.trade_no){
+      return res.json({code: 903, msg: 'err:none trade_no' });
+    }
     var ShopConfig = sails.config.system.ShopConfig||'';
     var member = '';
     var list = req.body.list || [];
@@ -109,6 +112,7 @@ module.exports = {
         order.addrName = req.body.name || '';
         order.addrMobile = req.body.mobile || '';
         order.addrAddr = req.body.addr || '';
+        order.trade_no = req.body.trade_no || '';
         if(req.body.invoice){
           order.taxType = StringUtil.getInt(req.body.invoice.taxType) || 0;
           order.taxNo = req.body.invoice.taxNo || '';
