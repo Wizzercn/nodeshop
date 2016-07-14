@@ -7,7 +7,11 @@ module.exports = {
   index: function (req, res) {
     req.data.stock = req.query.stock || 0;
     req.data.disabled = req.query.disabled || '';
-    return res.view('private/shop/goods/goods/index', req.data);
+    Shop_goods_type.find().exec(function (error, obj) {
+      if(obj)
+      req.data.typelist = obj;
+      return res.view('private/shop/goods/goods/index', req.data);
+    });
   },
   add: function (req, res) {
     async.parallel({
@@ -81,6 +85,23 @@ module.exports = {
         }
         cb(null, gsn + StringUtil.getSn(num, 6));
       });
+    }, function (sn,cb) {
+      var gn = 'G' + sn, pn = 'P' + sn;
+      Shop_goods.findOne({gn: gn})
+        .exec(function (e, o) {
+          if (o) {
+            cb('商品编号已存在', gn);
+          }
+          Shop_goods_products.findOne({gn: body.pbn})
+            .exec(function (e, o) {
+              // console.log(o);
+              if (o) {
+                cb('货品编号已存在', pn)
+              } else {
+                cb(null, sn);
+              }
+            })
+        });
     }, function (sn, cb) {
       var gn = 'G' + sn, pn = 'P' + sn;
       var is_spec = body.is_spec == 'true';
@@ -451,8 +472,8 @@ module.exports = {
               sails.log.debug('sobj::' + JSON.stringify(sobj));
 
               Shop_goods_products.update({id: sobj.id}, sobj).exec(function (e2, o2) {
-                sails.log.debug('o2::' + JSON.stringify(o2));
-                if (o2.length > 0) {
+                //sails.log.debug('o2::' + JSON.stringify(o2));
+                if (o2 && o2.length > 0) {
                   var lvprice = sobj.lvprice || [];
                   lvprice.forEach(function (lv) {
                     Shop_goods_lv_price.create({
@@ -562,6 +583,7 @@ module.exports = {
     var page = start / pageSize + 1;
     var draw = StringUtil.getInt(req.body.draw);
     var name = req.body.name || '';
+    var typeid = req.body.typeid || '';
     var stock = StringUtil.getInt(req.body.stock);
     var stock_type = req.body.stock_type || '';
     var price = StringUtil.getInt(req.body.price) * 100;
@@ -584,6 +606,9 @@ module.exports = {
     }
     if (disabled == 'false') {
       where.disabled = false;
+    }
+    if(typeid && typeid>0) {
+      where.typeid = typeid;
     }
     async.waterfall([function (cb) {
       var goodsids = [];
