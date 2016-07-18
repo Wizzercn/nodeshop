@@ -74,6 +74,10 @@ module.exports = {
       type: 'integer',
       size: 11
     },
+    model:{
+      type: 'integer',
+      size:2
+    },
     createdBy:{
       type: 'integer'
     },
