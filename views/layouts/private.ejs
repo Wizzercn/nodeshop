@@ -43,7 +43,10 @@
   <link rel="stylesheet" href="/css/skins/palette.css" id="skin">
   <% } %>
   <script src="/plugins/jquery-1.11.1.min.js"></script>
-
+<style>
+  .btn-block{width:120px;margin:0 auto;font-size:14px;font-family: '微软雅黑';letter-spacing: 2px}
+  *{font-family: 微软雅黑}
+</style>
 </head>
 <body>
 <div class="gallery-loader" style="background-color:transparent;">
@@ -101,17 +104,17 @@
 </div>
 <div
   class="app <% if(user.loginSidebar){ %>small-menu<% } %> <% if(user.loginScroll){ %>fixed-scroll<% } %> <% if(user.loginBoxed){ %>boxed<% } %>">
-  <header class="header header-fixed navbar">
+  <header class="header header-fixed navbar" style="font-size:14px;font-family:'微软雅黑'">
     <div class="brand">
 
       <a href="javascript:;" class="ti-menu off-left visible-xs" data-toggle="offscreen" data-move="ltr"></a>
 
 
-      <a href="/sysadmin/home"  data-pjax class="navbar-brand">
+      <a href="/sysadmin/home"  class="navbar-brand">
         <img src="/img/logo.png" alt="" class="o_img o_hide">
                 <span class="heading-font o_img">
-		            <!--<img src="/img/logoa.png">-->
-                <%= sails.config.system.AppShrotName||'' %>
+		            <img src="/img/logoa.png">
+                <!--<%= sails.config.system.AppShrotName||'' %>-->
                 </span>
       </a>
 
@@ -134,7 +137,7 @@
           <!--</a>-->
         <!--</li>-->
         <% if(firstMenus){ firstMenus.forEach(function(firstMenu){ %>
-        <li class="dropdown">
+        <li class="dropdown" style="height:50px;line-height:50px;font-size:16px;font-weight:bold">
           <a href="javascript:;" data-toggle="dropdown">
             <% if(firstMenu.icon){ %>
             <i class="<%= firstMenu.icon %>"></i>
@@ -145,16 +148,16 @@
           <ul class="dropdown-menu">
             <% if(secondMenus[firstMenu.path]){ secondMenus[firstMenu.path].forEach(function(secondMenu){ %>
             <li class="dropdown">
-              <a href="<% if(secondMenu.url){ %> <%= secondMenu.url %> <% }else{ %>javascript:;<% } %>">
+              <a href="<% if(secondMenu.url){ %> <%= secondMenu.url %> <% }else{ %>javascript:;<% } %>" style="height:30px;line-height:30px;font-size:14px;">
                 <% if(secondMenus[secondMenu.path]){ %><i class="toggle-accordion"></i><%}%>
                 <span><%= secondMenu.name %></span>
               </a>
               <% if(secondMenus[secondMenu.path]){ %>
               <ul class="sub-menu">
                 <% secondMenus[secondMenu.path].forEach(function(thMenu){ %>
-                <li class="clearfix" >
+                <li class="clearfix" style="height:30px;line-height:30px;font-size:12px;">
                   <a <% if(thMenu.url){ %>href="<%= thMenu.url %>" <% }else{ %>href="javascript:;"
-                    <% } %>>
+                    <% } %> style="height:30px;line-height:30px;">
                   <span><%= thMenu.name %></span>
                   </a>
                 </li><% });%>
@@ -172,10 +175,10 @@
           <i class="ti-angle-down ti-caret hidden-xs"></i>
         </a>
         <ul class="dropdown-menu animated fadeInLeft">
-          <li>
+          <!--li>
             <a href="/private/sys/user/custom" data-toggle="modal"
                data-target="#homeDetail"><%= sails.__('private.index.usersetting') %></a>
-          </li>
+          </li-->
 
           <li class="dropdown hidden-xs">
             <a href="javascript:;" class="pg-toggle">
@@ -196,35 +199,14 @@
     </ul>
   </header>
   <section class="layout">
-
-    <aside class="sidebar offscreen-left">
+<%if(path && path.length > 1){%>
+    <aside class="sidebar offscreen-left" style="font-size:14px;font-family:'微软雅黑'">
 
       <nav class="main-navigation" data-height="auto" data-size="6px" data-distance="0" data-rail-visible="true"
            data-wheel-step="10">
         <!--<p class="nav-title">MENU</p>-->
         <ul class="nav">
-          <li class="open">
-            <a href="javascript:;">
-              <%if(myMenus&&myMenus.length>0){%>
-              <i class="toggle-accordion"></i>
-              <%}%>
-              <i class="ti-heart"></i>
-              <span>常用菜单</span>
-            </a>
-            <%if(myMenus&&myMenus.length>0){%>
-            <ul class="sub-menu">
-              <%myMenus.forEach(function(o){%>
 
-              <li class="active">
-                <a <%if(o.url){%>href="<%=o.url%>" <%if('data-pjax'==o.target){%>data-pjax<%}}else{ %>href="javascript:;"<%}%>>
-                  <span><%=o.name%></span>
-                </a>
-              </li>
-
-              <%});%>
-            </ul>
-            <%}%>
-          </li>
           <% if(path.length > 8 && secondMenus[path.substring(0, path.length - 8)]){ %>
           <% secondMenus[path.substring(0, path.length - 8)].forEach(function(firstMenu){ %>
           <li <% if(path == firstMenu.path){ %>class="active"
@@ -266,13 +248,16 @@
             </ul>
             <% } %>
           </li>
-          <% });}else{ %>
-
-          <% } %>
+          <% });}else{ if(secondMenus && secondMenus[path.substring(0, 4)]){%>
+            <%secondMenus[path.substring(0, 4)].forEach(function(e){%>
+              <li class="active"><a href="<%=e.url%>" data-pjax><span><%=e.name%></span></a></li>
+            <%})%>
+          <% }} %>
 
         </ul>
       </nav>
     </aside>
+    <%}%>
     <section class="main-content" id="container">
       <%- body %>
     </section>

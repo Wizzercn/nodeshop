@@ -154,8 +154,8 @@ module.exports = {
   },
   doSend: function (req, res) {
     if(req.body.shopShip!='true'){
-      if(!req.body.orderlist){ return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
-      if(!req.body.shiptypeNo) { return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
+      if(!req.body.orderlist){return  res.json({code: 1,msg:'发货失败：未选择发货订单'}); }
+      if(!req.body.shiptypeNo) {return  res.json({code: 1,msg:'发货失败：未填写物流单号'}); }
     }
 
     var shiptypeId =  req.body.shiptypeId;
@@ -164,17 +164,14 @@ module.exports = {
     var i = 0;
     if(req.body.shopShip=='true'){
       var shiptypeId =  -1;
-      var shiptypeNo = '商家自发货';
+      var shiptypeNo = "'商家自发货'";
     }
     orderList.forEach(function (orderId) {
-      var ssql = 'update shop_order o,shop_order_goods og ';
+      var ssql = 'update Shop_order o,Shop_order_goods og ';
       ssql = ssql + 'set o.shipStatus=1,o.shiptypeId=' + shiptypeId;
-      ssql = ssql + ",o.shiptypeNo='" + shiptypeNo+"'";
+      ssql = ssql + ',o.shiptypeNo=' + shiptypeNo;
       ssql = ssql + ',og.sendNum = og.num where o.id = og.orderId and o.id = ' + orderId;
-      Shop_order_goods.query(ssql, function (e,o) {
-        if(e){
-            return res.json({code: 1,ssql:ssql,msg:"订单:"+orderId+"  发货失败"});
-        }
+      Shop_order_goods.query(ssql, function () {
         Shop_order_ship_log.create({
           orderId: orderId,
           shiptypeNo: shiptypeNo,
@@ -189,6 +186,7 @@ module.exports = {
       }
     );
   },
+
   pay: function (req, res) {
     Shop_order.findOne(req.params.id)
       .populate('memberId')
@@ -201,7 +199,7 @@ module.exports = {
       });
   },
   doPay: function (req, res) {
-    var ssql = 'update shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
+    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
     Shop_order.query(ssql, function (err, list) {
       Shop_order.findOne({id: req.body.id}).exec(function (err, order) {
         Shop_history_payments.create({
