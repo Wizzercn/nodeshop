@@ -28,19 +28,6 @@
         <input type="text" id="name" name="name" onclick="this.value=''" class="form-control" placeholder="商品名称">
       </div>
       <div class="form-group">
-        <label for="typeid">商品类型</label>
-        <select id="typeid" name="typeid" class="form-control" style="margin-bottom: 5px;">
-          <option value="0">通用商品</option>
-          <%if(typelist){
-            typelist.forEach(function(o){
-          %>
-          <option value="<%=o.id%>" ><%=o.name%></option>
-          <%
-          });
-          }%>
-        </select>
-      </div>
-      <div class="form-group">
         <label for="stock_type">库存</label>
         <select id="stock_type" name="stock_type" class="form-control" style="margin-bottom: 5px;">
           <option value="than">小于</option>
@@ -50,7 +37,6 @@
         </select>
         <input type="text" id="stock" name="stock" value="<%=stock>0?stock:''%>" onclick="this.value=''" class="form-control" placeholder="库存">
       </div>
-
       <div class="form-group">
         <label for="price_type">销售价</label>
         <select id="price_type" name="price_type" class="form-control" style="margin-bottom: 5px;">
@@ -159,7 +145,6 @@
           d.price_type = $('#price_type').val();
           d.price = $('#price').val();
           d.disabled = $('input[name=disabled]:checked').val();
-          d.typeid = $('#typeid option:checked').val();
         }
       },
       "order": [[4, "desc"]],

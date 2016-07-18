@@ -27,6 +27,10 @@
           </li>
           <li><a href="#shop_login" data-toggle="tab">信任登录</a>
           </li>
+          <li><a href="#shop_sms" data-toggle="tab">短信配置</a>
+          </li>
+          <li><a href="#shop_img" data-toggle="tab">图片配置</a>
+          </li>
         </ul>
         <div class="tab-content">
           <div class="tab-pane fade active in" id="shop_base">
@@ -238,6 +242,166 @@
               </div>
             </div>
           </div>
+          <div class="tab-pane fade" id="shop_login">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_open" value="1" <%if(obj.oauth_open){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_open" value="0" <%if(!obj.oauth_open){%>checked<%}%>>禁用
+
+                </div>
+              </div>
+              <div id="div_oauth" style="display: <%=obj.oauth_open==true?'block':'none'%>">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">微信信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_weixin" value="1" <%if(obj.oauth_weixin){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_weixin" value="0" <%if(!obj.oauth_weixin){%>checked<%}%>>禁用
+                  注意：必须启用并配置微信支付才可启用
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">QQ信任登录</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <input type="radio" name="oauth_qq" value="1" <%if(obj.oauth_qq){%>checked<%}%>>启用
+                  <input type="radio" name="oauth_qq" value="0" <%if(!obj.oauth_qq){%>checked<%}%>>禁用
+                  <button class="btn btn-info" type="button" id="btnOauth_qq" data-toggle="modal" data-target="#dialogOauth_qq"> 配置</button>
+                  <input name="oauth_qq_info" id="oauth_qq_info" type="hidden" value="<%-JSON.stringify(obj.oauth_qq_info)||{}%>">
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="shop_sms">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">接入平台</label>
+
+                <div class="col-sm-8">
+                  <select class="form-control" name="app_type">
+                    <option value="top" <%=sms.app_type=='top'?'selected':''%>>阿里大鱼</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">短信签名</label>
+                <div class="col-sm-8">
+                  <input class="form-control" name="sms_sign_name" value="<%=sms.sms_sign_name||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">App key</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="app_key" value="<%=sms.app_key||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">App secret</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="app_secret" value="<%=sms.app_secret||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">用户注册验证码模板</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="sms_reg_template" value="<%=sms.sms_reg_template||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">身份验证验证码模板</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="sms_check_template" value="<%=sms.sms_check_template||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">登陆确认验证码模板</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="sms_login_template" value="<%=sms.sms_login_template||''%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">修改密码验证码模板</label>
+
+                <div class="col-sm-8">
+                  <input class="form-control" name="sms_password_template" value="<%=sms.sms_password_template||''%>">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="shop_img">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <label for="s_width" class="col-sm-2 control-label">列表页缩略图设定</label>
+
+                <div class="col-sm-8" style="text-align: left;float: left">
+                  宽:<input type="text" id="s_width" style="width: 100px;" name="s_width"
+                         value="<%= imgs.s_width||120%>">  x
+                  高:<input type="text" id="s_height" style="width: 100px;"  name="s_height"
+                         value="<%= imgs.s_height||140%>">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="m_width" class="col-sm-2 control-label">商品页详细图设定</label>
+
+                <div class="col-sm-8" style="text-align: left;float: left">
+                  宽:<input type="text" id="m_width" style="width: 100px;" name="m_width"
+                           value="<%= imgs.m_width||300%>">  x
+                  高:<input type="text" id="m_height" style="width: 100px;"  name="m_height"
+                           value="<%= imgs.m_height||300%>">
+                </div>
+              </div>
+              <div class="form-group" style="display: none">
+                <label for="picurl" class="col-sm-2 control-label">水印图片</label>
+
+                <div class="col-sm-8">
+                  <div id="queue"></div>
+                  <div class="input-group">
+                    <input id="file_upload" name="file_upload" type="file" multiple="false">
+                    <span class="input-group-btn">
+                    <button class="btn btn-color current-time" type="button"
+                            onclick="$('#file_upload').uploadifive('upload')">上传<i class="ti-upload ml5"></i></button>
+                    </span>
+                  </div>
+                  <div id="img" style="padding: 5px;">
+                    <%if(obj.wk_url){%>
+                    <img src='<%=imgs.wk_url||''%>' style='width:150px;'>
+                    <i class="fa fa-close" onclick="$('#wk_url').val('');$('#img').html('');"></i>
+                    <%}%>
+                  </div>
+                  <input type="hidden" id="wk_url" name="wk_url" value="<%=obj.wk_url||''%>" >
+                </div>
+              </div>
+              <div class="form-group" style="display: none">
+                <label for="wk_txt" class="col-sm-2 control-label">水印文字</label>
+
+                <div class="col-sm-8" style="text-align: left;float: left">
+                  <input type="text" id="wk_txt" name="wk_txt"
+                           value="<%= imgs.wk_txt||''%>" class="form-control">
+                </div>
+              </div>
+              <div class="form-group" style="display: none">
+                <label for="wk_type" class="col-sm-2 control-label">水印类型</label>
+
+                <div class="col-sm-8" style="text-align: left;float: left">
+                  <select name="wk_type" class="form-control">
+                    <option value="0" <%=imgs.wk_type==0?'selected':''%>>不启用水印</option>
+                    <option value="1" <%=imgs.wk_type==1?'selected':''%>>文字</option>
+                    <option value="2" <%=imgs.wk_type==2?'selected':''%>>图片</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
 

@@ -70,7 +70,7 @@
  * @apiParam {string} province 一级地址
  * @apiParam {string} city 二级地址
  * @apiParam {string} area 三级地址
- * @apiParam {string} addr 收货地址
+ * @apiParam {string} addr 四级地址
  * @apiParam {string} name 收货人姓名
  * @apiParam {string} mobile 收货人电话
  * @apiParam {Object} invoice 发票
@@ -78,7 +78,6 @@
  * @apiParam {string} invoice.taxNo 企业税务号
  * @apiParam {string} invoice.taxTitle 发票抬头[如taxType字段为1,则此字段必填]
  * @apiParam {string} invoice.Centent 发票内容
- * @apiParam {string} trade_no 第三方订单号
  *
  * @apiParamExample {json} 示例
  *   POST /api/order/create
@@ -105,8 +104,7 @@
  *            "taxNo": "340120200000001",
  *            "taxTitle": "单位名称",
  *            "taxCentent":"发票内容"
- *        },
- *        "trade_no": "2016070400001"
+ *        }
  *   }
  *
  * @apiSuccess (成功) {number} code 0

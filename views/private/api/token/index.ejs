@@ -2,7 +2,7 @@
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/api/token/add" data-toggle="modal" data-target="#dialogDetail"><i class="ti-plus"></i> 添加授信</a>
     <button class="btn btn-danger navbar-btn" onclick="delCheck()"><i class="ti-close"></i> 删除选中</button>
-     <!--<button class="btn btn-danger navbar-btn" onclick="testCheck()"><i class="ti-close"></i>测试</button>-->
+    <!-- <button class="btn btn-danger navbar-btn" onclick="testCheck()"><i class="ti-close"></i>测试</button> -->
   </div>
 </header>
 <div class=panel-body style="padding-top: 50px;">
@@ -199,16 +199,16 @@
 
             $.post("/api/order/create",
             {
-              token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2ODU3MjQyODM4NX0.fFTFT_Ey71_7cekU1h777LGJcdarZQzGIv5kVEnwC9w",
+              token: "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOjEsImV4cCI6MTQ2NTAwNzc3NzEwM30.RXryQvKVWFhPsyXA2K5H9MFeMCzeuoO56LV02sDaj1A",
               // orderId:"160601134950858"
               products: [
               {
-                sku:"P1607000046",
-                num:1
+                sku:"P1605000008",
+                num:12
               },
               {
-                sku:"P1607000044",
-                num:2
+                sku:"P1605000007",
+                num:13
               }],
               province: "安徽省",
               city: "合肥市",
@@ -221,8 +221,7 @@
                 taxNo:340120200000001,
                 taxTitle: "单位名称",
                 taxCentent:"发票内容"
-              },
-              trade_no:"F0000000001"
+              }
             }
             , function (data) {
               console.log(data);
