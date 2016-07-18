@@ -291,7 +291,7 @@
             //     '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
             //     '</ul></div>';
           },
-          "targets": 11
+          "targets": 10
         }
       ]
     });
@@ -376,7 +376,7 @@
   });
   function initNavBar() {
     <%var status = navStatus?navStatus:'unship'%>
-    console.log("<%= status%>");
+    // console.log("<%= status%>");
     $("#orderTab").find("li").each(function () {
       $(this).removeClass("active");
     });

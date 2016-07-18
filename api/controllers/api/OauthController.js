@@ -20,8 +20,6 @@ module.exports = {
           return res.json({code: 3, msg: 'client_secret has error'});
         }
         var expires = moment().add(1,'days').valueOf();
-        console.log(o);
-        console.log(expires);
         var token = jwt.encode(
           {
             iss: o.id,
