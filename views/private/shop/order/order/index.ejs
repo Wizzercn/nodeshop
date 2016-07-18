@@ -62,8 +62,10 @@
         <th>收货地址</th>
         <th>收货人</th>
         <th>联系电话</th>
-        <th>支付时间</th>
+        <th>创建时间</th>
+        <th>第三方订单号</th>
         <th>操作</th>
+
       </tr>
     </table>
   </div>
@@ -136,7 +138,8 @@
         {"data": "addrProvince", "bSortable": true},
         {"data": "addrName", "bSortable": true},
         {"data": "addrMobile", "bSortable": true},
-        {"data": "payAt", "bSortable": true},
+        {"data": "createdAt", "bSortable": true}
+//        {"data": "trade_no", "bSortable": true}
       ],
       "columnDefs": [
         {
@@ -243,7 +246,17 @@
           },
           "targets": 3
         },
-
+//        {
+//          "render": function (data, type, row) {
+//            if (data) {
+//              return new Date(data * 1000).Format('yyyy-MM-dd hh:mm:ss');
+//
+//            }else {
+//              return '';
+//            }
+//          },
+//          "targets": 10
+//        },
         {
           "render": function (data, type, row) {
             var editMenu = '<div class="btn-group"><button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
@@ -278,7 +291,7 @@
             //     '<li><a href="javascript:;" onclick="del(' + row.id + ')">删除</a></li>' +
             //     '</ul></div>';
           },
-          "targets": 10
+          "targets": 11
         }
       ]
     });

@@ -27,6 +27,7 @@
 <header class="header navbar bg-white shadow">
   <div class="btn-group tool-button">
     <a class="btn btn-primary navbar-btn" href="/private/shop/goods/goods" data-pjax><i class="ti-angle-left"></i> 返回</a>
+    <a class="" id="addNew" href="/private/shop/goods/goods/add" data-pjax style="display:none">新建</a>
   </div>
   <div class="pull-right">
     <div class="btn-group tool-button">
@@ -617,8 +618,9 @@
       },
       success: function (data, statusText, xhr, form) {
         if (data.code == 0) {
-          $("#addForm").attr("action","/private/shop/goods/goods/editDo");
-          $("#id").val(data.goodsid);
+//          $("#addForm").attr("action","/private/shop/goods/goods/editDo");
+//          $("#id").val(data.goodsid);
+          $('#addNew').click();
           Toast.success(data.msg);
         } else {
           Toast.error(data.msg);
