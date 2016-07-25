@@ -37,7 +37,7 @@ module.exports = {
         if(sort_name=='price'){
           sort={price:sort_type};
         }
-        var where={disabled:false};
+        var where={disabled:false,hotsale:true};
         if(search_name){
           where.name={like:'%'+search_name+'%'};
         }
@@ -75,6 +75,7 @@ module.exports = {
     if(search_name){
       where.name={like:'%'+search_name+'%'};
     }
+    where.hotsale = true;
     Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size||8,start,where,sort, function (obj) {
       return res.json(obj);
     });

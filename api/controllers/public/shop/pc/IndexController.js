@@ -31,6 +31,12 @@ module.exports = {
           done(null, list);
         });
       },
+      //获取商城配置
+      indexShopConfig: function (done) {
+      Shop_config.findOne(1).exec(function(e,list){
+          done(null, list);
+        });
+      },
       //获取热卖商品
       hotGoodsList: function (done) {
         Shop_goods.getHotGoods(4, function (list) {
@@ -92,6 +98,8 @@ module.exports = {
         });
       }
     }, function (err, result) {
+
+      req.data.indexShopConfig = result.indexShopConfig || [];
       req.data.channelList = result.channelList || [];
       req.data.allClassList = result.allClassList || [];
       req.data.indexClassList = result.indexClassList || [];

@@ -71,6 +71,9 @@
             <label></label>
 
             <div>
+              <div id="app">
+                {{ message }}
+              </div>
               <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交</button>
             </div>
           </div>
@@ -104,6 +107,15 @@
     </div>
   </div>
 </div>
+
+<script>
+new Vue({
+el: '#app',
+data: {
+  message: 'Hello Vue.js!'
+}
+})
+</script>
 <script language="JavaScript">
   $(document).ready(function () {
     $('#addForm').ajaxForm({

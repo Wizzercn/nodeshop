@@ -18,6 +18,7 @@
 <%}%>
 <div class="wrap">
   <!----新品热卖start----->
+  <% if(indexShopConfig.display_hot_sale) {%>
   <div class="k_hotc"><span style="color:#fe6000">新品热卖</span>
     <ul class="k_hotch">
       <li class="k_hotchg brn"><a href="/hot">更多>></a></li>
@@ -38,6 +39,7 @@
     </ul>
    <%});%>
   </div>
+  <%}%>
   <!----新品热卖end----->
   <!----商品分类start----->
   <%indexClassList.forEach(function(clist1){%>

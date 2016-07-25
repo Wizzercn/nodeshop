@@ -41,6 +41,12 @@ module.exports = {
         return false;
       }
     },
+    display_hot_sale: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return true;
+      }
+    },
     freight_disabled: {
       type: 'boolean',
       defaultsTo: function () {

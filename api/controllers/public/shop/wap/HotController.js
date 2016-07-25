@@ -24,7 +24,7 @@ module.exports = {
         if (sort_name == 'price') {
           sort = {price: sort_type};
         }
-        Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size || 8, start, {disabled: false}, sort, function (obj) {
+        Shop_goods.getPageList(sails.config.system.ShopConfig.list_page_size || 8, start, {disabled: false,hotsale:true}, sort, function (obj) {
           done(null, obj);
         });
       }

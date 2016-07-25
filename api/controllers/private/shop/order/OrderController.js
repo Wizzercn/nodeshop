@@ -20,7 +20,7 @@ module.exports = {
     var columns = req.body.columns || [];
     var sort = {};
     var where = {};
-    var status = req.body.status || '0';
+    var status = req.body.status || 'unship';
     switch (status) {
       case 'unship':
       where = {
@@ -139,7 +139,7 @@ module.exports = {
         };
         orderObj['ship'] = obj;
         //查找可合并发货订单
-        Shop_order.find({where})
+        Shop_order.find({where:where})
         .populate('goods')
         .exec(function (orderlisterr, orderlistobj) {
           orderObj['orderList'] = orderlistobj || {};
@@ -164,12 +164,15 @@ module.exports = {
     var i = 0;
     if(req.body.shopShip=='true'){
       var shiptypeId =  -1;
-      var shiptypeNo = "'商家自发货'";
+      if(!req.body.shiptypeNo) {
+        var shiptypeNo = '商家自发货';
+      }
     }
+
     orderList.forEach(function (orderId) {
-      var ssql = 'update Shop_order o,Shop_order_goods og ';
+      var ssql = 'update shop_order o,shop_order_goods og ';
       ssql = ssql + 'set o.shipStatus=1,o.shiptypeId=' + shiptypeId;
-      ssql = ssql + ',o.shiptypeNo=' + shiptypeNo;
+      ssql = ssql + ',o.shiptypeNo=' + "'" +shiptypeNo+"'";
       ssql = ssql + ',og.sendNum = og.num where o.id = og.orderId and o.id = ' + orderId;
       Shop_order_goods.query(ssql, function () {
         Shop_order_ship_log.create({
@@ -186,7 +189,6 @@ module.exports = {
       }
     );
   },
-
   pay: function (req, res) {
     Shop_order.findOne(req.params.id)
       .populate('memberId')
@@ -199,7 +201,7 @@ module.exports = {
       });
   },
   doPay: function (req, res) {
-    var ssql = 'update Shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
+    var ssql = 'update shop_order set payAmount=finishAmount,payStatus=1,payAt='+ moment().format('X')+' where id = ' + req.body.id;
     Shop_order.query(ssql, function (err, list) {
       Shop_order.findOne({id: req.body.id}).exec(function (err, order) {
         Shop_history_payments.create({

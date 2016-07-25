@@ -264,6 +264,16 @@
 
                   </div>
                 </div>
+
+                  <div class="form-group">
+                    <label for="unit" class="col-sm-2 control-label">是否热卖</label>
+
+                    <div class="col-sm-8" style="float: left;text-align: left">
+                      <input type="radio" name="hotsale" value="0" <%=goods.hotsale==false?'checked':''%>>非热卖
+                      <input type="radio" name="hotsale" value="1" <%=goods.hotsale==true?'checked':''%>>热卖
+                    </div>
+                  </div>
+
                 <div class="form-group">
                   <label for="unit" class="col-sm-2 control-label">是否上架</label>
 
@@ -1092,7 +1102,6 @@
       if ($("#is_spec").val() == "false") {
         var specs = [];
         var self = $("#sp");
-        console.log(self.find("input[name='disabled[]'][type='radio']:checked").val());
         var spec = "";
         var id = self.find("input[name='pid[]']").val();
         var gn = self.find("input[name='pbn[]']").val();

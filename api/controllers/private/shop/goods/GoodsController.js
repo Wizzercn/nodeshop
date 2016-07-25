@@ -117,6 +117,7 @@ module.exports = {
       goods.name = body.name;
       goods.info = body.info;
       goods.note = body.note;
+      goods.hotsale = body.hotsale=='1';
       goods.disabled = body.disabled == '1';
       goods.unit = body.unit;
       goods.spec = JSON.parse(body.spec_values);
@@ -360,6 +361,7 @@ module.exports = {
       goods.name = body.name;
       goods.info = body.info;
       goods.note = body.note;
+      goods.hotsale = body.hotsale=='1';
       goods.disabled = body.disabled == '1';
       goods.unit = body.unit;
       goods.spec = JSON.parse(body.spec_values);

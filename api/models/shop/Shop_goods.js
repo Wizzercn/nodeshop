@@ -121,6 +121,12 @@ module.exports = {
         return false;
       }
     },
+    hotsale: {
+      type: 'boolean',
+      defaultsTo: function () {
+        return false;
+      }
+    },
     //上架时间
     upAt: {
       type: 'integer'
@@ -193,7 +199,7 @@ module.exports = {
   getHotGoods: function (num, cb) {
     Shop_goods.find({
         select: ['id', 'gn', 'name', 'info', 'price', 'priceMarket', 'is_spec', 'weight', 'unit', 'stock', 'buyMin', 'buyMax', 'imgurl', 'location'],
-        where: {disabled: false},
+        where: {disabled: false,hotsale: true},
         limit: num || 4
       })
       .sort('location desc')

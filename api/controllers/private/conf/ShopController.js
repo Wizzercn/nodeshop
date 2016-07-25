@@ -30,6 +30,7 @@ module.exports = {
   editDo: function (req, res) {
     var body = req.body;
     body.list_quick_buy=body.list_quick_buy=='1';
+    body.display_hot_sale=body.display_hot_sale=='1';
     body.freight_disabled=body.freight_disabled=='1';
     body.tax_disabled=body.tax_disabled=='1';
     body.pay_cash=body.pay_cash=='1';
@@ -50,6 +51,7 @@ module.exports = {
       'list_load_type':body.list_load_type,
       'list_page_size':body.list_page_size,
       'list_quick_buy':body.list_quick_buy,
+      'display_hot_sale':body.display_hot_sale,
       'freight_disabled':body.freight_disabled,
       'freight_type':body.freight_type,
       'freight_price':body.freight_price,
