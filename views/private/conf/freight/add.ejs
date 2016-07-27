@@ -1,12 +1,13 @@
 <style media="screen">
-  .city-freight{
+  .city-freight {
     border: 1px solid #e3e6f3;
     border-radius: 3px;
     padding: 10px;
     box-shadow: 0px 0px 5px 2px #eeeeee;
     margin: 10px 0;
   }
-  .city-freight:hover{
+
+  .city-freight:hover {
     box-shadow: 0px 0px 5px 2px #88bbee;
     border: 1px solid #88bbee;
   }
@@ -23,8 +24,8 @@
 <div class="content-wrap">
   <div class="wrapper" style="min-height:500px;">
     <section class="panel panel-form">
-      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate
-            action="/private/shop/logistics/addDo" method="post">
+      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="/private/shop/logistics/addDo"
+        method="post">
         <div class="row mb10">
           <div class="col-lg-12">
             <div class="form-group">
@@ -39,11 +40,40 @@
                 <input type="radio" name="list_quick_buy" value="1" checked="" data-parsley-multiple="list_quick_buy">按件数
                 <input type="radio" name="list_quick_buy" value="0" data-parsley-multiple="list_quick_buy">按重量
               </div>
+
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">运费设置</label>
+
+              <button id="btnAdd" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市模板</button>
               <div class="col-sm-8" id="freightModel">
-                <button id="btnAdd" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市模板</button>
+                <div id="app" >
+                  <button v-on:click="addFreight" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市</button>
+                  <span>Checked names: {{ freightlist | json }}</span>
+                  <div class="city-freight" v-for="v in freightlist">
+                    <div class="">
+                      <span> </span>
+                      <span>{{v.lable}}</span>
+                      <a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a>
+                    </div>
+                    <ul>
+                      <li>
+                        <span>首重</span>
+                  <input type="text" name="name" value="">
+                  <span>运费</span>
+                  <input type="text" name="name" value="">
+                  <span>续重</span>
+                  <input type="text" name="name" value="">
+                  <span>运费</span>
+                  <input type="text" name="name" value="">
+                      </li>
+                    </ul>
+                    <i class="del fa fa-remove" style="cursor:pointer" v-on:click="addFreight"></i>
+                  </div>
+
+                </div>
+
+
                 <div class="city-freight">
                   <div class="">
                     <span>所属城市</span>
@@ -71,9 +101,7 @@
             <label></label>
 
             <div>
-              <div id="app">
-                {{ message }}
-              </div>
+
               <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交</button>
             </div>
           </div>
@@ -110,11 +138,24 @@
 
 <script>
 new Vue({
-el: '#app',
-data: {
-  message: 'Hello Vue.js!'
-}
-})
+  el: '#app',
+  data: {
+    freightlist : [
+      {
+        lable: '首重',
+        value: 200
+      },
+    ]
+  },
+  methods : {
+    addFreight : function(){
+      this.freightlist.push({
+        lable: '续重',
+        value: 200
+      });
+    }
+  }
+});
 </script>
 <script language="JavaScript">
   $(document).ready(function () {
