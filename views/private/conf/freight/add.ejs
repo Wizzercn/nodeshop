@@ -6,7 +6,7 @@
     box-shadow: 0px 0px 5px 2px #eeeeee;
     margin: 10px 0;
   }
-
+  
   .city-freight:hover {
     box-shadow: 0px 0px 5px 2px #88bbee;
     border: 1px solid #88bbee;
@@ -24,8 +24,7 @@
 <div class="content-wrap">
   <div class="wrapper" style="min-height:500px;">
     <section class="panel panel-form">
-      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="/private/shop/logistics/addDo"
-        method="post">
+      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="/private/shop/logistics/addDo" method="post">
         <div class="row mb10">
           <div class="col-lg-12">
             <div class="form-group">
@@ -44,52 +43,79 @@
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">运费设置</label>
-
               <button id="btnAdd" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市模板</button>
               <div class="col-sm-8" id="freightModel">
-                <div id="app" >
+
+                <!--vue-start-->
+                <div id="app">
                   <button v-on:click="addFreight" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市</button>
-                  <span>Checked names: {{ freightlist | json }}</span>
+                  <span>data json: {{ freightlist | json }}</span>
                   <div class="city-freight" v-for="v in freightlist">
-                    <div class="">
-                      <span> </span>
-                      <span>{{v.lable}}</span>
-                      <a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a>
+                    <div>
+                      <span v-for="c in v.city">{{c}}  </span>
+                      <a href="#" data-toggle="modal" v data-target="#dialogCity" onClick="setIndex({{$index}})" >[修改]</a>
                     </div>
-                    <ul>
-                      <li>
-                        <span>首重</span>
-                  <input type="text" name="name" value="">
-                  <span>运费</span>
-                  <input type="text" name="name" value="">
-                  <span>续重</span>
-                  <input type="text" name="name" value="">
-                  <span>运费</span>
-                  <input type="text" name="name" value="">
-                      </li>
-                    </ul>
+                    <span>首重</span>
+                    <input type="text" v-model="v.price.firstunit" placeholder="edit me">
+                    <span>运费</span>
+                    <input type="text" v-model="v.price.continueunit" placeholder="edit me">
+                    <span>续重</span>
+                    <input type="text" v-model="v.price.firstprice" placeholder="edit me">
+                    <span>运费</span>
+                    <input type="text" v-model="v.price.continueprice" placeholder="edit me">
                     <i class="del fa fa-remove" style="cursor:pointer" v-on:click="addFreight"></i>
                   </div>
-
                 </div>
+                <!--vue-end-->
+
+                <script>
+                  var num = 0;
+                  var vmdata = {
+                    freightlist:[]
+                  }
+                  var vm = new Vue({
+                    el: '#app',
+                    data: vmdata,
+                    methods: {
+                      addFreight: function() {
+                        vmdata.freightlist.push({
+                          city: {
+                            '1': '合肥',
+                            '2': '芜湖'
+                          },
+                          price: {
+                            firstunit: 0,
+                            continueunit: 0,
+                            firstprice: 0,
+                            continueprice: 0
+                          }
+                        });
+                      }
+                    }
+                  });
+                  function setIndex(indexNum){
+                    num = indexNum;
+                    console.log(num)
+                  }
+                </script>
 
 
-                <div class="city-freight">
+                <!--<div class="city-freight">
                   <div class="">
                     <span>所属城市</span>
                     <span>全国</span>
                     <a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a>
                   </div>
                   <span>首重</span>
-                  <input type="text" name="name" value="">
+                  <input type="text" v-model="v.price.firstunit" placeholder="edit me">
                   <span>运费</span>
-                  <input type="text" name="name" value="">
+                  <input type="text" v-model="v.price.firstunit" placeholder="edit me">
                   <span>续重</span>
-                  <input type="text" name="name" value="">
+                  <input type="text" v-model="v.price.firstunit" placeholder="edit me">
                   <span>运费</span>
-                  <input type="text" name="name" value="">
+                  <input type="text" v-model="v.price.firstunit" placeholder="edit me">
                   <i class="del fa fa-remove" style="cursor:pointer;margin-left:10px;padding: 5px;" title="删除"></i>
-                </div>
+                </div>-->
 
               </div>
             </div>
@@ -130,41 +156,20 @@
           <button type="button" class="btn btn-success" data-dismiss="modal" onclick="selectFirstMenu()">全选</button>
         </div>
         <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
-        <button type="button" class="btn btn-primary" onclick="complete()">确认选择</button>
+        <button type="button" class="btn btn-primary" onclick="getcity()">确认选择</button>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-new Vue({
-  el: '#app',
-  data: {
-    freightlist : [
-      {
-        lable: '首重',
-        value: 200
-      },
-    ]
-  },
-  methods : {
-    addFreight : function(){
-      this.freightlist.push({
-        lable: '续重',
-        value: 200
-      });
-    }
-  }
-});
-</script>
 <script language="JavaScript">
-  $(document).ready(function () {
+  $(document).ready(function() {
     $('#addForm').ajaxForm({
       dataType: 'json',
-      beforeSubmit: function (arr, form, options) {
+      beforeSubmit: function(arr, form, options) {
         form.find("button:submit").button("loading");
       },
-      success: function (data, statusText, xhr, form) {
+      success: function(data, statusText, xhr, form) {
         if (data.code == 0) {
           Toast.success(data.msg);
           //刷新父级菜单
@@ -176,22 +181,23 @@ new Vue({
       }
     });
 
-    $('#btnAdd').on('click',function(e){
-      var domStr = '<div class="city-freight"><div class=""><span>所属城市</span><span>全国</span><a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a></div>'+
-                ' <span>首重</span> <input type="text" name="name" value=""> <span>运费</span> <input type="text" name="name" value="">'+
-                ' <span>续重</span> <input type="text" name="name" value=""> <span>运费</span> <input type="text" name="name" value="">'+
-                ' <i class="del fa fa-remove" style="cursor:pointer;margin-left:10px;padding: 5px;" title="删除"></i></div>';
+    $('#btnAdd').on('click', function(e) {
+      var domStr = '<div class="city-freight"><div class=""><span>所属城市</span><span>全国</span><a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a></div>' +
+        ' <span>首重</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me"> <span>运费</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me">' +
+        ' <span>续重</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me"> <span>运费</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me">' +
+        ' <i class="del fa fa-remove" style="cursor:pointer;margin-left:10px;padding: 5px;" title="删除"></i></div>';
       $('#freightModel').append(domStr);
-      $('.fa-remove').off().on('click',function (e) {
+      $('.fa-remove').off().on('click', function(e) {
         $(this).parent().remove();
       })
     });
 
     initTreeView();
   });
+
   function initTreeView() {
     $("#jsTreeParentUnit").jstree({
-      plugins: ["json_data","checkbox"],
+      plugins: ["json_data", "checkbox"],
       core: {
         data: <%-JSON.stringify(menu)%>,
         // data: {
@@ -202,10 +208,17 @@ new Vue({
         // },
         multiple: true
       }
-    }).on("dblclick.jstree", function (node) {
+    }).on("dblclick.jstree", function(node) {
       selectParentMenu();
     });
   }
+
+  function getcity() {
+    var tree = $.jstree.reference("#jsTreeParentUnit");
+    var ids = tree.get_selected();
+    console.log(ids);
+  }
+
   function complete() {
     var tree = $.jstree.reference("#jsTreeParentUnit");
     var ids = tree.get_selected();
@@ -215,7 +228,10 @@ new Vue({
     //   each(node, tree, ids);
     // }
     if (ids.length > 0) {
-      $.post("/private/conf/freight/cityEdit", {ids: ids, fcId:'1'}, function (data) {
+      $.post("/private/conf/freight/cityEdit", {
+        ids: ids,
+        fcId: '1'
+      }, function(data) {
         Toast.error(data.msg);
         // if (data.code == 0) {
         //   Toast.success(data.msg);
@@ -230,13 +246,13 @@ new Vue({
       Toast.warning("请先选择菜单！");
     }
   }
+
   function each(node, tree, nodes) {
     var p = tree.get_parent(node);
     if (p.length > 1) {
-      if (nodes&&p&&nodes.indexOf(p)<0)
+      if (nodes && p && nodes.indexOf(p) < 0)
         nodes.push(p);
       each(p, tree, nodes);
     }
   }
-
 </script>
