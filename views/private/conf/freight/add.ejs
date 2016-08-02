@@ -24,7 +24,7 @@
 <div class="content-wrap">
   <div class="wrapper" style="min-height:500px;">
     <section class="panel panel-form">
-      <form id="addForm" role="form" class="form-horizontal parsley-form" data-parsley-validate action="/private/shop/logistics/addDo" method="post">
+      <div id="addForm" class="form-horizontal parsley-form">
         <div class="row mb10">
           <div class="col-lg-12">
             <div class="form-group">
@@ -33,33 +33,45 @@
                 <input type="text" id="bn" class="form-control" name="bn" data-parsley-required="true" placeholder="模版名称">
               </div>
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">计价方式</label>
-              <div class="col-sm-8" style="padding-top: 5px;">
-                <input type="radio" name="list_quick_buy" value="1" checked="" data-parsley-multiple="list_quick_buy">按件数
-                <input type="radio" name="list_quick_buy" value="0" data-parsley-multiple="list_quick_buy">按重量
+            <div id="app">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">计价方式</label>
+                <div class="col-sm-8" style="padding-top: 5px;">
+                  <!--<input type="radio" name="list_quick_buy" value="1" checked="" data-parsley-multiple="list_quick_buy">按件数
+                  <input type="radio" name="list_quick_buy" value="0" data-parsley-multiple="list_quick_buy">按重量-->
+                  <input type="radio" id="weight" value="weight" v-model="ferighttype">
+                  <label for="weight">重量</label>
+                  <input type="radio" id="cubage" value="cubage" v-model="ferighttype">
+                  <label for="cubage">体积</label>
+                  <input type="radio" id="quantity" value="quantity" v-model="ferighttype">
+                  <label for="quantity">数量</label>
+                  <!--<span>Picked: {{ ferighttype }}</span>-->
+                </div>
+
               </div>
+              <!--<div class="form-group">
+                <span>data json: {{ ferighttype | json }}</span>
+                <span>data json: {{ freightlist | json }}</span>
+              </div>-->
+              <div class="form-group">
+                <label class="col-sm-2 control-label">运费设置</label>
+                <!--<button id="btnAdd" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市模板</button>-->
+                <div class="col-sm-8" id="freightModel">
 
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">运费设置</label>
-              <button id="btnAdd" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市模板</button>
-              <div class="col-sm-8" id="freightModel">
+                  <!--vue-start-->
 
-                <!--vue-start-->
-                <div id="app">
                   <button v-on:click="addFreight" type="button" class="btn btn-default"><i class="fa fa-plus mr5"></i>添加城市</button>
-                  <span>data json: {{ freightlist | json }}</span>
+
                   <div class="city-freight" v-for="v in freightlist">
                     <div>
-                      <span v-for="c in v.city">{{c}}  </span>
-                      <a href="#" data-toggle="modal" v data-target="#dialogCity" onClick="setIndex({{$index}})" >[修改]</a>
+                      <span v-for="c in v.city">{{c.name}}  </span>
+                      <a href="#" data-toggle="modal" v data-target="#dialogCity" onClick="setIndex({{$index}})">[选择城市]</a>
                     </div>
-                    <span>首重</span>
+                    <span>首计</span>
                     <input type="text" v-model="v.price.firstunit" placeholder="edit me">
                     <span>运费</span>
                     <input type="text" v-model="v.price.continueunit" placeholder="edit me">
-                    <span>续重</span>
+                    <span>续计</span>
                     <input type="text" v-model="v.price.firstprice" placeholder="edit me">
                     <span>运费</span>
                     <input type="text" v-model="v.price.continueprice" placeholder="edit me">
@@ -71,7 +83,8 @@
                 <script>
                   var num = 0;
                   var vmdata = {
-                    freightlist:[]
+                    ferighttype: '',
+                    freightlist: []
                   }
                   var vm = new Vue({
                     el: '#app',
@@ -79,10 +92,7 @@
                     methods: {
                       addFreight: function() {
                         vmdata.freightlist.push({
-                          city: {
-                            '1': '合肥',
-                            '2': '芜湖'
-                          },
+                          city: {},
                           price: {
                             firstunit: 0,
                             continueunit: 0,
@@ -93,9 +103,10 @@
                       }
                     }
                   });
-                  function setIndex(indexNum){
+
+                  function setIndex(indexNum) {
                     num = indexNum;
-                    console.log(num)
+                    console.log(num);
                   }
                 </script>
 
@@ -125,14 +136,12 @@
         <div class="col-lg-6">
           <div class="form-group text-center">
             <label></label>
-
             <div>
-
-              <button class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交...">提 交</button>
+              <button id="putferight" class="btn btn-primary btn-block btn-lg btn-parsley" data-loading-text="正在提交..." onClick="setferight()">提 交</button>
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </section>
 
   </div>
@@ -181,6 +190,8 @@
       }
     });
 
+    $
+
     $('#btnAdd').on('click', function(e) {
       var domStr = '<div class="city-freight"><div class=""><span>所属城市</span><span>全国</span><a href="#" data-toggle="modal" data-target="#dialogCity">[修改]</a></div>' +
         ' <span>首重</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me"> <span>运费</span> <input type="text" v-model="v.price.firstunit" placeholder="edit me">' +
@@ -213,10 +224,54 @@
     });
   }
 
+  function setferight() {
+     $.post("/private/conf/freight/setferight", {
+       vmdata
+      }, function(data) {
+        // Toast.error(data.msg);
+        // console.log(vmdata.freightlist[num].city);
+
+        if (data.code == 0) {
+          Toast.success(data.msg);
+          setTimeout(function() {
+            vmdata.freightlist[num].city = data.city;
+            $("#goback").trigger("click");
+          }, 1000);
+        } else {
+          Toast.error(data.msg);
+        }
+        $("#dialogCity").modal("hide");
+      }, "json");
+  }
+
   function getcity() {
     var tree = $.jstree.reference("#jsTreeParentUnit");
     var ids = tree.get_selected();
     console.log(ids);
+    console.log(num);
+    if (ids.length > 0) {
+      $.post("/private/conf/freight/cityEdit", {
+        ids: ids,
+        fcId: '1'
+      }, function(data) {
+        // Toast.error(data.msg);
+        // console.log(vmdata.freightlist[num].city);
+
+        if (data.code == 0) {
+          Toast.success(data.msg);
+          setTimeout(function() {
+            vmdata.freightlist[num].city = data.city;
+            $("#goback").trigger("click");
+          }, 1000);
+        } else {
+          Toast.error(data.msg);
+        }
+        $("#dialogCity").modal("hide");
+      }, "json");
+    } else {
+      Toast.warning("请先选择菜单！");
+    }
+
   }
 
   function complete() {
