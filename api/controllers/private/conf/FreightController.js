@@ -18,6 +18,7 @@ module.exports = {
   },
   add: function (req, res) {
     var data = req.data;
+
     Shop_area.find().sort('id asc').sort('path asc').exec(function (err, objs) {
       var str = [];
       if (objs) {
@@ -33,6 +34,13 @@ module.exports = {
       data.menu = str;
       return res.view('private/conf/freight/add', data);
     });
+  },
+  addDo: function (req, res) {
+    var vmdata = req.body.vmdata;
+    Shop_freight.create().exec(function (err, obj) {
+      
+    });
+    return res.json(req.body.vmdata);
   },
   cityEdit: function (req, res) {
     var freightContentId = req.body.fcId;
@@ -52,7 +60,5 @@ module.exports = {
       // }
     });
   },
-  setferight: function (req,res) {
-    return res.json(req.body.vmdata);
-  }
+
 };

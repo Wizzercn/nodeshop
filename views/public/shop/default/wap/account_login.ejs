@@ -1,39 +1,45 @@
 <header class="header">
   <a href="javascript:window.history.go(-1);" class="header_ladd1"><span>&nbsp;</span></a>
   <h1 class="head_tit"><img src="<%= SiteConfig.site_wap_logo||'' %>" alt="" class="head_logo"/></h1>
-  <a href="/wap/"><div class="header_r"><span class="header_cadd1"></span></div></a>
-
+  <a href="/wap/">
+    <div class="header_r"><span class="header_cadd1"></span></div>
+  </a>
 </header>
+<div class="list-ul">
+  <span><a id="nomallogin" href="javascript:nomallogin();" class="on">普通登录</a></span><span><a id="smslogin" href="javascript:smslogin();">动态短信登录</a></span>
+</div>
 <ul class="sign_list">
   <li class="sign_item sign_bg">
-    <input id="login_name" type="text" value="<%=saveLoginname||''%>" placeholder="用户名/手机号"
-                                       class="phone_sign sign_text"/>
+    <input id="login_name" type="text" value="<%=saveLoginname||''%>" placeholder="用户名/手机号" class="phone_sign sign_text" />
     <i id="login_name_tip" style="display: none" class="blue_notice"></i></li>
   <li id="p1" class="sign_item sign_bg">
-    <input id="login_pass" type="password" value="" placeholder="输入密码" class="pw_sign sign_text"/>
+    <input id="login_pass" type="password" value="" placeholder="输入密码" class="pw_sign sign_text" />
     <i id="login_pass_tip" style="display: none" class="blue_notice"></i>
   </li>
-  <li id="p2" style="display: none" class="sign_item sign_bg"><div class="wbw"><input id="smscode" maxlength="6" type="text" placeholder="手机动态密码" class="captcha_sign sign_text" /></div><a href="javascript:getSmscode();" class="c_a">获取动态密码&nbsp;</a><i id="smscode_tip" style="display: none" class="blue_notice"></i></li>
+  <li id="p2" style="display: none" class="sign_item sign_bg">
+    <div class="wbw"><input id="smscode" maxlength="6" type="text" placeholder="手机动态密码" class="captcha_sign sign_text" /></div><a href="javascript:getSmscode();" class="c_a">获取动态密码&nbsp;</a><i id="smscode_tip" style="display: none" class="blue_notice"></i></li>
   <li class="mt10"><a href="javascript:doLogin();" class="big_green_btn">登录</a></li>
   <li class="wbc mt10 mb10">
     <span class="sign_che">
       <input type="checkbox" <%if(saveLoginname){%>checked<%}%> id="saveLoginname"/><label
         for="saveLoginname">记住用户名</label>
     </span>
-    <div class="bottom_info wbw"><a href="javascript:forget();">忘记密码？</a><a href="/wap/join" class="white_btn">免费注册</a></div>
+    <div class="bottom_info wbw">
+      <!--<a href="javascript:forget();">忘记密码？</a>-->
+      <a href="/wap/join" class="white_btn">免费注册</a></div>
   </li>
 
 </ul>
 <input id="r" type="hidden" value="<%=r%>">
 
 <script type="text/javascript">
-  var type='login';
-  var is_send=false;
-  function checkMobile(){
-    var self=$("#login_name");
+  var type = 'login';
+  var is_send = false;
+
+  function checkMobile() {
+    var self = $("#login_name");
     var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(17[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
-    if(!myreg.test(self.val()))
-    {
+    if (!myreg.test(self.val())) {
       $("#login_name").focus();
       $("#login_name_tip").html('请输入有效的手机号码');
       $("#login_name_tip").show();
@@ -42,88 +48,147 @@
     }
     return true;
   }
-  function forget(){
+
+  function smslogin() {
     $("#p1").hide();
     $("#p2").show();
-    type='mobile';
+    $('#smslogin').addClass('on');
+    $('#nomallogin').removeClass('on');
+    type = 'mobile';
+    // tip('已切换为"手机动态密码"登录方式');
+  }
+
+   function nomallogin() {
+    $("#p2").hide();
+    $("#p1").show();
+    $('#nomallogin').addClass('on');
+    $('#smslogin').removeClass('on');
+    type = 'login';
+    // tip('已切换为"手机动态密码"登录方式');
+  }
+
+  function forget() {
+    $("#p1").hide();
+    $("#p2").show();
+    type = 'mobile';
     tip('已切换为"手机动态密码"登录方式');
   }
-  function getSmscode(){
-    if(checkMobile()){
+
+  function getSmscode() {
+    if (checkMobile()) {
       $("#smscode_tip").hide();
-      if(is_send){
+      if (is_send) {
         $("#smscode_tip").html('请勿重复获取');
         $("#smscode_tip").show();
         return false;
       }
-      is_send=true;
+      is_send = true;
       $.post(
-        "/public/shop/wap/account/getSmscode",
-        {'mobile':$("#login_name").val(),type:'login'},
-        function(result){
-          if(result.code==0){
+        "/public/shop/wap/account/getSmscode", {
+          'mobile': $("#login_name").val(),
+          type: 'login'
+        },
+        function(result) {
+          if (result.code == 0) {
             tip("短信发送成功，请在5分钟内完成登录");
             $("#smscode").focus();
-          }else if(result.code==2){
+          } else if (result.code == 2) {
             tip("短信未发送成功，请重试");
-            is_send=false;
-          }else if(result.code==3){
+            is_send = false;
+          } else if (result.code == 3) {
             tip("用户不存在，请先注册");
             $("#mobile").focus();
-            is_send=false;
+            is_send = false;
           }
-        },'json'
+        }, 'json'
       );
     }
   }
-  function doLogin(){
+
+  function doLoginMobile() {
     $("#login_name_tip").hide();
     $("#login_pass_tip").hide();
-    if(type=='login'){
-      if(checkLoginName()&&checkLoginPass()){
+    if (checkMobile() && checkSmscode()) {
+      $.post(
+        "/public/shop/pc/account/doLoginMobile", {
+          'mobile': $("#mobile").val(),
+          'smscode': $("#smscode").val()
+        },
+        function(result) {
+          if (result.code == 0) {
+            window.location.href = $("#r").val() || '/member';
+          } else if (result.code == 1) {
+            $("#smscode_tip").html('<span class="errorn">手机动态密码不正确，请重新输入或重新获取</span>');
+            $("#smscode_tip").show();
+            $("#smscode").val("");
+            $("#smscode").focus();
+          } else {
+            $("#tip .oc_pro_a").html(result.msg);
+            $("#tip").show();
+            $("#vercode_mobile").val("");
+            $("#vercode_mobile").focus();
+            $("#vercode_img_mobile").attr("src", "/public/shop/pc/account/captcha?" + new Date().getTime());
+          }
+        }, 'json'
+      );
+    }
+  }
+
+  function doLogin() {
+    $("#login_name_tip").hide();
+    $("#login_pass_tip").hide();
+    if (type == 'login') {
+      if (checkLoginName() && checkLoginPass()) {
         $.post(
-          "/public/shop/wap/account/doLogin",
-          {'login_name':$("#login_name").val(),'login_pass':$("#login_pass").val(),saveLoginname:$("#saveLoginname").prop("checked")},
-          function(result){
-            if(result.code==0){
+          "/public/shop/wap/account/doLogin", {
+            'login_name': $("#login_name").val(),
+            'login_pass': $("#login_pass").val(),
+            saveLoginname: $("#saveLoginname").prop("checked")
+          },
+          function(result) {
+            if (result.code == 0) {
               tip("登录成功");
-              setTimeout(function(){
-                window.location.href=$("#r").val()||'/wap/member';
-              },200);
-            }else{
+              setTimeout(function() {
+                window.location.href = $("#r").val() || '/wap/member';
+              }, 200);
+            } else {
               tip(result.msg);
             }
-          },'json'
+          }, 'json'
         );
       }
     }
-    if(type=='mobile'){
-      if(checkMobile()&&checkSmscode()){
+    if (type == 'mobile') {
+      if (checkMobile() && checkSmscode()) {
         $.post(
-          "/public/shop/wap/account/doLoginMobile",
-          {'mobile':$("#login_name").val(),'smscode':$("#smscode").val(),saveLoginname:$("#saveLoginname").prop("checked")},
-          function(result){
-            if(result.code==0){
+          "/public/shop/wap/account/doLoginMobile", {
+            'mobile': $("#login_name").val(),
+            'smscode': $("#smscode").val(),
+            saveLoginname: $("#saveLoginname").prop("checked")
+          },
+          function(result) {
+            if (result.code == 0) {
               tip("登录成功");
-              setTimeout(function(){
-                window.location.href=$("#r").val()||'/wap/member';
-              },1000);
-            }else if(result.code==1) {
+              setTimeout(function() {
+                window.location.href = $("#r").val() || '/wap/member';
+              }, 1000);
+            } else if (result.code == 1) {
               $("#smscode_tip").html('手机动态密码不正确');
               $("#smscode_tip").show();
               $("#smscode").val("");
               $("#smscode").focus();
-            }else{
+            } else {
               tip(result.msg);
             }
-          },'json'
+          }, 'json'
         );
       }
     }
   }
-  function checkSmscode(){
-    var self=$("#smscode");
-    if(self.val().length!=6){
+
+  function checkSmscode() {
+    var self = $("#smscode");
+    if (self.val().length != 6) {
       $("#smscode_tip").html('请输入手机动态密码');
       $("#smscode_tip").show();
       self.focus();
@@ -131,8 +196,9 @@
     }
     return true;
   }
-  function checkLoginName(){
-    if($("#login_name").val()==""){
+
+  function checkLoginName() {
+    if ($("#login_name").val() == "") {
       $("#login_name_tip").html('请输入用户名');
       $("#login_name_tip").show();
       $("#login_name").focus();
@@ -140,8 +206,9 @@
     }
     return true;
   }
-  function checkLoginPass(){
-    if($("#login_pass").val()==""){
+
+  function checkLoginPass() {
+    if ($("#login_pass").val() == "") {
       $("#login_pass_tip").html('请输入密码');
       $("#login_pass_tip").show();
       $("#login_pass").focus();
@@ -149,11 +216,20 @@
     }
     return true;
   }
-$(function(){
-  $("#smscode").on("keyup",function(){$("#smscode_tip").hide();});
-  $("#login_name").on("keyup",function(){$("#login_name_tip").hide();is_send=false;});
-  $("#login_pass").on("keyup",function(){$("#login_pass_tip").hide();});
-});
+
+
+  $(function() {
+    $("#smscode").on("keyup", function() {
+      $("#smscode_tip").hide();
+    });
+    $("#login_name").on("keyup", function() {
+      $("#login_name_tip").hide();
+      is_send = false;
+    });
+    $("#login_pass").on("keyup", function() {
+      $("#login_pass_tip").hide();
+    });
+  });
 </script>
 <nav class="bnav">
   <a href="/wap/" class="home_bnav">首页</a>

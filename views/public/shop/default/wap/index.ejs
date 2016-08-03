@@ -17,7 +17,7 @@
 </div>
 <% } %>
 <!--  -->
-<h2 class="cline_tit"><span class="cline_title">新品推荐</span></h2>
+<h2 class="cline_tit" style="display:none;"><span class="cline_title">新品推荐</span></h2>
 <!--  -->
 <ul class="pro_item_box">
   <%
@@ -64,7 +64,8 @@
   <section class="wbw">
     <a href="/wap/info/<%=aobj.id%>" >
     <h3><%=aobj.title||''%></h3>
-    <p class="pinfo"><%=len2>45?aobj.info.substring(0,45)+'...':aobj.info%></p>
+    <!--<p class="pinfo"><%=len2>45?aobj.info.substring(0,45)+'...':aobj.info%></p>-->
+    <p class="pinfo"><%=aobj.info%></p>
     </a>
   </section>
 </div>
