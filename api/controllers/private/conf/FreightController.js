@@ -1,3 +1,4 @@
+
 /**
 * Created by root on 11/5/15.
 */
@@ -18,7 +19,6 @@ module.exports = {
   },
   add: function (req, res) {
     var data = req.data;
-
     Shop_area.find().sort('id asc').sort('path asc').exec(function (err, objs) {
       var str = [];
       if (objs) {
@@ -37,28 +37,69 @@ module.exports = {
   },
   addDo: function (req, res) {
     var vmdata = req.body.vmdata;
-    Shop_freight.create().exec(function (err, obj) {
-      
-    });
-    return res.json(req.body.vmdata);
+    var freightData = Object.create();
+    // freightData.name = vmdata.freightname||'';
+    // freightData.type = vmdata.freighttype||'';
+    // for(let listItem of vmdata.freightlist) {
+    //   freightData.content.push({listItem.firstunit})
+    //   for(let item of listItem) {
+        
+    //   }
+    // }
+
+
+    // freightData.contentId =
+    Shop_freight.create({
+      name: vmdata.freightname,
+      freighttype: vmdata.freighttype,
+      contentId: [
+        { firstunit: 1, city: [1, 2, 3] }, { firstunit: 2, city: [7, 8, 9] }
+      ]
+    }).exec(function (err, obj) {
+      if (err) {
+        return res.json({ msg: 2, data: err })
+      }
+      return res.json({ msg: 0, data: obj })
+    })
+
+    //  Shop_freight_content.find()
+    //    .populateAll()
+    //    .then((params) => {
+    //      console.log(params);
+    //    })
+    //    .catch((params) => {
+    //      console.log(params);
+    //    })
+
+    // addFreight()
+    //   .then(id => {
+    //     console.log(id);
+    //     return res.json(id);
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //     return res.json(err)
+    //   })
   },
   cityEdit: function (req, res) {
     var freightContentId = req.body.fcId;
     var ids = req.body.ids;
     console.log(ids);
     console.log(freightContentId);
-    Shop_area.find({ id: ids }).exec(function (err, city) {
-      return res.json({ code: 0, city: city });
-      // if (role && ids) {
-      //   role.menus.remove(ids);
-      //   role.menus.add(ids);
-      //   role.save(function (se) {
-      //   });
-      //   return res.json({code: 0, msg: sails.__('update.ok')});
-      // } else {
-      //   return res.json({code: 1, msg: sails.__('update.fail')});
-      // }
-    });
-  },
+    Shop_area.find({ select: ['id', 'name'] }, { id: ids })
+      .exec(function (err, city) {
+        return res.json({ code: 0, city: city });
+        // if (role && ids) {
+        //   role.menus.remove(ids);
+        //   role.menus.add(ids);
+        //   role.save(function (se) {
+        //   });
+        //   return res.json({code: 0, msg: sails.__('update.ok')});
+        // } else {
+        //   return res.json({code: 1, msg: sails.__('update.fail')});
+        // }
+      });
+  }
+  // addFreight:function (vmdata) 
 
 };

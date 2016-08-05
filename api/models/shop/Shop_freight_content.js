@@ -16,7 +16,6 @@ module.exports = {
     },
     freightId: {
       model:'Shop_freight',
-      index: true
     },
     firstunit: {
       type: 'integer'
@@ -31,13 +30,10 @@ module.exports = {
       size: 50,
       index: true
     },
-    continueprice: {
-      type: 'string',
-      size: 20
-    },
-    freight: {
+    city: {
       collection: 'Shop_area',
-      via: 'id'
-    }
+      via: 'freight',
+      dominant: true
+    },
   }
 };

@@ -41,8 +41,8 @@ module.exports = {
       req.data.channelName = channelName;
       req.data.StringUtil = StringUtil;
       req.data.moment = moment;
+      if(model == 1){        
       req.data.videobanner = result.videobanner.links || [];
-      if(model == 1){
         return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/video', req.data);
       }else{
         return res.view('public/shop/' + sails.config.system.ShopConfig.shop_templet + '/wap/channel', req.data);

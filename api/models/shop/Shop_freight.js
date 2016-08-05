@@ -14,24 +14,17 @@ module.exports = {
       autoIncrement: true,
       primaryKey: true
     },
-    name:{
-      type:'string'
+    name: {
+      type: 'string'
     },
-    firstunit: {
-      type: 'integer'
-    },
-    continueunit: {
+    freighttype: {
       type: 'string',
-      size: 100,
-      index:true
+      enum: ['weight', 'cubage', 'quantity']
     },
-    firstprice: {
-      type: 'string',
-      size: 50,
-      index: true
-    },
-    continueprice: {
-      model: 'Shop_freight_content'
+    content: {
+      collection: 'Shop_freight_content',
+      via: 'freightId'
     }
+
   }
 };

@@ -49,7 +49,7 @@ module.exports = {
     },
     freight: {
       collection: 'Shop_freight_content',
-      via: 'id'
+      via: 'city'
     }
 
   }
