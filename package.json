@@ -1,11 +1,11 @@
 {
-  "name": "Sunchn-shop",
+  "name": "Nodeshop",
   "private": true,
   "version": "1.0.0",
   "description": "shop",
   "keywords": [],
   "apidoc": {
-    "title": "Sunchn-shop"
+    "title": "Nodeshop"
   },
   "dependencies": {
     "apidoc": "^0.16.1",
@@ -13,7 +13,7 @@
     "captchapng": "0.0.1",
     "connect-redis": "^3.0.2",
     "crypto": "0.0.3",
-    "ejs": "2.3.4",
+    "ejs": "2.5.5",
     "emoji": "^0.3.2",
     "excel-export": "^0.5.1",
     "express": "^4.15.3",
@@ -49,7 +49,6 @@
     "sails-disk": "~0.10.9",
     "sails-hook-autoreload": "^0.13.0",
     "sails-mysql": "^0.12.2",
-    "sails-redis": "^0.10.7",
     "sha1": "^1.1.1",
     "urllib": "^2.8.0",
     "wechat-api": "^1.24.0",
