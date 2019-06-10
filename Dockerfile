@@ -17,7 +17,7 @@ ADD config /node/sunshop/config
 ADD tasks /node/sunshop/tasks
 ADD views /node/sunshop/views
 ADD app.js /node/sunshop
-ADD Gruntfile.js /node/sunshop
+ADD Gruntfile.js.bak /node/sunshop
 ADD package.json /node/sunshop
 RUN npm i
 EXPOSE ${PORT}

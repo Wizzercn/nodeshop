@@ -71,12 +71,16 @@ module.exports = {
       sort[columns[order[0].column].data] = order[0].dir;
     }
     Shop_order.count(where).exec(function (err, count) {
+      console.log("err::"+err);
+      console.log("count::"+count);
       if (!err && count > 0) {
         Shop_order.find(where)
         .sort(sort)
         .sort('createdAt desc')
         .paginate({page: page, limit: pageSize})
         .exec(function (err, list) {
+          console.log("err2::"+err);
+          console.log("list::"+list);
           return res.json({
             "draw": draw,
             "recordsTotal": pageSize,
